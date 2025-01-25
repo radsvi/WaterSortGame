@@ -3,15 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WaterSortGame.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WaterSortGame.Models
 {
-    internal class Color
+    internal class Color : ViewModelBase
     {
         public int? Id { get; set; }
         public string? Name { get; set; }
-        public string? Rgb { get; set; }
+        //public string? Rgb { get; set; }
+        private string? rgb;
+        public string? Rgb
+        {
+            get { return rgb; }
+            set
+            {
+                rgb = value;
+                OnPropertyChanged();
+            }
+        }
         public int? Opacity { get; set; }
         //public static List<CCodeType> GetValues()
         //{

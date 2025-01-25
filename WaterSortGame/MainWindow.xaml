@@ -22,6 +22,7 @@
             <Label Content="{Binding MyProperty}"/>
             
             <ItemsControl
+                Name="ListTubes"
                 HorizontalContentAlignment="Stretch"
                 ItemsSource="{Binding Tubes}"
                 d:ItemsSource="{d:SampleData ItemCount=4}">
@@ -36,7 +37,10 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <Button Name="btTubeNumber" Command="{Binding SelectTubeCommand}">
+                            <Button x:Name="btTubeNumber"
+                                    CommandParameter="{Binding Path=.}"
+                                    Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
+                                    >
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Grid>

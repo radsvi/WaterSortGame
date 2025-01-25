@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
@@ -38,6 +39,47 @@ namespace WaterSortGame.Models
         public Color ThirdLayer { get; set; }
         public Color SecondLayer { get; set; }
         public Color FirstLayer { get; set; }
+        //private Color fourthLayer;
+        //public Color FourthLayer
+        //{
+        //    get { return fourthLayer; }
+        //    set {
+        //        fourthLayer = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+        //private Color thirdLayer;
+        //public Color ThirdLayer
+        //{
+        //    get { return thirdLayer; }
+        //    set {
+        //        thirdLayer = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+        //private Color secondLayer;
+        //public Color SecondLayer
+        //{
+        //    get { return secondLayer; }
+        //    set {
+        //        secondLayer = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+        //private Color firstLayer;
+        //public Color FirstLayer
+        //{
+        //    get { return firstLayer; }
+        //    set {
+        //        firstLayer = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+
+
+
+
+
 
         public Tube(int tubeId)
         {

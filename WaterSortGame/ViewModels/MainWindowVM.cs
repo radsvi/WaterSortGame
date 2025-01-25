@@ -44,7 +44,7 @@ namespace WaterSortGame.ViewModels
         private void SelectTubeMethod()
         {
             MessageBox.Show("qwer");
-            //Tubes[1].FirstLayer.Rgb = "#FF0000";
+            Tubes[1].FirstLayer.Rgb = "#FF0000";
         }
         
     }
