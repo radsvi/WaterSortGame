@@ -4,15 +4,79 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WaterSortGame"
+        xmlns:viewTube="clr-namespace:WaterSortGame.Views"
+        xmlns:VM="clr-namespace:WaterSortGame.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow"
         
         Height="650" MinHeight="300" d:MinHeight="150" d:Height="300"
         Width="700" MinWidth="700"
-
+        d:DataContext="{d:DesignInstance Type={x:Type local:MainWindow}}"
         >
     <!--d:DataContext="{d:DesignInstance Type=local:MainWindow}"-->
     <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <WrapPanel>
+            <Label Content="{Binding MyProperty}"/>
+            
+            <ItemsControl
+                HorizontalContentAlignment="Stretch"
+                ItemsSource="{Binding Tubes}"
+                d:ItemsSource="{d:SampleData ItemCount=3}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="8"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <!--<ListBoxItem/>
+                <ListBoxItem/>
+                <ListBoxItem/>-->
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Button Name="btTubeNumber">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Rectangle Margin="10" MinWidth="60" Width="60" Height="242">
+                                            <Rectangle.Fill>
+                                                <VisualBrush>
+                                                    <VisualBrush.Visual>
+                                                        <Border CornerRadius="0,0,20,20" Background="LightBlue" Width="40" Height="150" />
+                                                    </VisualBrush.Visual>
+                                                </VisualBrush>
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
 
+
+                            <Grid Margin="0,15" Height="232">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Rectangle d:Fill="#145DEF" Fill="{Binding Path=FourthLayer.Rgb}" Opacity="{Binding Path=FourthLayer.Opacity}" Margin="15,0" Grid.Row="1"/>
+                                <Rectangle d:Fill="#3F4482" Fill="{Binding Path=ThirdLayer.Rgb}" Opacity="{Binding Path=ThirdLayer.Opacity}" Margin="15,0" Grid.Row="2"/>
+                                <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=SecondLayer.Rgb}" Opacity="{Binding Path=SecondLayer.Opacity}" Margin="15,0" Grid.Row="3"/>
+
+                                <Rectangle Grid.Row="4" Margin="15,0" Width="50">
+                                    <Rectangle.Fill>
+                                        <VisualBrush>
+                                            <VisualBrush.Visual>
+                                                <Border CornerRadius="0,0,20,20" d:Background="#F27914" Width="40" Height="40"
+                                                    Background="{Binding Path=FirstLayer.Rgb}" Opacity="{Binding Path=FirstLayer.Opacity}" />
+                                            </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </WrapPanel>
     </ScrollViewer>
 </Window>

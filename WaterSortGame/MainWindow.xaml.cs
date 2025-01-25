@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WaterSortGame.Models;
-using WaterSortGame.Views;
+using WaterSortGame.ViewModels;
 
 namespace WaterSortGame
 {
