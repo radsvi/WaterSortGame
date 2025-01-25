@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace WaterSortGame.Models
 {
+    [ObsoleteAttribute]
     internal static class ColorKeys
     {
         public static List<CCodeType> GetValues()
