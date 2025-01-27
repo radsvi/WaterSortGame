@@ -43,8 +43,6 @@ namespace WaterSortGame.ViewModels
 
         //public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTubeMethod());
 
-        //public RelayParameterCommand SelectTubeCommand => new RelayParameterCommand(execute => SelectTubeMethod());
-
         public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTubeMethod(execute));
 
         private void SelectTubeMethod(object obj)
