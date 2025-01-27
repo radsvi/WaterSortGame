@@ -23,21 +23,33 @@ namespace WaterSortGame.ViewModels
             get { return selectedTube; }
             set
             {
-                if (selectedTube is not null)
-                    selectedTube.Margin = "0,30,0,0";
-
-                if (selectedTube == value)
-                {
-                    //Debug.WriteLine("test");
-                    selectedTube.Margin = "0,30,0,0";
-                    selectedTube = null;
-                }
-                else
+                if (selectedTube is null)
                 {
                     selectedTube = value;
-                    selectedTube.Margin = "0,0,0,30";
+                    //selectedTube.Margin = "0,0,0,30";
+                    selectedTube.Selected = true;
+                    OnPropertyChanged();
+                    return;
                 }
-                OnPropertyChanged();
+                if (selectedTube == value) // pokud clicknu na stejnou zkumavku znova
+                {
+                    //Debug.WriteLine("test");
+                    //selectedTube.Margin = "0,30,0,0";
+                    selectedTube.Selected = false;
+                    selectedTube = null;
+                    OnPropertyChanged();
+                    return;
+                }
+                if (selectedTube is not null && selectedTube != value)
+                {
+                    selectedTube.Selected = false;
+                    //selectedTube.Margin = "0,30,0,0";
+                    selectedTube = value;
+                    selectedTube = null;
+                    OnPropertyChanged();
+                    return;
+                }
+                
             }
         }
         private Liquid selectedLiquid;
@@ -96,20 +108,39 @@ namespace WaterSortGame.ViewModels
 
             if (selectedTube == null || selectedTube == tube)
                 SelectedTube = tube;
-            else
+            else // if selecting different different tube
             {
-                removeTopLiquid(SelectedTube);
+                RemoveTopLiquid(SelectedTube);
+                AddLiquid(tube);
             }
 
         }
 
-        private void removeTopLiquid(Tube tube)
+        private void RemoveTopLiquid(Tube tube)
         {
             if (tube.FourthLayer.Color.Id != 0)
             {
-                //SelectedLiquid = ;
+                SelectedLiquid = tube.FourthLayer;
+                tube.FourthLayer = null;
             }
-            //
+        }
+
+        private void AddLiquid(Tube tube)
+        {
+            //if (tube.FirstLayer == null)
+
+            AddLiquidToLayer(tube, 1);
+        }
+        private void AddLiquidToLayer(Tube tube, int layerNumber)
+        {
+            if (SelectedLiquid is not null)
+            {
+                tube.FirstLayer = SelectedLiquid;
+                SelectedTube.Selected = false;
+                SelectedTube = null;
+                SelectedLiquid = null;
+                //SelectedTube = null;
+            }
         }
 
         //public RelayCommand ResetTubesCommand => new RelayCommand(execute => ResetTubes());

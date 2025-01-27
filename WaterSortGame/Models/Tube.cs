@@ -10,19 +10,60 @@ namespace WaterSortGame.Models
     internal class Tube : ViewModelBase
     {
         public int TubeId { get; set; }
-        public Liquid FourthLayer { get; set; }
-        public Liquid ThirdLayer { get; set; }
-        public Liquid SecondLayer { get; set; }
-        public Liquid FirstLayer { get; set; }
+        private Liquid fourthLayer;
+        public Liquid FourthLayer
+        {
+            get { return fourthLayer; }
+            set
+            {
+                fourthLayer = value;
+                OnPropertyChanged();
+            }
+        }
+        private Liquid thirdLayer;
+        public Liquid ThirdLayer
+        {
+            get { return thirdLayer; }
+            set
+            {
+                thirdLayer = value;
+                OnPropertyChanged();
+            }
+        }
+        private Liquid secondLayer;
+        public Liquid SecondLayer
+        {
+            get { return secondLayer; }
+            set
+            {
+                secondLayer = value;
+                OnPropertyChanged();
+            }
+        }
+        private Liquid firstLayer;
+        public Liquid FirstLayer
+        {
+            get { return firstLayer; }
+            set
+            {
+                firstLayer = value;
+                OnPropertyChanged();
+            }
+        }
         private string margin;
         public string Margin
         {
-            get { return margin; }
-            set
-            {
-                margin = value;
-                OnPropertyChanged();
+            get {
+                if (selected == true)
+                    return "0,0,0,30";
+                else
+                    return "0,30,0,0";
             }
+            //set
+            //{
+            //    margin = value;
+            //    OnPropertyChanged();
+            //}
         }
         private bool selected = false;
         public bool Selected
@@ -32,6 +73,7 @@ namespace WaterSortGame.Models
             {
                 selected = value;
                 OnPropertyChanged();
+                OnPropertyChanged("Margin");
             }
         }
 
@@ -42,7 +84,7 @@ namespace WaterSortGame.Models
             ThirdLayer = Liquid.GetLiquid(tubeId, 3);
             SecondLayer = Liquid.GetLiquid(tubeId, 2);
             FirstLayer = Liquid.GetLiquid(tubeId, 1);
-            Margin = "0,30,0,0";
+            
         }
 
     }
