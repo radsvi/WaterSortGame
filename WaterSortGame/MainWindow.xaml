@@ -19,7 +19,11 @@
     </Window.InputBindings>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <WrapPanel>
-            <Label Content="{Binding MyProperty}"/>
+            <StackPanel>
+                <Label Content="{Binding MyProperty}"/>
+                <Button Content="parameter command" />
+            </StackPanel>
+            
             
             <ItemsControl
                 Name="ListTubes"
@@ -36,9 +40,9 @@
                 <ListBoxItem/>-->
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
+                        <Grid><!--https://stackoverflow.com/questions/32064308/pass-command-parameter-to-method-in-viewmodel-in-wpf-->
                             <Button x:Name="btTubeNumber"
-                                    CommandParameter="{Binding Path=.}"
+                                    CommandParameter="{Binding .}"
                                     Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
                                     >
                                 <Button.Template>

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 
@@ -39,13 +41,34 @@ namespace WaterSortGame.ViewModels
             System.Windows.Application.Current.Shutdown();
         }
 
-        public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTubeMethod());
+        //public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTubeMethod());
 
-        private void SelectTubeMethod()
+        //public RelayParameterCommand SelectTubeCommand => new RelayParameterCommand(execute => SelectTubeMethod());
+
+        public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTubeMethod(execute));
+
+        private void SelectTubeMethod(object obj)
         {
-            MessageBox.Show("qwer");
-            Tubes[1].FirstLayer.Rgb = "#FF0000";
+            //Tubes[1].FirstLayer.Rgb = "#FF0000";
+
+            //var element = obj as Label;
+            //if (obj == "qwer")
+            //{
+            //    MessageBox.Show("YES");
+            //}
+            //else
+            //{
+            //    MessageBox.Show("NO");
+            //}
+
+            var parameter = obj as Tube;
+
+            Tubes[parameter.TubeId].FirstLayer.Rgb = "#FF0000";
         }
-        
+
+        // https://www.youtube.com/watch?app=desktop&v=rv9flLl9Hrc&t=503s
+
+
+
     }
 }

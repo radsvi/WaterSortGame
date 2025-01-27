@@ -11,6 +11,7 @@ namespace WaterSortGame.Models
     {
         public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>()
         {
+            new Tube(0),
             new Tube(1),
             new Tube(2),
             new Tube(3),
@@ -24,7 +25,6 @@ namespace WaterSortGame.Models
             new Tube(11),
             new Tube(12),
             new Tube(13),
-            new Tube(14)
         };
 
         public static ObservableCollection<Tube> GetTubes()
