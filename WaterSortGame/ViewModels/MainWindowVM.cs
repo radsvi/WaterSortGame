@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -15,6 +16,50 @@ namespace WaterSortGame.ViewModels
     class MainWindowVM : ViewModelBase
     {
         public string MyProperty { get; set; } = "Testuju";
+
+        private Tube selectedTube;
+        public Tube SelectedTube
+        {
+            get { return selectedTube; }
+            set
+            {
+                if (selectedTube is not null)
+                    selectedTube.Margin = "0,30,0,0";
+
+                if (selectedTube == value)
+                {
+                    //Debug.WriteLine("test");
+                    selectedTube.Margin = "0,30,0,0";
+                    selectedTube = null;
+                }
+                else
+                {
+                    selectedTube = value;
+                    selectedTube.Margin = "0,0,0,30";
+                }
+                OnPropertyChanged();
+            }
+        }
+        private Liquid selectedLiquid;
+        public Liquid SelectedLiquid
+        {
+            get { return selectedLiquid; }
+            set
+            {
+                selectedLiquid = value;
+                OnPropertyChanged();
+            }
+        }
+        private Tube targetTube;
+        public Tube TargetTube
+        {
+            get { return targetTube; }
+            set
+            {
+                targetTube = value;
+                OnPropertyChanged();
+            }
+        }
 
         private ObservableCollection<Tube> tubes;
         public ObservableCollection<Tube> Tubes
@@ -43,29 +88,39 @@ namespace WaterSortGame.ViewModels
 
         //public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTubeMethod());
 
-        public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTubeMethod(execute));
+        public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTube(execute));
 
-        private void SelectTubeMethod(object obj)
+        private void SelectTube(object obj)
         {
-            //Tubes[1].FirstLayer.Rgb = "#FF0000";
+            var tube = obj as Tube;
 
-            //var element = obj as Label;
-            //if (obj == "qwer")
-            //{
-            //    MessageBox.Show("YES");
-            //}
-            //else
-            //{
-            //    MessageBox.Show("NO");
-            //}
+            if (selectedTube == null || selectedTube == tube)
+                SelectedTube = tube;
+            else
+            {
+                removeTopLiquid(SelectedTube);
+            }
 
-            var parameter = obj as Tube;
-
-            Tubes[parameter.TubeId].FirstLayer.Rgb = "#FF0000";
         }
 
-        // https://www.youtube.com/watch?app=desktop&v=rv9flLl9Hrc&t=503s
+        private void removeTopLiquid(Tube tube)
+        {
+            if (tube.FourthLayer.Id != 0)
+            {
+                //SelectedLiquid = ;
+            }
+            //
+        }
 
+        //public RelayCommand ResetTubesCommand => new RelayCommand(execute => ResetTubes());
+
+        //private void ResetTubes()
+        //{
+        //    foreach (var tube in Tubes)
+        //    {
+        //        tube.Margin = "0,30,0,0";
+        //    }
+        //}
 
 
     }

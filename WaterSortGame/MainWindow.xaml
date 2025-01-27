@@ -19,17 +19,16 @@
     </Window.InputBindings>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <WrapPanel>
-            <StackPanel>
+            <!--<StackPanel>
                 <Label Content="{Binding MyProperty}"/>
-                <Button Content="parameter command" />
-            </StackPanel>
-            
-            
+                <Button Content="reset command" Command="{Binding ResetTubesCommand}" />
+            </StackPanel>-->
             <ItemsControl
                 Name="ListTubes"
                 HorizontalContentAlignment="Stretch"
                 ItemsSource="{Binding Tubes}"
-                d:ItemsSource="{d:SampleData ItemCount=4}">
+                d:ItemsSource="{d:SampleData ItemCount=4}"
+                >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Columns="8"/>
@@ -44,6 +43,7 @@
                             <Button x:Name="btTubeNumber"
                                     CommandParameter="{Binding .}"
                                     Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
+                                    Margin="{Binding Margin}"
                                     >
                                 <Button.Template>
                                     <ControlTemplate>

@@ -7,79 +7,33 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    internal class Tube
+    internal class Tube : ViewModelBase
     {
-        //public CCodeType? FirstLayer { get; set; }
-        //public CCodeType? SecondLayer { get; set; }
-        //public CCodeType? ThirdLayer { get; set; }
-        //public CCodeType? FourthLayer { get; set; }
-        //public Tube() { }
-
-        ////public Tube(CCodeType firstLayer, CCodeType secondLayer, CCodeType thirdLayer, CCodeType fourthLayer)
-        ////{
-        ////    FirstLayer = firstLayer;
-        ////    SecondLayer = secondLayer;
-        ////    ThirdLayer = thirdLayer;
-        ////    FourthLayer = fourthLayer;
-        ////}
-        //public Tube(int firstLayer, int secondLayer, int thirdLayer, int fourthLayer)
-        //{
-        //    //FirstLayer = ColorKeys.GetValues().Where(key => key.Id == firstLayer).ToList()[0];
-        //    //SecondLayer = ColorKeys.GetValues().Where(key => key.Id == secondLayer).ToList()[0];
-        //    //ThirdLayer = ColorKeys.GetValues().Where(key => key.Id == thirdLayer).ToList()[0];
-        //    //FourthLayer = ColorKeys.GetValues().Where(key => key.Id == fourthLayer).ToList()[0];
-        //    FirstLayer = ColorKeys.ContainsKey(firstLayer);
-        //    SecondLayer = ColorKeys.ContainsKey(secondLayer);
-        //    ThirdLayer = ColorKeys.ContainsKey(thirdLayer);
-        //    FourthLayer = ColorKeys.ContainsKey(fourthLayer);
-        //}
-
         public int TubeId { get; set; }
         public Color FourthLayer { get; set; }
         public Color ThirdLayer { get; set; }
         public Color SecondLayer { get; set; }
         public Color FirstLayer { get; set; }
-        //private Color fourthLayer;
-        //public Color FourthLayer
-        //{
-        //    get { return fourthLayer; }
-        //    set {
-        //        fourthLayer = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
-        //private Color thirdLayer;
-        //public Color ThirdLayer
-        //{
-        //    get { return thirdLayer; }
-        //    set {
-        //        thirdLayer = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
-        //private Color secondLayer;
-        //public Color SecondLayer
-        //{
-        //    get { return secondLayer; }
-        //    set {
-        //        secondLayer = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
-        //private Color firstLayer;
-        //public Color FirstLayer
-        //{
-        //    get { return firstLayer; }
-        //    set {
-        //        firstLayer = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
-
-
-
-
-
+        private string margin;
+        public string Margin
+        {
+            get { return margin; }
+            set
+            {
+                margin = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool selected = false;
+        public bool Selected
+        {
+            get { return selected; }
+            set
+            {
+                selected = value;
+                OnPropertyChanged();
+            }
+        }
 
         public Tube(int tubeId)
         {
@@ -88,11 +42,7 @@ namespace WaterSortGame.Models
             ThirdLayer = Liquid.GetLiquid(tubeId, 3).Color;
             SecondLayer = Liquid.GetLiquid(tubeId, 2).Color;
             FirstLayer = Liquid.GetLiquid(tubeId, 1).Color;
-
-            //FourthLayer = Color.GetCode(1);
-            //ThirdLayer = Color.GetCode(1);
-            //SecondLayer = Color.GetCode(1);
-            //FirstLayer = Color.GetCode(1);
+            Margin = "0,30,0,0";
         }
 
     }
