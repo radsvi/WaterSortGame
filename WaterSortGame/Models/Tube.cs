@@ -10,10 +10,10 @@ namespace WaterSortGame.Models
     internal class Tube : ViewModelBase
     {
         public int TubeId { get; set; }
-        public Color FourthLayer { get; set; }
-        public Color ThirdLayer { get; set; }
-        public Color SecondLayer { get; set; }
-        public Color FirstLayer { get; set; }
+        public Liquid FourthLayer { get; set; }
+        public Liquid ThirdLayer { get; set; }
+        public Liquid SecondLayer { get; set; }
+        public Liquid FirstLayer { get; set; }
         private string margin;
         public string Margin
         {
@@ -38,10 +38,10 @@ namespace WaterSortGame.Models
         public Tube(int tubeId)
         {
             TubeId = tubeId;
-            FourthLayer = Liquid.GetLiquid(tubeId, 4).Color;
-            ThirdLayer = Liquid.GetLiquid(tubeId, 3).Color;
-            SecondLayer = Liquid.GetLiquid(tubeId, 2).Color;
-            FirstLayer = Liquid.GetLiquid(tubeId, 1).Color;
+            FourthLayer = Liquid.GetLiquid(tubeId, 4);
+            ThirdLayer = Liquid.GetLiquid(tubeId, 3);
+            SecondLayer = Liquid.GetLiquid(tubeId, 2);
+            FirstLayer = Liquid.GetLiquid(tubeId, 1);
             Margin = "0,30,0,0";
         }
 

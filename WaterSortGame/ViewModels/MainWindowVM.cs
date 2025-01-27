@@ -105,7 +105,7 @@ namespace WaterSortGame.ViewModels
 
         private void removeTopLiquid(Tube tube)
         {
-            if (tube.FourthLayer.Id != 0)
+            if (tube.FourthLayer.Color.Id != 0)
             {
                 //SelectedLiquid = ;
             }
