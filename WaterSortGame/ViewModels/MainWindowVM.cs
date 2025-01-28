@@ -132,7 +132,8 @@ namespace WaterSortGame.ViewModels
         }
         private void RemoveLiquidFromSourceTube(Tube tube)
         {
-            tube.Layers.Remove(SelectedLiquid);
+            //tube.Layers.Remove(SelectedLiquid);
+            SelectedLiquid.IsFilled = false;
             SelectedTube.Selected = false;
             SelectedTube = null;
             SelectedLiquid = null;

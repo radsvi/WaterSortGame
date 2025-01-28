@@ -21,8 +21,19 @@ namespace WaterSortGame.Models
                 OnPropertyChanged();
             }
         }
-        public int TubeNumber { get; set; }
-        public int LayerNumber { get; set; } // lowest layer starting at 0
+        [Obsolete]public int TubeNumber { get; set; }
+        [Obsolete] public int LayerNumber { get; set; } // lowest layer starting at 0
+
+        private bool isFilled = true;
+        public bool IsFilled
+        {
+            get { return isFilled; }
+            set
+            {
+                isFilled = value;
+                OnPropertyChanged();
+            }
+        }
 
         public Liquid() { }
         public Liquid(int color, int tubeNumber, int layerNumber)
