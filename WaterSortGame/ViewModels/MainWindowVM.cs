@@ -110,38 +110,74 @@ namespace WaterSortGame.ViewModels
                 SelectedTube = tube;
             else // if selecting different different tube
             {
-                RemoveTopLiquid(SelectedTube);
-                AddLiquid(tube);
+                SelectLiquid(SelectedTube);
+                if (AddLiquidToTube(tube) == true)
+                    RemoveLiquidFromSourceTube(SelectedTube);
             }
 
         }
 
-        private void RemoveTopLiquid(Tube tube)
+        private void SelectLiquid(Tube tube)
         {
-            if (tube.Layers[3].Color.Id != 0)
+            //for (int i = 0; i < tube.Layers.Count; i++)
+            for (int i = tube.Layers.Count - 1; i >= 0; i--)
             {
-                SelectedLiquid = tube.Layers[3];
-                tube.Layers[3] = null;
+                if (tube.Layers[i].Color.Id != 0)
+                {
+                    SelectedLiquid = tube.Layers[i];
+                    //tube.Layers[i] = null;
+                    return;
+                }
             }
         }
+        private void RemoveLiquidFromSourceTube(Tube tube)
+        {
+            tube.Layers.Remove(SelectedLiquid);
+            SelectedTube.Selected = false;
+            SelectedTube = null;
+            SelectedLiquid = null;
+        }
 
-        private void AddLiquid(Tube tube)
+        private bool AddLiquidToTube(Tube tube)
         {
             //if (tube.FirstLayer == null)
+            //for (int i = tube.Layers.Count - 1; i >= 0; i--)
+            int count = tube.Layers.Count; // this is needed, otherwise the loop will be skipped for empty tubes.
 
-            AddLiquidToLayer(tube, 1);
-        }
-        private void AddLiquidToLayer(Tube tube, int layerNumber)
-        {
-            if (SelectedLiquid is not null)
+            //if (count == 0)
+            //{
+            //    tube.Layers.Insert(0, SelectedLiquid);
+            //    return true;
+            //}
+
+            for (int i = 0; i < count + 1; i++)
             {
-                tube.Layers[0] = SelectedLiquid;
-                SelectedTube.Selected = false;
-                SelectedTube = null;
-                SelectedLiquid = null;
-                //SelectedTube = null;
+                //if (tube.Layers[i] is null)
+                //if (tube.Layers[i].Color.Id == 0)
+                if (tube.Layers[i].Color is null)
+                {
+                    tube.Layers.Remove(tube.Layers[i]);
+                    //insert
+                    //tube.Layers.Add(SelectedLiquid);
+                    tube.Layers.Insert(i, SelectedLiquid);
+                    return true;
+                }
             }
+            return false;
+
+            //AddLiquidToLayer(tube, 0);
         }
+        //private void AddLiquidToLayer(Tube tube, int layerNumber)
+        //{
+        //    if (SelectedLiquid is not null)
+        //    {
+        //        tube.Layers[layerNumber] = SelectedLiquid;
+        //        SelectedTube.Selected = false;
+        //        SelectedTube = null;
+        //        SelectedLiquid = null;
+        //        //SelectedTube = null;
+        //    }
+        //}
 
         //public RelayCommand ResetTubesCommand => new RelayCommand(execute => ResetTubes());
 

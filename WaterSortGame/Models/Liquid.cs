@@ -24,6 +24,7 @@ namespace WaterSortGame.Models
         public int TubeNumber { get; set; }
         public int LayerNumber { get; set; } // lowest layer starting at 0
 
+        public Liquid() { }
         public Liquid(int color, int tubeNumber, int layerNumber)
         {
             Color = new Color(color);
@@ -107,7 +108,7 @@ namespace WaterSortGame.Models
             if (result.Count() > 0)
                 return result[0];
             else
-                return new Liquid(0, tubeId, layerNumber);
+                return new Liquid();
 
             //return liquids
             //    .Where(liquid => liquid.TubeNumber == tubeId)
