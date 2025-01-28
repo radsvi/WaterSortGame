@@ -65,16 +65,16 @@
                                                     <RowDefinition/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
-                                                <Rectangle d:Fill="#145DEF" Fill="{Binding Path=FourthLayer.Color.Rgb}" Opacity="{Binding Path=FourthLayer.Color.Opacity}" Margin="15,0" Grid.Row="1"/>
-                                                <Rectangle d:Fill="#3F4482" Fill="{Binding Path=ThirdLayer.Color.Rgb}" Opacity="{Binding Path=ThirdLayer.Color.Opacity}" Margin="15,0" Grid.Row="2"/>
-                                                <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=SecondLayer.Color.Rgb}" Opacity="{Binding Path=SecondLayer.Color.Opacity}" Margin="15,0" Grid.Row="3"/>
+                                                <Rectangle d:Fill="#145DEF" Fill="{Binding Path=Layers[3].Color.Rgb}" Opacity="{Binding Path=Layers[3].Color.Opacity}" Margin="15,0" Grid.Row="1"/>
+                                                <Rectangle d:Fill="#3F4482" Fill="{Binding Path=Layers[2].Color.Rgb}" Opacity="{Binding Path=Layers[2].Color.Opacity}" Margin="15,0" Grid.Row="2"/>
+                                                <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=Layers[1].Color.Rgb}" Opacity="{Binding Path=Layers[1].Color.Opacity}" Margin="15,0" Grid.Row="3"/>
 
                                                 <Rectangle Grid.Row="4" Margin="15,0" Width="50">
                                                     <Rectangle.Fill>
                                                         <VisualBrush>
                                                             <VisualBrush.Visual>
                                                                 <Border CornerRadius="0,0,20,20" d:Background="#F27914" Width="40" Height="40"
-                                                                        Background="{Binding Path=FirstLayer.Color.Rgb}" Opacity="{Binding Path=FirstLayer.Color.Opacity}" />
+                                                                        Background="{Binding Path=Layers[0].Color.Rgb}" Opacity="{Binding Path=Layers[0].Color.Opacity}" />
                                                             </VisualBrush.Visual>
                                                         </VisualBrush>
                                                     </Rectangle.Fill>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,46 +11,68 @@ namespace WaterSortGame.Models
     internal class Tube : ViewModelBase
     {
         public int TubeId { get; set; }
-        private Liquid fourthLayer;
-        public Liquid FourthLayer
+        //private Liquid[] layers = new Liquid[4];
+        //public Liquid[] Layers
+        //{
+        //    get { return layers; }
+        //    set
+        //    {
+        //        layers = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+        private ObservableCollection<Liquid> layers = new ObservableCollection<Liquid>();
+        public ObservableCollection<Liquid> Layers
         {
-            get { return fourthLayer; }
+            get { return layers; }
             set
             {
-                fourthLayer = value;
+                layers = value;
                 OnPropertyChanged();
             }
         }
-        private Liquid thirdLayer;
-        public Liquid ThirdLayer
-        {
-            get { return thirdLayer; }
-            set
-            {
-                thirdLayer = value;
-                OnPropertyChanged();
-            }
-        }
-        private Liquid secondLayer;
-        public Liquid SecondLayer
-        {
-            get { return secondLayer; }
-            set
-            {
-                secondLayer = value;
-                OnPropertyChanged();
-            }
-        }
-        private Liquid firstLayer;
-        public Liquid FirstLayer
-        {
-            get { return firstLayer; }
-            set
-            {
-                firstLayer = value;
-                OnPropertyChanged();
-            }
-        }
+
+
+        //private Liquid fourthLayer;
+        //public Liquid FourthLayer
+        //{
+        //    get { return fourthLayer; }
+        //    set
+        //    {
+        //        fourthLayer = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+        //private Liquid thirdLayer;
+        //public Liquid ThirdLayer
+        //{
+        //    get { return thirdLayer; }
+        //    set
+        //    {
+        //        thirdLayer = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+        //private Liquid secondLayer;
+        //public Liquid SecondLayer
+        //{
+        //    get { return secondLayer; }
+        //    set
+        //    {
+        //        secondLayer = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+        //private Liquid firstLayer;
+        //public Liquid FirstLayer
+        //{
+        //    get { return firstLayer; }
+        //    set
+        //    {
+        //        firstLayer = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
         private string margin;
         public string Margin
         {
@@ -80,10 +103,16 @@ namespace WaterSortGame.Models
         public Tube(int tubeId)
         {
             TubeId = tubeId;
-            FourthLayer = Liquid.GetLiquid(tubeId, 4);
-            ThirdLayer = Liquid.GetLiquid(tubeId, 3);
-            SecondLayer = Liquid.GetLiquid(tubeId, 2);
-            FirstLayer = Liquid.GetLiquid(tubeId, 1);
+            for (int i = 0; i < 4; i++)
+            {
+                //layers[i] = Liquid.GetLiquid(tubeId, i);
+                layers.Add(Liquid.GetLiquid(tubeId, i));
+            }
+
+            //FourthLayer = Liquid.GetLiquid(tubeId, 4);
+            //ThirdLayer = Liquid.GetLiquid(tubeId, 3);
+            //SecondLayer = Liquid.GetLiquid(tubeId, 2);
+            //FirstLayer = Liquid.GetLiquid(tubeId, 1);
             
         }
 
