@@ -31,5 +31,27 @@ namespace WaterSortGame.Models
         {
             return _tubes;
         }
+        private static ObservableCollection<Tube> tubesProperty;
+        public static ObservableCollection<Tube> TubesProperty
+        {
+            get { return _tubes; }
+        }
+
+        public static void ChangeLiquidPosition(Color color, int sourceTube, int sourceLayer, int targetTube, int targetLayer)
+        {
+            //_tubes.Remove(sourceTube);
+            //_tubes.Add(targetTube);
+
+            if (sourceLayer == 3)
+            {
+                _tubes[sourceTube].FourthLayer = null;
+
+                if (sourceLayer == 0)
+                {
+                    _tubes[targetTube].FirstLayer.Color = color;
+                }
+            }
+            
+        }
     }
 }

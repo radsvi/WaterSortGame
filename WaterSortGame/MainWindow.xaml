@@ -6,18 +6,24 @@
         xmlns:local="clr-namespace:WaterSortGame"
         xmlns:viewTube="clr-namespace:WaterSortGame.Views"
         xmlns:VM="clr-namespace:WaterSortGame.ViewModels"
+        xmlns:Models="clr-namespace:WaterSortGame.Models"
         mc:Ignorable="d"
         Title="MainWindow"
         
         Height="650" MinHeight="300" d:MinHeight="150" d:Height="300"
         Width="700" MinWidth="700"
-        d:DataContext="{d:DesignInstance Type={x:Type local:MainWindow}}"
+        
         >
     <!--d:DataContext="{d:DesignInstance Type=local:MainWindow}"-->
+    <Window.Resources>
+        <Models:LiquidsManager x:Key="LiquidsManager"/>
+        <Models:TubesList x:Key="TubesList"/>
+        <VM:MainWindowVM x:Key="MainWindowVM"/>
+    </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding EscKeyCommand}"/>
     </Window.InputBindings>
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" DataContext="{Binding Source={StaticResource MainWindowVM}}">
         <WrapPanel>
             <!--<StackPanel>
                 <Label Content="{Binding MyProperty}"/>
@@ -42,6 +48,7 @@
                         <Grid><!--https://stackoverflow.com/questions/32064308/pass-command-parameter-to-method-in-viewmodel-in-wpf-->
                             <Button x:Name="btTubeNumber"
                                     CommandParameter="{Binding .}"
+                                    
                                     Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
                                     Margin="{Binding Margin}"
                                     >
@@ -65,16 +72,16 @@
                                                     <RowDefinition/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
-                                                <Rectangle d:Fill="#145DEF" Fill="{Binding Path=Layers[3].Color.Rgb}" Margin="15,0" Grid.Row="1"/>
-                                                <Rectangle d:Fill="#3F4482" Fill="{Binding Path=Layers[2].Color.Rgb}" Margin="15,0" Grid.Row="2"/>
-                                                <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=Layers[1].Color.Rgb}" Margin="15,0" Grid.Row="3"/>
+                                                <Rectangle d:Fill="#145DEF" Fill="{Binding Path=FourthLayer.Color.Rgb}" Margin="15,0" Grid.Row="1"/>
+                                                <Rectangle d:Fill="#3F4482" Fill="{Binding Path=ThirdLayer.Color.Rgb}" Margin="15,0" Grid.Row="2"/>
+                                                <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=SecondLayer.Color.Rgb}" Margin="15,0" Grid.Row="3"/>
 
                                                 <Rectangle Grid.Row="4" Margin="15,0" Width="50">
                                                     <Rectangle.Fill>
                                                         <VisualBrush>
                                                             <VisualBrush.Visual>
                                                                 <Border CornerRadius="0,0,20,20" d:Background="#F27914" Width="40" Height="40"
-                                                                        Background="{Binding Path=Layers[0].Color.Rgb}" />
+                                                                        Background="{Binding Path=FirstLayer.Color.Rgb}" />
                                                             </VisualBrush.Visual>
                                                         </VisualBrush>
                                                     </Rectangle.Fill>

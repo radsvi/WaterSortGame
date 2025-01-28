@@ -119,16 +119,68 @@ namespace WaterSortGame.ViewModels
 
         private void SelectLiquid(Tube tube)
         {
-            //for (int i = 0; i < tube.Layers.Count; i++)
-            for (int i = tube.Layers.Count - 1; i >= 0; i--)
+            ////for (int i = 0; i < tube.Layers.Count; i++)
+            //for (int i = tube.Layers.Count - 1; i >= 0; i--)
+            //{
+            //    if (tube.Layers[i].Color.Id != 0)
+            //    {
+            //        SelectedLiquid = tube.Layers[i];
+            //        //tube.Layers[i] = null;
+            //        return;
+            //    }
+            //}
+
+            if (tube.FourthLayer.Color.Id != 0)
             {
-                if (tube.Layers[i].Color.Id != 0)
-                {
-                    SelectedLiquid = tube.Layers[i];
-                    //tube.Layers[i] = null;
-                    return;
-                }
+                SelectedLiquid = tube.FourthLayer;
+                //tube.Layers[i] = null;
+                return;
             }
+        }
+
+        private bool AddLiquidToTube(Tube tube)
+        {
+            //if (tube.FirstLayer == null)
+            //for (int i = tube.Layers.Count - 1; i >= 0; i--)
+            
+            //int count = tube.Layers.Count; // this is needed, otherwise the loop will be skipped for empty tubes.
+
+            //if (count == 0)
+            //{
+            //    tube.Layers.Insert(0, SelectedLiquid);
+            //    return true;
+            //}
+
+            //for (int i = 0; i < count + 1; i++)
+            //{
+            //    //if (tube.Layers[i] is null)
+            //    //if (tube.Layers[i].Color.Id == 0)
+            //    if (tube.Layers[i].Color is null)
+            //    {
+            //        tube.Layers.Remove(tube.Layers[i]);
+            //        //insert
+            //        //tube.Layers.Add(SelectedLiquid);
+            //        tube.Layers.Insert(i, SelectedLiquid);
+            //        return true;
+            //    }
+            //}
+
+            if (tube.FirstLayer.Color is null)
+            {
+                //tube.Layers.Remove(tube.FourthLayer);
+                //insert
+                //tube.Layers.Add(SelectedLiquid);
+                //tube.FirstLayer = SelectedLiquid;
+
+                SelectedLiquid.TubeNumber = tube.TubeId;
+                SelectedLiquid.LayerNumber = 0;
+
+                return true;
+            }
+
+            return false;
+
+            //AddLiquidToLayer(tube, 0);
         }
         private void RemoveLiquidFromSourceTube(Tube tube)
         {
@@ -137,36 +189,6 @@ namespace WaterSortGame.ViewModels
             SelectedTube.Selected = false;
             SelectedTube = null;
             SelectedLiquid = null;
-        }
-
-        private bool AddLiquidToTube(Tube tube)
-        {
-            //if (tube.FirstLayer == null)
-            //for (int i = tube.Layers.Count - 1; i >= 0; i--)
-            int count = tube.Layers.Count; // this is needed, otherwise the loop will be skipped for empty tubes.
-
-            //if (count == 0)
-            //{
-            //    tube.Layers.Insert(0, SelectedLiquid);
-            //    return true;
-            //}
-
-            for (int i = 0; i < count + 1; i++)
-            {
-                //if (tube.Layers[i] is null)
-                //if (tube.Layers[i].Color.Id == 0)
-                if (tube.Layers[i].Color is null)
-                {
-                    tube.Layers.Remove(tube.Layers[i]);
-                    //insert
-                    //tube.Layers.Add(SelectedLiquid);
-                    tube.Layers.Insert(i, SelectedLiquid);
-                    return true;
-                }
-            }
-            return false;
-
-            //AddLiquidToLayer(tube, 0);
         }
         //private void AddLiquidToLayer(Tube tube, int layerNumber)
         //{
