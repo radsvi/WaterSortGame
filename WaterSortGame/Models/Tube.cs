@@ -15,8 +15,8 @@ namespace WaterSortGame.Models
     {
         public int TubeId { get; set; }
         private static int TubeIdCounter;
-        //private Liquid[] layers = new Liquid[4];
-        //public Liquid[] Layers
+        //private Color[] layers = new Color[4];
+        //public Color[] Layers
         //{
         //    get { return layers; }
         //    set
@@ -25,63 +25,63 @@ namespace WaterSortGame.Models
         //        OnPropertyChanged();
         //    }
         //}
-        //private ObservableCollection<Liquid> layers = new ObservableCollection<Liquid>();
-        //public ObservableCollection<Liquid> Layers
+        private ObservableCollection<Color> layers = new ObservableCollection<Color>();
+        public ObservableCollection<Color> Layers
+        {
+            get { return layers; }
+            set
+            {
+                layers = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        //private Color fourthLayer;
+        //public Color FourthLayer
         //{
-        //    get { return layers; }
+        //    get {
+        //        //return fourthLayer;
+        //        return fourthLayer;
+        //    }
         //    set
         //    {
-        //        layers = value;
+        //        fourthLayer = value;
+        //        OnPropertyChanged();
+
+        //        //LiquidsManager.LiquidProperty
+        //    }
+        //}
+        //private Color thirdLayer;
+        //public Color ThirdLayer
+        //{
+        //    get { return thirdLayer; }
+        //    set
+        //    {
+        //        thirdLayer = value;
         //        OnPropertyChanged();
         //    }
         //}
-
-
-        private Color fourthLayer;
-        public Color FourthLayer
-        {
-            get {
-                //return fourthLayer;
-                return fourthLayer;
-            }
-            set
-            {
-                fourthLayer = value;
-                OnPropertyChanged();
-
-                //LiquidsManager.LiquidProperty
-            }
-        }
-        private Color thirdLayer;
-        public Color ThirdLayer
-        {
-            get { return thirdLayer; }
-            set
-            {
-                thirdLayer = value;
-                OnPropertyChanged();
-            }
-        }
-        private Color secondLayer;
-        public Color SecondLayer
-        {
-            get { return secondLayer; }
-            set
-            {
-                secondLayer = value;
-                OnPropertyChanged();
-            }
-        }
-        private Color firstLayer;
-        public Color FirstLayer
-        {
-            get { return firstLayer; }
-            set
-            {
-                firstLayer = value;
-                OnPropertyChanged();
-            }
-        }
+        //private Color secondLayer;
+        //public Color SecondLayer
+        //{
+        //    get { return secondLayer; }
+        //    set
+        //    {
+        //        secondLayer = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+        //private Color firstLayer;
+        //public Color FirstLayer
+        //{
+        //    get { return firstLayer; }
+        //    set
+        //    {
+        //        firstLayer = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
         private string margin;
         public string Margin
         {
@@ -116,10 +116,20 @@ namespace WaterSortGame.Models
         public Tube(int firstLayer, int secondLayer, int thirdLayer, int fourthLayer)
         {
             TubeId = TubeIdCounter++;
-            FirstLayer = new Color(firstLayer, TubeId, 0);
-            SecondLayer = new Color(secondLayer, TubeId, 1);
-            ThirdLayer = new Color(thirdLayer, TubeId, 2);
-            FourthLayer = new Color(fourthLayer, TubeId, 3);
+            //FirstLayer = new Color(firstLayer, TubeId, 0);
+            //SecondLayer = new Color(secondLayer, TubeId, 1);
+            //ThirdLayer = new Color(thirdLayer, TubeId, 2);
+            //FourthLayer = new Color(fourthLayer, TubeId, 3);
+
+            //for (int i = 0; i < Layers.Length; i++)
+            //{
+            //    Layers[i] = new Color(firstLayer, TubeId, i);
+            //}
+
+            Layers.Add(new Color(firstLayer, TubeId, 0));
+            Layers.Add(new Color(secondLayer, TubeId, 1));
+            Layers.Add(new Color(thirdLayer, TubeId, 2));
+            Layers.Add(new Color(fourthLayer, TubeId, 3));
         }
         //public Tube(int tubeId)
         //{
