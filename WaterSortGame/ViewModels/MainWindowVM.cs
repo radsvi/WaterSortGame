@@ -141,16 +141,18 @@ namespace WaterSortGame.ViewModels
 
         private bool AddLiquidToTargetTube(Tube targetTube)
         {
-            if (targetTube.Layers.Count <= 4)
-            {
-                targetTube.Layers.Add(SourceColor);
-                RemoveColorFromSourceTube(targetTube);
-                //SourceColor.LayerNumber = targetTube.Layers.Count - 1;
-                //SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
-                return true;
-            }
+            if (targetTube.Layers.Count >= 4)
+                return false;
 
-            return false;
+            if (targetTube.Layers.Count != 0)
+                if (targetTube.Layers[targetTube.Layers.Count - 1].Id != SourceColor.Id)
+                    return false;
+
+            targetTube.Layers.Add(SourceColor);
+            RemoveColorFromSourceTube(targetTube);
+            //SourceColor.LayerNumber = targetTube.Layers.Count - 1;
+            //SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
+            return true;
         }
 
         private void RemoveColorFromSourceTube(Tube targetTube)

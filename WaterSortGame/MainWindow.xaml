@@ -29,7 +29,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button Content="Reset" Command="{Binding RestartCommand}" Width="100" HorizontalAlignment="Left"/>
+        <Button Content="Reset" Command="{Binding RestartCommand}" Width="100" HorizontalAlignment="Right"/>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
             <WrapPanel>
