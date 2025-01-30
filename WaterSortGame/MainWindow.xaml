@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Title="MainWindow"
         
-        Height="650" MinHeight="300" d:MinHeight="150" d:Height="300"
+        Height="690" MinHeight="300" d:MinHeight="150" d:Height="300"
         Width="700" MinWidth="700"
         
         >
@@ -23,81 +23,91 @@
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding EscKeyCommand}"/>
     </Window.InputBindings>
-    <ScrollViewer VerticalScrollBarVisibility="Auto" DataContext="{Binding Source={StaticResource MainWindowVM}}">
-        <WrapPanel>
-            <!--<StackPanel>
-                <Label Content="{Binding MyProperty}"/>
-                <Button Content="reset command" Command="{Binding ResetTubesCommand}" />
-            </StackPanel>-->
-            <ItemsControl
-                Name="ListTubes"
-                HorizontalContentAlignment="Stretch"
-                ItemsSource="{Binding Tubes}"
-                d:ItemsSource="{d:SampleData ItemCount=4}"
-                >
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="8"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <!--<ListBoxItem/>
-                <ListBoxItem/>
-                <ListBoxItem/>-->
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid><!--https://stackoverflow.com/questions/32064308/pass-command-parameter-to-method-in-viewmodel-in-wpf-->
-                            <Button x:Name="btTubeNumber"
-                                    CommandParameter="{Binding .}"
-                                    
-                                    Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
-                                    Margin="{Binding Margin}"
-                                    >
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Grid>
-                                            <Rectangle Margin="10" MinWidth="60" Width="60" Height="242">
-                                                <Rectangle.Fill>
-                                                    <VisualBrush>
-                                                        <VisualBrush.Visual>
-                                                            <Border CornerRadius="0,0,20,20" Background="LightBlue" Width="40" Height="150" />
-                                                        </VisualBrush.Visual>
-                                                    </VisualBrush>
-                                                </Rectangle.Fill>
-                                            </Rectangle>
-                                            <Grid Margin="0,15" Height="232">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="20"/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                </Grid.RowDefinitions>
-                                                <Rectangle d:Fill="#145DEF" Fill="{Binding Path=FourthLayer.Rgb}" Margin="15,0" Grid.Row="1"/>
-                                                <Rectangle d:Fill="#3F4482" Fill="{Binding Path=ThirdLayer.Rgb}" Margin="15,0" Grid.Row="2"/>
-                                                <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=SecondLayer.Rgb}" Margin="15,0" Grid.Row="3"/>
 
-                                                <Rectangle Grid.Row="4" Margin="15,0" Width="50">
+    <Grid DataContext="{Binding Source={StaticResource MainWindowVM}}" Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Button Content="Reset" Command="{Binding RestartCommand}" Width="100" HorizontalAlignment="Left"/>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+            <WrapPanel>
+                <!--<StackPanel>
+            <Label Content="{Binding MyProperty}"/>
+            <Button Content="reset command" Command="{Binding ResetTubesCommand}" />
+        </StackPanel>-->
+                <ItemsControl
+            Name="ListTubes"
+            HorizontalContentAlignment="Stretch"
+            ItemsSource="{Binding Tubes}"
+            d:ItemsSource="{d:SampleData ItemCount=4}"
+            >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="8"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <!--<ListBoxItem/>
+            <ListBoxItem/>
+            <ListBoxItem/>-->
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <!--https://stackoverflow.com/questions/32064308/pass-command-parameter-to-method-in-viewmodel-in-wpf-->
+                                <Button x:Name="btTubeNumber"
+                                CommandParameter="{Binding .}"
+                                
+                                Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
+                                Margin="{Binding Margin}"
+                                >
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Grid>
+                                                <Rectangle Margin="10" MinWidth="60" Width="60" Height="242">
                                                     <Rectangle.Fill>
                                                         <VisualBrush>
                                                             <VisualBrush.Visual>
-                                                                <Border CornerRadius="0,0,20,20" d:Background="#F27914" Width="40" Height="40"
-                                                                        Background="{Binding Path=FirstLayer.Rgb}" />
+                                                                <Border CornerRadius="0,0,20,20" Background="LightBlue" Width="40" Height="150" />
                                                             </VisualBrush.Visual>
                                                         </VisualBrush>
                                                     </Rectangle.Fill>
                                                 </Rectangle>
+                                                <Grid Margin="0,15" Height="232">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="20"/>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                    </Grid.RowDefinitions>
+                                                    <Rectangle d:Fill="#145DEF" Fill="{Binding Path=FourthLayer.Rgb}" Margin="15,0" Grid.Row="1"/>
+                                                    <Rectangle d:Fill="#3F4482" Fill="{Binding Path=ThirdLayer.Rgb}" Margin="15,0" Grid.Row="2"/>
+                                                    <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=SecondLayer.Rgb}" Margin="15,0" Grid.Row="3"/>
+
+                                                    <Rectangle Grid.Row="4" Margin="15,0" Width="50">
+                                                        <Rectangle.Fill>
+                                                            <VisualBrush>
+                                                                <VisualBrush.Visual>
+                                                                    <Border CornerRadius="0,0,20,20" d:Background="#F27914" Width="40" Height="40"
+                                                                    Background="{Binding Path=FirstLayer.Rgb}" />
+                                                                </VisualBrush.Visual>
+                                                            </VisualBrush>
+                                                        </Rectangle.Fill>
+                                                    </Rectangle>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
 
 
-                            
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </WrapPanel>
-    </ScrollViewer>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </WrapPanel>
+        </ScrollViewer>
+    </Grid>
 </Window>
