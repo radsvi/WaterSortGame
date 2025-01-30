@@ -16,7 +16,7 @@
         >
     <!--d:DataContext="{d:DesignInstance Type=local:MainWindow}"-->
     <Window.Resources>
-        <Models:LiquidsManager x:Key="LiquidsManager"/>
+        <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
         <Models:TubesList x:Key="TubesList"/>
         <VM:MainWindowVM x:Key="MainWindowVM"/>
     </Window.Resources>
@@ -72,16 +72,16 @@
                                                     <RowDefinition/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
-                                                <Rectangle d:Fill="#145DEF" Fill="{Binding Path=FourthLayer.Color.Rgb}" Margin="15,0" Grid.Row="1"/>
-                                                <Rectangle d:Fill="#3F4482" Fill="{Binding Path=ThirdLayer.Color.Rgb}" Margin="15,0" Grid.Row="2"/>
-                                                <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=SecondLayer.Color.Rgb}" Margin="15,0" Grid.Row="3"/>
+                                                <Rectangle d:Fill="#145DEF" Fill="{Binding Path=FourthLayer.Rgb}" Margin="15,0" Grid.Row="1"/>
+                                                <Rectangle d:Fill="#3F4482" Fill="{Binding Path=ThirdLayer.Rgb}" Margin="15,0" Grid.Row="2"/>
+                                                <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=SecondLayer.Rgb}" Margin="15,0" Grid.Row="3"/>
 
                                                 <Rectangle Grid.Row="4" Margin="15,0" Width="50">
                                                     <Rectangle.Fill>
                                                         <VisualBrush>
                                                             <VisualBrush.Visual>
                                                                 <Border CornerRadius="0,0,20,20" d:Background="#F27914" Width="40" Height="40"
-                                                                        Background="{Binding Path=FirstLayer.Color.Rgb}" />
+                                                                        Background="{Binding Path=FirstLayer.Rgb}" />
                                                             </VisualBrush.Visual>
                                                         </VisualBrush>
                                                     </Rectangle.Fill>

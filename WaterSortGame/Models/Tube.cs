@@ -14,6 +14,7 @@ namespace WaterSortGame.Models
     internal class Tube : ViewModelBase
     {
         public int TubeId { get; set; }
+        private static int TubeIdCounter;
         //private Liquid[] layers = new Liquid[4];
         //public Liquid[] Layers
         //{
@@ -36,8 +37,8 @@ namespace WaterSortGame.Models
         //}
 
 
-        private Liquid fourthLayer;
-        public Liquid FourthLayer
+        private Color fourthLayer;
+        public Color FourthLayer
         {
             get {
                 //return fourthLayer;
@@ -51,8 +52,8 @@ namespace WaterSortGame.Models
                 //LiquidsManager.LiquidProperty
             }
         }
-        private Liquid thirdLayer;
-        public Liquid ThirdLayer
+        private Color thirdLayer;
+        public Color ThirdLayer
         {
             get { return thirdLayer; }
             set
@@ -61,8 +62,8 @@ namespace WaterSortGame.Models
                 OnPropertyChanged();
             }
         }
-        private Liquid secondLayer;
-        public Liquid SecondLayer
+        private Color secondLayer;
+        public Color SecondLayer
         {
             get { return secondLayer; }
             set
@@ -71,8 +72,8 @@ namespace WaterSortGame.Models
                 OnPropertyChanged();
             }
         }
-        private Liquid firstLayer;
-        public Liquid FirstLayer
+        private Color firstLayer;
+        public Color FirstLayer
         {
             get { return firstLayer; }
             set
@@ -108,79 +109,91 @@ namespace WaterSortGame.Models
             }
         }
 
-        public Tube(int tubeId)
+        public Tube()
         {
-            TubeId = tubeId;
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    //layers[i] = Liquid.GetLiquid(tubeId, i);
-            //    layers.Add(null);
-            //}
-
-            //FourthLayer = Liquid.GetLiquid(tubeId, 4);
-            //ThirdLayer = Liquid.GetLiquid(tubeId, 3);
-            //SecondLayer = Liquid.GetLiquid(tubeId, 2);
-            //FirstLayer = Liquid.GetLiquid(tubeId, 1);
-
-            FourthLayer = GetLiquid(3);
-            ThirdLayer = GetLiquid(2);
-            SecondLayer = GetLiquid(1);
-            FirstLayer = GetLiquid(0);
-
-            if (FourthLayer is not null)
-                FourthLayer.InternalPropertyChanged += InternalPropertyChanged;
-            if (ThirdLayer is not null)
-                ThirdLayer.InternalPropertyChanged += InternalPropertyChanged;
-            if (SecondLayer is not null)
-                SecondLayer.InternalPropertyChanged += InternalPropertyChanged;
-            if (FirstLayer is not null)
-                FirstLayer.InternalPropertyChanged += InternalPropertyChanged;
-
+            TubeId = TubeIdCounter++;
         }
-
-        private void InternalPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        public Tube(int firstLayer, int secondLayer, int thirdLayer, int fourthLayer)
         {
-            Liquid liquid = sender as Liquid;
-            if (liquid.LayerNumber == 3)
-                FourthLayer = GetLiquid(3);
-            if (liquid.LayerNumber == 2)
-                ThirdLayer = GetLiquid(2);
-            if (liquid.LayerNumber == 1)
-                SecondLayer = GetLiquid(1);
-            if (liquid.LayerNumber == 0)
-                FirstLayer = GetLiquid(0);
+            TubeId = TubeIdCounter++;
+            FirstLayer = new Color(firstLayer, TubeId, 0);
+            SecondLayer = new Color(secondLayer, TubeId, 1);
+            ThirdLayer = new Color(thirdLayer, TubeId, 2);
+            FourthLayer = new Color(fourthLayer, TubeId, 3);
         }
+        //public Tube(int tubeId)
+        //{
+        //    TubeId = tubeId;
+        //    //for (int i = 0; i < 4; i++)
+        //    //{
+        //    //    //layers[i] = Liquid.GetLiquid(tubeId, i);
+        //    //    layers.Add(null);
+        //    //}
 
-        public Liquid GetLiquid(int layerNumber)
-        { //Liquid.GetLiquid(tubeId, 4).Color;
-            var result = LiquidsManager.LiquidProperty
-                .Where(liquid => liquid.TubeNumber == TubeId)
-                .Where(liquid => liquid.LayerNumber == layerNumber).ToList();
+        //    //FourthLayer = Liquid.GetLiquid(tubeId, 4);
+        //    //ThirdLayer = Liquid.GetLiquid(tubeId, 3);
+        //    //SecondLayer = Liquid.GetLiquid(tubeId, 2);
+        //    //FirstLayer = Liquid.GetLiquid(tubeId, 1);
 
-            if (result.Count() > 0)
-                return result[0];
-            else
-                return null;
-        }
-        public void UpdateLayer(int layerNumber)
-        {
-            Liquid liquid = GetLiquid(layerNumber);
+        //    FourthLayer = GetLiquid(3);
+        //    ThirdLayer = GetLiquid(2);
+        //    SecondLayer = GetLiquid(1);
+        //    FirstLayer = GetLiquid(0);
 
-            if (layerNumber == 3)
-                FourthLayer = liquid;
-            if (layerNumber == 2)
-                ThirdLayer = liquid;
-            if (layerNumber == 1)
-                SecondLayer = liquid;
-            if (layerNumber == 0)
-                FirstLayer = liquid;
-        }
+        //    if (FourthLayer is not null)
+        //        FourthLayer.InternalPropertyChanged += InternalPropertyChanged;
+        //    if (ThirdLayer is not null)
+        //        ThirdLayer.InternalPropertyChanged += InternalPropertyChanged;
+        //    if (SecondLayer is not null)
+        //        SecondLayer.InternalPropertyChanged += InternalPropertyChanged;
+        //    if (FirstLayer is not null)
+        //        FirstLayer.InternalPropertyChanged += InternalPropertyChanged;
 
-        public event PropertyChangedEventHandler DestinationTubeChanged;
-        protected virtual void OnDestinationTubeChanged([CallerMemberName] string propertyName = null)
-        {
-            DestinationTubeChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        //}
+
+        //private void InternalPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        //{
+        //    Liquid liquid = sender as Liquid;
+        //    if (liquid.LayerNumber == 3)
+        //        FourthLayer = GetLiquid(3);
+        //    if (liquid.LayerNumber == 2)
+        //        ThirdLayer = GetLiquid(2);
+        //    if (liquid.LayerNumber == 1)
+        //        SecondLayer = GetLiquid(1);
+        //    if (liquid.LayerNumber == 0)
+        //        FirstLayer = GetLiquid(0);
+        //}
+
+        //public Liquid GetLiquid(int layerNumber)
+        //{ //Liquid.GetLiquid(tubeId, 4).Color;
+        //    var result = LiquidsManager.LiquidProperty
+        //        .Where(liquid => liquid.TubeNumber == TubeId)
+        //        .Where(liquid => liquid.LayerNumber == layerNumber).ToList();
+
+        //    if (result.Count() > 0)
+        //        return result[0];
+        //    else
+        //        return null;
+        //}
+        //public void UpdateLayer(int layerNumber)
+        //{
+        //    Liquid liquid = GetLiquid(layerNumber);
+
+        //    if (layerNumber == 3)
+        //        FourthLayer = liquid;
+        //    if (layerNumber == 2)
+        //        ThirdLayer = liquid;
+        //    if (layerNumber == 1)
+        //        SecondLayer = liquid;
+        //    if (layerNumber == 0)
+        //        FirstLayer = liquid;
+        //}
+
+        //public event PropertyChangedEventHandler DestinationTubeChanged;
+        //protected virtual void OnDestinationTubeChanged([CallerMemberName] string propertyName = null)
+        //{
+        //    DestinationTubeChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
 
 
 

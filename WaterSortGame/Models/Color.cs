@@ -23,6 +23,8 @@ namespace WaterSortGame.Models
                 OnPropertyChanged();
             }
         }
+        public int LayerNumber { get; set; }
+        public int TubeNumber { get; set; }
         public int? Opacity { get; set; }
         //public static List<CCodeType> GetValues()
         //{
@@ -69,7 +71,7 @@ namespace WaterSortGame.Models
         }
 
         public Color() { }
-        public Color(int id)
+        public Color(int id, int tubeNumber, int layerNumber)
         {
             //CCodeType colorObject = ContainsKey(id);
 
@@ -81,6 +83,9 @@ namespace WaterSortGame.Models
             Name = GetCode(id).Name;
             Rgb = GetCode(id).Rgb;
             Opacity = GetCode(id).Opacity;
+
+            TubeNumber = tubeNumber;
+            LayerNumber = layerNumber;
         }
     }
 }
