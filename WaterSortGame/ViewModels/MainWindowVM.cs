@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -174,6 +175,11 @@ namespace WaterSortGame.ViewModels
 
                 SelectedLiquid.TubeNumber = tube.TubeId;
                 SelectedLiquid.LayerNumber = 0;
+
+                // ## tady pridam event kterej trigrne updatnuti TubeListu. Primo tady totiz upravim jen Liquid a musim nejak zaridit aby se updatnul i Tube
+                // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                
+                OnPropertyChanged("Tube");
 
                 return true;
             }

@@ -85,7 +85,7 @@ namespace WaterSortGame.Models
         public static void ChangeLiquid(Liquid liquid)
         {
             //liquids
-            // je to vubec nutny delat takhle? Jakmile mam liquid (pointer) tak uz to muzu zmenit kdekoliv
+            // ## je to vubec nutny delat takhle? Jakmile mam liquid (pointer) tak uz to muzu zmenit kdekoliv
         }
     }
 }

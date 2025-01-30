@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using WaterSortGame.ViewModels;
@@ -21,6 +23,12 @@ namespace WaterSortGame.Models
                 OnPropertyChanged();
             }
         }
+        // ## tohle mozna muzu pak smazat a pouzit to z ViewModelBase. mam to tu jen pro testovani, ale myslim ze je to zbytecny mit jinej nazev
+        public event PropertyChangedEventHandler InternalPropertyChanged;
+        protected virtual void OnInternalPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            InternalPropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
         //[Obsolete]public int TubeNumber { get; set; }
         private int tubeNumber;
         public int TubeNumber
@@ -31,9 +39,20 @@ namespace WaterSortGame.Models
                 //TubesList.ChangeLiquidPosition(Color, tubeNumber, LayerNumber, value, LayerNumber);
                 tubeNumber = value;
                 OnPropertyChanged();
+                OnInternalPropertyChanged();
             }
         }
-        public int LayerNumber { get; set; } // lowest layer starting at 0
+        private int layerNumber; // lowest layer starting at 0
+        public int LayerNumber
+        {
+            get { return layerNumber; }
+            set
+            {
+                layerNumber = value;
+                OnPropertyChanged();
+                OnInternalPropertyChanged();
+            }
+        }
 
         private bool isFilled = true;
         
@@ -44,6 +63,7 @@ namespace WaterSortGame.Models
             {
                 isFilled = value;
                 OnPropertyChanged();
+                OnInternalPropertyChanged();
             }
         }
 
