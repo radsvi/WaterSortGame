@@ -146,7 +146,7 @@ namespace WaterSortGame.ViewModels
                 targetTube.Layers.Add(SourceColor);
                 RemoveColorFromSourceTube(targetTube);
                 //SourceColor.LayerNumber = targetTube.Layers.Count - 1;
-                SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
+                //SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
                 return true;
             }
 
@@ -156,7 +156,7 @@ namespace WaterSortGame.ViewModels
         private void RemoveColorFromSourceTube(Tube targetTube)
         {
             SelectedTube.Layers.Remove(SourceColor);
-            SourceColor.TubeNumber = targetTube.TubeId;
+            //SourceColor.TubeNumber = targetTube.TubeId;
         }
 
         private void DeselectTube()

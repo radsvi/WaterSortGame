@@ -57,10 +57,14 @@ namespace WaterSortGame.Models
         {
             TubeId = TubeIdCounter++;
 
-            Layers.Add(new Color(firstLayer, TubeId, 0));
-            Layers.Add(new Color(secondLayer, TubeId, 1));
-            Layers.Add(new Color(thirdLayer, TubeId, 2));
-            Layers.Add(new Color(fourthLayer, TubeId, 3));
+            //Layers.Add(new Color(firstLayer, TubeId, 0));
+            //Layers.Add(new Color(secondLayer, TubeId, 1));
+            //Layers.Add(new Color(thirdLayer, TubeId, 2));
+            //Layers.Add(new Color(fourthLayer, TubeId, 3));
+            Layers.Add(new Color(firstLayer));
+            Layers.Add(new Color(secondLayer));
+            Layers.Add(new Color(thirdLayer));
+            Layers.Add(new Color(fourthLayer));
         }
     }
 }
