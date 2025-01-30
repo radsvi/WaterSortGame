@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using WaterSortGame.ViewModels;
+using WaterSortGame.Views;
 
 namespace WaterSortGame.Models
 {
@@ -37,11 +38,33 @@ namespace WaterSortGame.Models
             set
             {
                 //TubesList.ChangeLiquidPosition(Color, tubeNumber, LayerNumber, value, LayerNumber);
+                //if (tubeNumber != value)
+                //    GetTube(value).DestinationTubeChanged += Liquid_DestinationTubeChanged;
+
+                //if (tubeNumber != value && tubeNumber != null)
+                //    GetTube(value).UpdateLayer(LayerNumber);
+
+                //var result = TubesList.GetTubes()
+                //.Where(tube => tube.TubeId == value)
+                //.ToList();
+
+                //if (result.Count() > 0)
+                //{
+                //    result[0].UpdateLayer(LayerNumber);
+                //}
+
                 tubeNumber = value;
+
                 OnPropertyChanged();
                 OnInternalPropertyChanged();
             }
         }
+
+        //private void Liquid_DestinationTubeChanged(object? sender, PropertyChangedEventArgs e)
+        //{
+        //    InternalPropertyChanged(this, new PropertyChangedEventArgs("asdf"));
+        //}
+
         private int layerNumber; // lowest layer starting at 0
         public int LayerNumber
         {
@@ -56,7 +79,7 @@ namespace WaterSortGame.Models
 
         private bool isFilled = true;
         
-        public bool IsFilled
+        [Obsolete]public bool IsFilled
         {
             get { return isFilled; }
             set
@@ -73,6 +96,17 @@ namespace WaterSortGame.Models
             Color = new Color(color);
             TubeNumber = tubeNumber;
             LayerNumber = layerNumber;
+        }
+        public Tube GetTube(int tubeNumber)
+        {
+            var result = TubesList.GetTubes()
+                .Where(tube => tube.TubeId == tubeNumber)
+                .ToList();
+
+            if (result.Count() > 0)
+                return result[0];
+            else
+                return null;
         }
 
         //public static ObservableCollection<Liquid> liquids { get; set; } = new ObservableCollection<Liquid>()

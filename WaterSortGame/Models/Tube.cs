@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using WaterSortGame.ViewModels;
@@ -39,12 +41,12 @@ namespace WaterSortGame.Models
         {
             get {
                 //return fourthLayer;
-                return GetLiquid(3);
+                return fourthLayer;
             }
             set
             {
-                //fourthLayer = value;
-                //OnPropertyChanged();
+                fourthLayer = value;
+                OnPropertyChanged();
 
                 //LiquidsManager.LiquidProperty
             }
@@ -52,7 +54,7 @@ namespace WaterSortGame.Models
         private Liquid thirdLayer;
         public Liquid ThirdLayer
         {
-            get { return GetLiquid(2); }
+            get { return thirdLayer; }
             set
             {
                 thirdLayer = value;
@@ -62,7 +64,7 @@ namespace WaterSortGame.Models
         private Liquid secondLayer;
         public Liquid SecondLayer
         {
-            get { return GetLiquid(1); }
+            get { return secondLayer; }
             set
             {
                 secondLayer = value;
@@ -72,7 +74,7 @@ namespace WaterSortGame.Models
         private Liquid firstLayer;
         public Liquid FirstLayer
         {
-            get { return GetLiquid(0); }
+            get { return firstLayer; }
             set
             {
                 firstLayer = value;
@@ -120,8 +122,33 @@ namespace WaterSortGame.Models
             //SecondLayer = Liquid.GetLiquid(tubeId, 2);
             //FirstLayer = Liquid.GetLiquid(tubeId, 1);
 
+            FourthLayer = GetLiquid(3);
+            ThirdLayer = GetLiquid(2);
+            SecondLayer = GetLiquid(1);
+            FirstLayer = GetLiquid(0);
 
-            
+            if (FourthLayer is not null)
+                FourthLayer.InternalPropertyChanged += InternalPropertyChanged;
+            if (ThirdLayer is not null)
+                ThirdLayer.InternalPropertyChanged += InternalPropertyChanged;
+            if (SecondLayer is not null)
+                SecondLayer.InternalPropertyChanged += InternalPropertyChanged;
+            if (FirstLayer is not null)
+                FirstLayer.InternalPropertyChanged += InternalPropertyChanged;
+
+        }
+
+        private void InternalPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            Liquid liquid = sender as Liquid;
+            if (liquid.LayerNumber == 3)
+                FourthLayer = GetLiquid(3);
+            if (liquid.LayerNumber == 2)
+                ThirdLayer = GetLiquid(2);
+            if (liquid.LayerNumber == 1)
+                SecondLayer = GetLiquid(1);
+            if (liquid.LayerNumber == 0)
+                FirstLayer = GetLiquid(0);
         }
 
         public Liquid GetLiquid(int layerNumber)
@@ -133,8 +160,29 @@ namespace WaterSortGame.Models
             if (result.Count() > 0)
                 return result[0];
             else
-                return new Liquid();
+                return null;
         }
+        public void UpdateLayer(int layerNumber)
+        {
+            Liquid liquid = GetLiquid(layerNumber);
+
+            if (layerNumber == 3)
+                FourthLayer = liquid;
+            if (layerNumber == 2)
+                ThirdLayer = liquid;
+            if (layerNumber == 1)
+                SecondLayer = liquid;
+            if (layerNumber == 0)
+                FirstLayer = liquid;
+        }
+
+        public event PropertyChangedEventHandler DestinationTubeChanged;
+        protected virtual void OnDestinationTubeChanged([CallerMemberName] string propertyName = null)
+        {
+            DestinationTubeChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
 
     }
 }

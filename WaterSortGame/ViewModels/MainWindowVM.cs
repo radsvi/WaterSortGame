@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -87,8 +88,6 @@ namespace WaterSortGame.ViewModels
         public MainWindowVM()
         {
             Tubes = TubesList.GetTubes();
-
-            
         }
 
         public RelayCommand EscKeyCommand => new RelayCommand(execute => CloseApplication());
@@ -108,14 +107,15 @@ namespace WaterSortGame.ViewModels
             var tube = obj as Tube;
 
             if (selectedTube == null || selectedTube == tube)
-                SelectedTube = tube;
+            {
+                SelectLiquid(tube);
+            }
+                
             else // if selecting different different tube
             {
-                SelectLiquid(SelectedTube);
-                if (AddLiquidToTube(tube) == true)
-                    RemoveLiquidFromSourceTube(SelectedTube);
+                if (MoveLiquidToTube(tube) == true) // kdyz je target tube plna tak by to nemelo udelat nic. ## pripadne pozdeji pridat vyhozeni nejakyho erroru
+                    DeselectTube();
             }
-
         }
 
         private void SelectLiquid(Tube tube)
@@ -131,15 +131,40 @@ namespace WaterSortGame.ViewModels
             //    }
             //}
 
-            if (tube.FourthLayer.Color.Id != 0)
+            //if (tube.FourthLayer.Color.Id != 0)
+            if (tube.FourthLayer is not null)
             {
+                SelectedTube = tube;
                 SelectedLiquid = tube.FourthLayer;
                 //tube.Layers[i] = null;
                 return;
             }
+            if (tube.ThirdLayer is not null)
+            {
+                SelectedTube = tube;
+                SelectedLiquid = tube.ThirdLayer;
+                //tube.Layers[i] = null;
+                return;
+            }
+            if (tube.SecondLayer is not null)
+            {
+                SelectedTube = tube;
+                SelectedLiquid = tube.SecondLayer;
+                //tube.Layers[i] = null;
+                return;
+            }
+            if (tube.FirstLayer is not null)
+            {
+                SelectedTube = tube;
+                SelectedLiquid = tube.FirstLayer;
+                //tube.Layers[i] = null;
+                return;
+            }
+
+            //MessageBox.Show("Cannot select empty Vial.");
         }
 
-        private bool AddLiquidToTube(Tube tube)
+        private bool MoveLiquidToTube(Tube tube)
         {
             //if (tube.FirstLayer == null)
             //for (int i = tube.Layers.Count - 1; i >= 0; i--)
@@ -166,7 +191,7 @@ namespace WaterSortGame.ViewModels
             //    }
             //}
 
-            if (tube.FirstLayer.Color is null)
+            if (tube.FirstLayer is null)
             {
                 //tube.Layers.Remove(tube.FourthLayer);
                 //insert
@@ -178,20 +203,65 @@ namespace WaterSortGame.ViewModels
 
                 // ## tady pridam event kterej trigrne updatnuti TubeListu. Primo tady totiz upravim jen Liquid a musim nejak zaridit aby se updatnul i Tube
                 // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                
+                GetTube(tube.TubeId).UpdateLayer(SelectedLiquid.LayerNumber);
+
+                OnPropertyChanged("Tube");
+
+                return true;
+            }
+            if (tube.SecondLayer is null)
+            {
+                SelectedLiquid.TubeNumber = tube.TubeId;
+                SelectedLiquid.LayerNumber = 1;
+                GetTube(tube.TubeId).UpdateLayer(SelectedLiquid.LayerNumber);
+
+                OnPropertyChanged("Tube");
+
+                return true;
+            }
+            if (tube.ThirdLayer is null)
+            {
+                SelectedLiquid.TubeNumber = tube.TubeId;
+                SelectedLiquid.LayerNumber = 2;
+                GetTube(tube.TubeId).UpdateLayer(SelectedLiquid.LayerNumber);
+
+                OnPropertyChanged("Tube");
+
+                return true;
+            }
+            if (tube.FourthLayer is null)
+            {
+                SelectedLiquid.TubeNumber = tube.TubeId;
+                SelectedLiquid.LayerNumber = 3;
+                GetTube(tube.TubeId).UpdateLayer(SelectedLiquid.LayerNumber);
+
                 OnPropertyChanged("Tube");
 
                 return true;
             }
 
+
+
             return false;
 
             //AddLiquidToLayer(tube, 0);
         }
-        private void RemoveLiquidFromSourceTube(Tube tube)
+        public Tube GetTube(int tubeNumber)
+        {
+            var result = TubesList.GetTubes()
+                .Where(tube => tube.TubeId == tubeNumber)
+                .ToList();
+
+            if (result.Count() > 0)
+                return result[0];
+            else
+                return null;
+        }
+
+        private void DeselectTube()
         {
             //tube.Layers.Remove(SelectedLiquid);
-            SelectedLiquid.IsFilled = false;
+            //SelectedLiquid.IsFilled = false;
             SelectedTube.Selected = false;
             SelectedTube = null;
             SelectedLiquid = null;
