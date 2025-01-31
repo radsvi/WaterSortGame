@@ -85,7 +85,7 @@ namespace WaterSortGame.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        #endregion
         public MainWindowVM(IWindowService windowService)
         //public MainWindowVM()
         {
@@ -93,7 +93,6 @@ namespace WaterSortGame.ViewModels
             Tubes = TubesList.GetTubes();
             PropertyChanged += Tube_PropertyChanged;
         }
-        #endregion
 
         #region Navigation
         public RelayCommand EscKeyCommand => new RelayCommand(execute => CloseApplication());
@@ -110,8 +109,10 @@ namespace WaterSortGame.ViewModels
         private void Restart()
         {
             TubesList.GenerateTubes(true);
+            DeselectTube();
         }
         public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesList.AddExtraTube(), canExecute => TubesList.ExtraTubes < TubesList.MaximumExtraTubes);
+        #endregion
         #region OptionsWindow
         private IWindowService _windowService;
 
@@ -125,7 +126,7 @@ namespace WaterSortGame.ViewModels
             _windowService?.CloseWindow();
         }
         #endregion
-        #endregion
+        
 
         #region Moving Liquids
         public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTube(execute));
@@ -133,18 +134,47 @@ namespace WaterSortGame.ViewModels
         {
             var tube = obj as Tube;
 
-            if (SelectedTube == null || SelectedTube == tube)
+            if (SelectedTube == null)
             {
                 SelectLiquid(tube);
+                return;
             }
-                
-            else // if selecting different different tube
+            if (SelectedTube == tube)
             {
-                if (AddLiquidToTargetTube(tube) == true) // kdyz je target tube plna tak by to nemelo udelat nic.
-                {
-                    DeselectTube();
-                }
+                DeselectTube();
+                return;
             }
+
+
+            // if selecting different different tube
+            bool success = false;
+            bool successAtLeastOnce = false;
+
+
+            //if (success == true) // kdyz je target tube plna tak by to neudela nic.
+            //{
+            //    //do { } while (AddLiquidToTargetTube(tube) == true);
+
+            //    SelectLiquid(SelectedTube);
+
+            //    DeselectTube();
+            //}
+
+
+            do {
+                success = AddLiquidToTargetTube(tube);
+                if (success == true)
+                {
+                    successAtLeastOnce = true;
+                    SelectLiquid(SelectedTube); // vyber dalsi liquid ze stejne zkumavky
+                }
+            } while (success == true);
+            if (successAtLeastOnce == true)
+            {
+                DeselectTube();
+            }
+            
+
         }
 
         private void SelectLiquid(Tube sourceTube)
@@ -153,7 +183,8 @@ namespace WaterSortGame.ViewModels
             {
                 if (sourceTube.Layers[i] is not null)
                 {
-                    SelectedTube = sourceTube;
+                    if (SelectedTube != sourceTube)
+                        SelectedTube = sourceTube;
                     SourceColor = sourceTube.Layers[i];
                     return;
                 }
@@ -184,8 +215,11 @@ namespace WaterSortGame.ViewModels
 
         private void DeselectTube()
         {
-            SelectedTube.Selected = false;
-            SelectedTube = null;
+            if (SelectedTube is not null)
+            {
+                SelectedTube.Selected = false;
+                SelectedTube = null;
+            }
         }
 
         private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)

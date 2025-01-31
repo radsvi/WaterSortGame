@@ -57,20 +57,14 @@ namespace WaterSortGame.Models
         {
             TubeId = TubeIdCounter++;
         }
-        public Tube(int firstLayer, int secondLayer, int thirdLayer, int fourthLayer)
+        public Tube(int? firstLayer = null, int? secondLayer = null, int? thirdLayer = null, int? fourthLayer = null)
         {
             TubeId = TubeIdCounter++;
 
-            //Layers.Add(new Color(firstLayer, TubeId, 0));
-            //Layers.Add(new Color(secondLayer, TubeId, 1));
-            //Layers.Add(new Color(thirdLayer, TubeId, 2));
-            //Layers.Add(new Color(fourthLayer, TubeId, 3));
-            Layers.Add(new Color(firstLayer));
-            Layers.Add(new Color(secondLayer));
-            Layers.Add(new Color(thirdLayer));
-            Layers.Add(new Color(fourthLayer));
-
-            //PropertyChanged += Tube_PropertyChanged;
+            if (firstLayer is not null) Layers.Add(new Color((int)firstLayer));
+            if (secondLayer is not null) Layers.Add(new Color((int)secondLayer));
+            if (thirdLayer is not null) Layers.Add(new Color((int)thirdLayer));
+            if (fourthLayer is not null) Layers.Add(new Color((int)fourthLayer));
         }
 
         //private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)
