@@ -17,14 +17,15 @@
     <!--d:DataContext="{d:DesignInstance Type=local:MainWindow}"-->
     <Window.Resources>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
-        <Models:TubesList x:Key="TubesList"/>
-        <VM:MainWindowVM x:Key="MainWindowVM"/>
+        <!--<Models:TubesList x:Key="TubesList"/>
+        <VM:MainWindowVM x:Key="MainWindowVM"/>-->
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding EscKeyCommand}"/>
     </Window.InputBindings>
 
-    <Grid DataContext="{Binding Source={StaticResource MainWindowVM}}" Margin="5">
+    <!--<Grid DataContext="{Binding Source={StaticResource MainWindowVM}}" Margin="5">-->
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition/>

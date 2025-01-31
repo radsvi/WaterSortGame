@@ -85,10 +85,10 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        //public MainWindowVM(IWindowService windowService)
-        public MainWindowVM()
+        public MainWindowVM(IWindowService windowService)
+        //public MainWindowVM()
         {
-            //_windowService = windowService;
+            _windowService = windowService;
             Tubes = TubesList.GetTubes();
         }
 
@@ -169,11 +169,17 @@ namespace WaterSortGame.ViewModels
             SelectedTube = null;
         }
 
-        //private IWindowService _windowService;
-        //public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => OpenOptionsWindow());
-        //private void OpenOptionsWindow()
-        //{
-        //    _windowService.OpenWindow(this);
-        //}
+        #region OptionsWindow
+        private IWindowService _windowService;
+        public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => OpenOptionsWindow());
+        private void OpenOptionsWindow()
+        {
+            _windowService?.OpenWindow(this);
+        }
+        private void OnCloseWindow()
+        {
+            _windowService?.CloseWindow();
+        }
+        #endregion
     }
 }
