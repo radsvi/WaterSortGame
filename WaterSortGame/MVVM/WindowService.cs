@@ -13,7 +13,7 @@ namespace WaterSortGame.MVVM
         public void OpenWindow(object dataContext)
         {
             // Create an instance of the new window
-            var window = new OptionsWindow(dataContext);
+            var window = new OptionsWindow();
 
             // Show the new window
             window.ShowDialog();

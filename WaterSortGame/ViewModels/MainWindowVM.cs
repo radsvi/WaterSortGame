@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 
@@ -20,6 +21,18 @@ namespace WaterSortGame.ViewModels
     class MainWindowVM : ViewModelBase
     {
         #region Properties
+        private ViewModelBase _selectedViewModel;
+        public ViewModelBase SelectedViewModel
+        {
+            get { return _selectedViewModel; }
+            set
+            {
+                _selectedViewModel = value;
+                OnPropertyChanged();
+            }
+        }
+        public ICommand UpdateViewCommand { get; set; }
+
         private Tube selectedTube;
         public Tube SelectedTube
         {
@@ -89,7 +102,7 @@ namespace WaterSortGame.ViewModels
         public MainWindowVM(IWindowService windowService)
         //public MainWindowVM()
         {
-            _windowService = windowService;
+            this.windowService = windowService;
             Tubes = TubesList.GetTubes();
             PropertyChanged += Tube_PropertyChanged;
         }
@@ -116,16 +129,16 @@ namespace WaterSortGame.ViewModels
         public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesList.AddExtraTube(), canExecute => TubesList.ExtraTubes < TubesList.MaximumExtraTubes);
         #endregion
         #region OptionsWindow
-        private IWindowService _windowService;
+        private IWindowService windowService;
 
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => OpenOptionsWindow());
         private void OpenOptionsWindow()
         {
-            _windowService?.OpenWindow(this);
+            windowService?.OpenWindow(this);
         }
         private void OnCloseWindow()
         {
-            _windowService?.CloseWindow();
+            windowService?.CloseWindow();
         }
         #endregion
         

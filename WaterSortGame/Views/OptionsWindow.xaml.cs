@@ -21,11 +21,21 @@ namespace WaterSortGame.Views
     /// </summary>
     public partial class OptionsWindow : Window
     {
-        public OptionsWindow(object mainWindowDataContext)
+        public OptionsWindow()
         {
             InitializeComponent();
-            //var windowService = new WindowService();
-            DataContext = mainWindowDataContext;
+
+            //var ow = new OptionsWindowVM((IWindowService)mainWindowDataContext);
+            //DataContext = ow;
+
+
+
+            //Top = (SystemParameters.WorkArea.Height - ow.WindowHeight) / 2 + 50;
+            //Left = (SystemParameters.WorkArea.Width - ow.WindowWidth) / 2;
+
+            //MainWindowVM dtc = mainWindowDataContext as MainWindowVM;
+            //Top = (SystemParameters.WorkArea.Height - ow.WindowHeight) / 2 + 50;
+            //Left = (SystemParameters.WorkArea.Width - ow.WindowWidth) / 2;
         }
     }
 }

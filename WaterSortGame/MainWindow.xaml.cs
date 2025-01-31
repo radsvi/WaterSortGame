@@ -23,8 +23,9 @@ namespace WaterSortGame
         public MainWindow()
         {
             InitializeComponent();
-            var windowService = new WindowService();
-            DataContext = new MainWindowVM(windowService);
+            //var windowService = new WindowService();
+            //DataContext = new MainWindowVM(windowService);
+            DataContext = new MainWindowVM(new WindowService());
             //DataContext = new MainWindowVM();
         }
     }

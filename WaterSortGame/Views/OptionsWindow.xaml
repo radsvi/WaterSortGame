@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WaterSortGame.Views"
         mc:Ignorable="d"
-        Title="OptionsWindow" Height="450" Width="800">
+        d:DataContext="{d:DesignInstance Type={x:Type local:OptionsWindow}}"
+        Title="OptionsWindow"
+        WindowStartupLocation="CenterScreen"
+        Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}"
+        >
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding CloseOptionsWindowCommand}"/>
     </Window.InputBindings>
@@ -15,7 +19,7 @@
                 <GroupBox Header="Tubes">
                     <DockPanel>
                         <Label Content="Maximum extra tubes"/>
-                        <TextBox x:Name="tbSubtitlesSource" d:Text="https://www.opensubtitles.org/en/search2/sublanguageid-eng/moviename-%s"
+                        <TextBox x:Name="MaximumExtraTubes" d:Text="100"
                                  Text="{Binding SubtitlesDownloadSource, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                  VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />
                     </DockPanel>
