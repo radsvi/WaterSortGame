@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -22,8 +23,11 @@ namespace WaterSortGame.Models
             get { return layers; }
             set
             {
-                layers = value;
-                OnPropertyChanged();
+                if (layers != value)
+                {
+                    layers = value;
+                    //OnPropertyChanged();
+                }
             }
         }
 
@@ -44,7 +48,7 @@ namespace WaterSortGame.Models
             set
             {
                 selected = value;
-                OnPropertyChanged();
+                //OnPropertyChanged(); // Tube_PropertyChanged se provadi 2x kdyz jsem to tu mel
                 OnPropertyChanged("Margin");
             }
         }
@@ -65,6 +69,13 @@ namespace WaterSortGame.Models
             Layers.Add(new Color(secondLayer));
             Layers.Add(new Color(thirdLayer));
             Layers.Add(new Color(fourthLayer));
+
+            //PropertyChanged += Tube_PropertyChanged;
         }
+
+        //private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        //{
+        //    Debug.WriteLine("asdf");
+        //}
     }
 }
