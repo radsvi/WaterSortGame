@@ -6,10 +6,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 
@@ -17,8 +19,7 @@ namespace WaterSortGame.ViewModels
 {
     class MainWindowVM : ViewModelBase
     {
-        public string MyProperty { get; set; } = "Testuju";
-
+        #region Properties
         private Tube selectedTube;
         public Tube SelectedTube
         {
@@ -90,8 +91,11 @@ namespace WaterSortGame.ViewModels
         {
             _windowService = windowService;
             Tubes = TubesList.GetTubes();
+            PropertyChanged += Tube_PropertyChanged;
         }
+        #endregion
 
+        #region Navigation
         public RelayCommand EscKeyCommand => new RelayCommand(execute => CloseApplication());
         private void CloseApplication()
         {
@@ -108,8 +112,23 @@ namespace WaterSortGame.ViewModels
             TubesList.GenerateTubes(true);
         }
         public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesList.AddExtraTube(), canExecute => TubesList.ExtraTubes < TubesList.MaximumExtraTubes);
-        public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTube(execute));
+        #region OptionsWindow
+        private IWindowService _windowService;
 
+        public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => OpenOptionsWindow());
+        private void OpenOptionsWindow()
+        {
+            _windowService?.OpenWindow(this);
+        }
+        private void OnCloseWindow()
+        {
+            _windowService?.CloseWindow();
+        }
+        #endregion
+        #endregion
+
+        #region Moving Liquids
+        public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTube(execute));
         private void SelectTube(object obj)
         {
             var tube = obj as Tube;
@@ -169,17 +188,42 @@ namespace WaterSortGame.ViewModels
             SelectedTube = null;
         }
 
-        #region OptionsWindow
-        private IWindowService _windowService;
-        public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => OpenOptionsWindow());
-        private void OpenOptionsWindow()
+        private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            _windowService?.OpenWindow(this);
+            if (CompareAllTubes())
+            {
+                LevelWonMessage();
+            }
         }
-        private void OnCloseWindow()
+        private bool CompareAllTubes()
         {
-            _windowService?.CloseWindow();
+            foreach (var tube in Tubes)
+            {
+                if (tube.Layers.Count != 4 && tube.Layers.Count != 0) // pokud zkumavka neni plna, nebo uplne prazdna, nemuze to byt level dokoncenej
+                {
+                    return false;
+                }
+                for (var i = 0; i < tube.Layers.Count; i++)
+                {
+                    for (int j = i + 1; j < tube.Layers.Count; j++)
+                    {
+                        if (tube.Layers[i].Id != tube.Layers[j].Id)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        private void LevelWonMessage()
+        {
+            MessageBox.Show("Level won!");
+            // pridat veci jako otazka jestli chci zopakovat level, nebo vygenerovat novej
+            // pripadne zkusit udelat nejakou grafiku, ohnostroj
         }
         #endregion
+
+
     }
 }
