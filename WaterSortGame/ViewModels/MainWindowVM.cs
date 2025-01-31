@@ -93,6 +93,7 @@ namespace WaterSortGame.ViewModels
             Tubes = TubesList.GetTubes();
             PropertyChanged += Tube_PropertyChanged;
         }
+        public bool LevelComplete { get; set; }
 
         #region Navigation
         public RelayCommand EscKeyCommand => new RelayCommand(execute => CloseApplication());
@@ -109,6 +110,7 @@ namespace WaterSortGame.ViewModels
         private void Restart()
         {
             TubesList.GenerateTubes(true);
+            LevelComplete = false;
             DeselectTube();
         }
         public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesList.AddExtraTube(), canExecute => TubesList.ExtraTubes < TubesList.MaximumExtraTubes);
@@ -209,8 +211,10 @@ namespace WaterSortGame.ViewModels
 
         private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (CompareAllTubes())
+            
+            if (CompareAllTubes() && LevelComplete == false)
             {
+                LevelComplete = true;
                 LevelWonMessage();
             }
         }
@@ -237,7 +241,8 @@ namespace WaterSortGame.ViewModels
         }
         private void LevelWonMessage()
         {
-            MessageBox.Show("Level won!");
+            MessageBox.Show("Level complete!");
+
             // pridat veci jako otazka jestli chci zopakovat level, nebo vygenerovat novej
             // pripadne zkusit udelat nejakou grafiku, ohnostroj
         }
