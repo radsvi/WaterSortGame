@@ -22,11 +22,16 @@ namespace WaterSortGame.Models
             set
             {
                 maximumExtraTubes = value;
-                //OnPropertyChanged();
+                //OnPropertyChanged(nameof(MaximumExtraTubes));
+                //OnPropertyChanged("MaximumExtraTubes");
                 Settings.Default.MaximumExtraTubes = value;
                 Settings.Default.Save();
             }
         }
+        //static TubesList()
+        //{
+        //    MaximumExtraTubes = Settings.Default.MaximumExtraTubes;
+        //}
 
         //public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>()
         //{

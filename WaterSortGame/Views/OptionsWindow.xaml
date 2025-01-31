@@ -23,7 +23,7 @@
                 <GroupBox Header="Tubes">
                     <DockPanel>
                         <Label Content="Limit extra tubes to maximum of"/>
-                        <TextBox x:Name="MaximumExtraTubes" d:Text="100"
+                        <TextBox x:Name="MaximumExtraTubes"
                                  DataContext="{Binding Source={StaticResource TubesList}}"
                                  Text="{Binding MaximumExtraTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                  VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />

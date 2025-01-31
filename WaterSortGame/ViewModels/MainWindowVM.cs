@@ -15,12 +15,14 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
+using WaterSortGame.Properties;
 
 namespace WaterSortGame.ViewModels
 {
     class MainWindowVM : ViewModelBase
     {
         #region Properties
+
         private ViewModelBase _selectedViewModel;
         public ViewModelBase SelectedViewModel
         {

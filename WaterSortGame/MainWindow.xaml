@@ -17,8 +17,8 @@
     <!--d:DataContext="{d:DesignInstance Type=local:MainWindow}"-->
     <Window.Resources>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
-        <!--<Models:TubesList x:Key="TubesList"/>
-        <VM:MainWindowVM x:Key="MainWindowVM"/>-->
+        <Models:TubesList x:Key="TubesList"/>
+        <!--<VM:MainWindowVM x:Key="MainWindowVM"/>-->
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding EscKeyCommand}"/>
@@ -31,7 +31,6 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            
             <Button Content="Add Extra Vial" Command="{Binding AddExtraTubeCommand}" Width="100" Margin="7,0,0,0"/>
             <Button Content="Restart level" Command="{Binding RestartCommand}" Width="100" HorizontalAlignment="Right" Margin="7,0,0,0"/>
             <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}" Width="100" HorizontalAlignment="Right" Margin="7,0,0,0"/>
