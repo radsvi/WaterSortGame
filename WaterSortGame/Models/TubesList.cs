@@ -14,19 +14,19 @@ namespace WaterSortGame.Models
     {
         public static int ExtraTubes { get; set; } = 0;
 
-        public static int MaximumExtraTubes { get; set; } = Settings.Default.MaximumExtraTubes;
-        //private static int maximumExtraTubes = Settings.Default.MaximumExtraTubes;
-        //public static int MaximumExtraTubes
-        //{
-        //    get { return maximumExtraTubes; }
-        //    set
-        //    {
-        //        maximumExtraTubes = value;
-        //        OnPropertyChanged();
-        //        Settings.Default.MaximumExtraTubes = value;
-        //        Settings.Default.Save();
-        //    }
-        //}
+        //public static int MaximumExtraTubes { get; set; } = Settings.Default.MaximumExtraTubes;
+        private static int maximumExtraTubes = Settings.Default.MaximumExtraTubes;
+        public static int MaximumExtraTubes
+        {
+            get { return maximumExtraTubes; }
+            set
+            {
+                maximumExtraTubes = value;
+                //OnPropertyChanged();
+                Settings.Default.MaximumExtraTubes = value;
+                Settings.Default.Save();
+            }
+        }
 
         //public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>()
         //{

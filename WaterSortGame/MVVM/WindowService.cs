@@ -5,15 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using WaterSortGame.Views;
+using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.MVVM
 {
     public class WindowService : IWindowService
     {
-        public void OpenWindow(object dataContext)
+        public void OpenWindow(object mainWindowVM)
         {
             // Create an instance of the new window
+            //new OptionsWindow().DataContext = new OptionsWindowVM();
             var window = new OptionsWindow();
+            var viewModel = new OptionsWindowVM(mainWindowVM);
+            window.DataContext = viewModel;
 
             // Show the new window
             window.ShowDialog();

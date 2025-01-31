@@ -13,11 +13,14 @@ namespace WaterSortGame.ViewModels
         public int WindowWidth { get; set; } = 800;
 
         private IWindowService windowService;
+        public MainWindowVM MainWindowVM { get; set; }
 
         //public OptionsWindowVM(IWindowService windowService)
-        public OptionsWindowVM()
+        public OptionsWindowVM(object mainWindowVM)
         {
             //this.windowService = windowService;
+            MainWindowVM = (MainWindowVM)mainWindowVM;
+
         }
     }
 }
