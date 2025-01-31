@@ -55,13 +55,13 @@ namespace WaterSortGame.ViewModels
                 
             }
         }
-        private Color selectedLiquid;
-        public Color SourceColor
+        private Color sourceLiquid;
+        public Color SourceLiquid
         {
-            get { return selectedLiquid; }
+            get { return sourceLiquid; }
             set
             {
-                selectedLiquid = value;
+                sourceLiquid = value;
                 OnPropertyChanged();
             }
         }
@@ -145,21 +145,9 @@ namespace WaterSortGame.ViewModels
                 return;
             }
 
-
-            // if selecting different different tube
+            // if selecting different tube
             bool success = false;
             bool successAtLeastOnce = false;
-
-
-            //if (success == true) // kdyz je target tube plna tak by to neudela nic.
-            //{
-            //    //do { } while (AddLiquidToTargetTube(tube) == true);
-
-            //    SelectLiquid(SelectedTube);
-
-            //    DeselectTube();
-            //}
-
 
             do {
                 success = AddLiquidToTargetTube(tube);
@@ -168,39 +156,36 @@ namespace WaterSortGame.ViewModels
                     successAtLeastOnce = true;
                     SelectLiquid(SelectedTube); // vyber dalsi liquid ze stejne zkumavky
                 }
-            } while (success == true);
+            } while (success == true && SourceLiquid is not null);
             if (successAtLeastOnce == true)
             {
                 DeselectTube();
             }
-            
-
         }
-
-        private void SelectLiquid(Tube sourceTube)
+        private void SelectLiquid(Tube sourceTube) // selects topmost liquid in a sourceTube
         {
+            SourceLiquid = null;
             for (int i = sourceTube.Layers.Count - 1; i >= 0; i--)
             {
                 if (sourceTube.Layers[i] is not null)
                 {
                     if (SelectedTube != sourceTube)
                         SelectedTube = sourceTube;
-                    SourceColor = sourceTube.Layers[i];
+                    SourceLiquid = sourceTube.Layers[i];
                     return;
                 }
             }
         }
-
         private bool AddLiquidToTargetTube(Tube targetTube)
         {
             if (targetTube.Layers.Count >= 4)
                 return false;
 
             if (targetTube.Layers.Count != 0)
-                if (targetTube.Layers[targetTube.Layers.Count - 1].Id != SourceColor.Id)
+                if (targetTube.Layers[targetTube.Layers.Count - 1].Id != SourceLiquid.Id)
                     return false;
 
-            targetTube.Layers.Add(SourceColor);
+            targetTube.Layers.Add(SourceLiquid);
             RemoveColorFromSourceTube(targetTube);
             //SourceColor.LayerNumber = targetTube.Layers.Count - 1;
             //SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
@@ -209,7 +194,7 @@ namespace WaterSortGame.ViewModels
 
         private void RemoveColorFromSourceTube(Tube targetTube)
         {
-            SelectedTube.Layers.Remove(SourceColor);
+            SelectedTube.Layers.Remove(SourceLiquid);
             //SourceColor.TubeNumber = targetTube.TubeId;
         }
 
