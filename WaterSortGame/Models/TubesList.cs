@@ -5,11 +5,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using WaterSortGame.Properties;
+using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    internal class TubesList
+    internal class TubesList : ViewModelBase
     {
+        public static int ExtraTubes { get; set; } = 0;
+
+        public static int MaximumExtraTubes { get; set; } = Settings.Default.MaximumExtraTubes;
+        //private static int maximumExtraTubes = Settings.Default.MaximumExtraTubes;
+        //public static int MaximumExtraTubes
+        //{
+        //    get { return maximumExtraTubes; }
+        //    set
+        //    {
+        //        maximumExtraTubes = value;
+        //        OnPropertyChanged();
+        //        Settings.Default.MaximumExtraTubes = value;
+        //        Settings.Default.Save();
+        //    }
+        //}
+
         //public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>()
         //{
         //    new Tube(0),
@@ -93,6 +111,16 @@ namespace WaterSortGame.Models
             _tubes.Add(new Tube(1, 12, 8, 9));
             _tubes.Add(new Tube());
             _tubes.Add(new Tube());
+
+            _tubes.Add(new Tube());
+        }
+        public static void AddExtraTube()
+        {
+            if (ExtraTubes < MaximumExtraTubes)
+            {
+                _tubes.Add(new Tube());
+                ExtraTubes++;
+            }
         }
 
         public static ObservableCollection<Tube> GetTubes()

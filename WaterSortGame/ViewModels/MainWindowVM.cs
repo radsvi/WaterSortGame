@@ -85,8 +85,10 @@ namespace WaterSortGame.ViewModels
             }
         }
 
+        //public MainWindowVM(IWindowService windowService)
         public MainWindowVM()
         {
+            //_windowService = windowService;
             Tubes = TubesList.GetTubes();
         }
 
@@ -105,7 +107,7 @@ namespace WaterSortGame.ViewModels
         {
             TubesList.GenerateTubes(true);
         }
-
+        public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesList.AddExtraTube(), canExecute => TubesList.ExtraTubes < TubesList.MaximumExtraTubes);
         public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTube(execute));
 
         private void SelectTube(object obj)
@@ -166,5 +168,12 @@ namespace WaterSortGame.ViewModels
             SelectedTube.Selected = false;
             SelectedTube = null;
         }
+
+        //private IWindowService _windowService;
+        //public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => OpenOptionsWindow());
+        //private void OpenOptionsWindow()
+        //{
+        //    _windowService.OpenWindow(this);
+        //}
     }
 }
