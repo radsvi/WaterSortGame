@@ -111,7 +111,7 @@ namespace WaterSortGame.ViewModels
         public bool LevelComplete { get; set; }
 
         #region Navigation
-        public RelayCommand EscKeyCommand => new RelayCommand(execute => CloseApplication());
+        public RelayCommand EscKeyCommand => new RelayCommand(execute => CloseWindow());
         private void CloseApplication()
         {
             // ## predelat na MVVM model: https://www.youtube.com/watch?v=U7Qclpe2joo
@@ -138,7 +138,7 @@ namespace WaterSortGame.ViewModels
         {
             windowService?.OpenWindow(this);
         }
-        private void OnCloseWindow()
+        private void CloseWindow()
         {
             windowService?.CloseWindow();
         }
