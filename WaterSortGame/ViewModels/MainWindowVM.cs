@@ -111,15 +111,7 @@ namespace WaterSortGame.ViewModels
         public bool LevelComplete { get; set; }
 
         #region Navigation
-        public RelayCommand EscKeyCommand => new RelayCommand(execute => CloseWindow());
-        private void CloseApplication()
-        {
-            // ## predelat na MVVM model: https://www.youtube.com/watch?v=U7Qclpe2joo
-            // ## C:\Users\svihe\Dropbox\Coding\C#\Testing\WpfTutorialsOther\How to Close Windows in MVVM\MainWindowViewModel.cs
-            System.Windows.Application.Current.Shutdown();
-        }
-
-        //public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTubeMethod());
+        public RelayCommand EscKeyCommand => new RelayCommand(execute => windowService?.CloseWindow());
 
         public RelayCommand RestartCommand => new RelayCommand(execute => Restart());
         private void Restart()
@@ -133,15 +125,7 @@ namespace WaterSortGame.ViewModels
         #region OptionsWindow
         private IWindowService windowService;
 
-        public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => OpenOptionsWindow());
-        private void OpenOptionsWindow()
-        {
-            windowService?.OpenWindow(this);
-        }
-        private void CloseWindow()
-        {
-            windowService?.CloseWindow();
-        }
+        public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenWindow(this));
         #endregion
         
 
@@ -241,7 +225,7 @@ namespace WaterSortGame.ViewModels
                 {
                     return false;
                 }
-                for (var i = 0; i < tube.Layers.Count; i++)
+                for (int i = 0; i < tube.Layers.Count; i++)
                 {
                     for (int j = i + 1; j < tube.Layers.Count; j++)
                     {

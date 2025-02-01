@@ -25,14 +25,6 @@ namespace WaterSortGame.ViewModels
 
         }
 
-        public RelayCommand CloseOptionsWindowCommand => new RelayCommand(execute => CloseWindow());
-        private void CloseWindow()
-        {
-            // ## predelat na MVVM model: https://www.youtube.com/watch?v=U7Qclpe2joo
-            // ## C:\Users\svihe\Dropbox\Coding\C#\Testing\WpfTutorialsOther\How to Close Windows in MVVM\MainWindowViewModel.cs
-            //System.Windows.Application.Current.Shutdown();
-
-            windowService?.CloseWindow();
-        }
+        public RelayCommand CloseOptionsWindowCommand => new RelayCommand(execute => windowService?.CloseWindow());
     }
 }

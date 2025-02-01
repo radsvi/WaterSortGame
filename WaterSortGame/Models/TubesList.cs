@@ -141,7 +141,7 @@ namespace WaterSortGame.Models
 
         public static void AddExtraTube()
         {
-            if (ExtraTubes < MaximumExtraTubes)
+            if (ExtraTubes <= MaximumExtraTubes)
             {
                 _tubes.Add(new Tube());
                 ExtraTubes++;
