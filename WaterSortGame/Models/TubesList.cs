@@ -13,7 +13,7 @@ namespace WaterSortGame.Models
     internal class TubesList : ViewModelBase
     {
         public static int ExtraTubes { get; set; } = 0;
-        public static int NumberOfTubesGenerated { get; set; }
+        public static int NumberOfColorsGenerated { get; set; }
         public static bool RandomNumberOfTubes { get; set; }
 
         //public static int MaximumExtraTubes { get; set; } = Settings.Default.MaximumExtraTubes;
@@ -97,7 +97,9 @@ namespace WaterSortGame.Models
         //}
 
         public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>();
-        public static void GenerateTubes(bool regenerate = false)
+        public static ObservableCollection<Tube> SavedStartingTubes = new ObservableCollection<Tube>();
+        //public static void StartNewLevel(bool regenerate = false)
+        public static void StartNewLevel()
         {
             //if (regenerate is true)
             //{
@@ -151,22 +153,31 @@ namespace WaterSortGame.Models
                 ExtraTubes++;
             }
         }
+        public static void RestartLevel()
+        {
+            //SavedStartingTubes?.Clear();
+            _tubes?.Clear();
+            foreach (var tube in SavedStartingTubes)
+            {
+                _tubes.Add((Tube)tube.DeepCopy());
+            }
+        }
         public static void GenerateNewTubes()
         {
-            ExtraTubes = 0; // reset how much extra tubes has been added
+            ExtraTubes = 0; // resets how much extra tubes has been added
             Random rnd = new Random();
-            ObservableCollection<Tube> newTubes = new ObservableCollection<Tube>();
+            
+            _tubes?.Clear();
             ObservableCollection<Color> colorsList = new ObservableCollection<Color>();
             if (RandomNumberOfTubes)
             {
-                NumberOfTubesGenerated = rnd.Next(6, 12);
+                NumberOfColorsGenerated = rnd.Next(6, 12);
             }
             else
             {
-                NumberOfTubesGenerated = 12;
+                NumberOfColorsGenerated = 12;
             }
 
-            // ## pozdeji to zmenit aby to treba negenerovalo vsechny barvy, ale jen nektery. treba podle nejake obtiznosti
             foreach (var color in Color.ColorKeys)
             {
                 colorsList.Add(color);
@@ -175,7 +186,7 @@ namespace WaterSortGame.Models
                 colorsList.Add(color);
             }
 
-            for (int i = 0; i < NumberOfTubesGenerated; i++)
+            for (int i = 0; i < NumberOfColorsGenerated; i++)
             {
                 Color[] layer = new Color[4];
                 for (int j = 0; j < 4; j++)
@@ -185,17 +196,22 @@ namespace WaterSortGame.Models
                     colorsList.Remove(colorsList[colorNumber]);
                 }
 
-                newTubes.Add(new Tube(layer[0], layer[1], layer[2], layer[3]));
+                _tubes.Add(new Tube(layer[0], layer[1], layer[2], layer[3]));
             }
-            newTubes.Add(new Tube());
-            newTubes.Add(new Tube());
-            _tubes = newTubes;
+            _tubes.Add(new Tube());
+            _tubes.Add(new Tube());
+
+            SavedStartingTubes?.Clear();
+            foreach (var tube in _tubes)
+            {
+                SavedStartingTubes.Add((Tube)tube.DeepCopy());
+            }
         }
 
         public static ObservableCollection<Tube> GetTubes()
         {
             if (_tubes.Count == 0)
-                GenerateTubes();
+                StartNewLevel();
 
             return _tubes;
         }

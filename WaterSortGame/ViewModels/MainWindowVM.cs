@@ -101,6 +101,7 @@ namespace WaterSortGame.ViewModels
             }
         }
         #endregion
+        #region Constructor
         public MainWindowVM(IWindowService windowService)
         //public MainWindowVM()
         {
@@ -109,26 +110,41 @@ namespace WaterSortGame.ViewModels
             PropertyChanged += Tube_PropertyChanged;
         }
         public bool LevelComplete { get; set; }
-
+        #endregion
         #region Navigation
         public RelayCommand EscKeyCommand => new RelayCommand(execute => windowService?.CloseWindow());
 
         public RelayCommand RestartCommand => new RelayCommand(execute => Restart());
         private void Restart()
         {
-            TubesList.GenerateTubes(true);
+            var result = MessageBox.Show("Do you want to restart current level?", "Restart", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            if (result != MessageBoxResult.OK)
+            {
+                return;
+            }
+            TubesList.RestartLevel();
             LevelComplete = false;
             DeselectTube();
         }
         public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesList.AddExtraTube(), canExecute => TubesList.ExtraTubes < TubesList.MaximumExtraTubes);
+        public RelayCommand NewLevelCommand => new RelayCommand(execute => StartNewLevel());
+        private void StartNewLevel()
+        {
+            var result = MessageBox.Show("Do you want to start new level?","New level",MessageBoxButton.OKCancel,MessageBoxImage.Information);
+            if (result != MessageBoxResult.OK)
+            {
+                return;
+            }
+            TubesList.StartNewLevel();
+            LevelComplete = false;
+            DeselectTube();
+        }
         #endregion
         #region OptionsWindow
         private IWindowService windowService;
 
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenWindow(this));
         #endregion
-        
-
         #region Moving Liquids
         public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTube(execute));
         private void SelectTube(object obj)
@@ -246,7 +262,5 @@ namespace WaterSortGame.ViewModels
             // pripadne zkusit udelat nejakou grafiku, ohnostroj
         }
         #endregion
-
-
     }
 }

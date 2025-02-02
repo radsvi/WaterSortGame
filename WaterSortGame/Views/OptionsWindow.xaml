@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WaterSortGame.Views"
         xmlns:models="clr-namespace:WaterSortGame.Models"
+        xmlns:userControls="clr-namespace:WaterSortGame.Views.UserControls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type local:OptionsWindow}}"
         Title="OptionsWindow"
@@ -20,14 +21,25 @@
     <Grid Margin="10">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
-                <GroupBox Header="Tubes">
-                    <DockPanel>
-                        <Label Content="Limit extra tubes to maximum of"/>
-                        <TextBox x:Name="MaximumExtraTubes"
-                                 DataContext="{Binding Source={StaticResource TubesList}}"
+                <GroupBox Header="Tubes" DataContext="{Binding Source={StaticResource TubesList}}">
+                    <StackPanel>
+                        <DockPanel>
+                            <Label Content="Limit extra tubes to maximum of"/>
+                            <TextBox
                                  Text="{Binding MaximumExtraTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                  VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />
-                    </DockPanel>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Random number of colors"/>
+                            <CheckBox IsChecked="{Binding RandomNumberOfTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Label Content="Number of colors"/>
+                            <TextBox
+                                 Text="{Binding NumberOfColorsGenerated, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />
+                        </DockPanel>
+                    </StackPanel>
                 </GroupBox>
             </StackPanel>
         </ScrollViewer>
