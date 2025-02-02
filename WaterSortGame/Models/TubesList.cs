@@ -13,6 +13,8 @@ namespace WaterSortGame.Models
     internal class TubesList : ViewModelBase
     {
         public static int ExtraTubes { get; set; } = 0;
+        public static int NumberOfTubesGenerated { get; set; }
+        public static bool RandomNumberOfTubes { get; set; }
 
         //public static int MaximumExtraTubes { get; set; } = Settings.Default.MaximumExtraTubes;
         private static int maximumExtraTubes = Settings.Default.MaximumExtraTubes;
@@ -97,46 +99,48 @@ namespace WaterSortGame.Models
         public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>();
         public static void GenerateTubes(bool regenerate = false)
         {
-            if (regenerate is true)
-            {
-                _tubes.Clear();
-            }
+            //if (regenerate is true)
+            //{
+            //    _tubes.Clear();
+            //}
 
-            if (false)
-            {
-                _tubes.Add(new Tube(9, 2, 4, 1));
-                _tubes.Add(new Tube(3, 8, 11, 5));
-                _tubes.Add(new Tube(9, 11, 11, 12));
-                _tubes.Add(new Tube(3, 3, 2, 5));
-                _tubes.Add(new Tube(1, 7, 6, 10));
-                _tubes.Add(new Tube(3, 4, 7, 4));
-                _tubes.Add(new Tube(2, 8, 5, 10));
-                _tubes.Add(new Tube(6, 1, 2, 9));
-                _tubes.Add(new Tube(11, 10, 7, 6));
-                _tubes.Add(new Tube(5, 7, 10, 4));
-                _tubes.Add(new Tube(8, 12, 6, 12));
-                _tubes.Add(new Tube(1, 12, 8, 9));
-                _tubes.Add(new Tube());
-                _tubes.Add(new Tube());
-                _tubes.Add(new Tube()); // extra
-            }
-            else
-            {
-                _tubes.Add(new Tube(1, 1, 1, 1));
-                _tubes.Add(new Tube(2, 2, 2, 2));
-                _tubes.Add(new Tube(3, 3, 3, 3));
-                _tubes.Add(new Tube(4, 4, 4, 4));
-                _tubes.Add(new Tube(5, 5, 5, 5));
-                _tubes.Add(new Tube(6, 6, 6, 6));
-                _tubes.Add(new Tube(7, 7, 7, 7));
-                _tubes.Add(new Tube(8, 8, 8, 8));
-                _tubes.Add(new Tube(9, 9, 9, 9));
-                _tubes.Add(new Tube(10, 10, 10, 10));
-                _tubes.Add(new Tube(11, 11, 11, 12));
-                _tubes.Add(new Tube(12, 12, 12, 11));
-                _tubes.Add(new Tube());
-                _tubes.Add(new Tube());
-            }
+            //if (false)
+            //{
+            //    _tubes.Add(new Tube(9, 2, 4, 1));
+            //    _tubes.Add(new Tube(3, 8, 11, 5));
+            //    _tubes.Add(new Tube(9, 11, 11, 12));
+            //    _tubes.Add(new Tube(3, 3, 2, 5));
+            //    _tubes.Add(new Tube(1, 7, 6, 10));
+            //    _tubes.Add(new Tube(3, 4, 7, 4));
+            //    _tubes.Add(new Tube(2, 8, 5, 10));
+            //    _tubes.Add(new Tube(6, 1, 2, 9));
+            //    _tubes.Add(new Tube(11, 10, 7, 6));
+            //    _tubes.Add(new Tube(5, 7, 10, 4));
+            //    _tubes.Add(new Tube(8, 12, 6, 12));
+            //    _tubes.Add(new Tube(1, 12, 8, 9));
+            //    _tubes.Add(new Tube());
+            //    _tubes.Add(new Tube());
+            //    _tubes.Add(new Tube()); // extra
+            //}
+            //else
+            //{
+            //    _tubes.Add(new Tube(1, 1, 1, 1));
+            //    _tubes.Add(new Tube(2, 2, 2, 2));
+            //    _tubes.Add(new Tube(3, 3, 3, 3));
+            //    _tubes.Add(new Tube(4, 4, 4, 4));
+            //    _tubes.Add(new Tube(5, 5, 5, 5));
+            //    _tubes.Add(new Tube(6, 6, 6, 6));
+            //    _tubes.Add(new Tube(7, 7, 7, 7));
+            //    _tubes.Add(new Tube(8, 8, 8, 8));
+            //    _tubes.Add(new Tube(9, 9, 9, 9));
+            //    _tubes.Add(new Tube(10, 10, 10, 10));
+            //    _tubes.Add(new Tube(11, 11, 11, 12));
+            //    _tubes.Add(new Tube(12, 12, 12, 11));
+            //    _tubes.Add(new Tube());
+            //    _tubes.Add(new Tube());
+            //}
+
+            GenerateNewTubes();
         }
 
         public static void AddExtraTube()
@@ -147,15 +151,46 @@ namespace WaterSortGame.Models
                 ExtraTubes++;
             }
         }
-        //public static void GenerateNewTubes()
-        //{
-        //    ObservableCollection<Tube> newTubes = new ObservableCollection<Tube>();
-        //    ObservableCollection<Color> colorsList = new ObservableCollection<Color>();
-        //    // ## pozdeji to zmenit aby to treba negenerovalo vsechny barvy, ale jen nektery. treba podle nejake obtiznosti
-        //    //Color.
+        public static void GenerateNewTubes()
+        {
+            ExtraTubes = 0; // reset how much extra tubes has been added
+            Random rnd = new Random();
+            ObservableCollection<Tube> newTubes = new ObservableCollection<Tube>();
+            ObservableCollection<Color> colorsList = new ObservableCollection<Color>();
+            if (RandomNumberOfTubes)
+            {
+                NumberOfTubesGenerated = rnd.Next(6, 12);
+            }
+            else
+            {
+                NumberOfTubesGenerated = 12;
+            }
 
+            // ## pozdeji to zmenit aby to treba negenerovalo vsechny barvy, ale jen nektery. treba podle nejake obtiznosti
+            foreach (var color in Color.ColorKeys)
+            {
+                colorsList.Add(color);
+                colorsList.Add(color);
+                colorsList.Add(color);
+                colorsList.Add(color);
+            }
 
-        //}
+            for (int i = 0; i < NumberOfTubesGenerated; i++)
+            {
+                Color[] layer = new Color[4];
+                for (int j = 0; j < 4; j++)
+                {
+                    int colorNumber = rnd.Next(0, colorsList.Count);
+                    layer[j] = colorsList[colorNumber];
+                    colorsList.Remove(colorsList[colorNumber]);
+                }
+
+                newTubes.Add(new Tube(layer[0], layer[1], layer[2], layer[3]));
+            }
+            newTubes.Add(new Tube());
+            newTubes.Add(new Tube());
+            _tubes = newTubes;
+        }
 
         public static ObservableCollection<Tube> GetTubes()
         {

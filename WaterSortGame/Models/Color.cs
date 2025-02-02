@@ -14,8 +14,8 @@ namespace WaterSortGame.Models
         public string? Name { get; set; }
         public string? Rgb { get; set; }
         
-        private static List<Color> _colorKeys { get; set; } = new List<Color>() {
-            new Color{ Id = 0, Name="EMPTY", Rgb = "#C0C0C0" },
+        public static List<Color> ColorKeys { get; set; } = new List<Color>() {
+            //new Color{ Id = 0, Name="EMPTY", Rgb = "#C0C0C0" },
             new Color{ Id = 1, Name="blue", Rgb = "#145DEF" },
             new Color{ Id = 2, Name="gray-blue", Rgb = "#3F4482" }, // indigo / dark blue
             new Color{ Id = 3, Name="light-blue", Rgb = "#88AAFF" },
@@ -32,7 +32,7 @@ namespace WaterSortGame.Models
 
         public static Color GetCode(int id)
         {
-            return _colorKeys.Where(key => key.Id == id).ToList()[0];
+            return ColorKeys.Where(key => key.Id == id).ToList()[0];
         }
 
         public Color() { }
