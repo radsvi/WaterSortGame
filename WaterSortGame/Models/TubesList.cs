@@ -13,10 +13,29 @@ namespace WaterSortGame.Models
     internal class TubesList : ViewModelBase
     {
         public static int ExtraTubes { get; set; } = 0;
-        public static int NumberOfColorsGenerated { get; set; }
-        public static bool RandomNumberOfTubes { get; set; }
+        private static int numberOfColorsGenerated = Settings.Default.NumberOfColorsGenerated;
+        public static int NumberOfColorsGenerated
+        {
+            get { return numberOfColorsGenerated; }
+            set
+            {
+                numberOfColorsGenerated = value;
+                Settings.Default.NumberOfColorsGenerated = value;
+                Settings.Default.Save();
+            }
+        }
+        private static bool randomNumberOfTubes = Settings.Default.RandomNumberOfTubes;
+        public static bool RandomNumberOfTubes
+        {
+            get { return randomNumberOfTubes; }
+            set
+            {
+                randomNumberOfTubes = value;
+                Settings.Default.RandomNumberOfTubes = value;
+                Settings.Default.Save();
+            }
+        }
 
-        //public static int MaximumExtraTubes { get; set; } = Settings.Default.MaximumExtraTubes;
         private static int maximumExtraTubes = Settings.Default.MaximumExtraTubes;
         public static int MaximumExtraTubes
         {
@@ -24,8 +43,6 @@ namespace WaterSortGame.Models
             set
             {
                 maximumExtraTubes = value;
-                //OnPropertyChanged(nameof(MaximumExtraTubes));
-                //OnPropertyChanged("MaximumExtraTubes");
                 Settings.Default.MaximumExtraTubes = value;
                 Settings.Default.Save();
             }
@@ -36,7 +53,7 @@ namespace WaterSortGame.Models
         //}
 
         //public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>()
-        //{
+        //{ // posunul jsem IDcka zkumavek o jedna. spravit!
         //    new Tube(0),
         //    new Tube(1),
         //    new Tube(2),
@@ -54,7 +71,7 @@ namespace WaterSortGame.Models
         //};
 
         //private static readonly ObservableCollection<Tube> _defaultTubes = new ObservableCollection<Tube>()
-        //{
+        //{ // posunul jsem IDcka zkumavek o jedna. spravit!
         //    new Tube(9, 2, 4, 1),
         //    new Tube(3, 8, 11, 5),
         //    new Tube(9, 11, 11, 12),
@@ -76,7 +93,7 @@ namespace WaterSortGame.Models
         //public static ObservableCollection<Tube> GetDefaultValues()
         //{
         //    return new ObservableCollection<Tube>()
-        //    {
+        //    { // posunul jsem IDcka zkumavek o jedna. spravit!
         //        new Tube(9, 2, 4, 1),
         //        new Tube(3, 8, 11, 5),
         //        new Tube(9, 11, 11, 12),
@@ -107,7 +124,7 @@ namespace WaterSortGame.Models
             //}
 
             //if (false)
-            //{
+            //{ // posunul jsem IDcka zkumavek o jedna. spravit!
             //    _tubes.Add(new Tube(9, 2, 4, 1));
             //    _tubes.Add(new Tube(3, 8, 11, 5));
             //    _tubes.Add(new Tube(9, 11, 11, 12));
@@ -125,7 +142,7 @@ namespace WaterSortGame.Models
             //    _tubes.Add(new Tube()); // extra
             //}
             //else
-            //{
+            //{ // posunul jsem IDcka zkumavek o jedna. spravit!
             //    _tubes.Add(new Tube(1, 1, 1, 1));
             //    _tubes.Add(new Tube(2, 2, 2, 2));
             //    _tubes.Add(new Tube(3, 3, 3, 3));
@@ -171,19 +188,29 @@ namespace WaterSortGame.Models
             ObservableCollection<Color> colorsList = new ObservableCollection<Color>();
             if (RandomNumberOfTubes)
             {
-                NumberOfColorsGenerated = rnd.Next(6, 12);
+                NumberOfColorsGenerated = rnd.Next(6, Color.ColorKeys.Count);
             }
             else
             {
                 NumberOfColorsGenerated = 12;
             }
 
-            foreach (var color in Color.ColorKeys)
+            List<int> selectedColors = new List<int>();
+            for (int i = 0; i < NumberOfColorsGenerated; i++) // generate list of all 12 colors
             {
-                colorsList.Add(color);
-                colorsList.Add(color);
-                colorsList.Add(color);
-                colorsList.Add(color);
+                selectedColors.Add(i);
+            }
+
+            for (int i = 0; i < selectedColors.Count - NumberOfColorsGenerated; i++) // now remove some random ones
+            {
+                selectedColors.Remove(selectedColors[NumberOfColorsGenerated]);
+            }
+            foreach (var color in selectedColors)
+            {
+                colorsList.Add(Color.GetCode(color));
+                colorsList.Add(Color.GetCode(color));
+                colorsList.Add(Color.GetCode(color));
+                colorsList.Add(Color.GetCode(color));
             }
 
             for (int i = 0; i < NumberOfColorsGenerated; i++)

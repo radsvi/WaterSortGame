@@ -34,5 +34,29 @@ namespace WaterSortGame.Properties {
                 this["MaximumExtraTubes"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool RandomNumberOfTubes {
+            get {
+                return ((bool)(this["RandomNumberOfTubes"]));
+            }
+            set {
+                this["RandomNumberOfTubes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public int NumberOfColorsGenerated {
+            get {
+                return ((int)(this["NumberOfColorsGenerated"]));
+            }
+            set {
+                this["NumberOfColorsGenerated"] = value;
+            }
+        }
     }
 }

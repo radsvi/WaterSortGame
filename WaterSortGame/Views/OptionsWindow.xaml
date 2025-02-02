@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:WaterSortGame.Views"
         xmlns:models="clr-namespace:WaterSortGame.Models"
         xmlns:userControls="clr-namespace:WaterSortGame.Views.UserControls"
+        xmlns:converters="clr-namespace:WaterSortGame.Converters"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type local:OptionsWindow}}"
         Title="OptionsWindow"
@@ -14,6 +15,7 @@
         >
     <Window.Resources>
         <models:TubesList x:Key="TubesList"/>
+        <converters:BoolNegateConverter x:Key="StatusToEnabled"/>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding CloseOptionsWindowCommand}"/>
@@ -30,10 +32,12 @@
                                  VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />
                         </DockPanel>
                         <DockPanel>
-                            <Label Content="Random number of colors"/>
-                            <CheckBox IsChecked="{Binding RandomNumberOfTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            <CheckBox x:Name="RandomColors" IsChecked="{Binding RandomNumberOfTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                                <Label Content="Random number of colors"/>
+                            </CheckBox>
                         </DockPanel>
-                        <DockPanel>
+                        <DockPanel IsEnabled="{Binding ElementName=RandomColors,Path=IsChecked,Converter={StaticResource StatusToEnabled}}"
+                                   ToolTip="This number coresponds to the latest number of colors generated.">
                             <Label Content="Number of colors"/>
                             <TextBox
                                  Text="{Binding NumberOfColorsGenerated, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
