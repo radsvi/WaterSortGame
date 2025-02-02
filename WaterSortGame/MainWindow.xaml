@@ -38,6 +38,7 @@
             <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}" Width="100" HorizontalAlignment="Right" Margin="7,0,0,0"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Height="15">
+            <Button Content="Load Level" Command="{Binding LoadLevelCommand}" Width="80" FontSize="10" Margin="7,0,0,0"/>
             <Button Content="Add Extra Vial" Command="{Binding AddExtraTubeCommand}" Width="80" FontSize="10" Margin="7,0,0,0"/>
         </StackPanel>
         

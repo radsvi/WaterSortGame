@@ -142,7 +142,7 @@ namespace WaterSortGame.Models
             //    _tubes.Add(new Tube()); // extra
             //}
             //else
-            //{ // posunul jsem IDcka zkumavek o jedna. spravit!
+            //{
             //    _tubes.Add(new Tube(1, 1, 1, 1));
             //    _tubes.Add(new Tube(2, 2, 2, 2));
             //    _tubes.Add(new Tube(3, 3, 3, 3));
@@ -178,6 +178,46 @@ namespace WaterSortGame.Models
             {
                 _tubes.Add((Tube)tube.DeepCopy());
             }
+        }
+        public static void LoadLevel()
+        {
+            _tubes?.Clear();
+            if (false)
+            {
+                _tubes.Add(new Tube(8, 1, 3, 0));
+                _tubes.Add(new Tube(2, 7, 10, 4));
+                _tubes.Add(new Tube(8, 10, 10, 11));
+                _tubes.Add(new Tube(2, 2, 1, 4));
+                _tubes.Add(new Tube(0, 6, 5, 9));
+                _tubes.Add(new Tube(2, 3, 6, 3));
+                _tubes.Add(new Tube(3, 7, 4, 9));
+                _tubes.Add(new Tube(5, 0, 1, 8));
+                _tubes.Add(new Tube(10, 9, 6, 5));
+                _tubes.Add(new Tube(4, 6, 9, 3));
+                _tubes.Add(new Tube(7, 11, 5, 11));
+                _tubes.Add(new Tube(0, 11, 7, 8));
+                _tubes.Add(new Tube());
+                _tubes.Add(new Tube());
+            }
+            else
+            {
+                _tubes.Add(new Tube(0, 0, 0, 0));
+                _tubes.Add(new Tube(1, 1, 1, 1));
+                _tubes.Add(new Tube(2, 2, 2, 2));
+                _tubes.Add(new Tube(3, 3, 3, 3));
+                _tubes.Add(new Tube(4, 4, 4, 4));
+                _tubes.Add(new Tube(5, 5, 5, 5));
+                _tubes.Add(new Tube(6, 6, 6, 6));
+                _tubes.Add(new Tube(7, 7, 7, 7));
+                _tubes.Add(new Tube(8, 8, 8, 8));
+                _tubes.Add(new Tube(9, 9, 9, 9));
+                _tubes.Add(new Tube(10, 10, 10, 11));
+                _tubes.Add(new Tube(11, 11, 11, 10));
+                _tubes.Add(new Tube());
+                _tubes.Add(new Tube());
+            }
+
+            SaveStartingTubes();
         }
         public static void GenerateNewTubes()
         {
@@ -228,6 +268,10 @@ namespace WaterSortGame.Models
             _tubes.Add(new Tube());
             _tubes.Add(new Tube());
 
+            SaveStartingTubes();
+        }
+        private static void SaveStartingTubes()
+        {
             SavedStartingTubes?.Clear();
             foreach (var tube in _tubes)
             {

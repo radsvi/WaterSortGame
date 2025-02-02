@@ -115,27 +115,63 @@ namespace WaterSortGame.ViewModels
         public RelayCommand EscKeyCommand => new RelayCommand(execute => windowService?.CloseWindow());
 
         public RelayCommand RestartCommand => new RelayCommand(execute => Restart());
-        private void Restart()
+        private void Restart(bool force = false)
         {
-            var result = MessageBox.Show("Do you want to restart current level?", "Restart", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            if (result != MessageBoxResult.OK)
+            if (force == false)
             {
-                return;
+                var result = MessageBox.Show("Do you want to restart current level?", "Restart", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                if (result != MessageBoxResult.OK)
+                {
+                    return;
+                }
             }
             TubesList.RestartLevel();
-            LevelComplete = false;
-            DeselectTube();
+            ChangingLevel();
         }
         public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesList.AddExtraTube(), canExecute => TubesList.ExtraTubes < TubesList.MaximumExtraTubes);
         public RelayCommand NewLevelCommand => new RelayCommand(execute => StartNewLevel());
-        private void StartNewLevel()
+        private void StartNewLevel(bool force = false)
         {
-            var result = MessageBox.Show("Do you want to start new level?","New level",MessageBoxButton.OKCancel,MessageBoxImage.Information);
-            if (result != MessageBoxResult.OK)
+            if (force == false)
             {
-                return;
+                var result = MessageBox.Show("Do you want to start new level?", "New level", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                if (result != MessageBoxResult.OK)
+                {
+                    return;
+                }
             }
             TubesList.StartNewLevel();
+            ChangingLevel();
+        }
+        private void LevelWonMessage()
+        {
+            var result = MessageBox.Show("Level complete!\nYes - next level\nNo - restart current level", "Level complete!", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
+            if (result == MessageBoxResult.Yes)
+            {
+                StartNewLevel(true);
+            }
+            else if (result == MessageBoxResult.No)
+            {
+                Restart(true);
+            }
+            // zkusit udelat nejakou grafiku, ohnostroj
+        }
+        public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
+        private void LoadLevel(bool force = false)
+        {
+            if (force == false)
+            {
+                var result = MessageBox.Show("Do you want to load level?", "Load level", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                if (result != MessageBoxResult.OK)
+                {
+                    return;
+                }
+            }
+            TubesList.LoadLevel();
+            ChangingLevel();
+        }
+        private void ChangingLevel()
+        {
             LevelComplete = false;
             DeselectTube();
         }
@@ -253,13 +289,6 @@ namespace WaterSortGame.ViewModels
                 }
             }
             return true;
-        }
-        private void LevelWonMessage()
-        {
-            MessageBox.Show("Level complete!");
-
-            // pridat veci jako otazka jestli chci zopakovat level, nebo vygenerovat novej
-            // pripadne zkusit udelat nejakou grafiku, ohnostroj
         }
         #endregion
     }
