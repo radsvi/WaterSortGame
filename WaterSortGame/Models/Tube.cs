@@ -52,6 +52,16 @@ namespace WaterSortGame.Models
                 OnPropertyChanged("Margin");
             }
         }
+        public Tube DeepCopy()
+        {
+            Tube clone = (Tube)MemberwiseClone();
+            clone.Layers = new ObservableCollection<Color>();
+            for (int i = 0; i < this.Layers.Count; i++)
+            {
+                clone.Layers.Add(new Color((int)this.Layers[i].Id));
+            }
+            return clone;
+        }
 
         public Tube()
         {
@@ -66,7 +76,6 @@ namespace WaterSortGame.Models
             if (thirdLayer is not null) Layers.Add(new Color((int)thirdLayer));
             if (fourthLayer is not null) Layers.Add(new Color((int)fourthLayer));
         }
-
         //private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         //{
         //    Debug.WriteLine("asdf");

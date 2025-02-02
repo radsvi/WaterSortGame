@@ -147,6 +147,15 @@ namespace WaterSortGame.Models
                 ExtraTubes++;
             }
         }
+        //public static void GenerateNewTubes()
+        //{
+        //    ObservableCollection<Tube> newTubes = new ObservableCollection<Tube>();
+        //    ObservableCollection<Color> colorsList = new ObservableCollection<Color>();
+        //    // ## pozdeji to zmenit aby to treba negenerovalo vsechny barvy, ale jen nektery. treba podle nejake obtiznosti
+        //    //Color.
+
+
+        //}
 
         public static ObservableCollection<Tube> GetTubes()
         {
