@@ -11,5 +11,11 @@
     <Setting Name="NumberOfColorsGenerated" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">12</Value>
     </Setting>
+    <Setting Name="OptionsWindowHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">450</Value>
+    </Setting>
+    <Setting Name="OptionsWindowWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">800</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

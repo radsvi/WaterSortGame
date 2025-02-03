@@ -4,13 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WaterSortGame.MVVM;
+using WaterSortGame.Properties;
 
 namespace WaterSortGame.ViewModels
 {
     internal class OptionsWindowVM : ViewModelBase
     {
-        public int WindowHeight { get; set; } = 450;
-        public int WindowWidth { get; set; } = 800;
+        private int optionsWindowHeight = Settings.Default.OptionsWindowHeight;
+        public int OptionsWindowHeight
+        {
+            get { return optionsWindowHeight; }
+            set
+            {
+                optionsWindowHeight = value;
+                Settings.Default.OptionsWindowHeight = value;
+                Settings.Default.Save();
+            }
+        }
+        private int optionsWindowWidth = Settings.Default.OptionsWindowWidth;
+        public int OptionsWindowWidth
+        {
+            get { return optionsWindowWidth; }
+            set
+            {
+                optionsWindowWidth = value;
+                Settings.Default.OptionsWindowWidth = value;
+                Settings.Default.Save();
+            }
+        }
 
         private IWindowService windowService;
         public MainWindowVM MainWindowVM { get; set; }

@@ -58,5 +58,29 @@ namespace WaterSortGame.Properties {
                 this["NumberOfColorsGenerated"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("450")]
+        public int OptionsWindowHeight {
+            get {
+                return ((int)(this["OptionsWindowHeight"]));
+            }
+            set {
+                this["OptionsWindowHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("800")]
+        public int OptionsWindowWidth {
+            get {
+                return ((int)(this["OptionsWindowWidth"]));
+            }
+            set {
+                this["OptionsWindowWidth"] = value;
+            }
+        }
     }
 }

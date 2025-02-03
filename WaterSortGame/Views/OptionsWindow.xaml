@@ -11,7 +11,8 @@
         d:DataContext="{d:DesignInstance Type={x:Type local:OptionsWindow}}"
         Title="OptionsWindow"
         WindowStartupLocation="CenterScreen"
-        Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}"
+        Height="{Binding OptionsWindowHeight, Mode=TwoWay}"
+        Width="{Binding OptionsWindowWidth, Mode=TwoWay}"
         >
     <Window.Resources>
         <models:TubesManager x:Key="TubesList"/>
