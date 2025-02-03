@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Title="MainWindow"
         
-        Height="730" MinHeight="375" d:MinHeight="150" d:Height="300"
+        Height="730" MinHeight="400" d:MinHeight="150" d:Height="300"
         Width="700" MinWidth="700"
         d:DataContext="{d:DesignInstance Type={x:Type local:MainWindow}}"
         >
@@ -39,16 +39,13 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Height="15">
             <Button Content="Load Level" Command="{Binding LoadLevelCommand}" Width="80" FontSize="10" Margin="7,0,0,0"/>
+            <!--<Button Content="Save Level" Command="{Binding SaveLevelCommand}" Width="80" FontSize="10" Margin="7,0,0,0"/>-->
             <Button Content="Add Extra Vial" Command="{Binding AddExtraTubeCommand}" Width="80" FontSize="10" Margin="7,0,0,0"/>
         </StackPanel>
         
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" Margin="0,5,0,0">
-            <WrapPanel>
-                <!--<StackPanel>
-            <Label Content="{Binding MyProperty}"/>
-            <Button Content="reset command" Command="{Binding ResetTubesCommand}" />
-        </StackPanel>-->
+            <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <ItemsControl
             Name="ListTubes"
             HorizontalContentAlignment="Stretch"

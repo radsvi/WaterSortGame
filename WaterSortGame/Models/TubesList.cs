@@ -210,9 +210,11 @@ namespace WaterSortGame.Models
                 _tubes.Add(new Tube(6, 6, 6, 6));
                 _tubes.Add(new Tube(7, 7, 7, 7));
                 _tubes.Add(new Tube(8, 8, 8, 8));
-                _tubes.Add(new Tube(9, 9, 9, 9));
-                _tubes.Add(new Tube(10, 10, 10, 11));
-                _tubes.Add(new Tube(11, 11, 11, 10));
+                //_tubes.Add(new Tube(9, 9, 9, 9));
+                //_tubes.Add(new Tube(10, 10, 10, 10));
+                //_tubes.Add(new Tube(11, 11, 11, 11));
+                _tubes.Add(new Tube(9, 11, 10, 11));
+                _tubes.Add(new Tube(9, 10, 11, 10));
                 _tubes.Add(new Tube());
                 _tubes.Add(new Tube());
             }
@@ -247,10 +249,10 @@ namespace WaterSortGame.Models
             }
             foreach (var color in selectedColors)
             {
-                colorsList.Add(Color.GetCode(color));
-                colorsList.Add(Color.GetCode(color));
-                colorsList.Add(Color.GetCode(color));
-                colorsList.Add(Color.GetCode(color));
+                colorsList.Add(new Color(color));
+                colorsList.Add(new Color(color));
+                colorsList.Add(new Color(color));
+                colorsList.Add(new Color(color));
             }
 
             for (int i = 0; i < NumberOfColorsGenerated; i++)

@@ -175,6 +175,12 @@ namespace WaterSortGame.ViewModels
             LevelComplete = false;
             DeselectTube();
         }
+        public RelayCommand SaveLevelCommand => new RelayCommand(execute => SaveLevel());
+
+        private void SaveLevel()
+        {
+            
+        }
         #endregion
         #region OptionsWindow
         private IWindowService windowService;
