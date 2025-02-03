@@ -9,8 +9,7 @@
         xmlns:Models="clr-namespace:WaterSortGame.Models"
         mc:Ignorable="d"
         Title="MainWindow"
-        
-        Height="750" MinHeight="400" d:MinHeight="150" d:Height="340"
+        Height="700" MinHeight="400" d:MinHeight="150" d:Height="340"
         Width="720" MinWidth="700"
         d:DataContext="{d:DesignInstance Type={x:Type local:MainWindow}}"
         Background="Transparent"
@@ -52,7 +51,7 @@
             </StackPanel>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,5,0,0">
-                <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Center">
                     <ItemsControl
                         Name="ListTubes"
                         HorizontalContentAlignment="Stretch"
@@ -73,7 +72,6 @@
                                     <!--https://stackoverflow.com/questions/32064308/pass-command-parameter-to-method-in-viewmodel-in-wpf-->
                                     <Button x:Name="btTubeNumber"
                                         CommandParameter="{Binding .}"
-                            
                                         Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
                                         Margin="{Binding Margin}"
                                         >
@@ -116,9 +114,6 @@
                                             </ControlTemplate>
                                         </Button.Template>
                                     </Button>
-
-
-
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
