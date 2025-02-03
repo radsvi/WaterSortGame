@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Title="MainWindow"
         
-        Height="730" MinHeight="400" d:MinHeight="150" d:Height="300"
+        Height="730" MinHeight="400" d:MinHeight="150" d:Height="340"
         Width="700" MinWidth="700"
         d:DataContext="{d:DesignInstance Type={x:Type local:MainWindow}}"
         Background="Transparent"
@@ -38,6 +38,7 @@
             </Grid.RowDefinitions>
             <Border Grid.Row="1" Style="{StaticResource Separator}"/>
             <StackPanel Style="{StaticResource NavigationButtonsPrimary}">
+                <Label Content="{Binding TubeCount}" Foreground="White"/>
                 <Button Content="New Level" Command="{Binding NewLevelCommand}"/>
                 <Button Content="Restart level" Command="{Binding RestartCommand}"/>
                 <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}"/>
@@ -59,12 +60,12 @@
                         >
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Columns="8"/>
+                                <UniformGrid d:Columns="8" Columns="{Binding TubeCount}"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <!--<ListBoxItem/>
-        <ListBoxItem/>
-        <ListBoxItem/>-->
+                        <ListBoxItem/>
+                        <ListBoxItem/>-->
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -96,15 +97,15 @@
                                                             <RowDefinition/>
                                                         </Grid.RowDefinitions>
                                                         <Rectangle d:Fill="#145DEF" Fill="{Binding Path=Layers[3].Rgb}" Margin="15,0" Grid.Row="1"/>
-                                                        <Rectangle d:Fill="#3F4482" Fill="{Binding Path=Layers[2].Rgb}" Margin="15,0" Grid.Row="2"/>
-                                                        <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=Layers[1].Rgb}" Margin="15,0" Grid.Row="3"/>
+                                                        <Rectangle d:Fill="#3F4482" Fill="{Binding Path=Layers[2].Rgb}" Margin="15,-1" Grid.Row="2"/>
+                                                        <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=Layers[1].Rgb}" Margin="15,-1" Grid.Row="3"/>
 
-                                                        <Rectangle Grid.Row="4" Margin="15,0" Width="50">
+                                                        <Rectangle Grid.Row="4" Margin="15,-1" Width="50">
                                                             <Rectangle.Fill>
                                                                 <VisualBrush>
                                                                     <VisualBrush.Visual>
                                                                         <Border CornerRadius="0,0,20,20" d:Background="#F27914" Width="40" Height="40"
-                                                                Background="{Binding Path=Layers[0].Rgb}" />
+                                                                            Background="{Binding Path=Layers[0].Rgb}" />
                                                                     </VisualBrush.Visual>
                                                                 </VisualBrush>
                                                             </Rectangle.Fill>
