@@ -112,7 +112,7 @@ namespace WaterSortGame.ViewModels
         public bool LevelComplete { get; set; }
         #endregion
         #region Navigation
-        public RelayCommand EscKeyCommand => new RelayCommand(execute => windowService?.CloseWindow());
+        public RelayCommand CloseWindowCommand => new RelayCommand(execute => windowService?.CloseWindow());
 
         public RelayCommand RestartCommand => new RelayCommand(execute => Restart());
         private void Restart(bool force = false)
@@ -179,8 +179,10 @@ namespace WaterSortGame.ViewModels
 
         private void SaveLevel()
         {
-            
+            throw new NotImplementedException();
         }
+
+        
         #endregion
         #region OptionsWindow
         private IWindowService windowService;

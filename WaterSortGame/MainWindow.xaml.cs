@@ -28,5 +28,10 @@ namespace WaterSortGame
             DataContext = new MainWindowVM(new WindowService());
             //DataContext = new MainWindowVM();
         }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
     }
 }
