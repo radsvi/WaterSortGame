@@ -49,4 +49,9 @@
             </Style>
         </Style.Resources>
     </Style>
+    <Style TargetType="Border" x:Key="Separator">
+        <Setter Property="BorderThickness" Value="0,2,0,1" />
+        <Setter Property="BorderBrush" Value="#b2cbde" />
+        <Setter Property="Margin" Value="0 4 0 0" />
+    </Style>
 </ResourceDictionary>

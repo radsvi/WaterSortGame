@@ -20,44 +20,43 @@
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         >
     <!--d:DataContext="{d:DesignInstance Type=local:MainWindow}"-->
+    <Window.InputBindings>
+        <KeyBinding Key="Esc" Command="{Binding CloseWindowCommand}"/>
+    </Window.InputBindings>
     <Window.Resources>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
         <Models:TubesManager x:Key="TubesList"/>
         <!--<VM:MainWindowVM x:Key="MainWindowVM"/>-->
     </Window.Resources>
-    <Window.InputBindings>
-        <KeyBinding Key="Esc" Command="{Binding CloseWindowCommand}"/>
-    </Window.InputBindings>
-
     <!--<Grid DataContext="{Binding Source={StaticResource MainWindowVM}}" Margin="5">-->
     <Border Style="{StaticResource BackgroundStyle}">
         <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
-                <RowDefinition Height="25"/>
                 <RowDefinition/>
+                <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
+            <Border Grid.Row="1" Style="{StaticResource Separator}"/>
             <StackPanel Style="{StaticResource NavigationButtonsPrimary}">
                 <Button Content="New Level" Command="{Binding NewLevelCommand}"/>
                 <Button Content="Restart level" Command="{Binding RestartCommand}"/>
                 <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}"/>
                 <Button Content="Exit" Command="{Binding CloseWindowCommand}" Width="30"/>
             </StackPanel>
-            <StackPanel Grid.Row="1" Style="{StaticResource NavigationButtonsSecondary}">
+            <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                 <Button Content="Load Level" Command="{Binding LoadLevelCommand}"/>
                 <!--<Button Content="Save Level" Command="{Binding SaveLevelCommand}" />-->
                 <Button Content="Add Extra Vial" Command="{Binding AddExtraTubeCommand}"/>
             </StackPanel>
 
-
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" Margin="0,5,0,0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,5,0,0">
                 <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                     <ItemsControl
-        Name="ListTubes"
-        HorizontalContentAlignment="Stretch"
-        ItemsSource="{Binding Tubes}"
-        d:ItemsSource="{d:SampleData ItemCount=4}"
-        >
+                        Name="ListTubes"
+                        HorizontalContentAlignment="Stretch"
+                        ItemsSource="{Binding Tubes}"
+                        d:ItemsSource="{d:SampleData ItemCount=4}"
+                        >
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <UniformGrid Columns="8"/>
@@ -71,11 +70,11 @@
                                 <Grid>
                                     <!--https://stackoverflow.com/questions/32064308/pass-command-parameter-to-method-in-viewmodel-in-wpf-->
                                     <Button x:Name="btTubeNumber"
-                            CommandParameter="{Binding .}"
+                                        CommandParameter="{Binding .}"
                             
-                            Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
-                            Margin="{Binding Margin}"
-                            >
+                                        Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
+                                        Margin="{Binding Margin}"
+                                        >
                                         <Button.Template>
                                             <ControlTemplate>
                                                 <Grid>
