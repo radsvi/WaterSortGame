@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,15 +15,29 @@ namespace WaterSortGame.Models
     internal class TubesManager : ViewModelBase
     {
         public static int ExtraTubes { get; set; } = 0;
-        private static int numberOfColorsGenerated = Settings.Default.NumberOfColorsGenerated;
-        public static int NumberOfColorsGenerated
+        private static int numberOfColorsToGenerate = Settings.Default.NumberOfColorsToGenerate;
+        public static int NumberOfColorsToGenerate
         {
-            get { return numberOfColorsGenerated; }
+            get { return numberOfColorsToGenerate; }
             set
             {
-                numberOfColorsGenerated = value;
-                Settings.Default.NumberOfColorsGenerated = value;
-                Settings.Default.Save();
+                if (numberOfColorsToGenerate != value)
+                {
+                    if (value >= 3 && value <= Color.ColorKeys.Count)
+                    {
+                        numberOfColorsToGenerate = value;
+                    }
+                    else if (value < 3)
+                    {
+                        numberOfColorsToGenerate = 3;
+                    }
+                    else if (value > Color.ColorKeys.Count)
+                    {
+                        numberOfColorsToGenerate = Color.ColorKeys.Count;
+                    }
+                    Settings.Default.NumberOfColorsToGenerate = numberOfColorsToGenerate;
+                    Settings.Default.Save();
+                }
             }
         }
         private static bool randomNumberOfTubes = Settings.Default.RandomNumberOfTubes;
@@ -43,9 +58,23 @@ namespace WaterSortGame.Models
             get { return maximumExtraTubes; }
             set
             {
-                maximumExtraTubes = value;
-                Settings.Default.MaximumExtraTubes = value;
-                Settings.Default.Save();
+                if (maximumExtraTubes != value)
+                {
+                    if (value >= 0 && value <= 20)
+                    {
+                        maximumExtraTubes = value;
+                    }
+                    else if (value < 0)
+                    {
+                        maximumExtraTubes = 0;
+                    }
+                    else if (value > 20)
+                    {
+                        maximumExtraTubes = 20;
+                    }
+                    Settings.Default.MaximumExtraTubes = value;
+                    Settings.Default.Save();
+                }
             }
         }
         //static TubesList()
@@ -244,18 +273,18 @@ namespace WaterSortGame.Models
             ObservableCollection<Color> colorsList = new ObservableCollection<Color>();
             if (RandomNumberOfTubes)
             {
-                NumberOfColorsGenerated = rnd.Next(6, Color.ColorKeys.Count);
+                NumberOfColorsToGenerate = rnd.Next(6, Color.ColorKeys.Count);
             }
 
             List<int> selectedColors = new List<int>();
-            for (int i = 0; i < NumberOfColorsGenerated; i++) // generate list of all 12 colors
+            for (int i = 0; i < NumberOfColorsToGenerate; i++) // generate list of all 12 colors
             {
                 selectedColors.Add(i);
             }
 
-            for (int i = 0; i < selectedColors.Count - NumberOfColorsGenerated; i++) // now remove some random ones
+            for (int i = 0; i < selectedColors.Count - NumberOfColorsToGenerate; i++) // now remove some random ones
             {
-                selectedColors.Remove(selectedColors[NumberOfColorsGenerated]);
+                selectedColors.Remove(selectedColors[NumberOfColorsToGenerate]);
             }
             foreach (var color in selectedColors)
             {
@@ -265,7 +294,7 @@ namespace WaterSortGame.Models
                 colorsList.Add(new Color(color));
             }
 
-            for (int i = 0; i < NumberOfColorsGenerated; i++)
+            for (int i = 0; i < NumberOfColorsToGenerate; i++)
             {
                 Color[] layer = new Color[4];
                 for (int j = 0; j < 4; j++)

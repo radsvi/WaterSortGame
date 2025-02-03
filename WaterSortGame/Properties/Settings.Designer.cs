@@ -49,13 +49,13 @@ namespace WaterSortGame.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("12")]
-        public int NumberOfColorsGenerated {
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int NumberOfColorsToGenerate {
             get {
-                return ((int)(this["NumberOfColorsGenerated"]));
+                return ((int)(this["NumberOfColorsToGenerate"]));
             }
             set {
-                this["NumberOfColorsGenerated"] = value;
+                this["NumberOfColorsToGenerate"] = value;
             }
         }
         
