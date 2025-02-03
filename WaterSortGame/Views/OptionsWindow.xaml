@@ -14,7 +14,7 @@
         Height="{Binding WindowHeight, Mode=TwoWay}" Width="{Binding WindowWidth, Mode=TwoWay}"
         >
     <Window.Resources>
-        <models:TubesList x:Key="TubesList"/>
+        <models:TubesManager x:Key="TubesList"/>
         <converters:BoolNegateConverter x:Key="StatusToEnabled"/>
     </Window.Resources>
     <Window.InputBindings>

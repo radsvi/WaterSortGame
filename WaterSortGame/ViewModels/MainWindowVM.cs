@@ -106,7 +106,7 @@ namespace WaterSortGame.ViewModels
         //public MainWindowVM()
         {
             this.windowService = windowService;
-            Tubes = TubesList.GetTubes();
+            Tubes = TubesManager.GetTubes();
             PropertyChanged += Tube_PropertyChanged;
         }
         public bool LevelComplete { get; set; }
@@ -125,10 +125,10 @@ namespace WaterSortGame.ViewModels
                     return;
                 }
             }
-            TubesList.RestartLevel();
+            TubesManager.RestartLevel();
             ChangingLevel();
         }
-        public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesList.AddExtraTube(), canExecute => TubesList.ExtraTubes < TubesList.MaximumExtraTubes);
+        public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesManager.AddExtraTube(), canExecute => TubesManager.ExtraTubes < TubesManager.MaximumExtraTubes);
         public RelayCommand NewLevelCommand => new RelayCommand(execute => StartNewLevel());
         private void StartNewLevel(bool force = false)
         {
@@ -140,7 +140,7 @@ namespace WaterSortGame.ViewModels
                     return;
                 }
             }
-            TubesList.StartNewLevel();
+            TubesManager.StartNewLevel();
             ChangingLevel();
         }
         private void LevelWonMessage()
@@ -167,7 +167,7 @@ namespace WaterSortGame.ViewModels
                     return;
                 }
             }
-            TubesList.LoadLevel();
+            TubesManager.LoadLevel();
             ChangingLevel();
         }
         private void ChangingLevel()

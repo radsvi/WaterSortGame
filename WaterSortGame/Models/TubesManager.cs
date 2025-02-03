@@ -10,7 +10,7 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    internal class TubesList : ViewModelBase
+    internal class TubesManager : ViewModelBase
     {
         public static int ExtraTubes { get; set; } = 0;
         private static int numberOfColorsGenerated = Settings.Default.NumberOfColorsGenerated;

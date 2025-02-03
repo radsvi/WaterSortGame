@@ -17,7 +17,7 @@
     <!--d:DataContext="{d:DesignInstance Type=local:MainWindow}"-->
     <Window.Resources>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
-        <Models:TubesList x:Key="TubesList"/>
+        <Models:TubesManager x:Key="TubesList"/>
         <!--<VM:MainWindowVM x:Key="MainWindowVM"/>-->
     </Window.Resources>
     <Window.InputBindings>
