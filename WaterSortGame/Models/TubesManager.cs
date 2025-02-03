@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using WaterSortGame.Properties;
 using WaterSortGame.ViewModels;
+using WaterSortGame.Views;
 
 namespace WaterSortGame.Models
 {
@@ -115,6 +116,19 @@ namespace WaterSortGame.Models
 
         public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>();
         public static ObservableCollection<Tube> SavedStartingTubes = new ObservableCollection<Tube>();
+
+        private int countTubes;
+        public int CountTubes
+        {
+            get
+            {
+                return (int)Math.Ceiling((decimal)_tubes.Count / 2);
+            }
+            //set
+            //{
+            //    countTubes = value;
+            //}
+        }
         //public static void StartNewLevel(bool regenerate = false)
         public static void StartNewLevel()
         {
@@ -231,10 +245,6 @@ namespace WaterSortGame.Models
             if (RandomNumberOfTubes)
             {
                 NumberOfColorsGenerated = rnd.Next(6, Color.ColorKeys.Count);
-            }
-            else
-            {
-                NumberOfColorsGenerated = 12;
             }
 
             List<int> selectedColors = new List<int>();

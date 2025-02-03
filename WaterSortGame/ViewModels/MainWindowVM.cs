@@ -98,8 +98,23 @@ namespace WaterSortGame.ViewModels
             set {
                 tubes = value;
                 OnPropertyChanged();
+                OnPropertyChanged("TubeCount");
             }
         }
+        private int tubeCount;
+        public int TubeCount
+        {
+            get {
+                //return tubeCount; 
+                return (int)Math.Ceiling((decimal)Tubes.Count / 2);
+            }
+            //set
+            //{
+            //    tubeCount = value;
+            //    OnPropertyChanged();
+            //}
+        }
+
         #endregion
         #region Constructor
         public MainWindowVM(IWindowService windowService)
@@ -108,7 +123,13 @@ namespace WaterSortGame.ViewModels
             this.windowService = windowService;
             Tubes = TubesManager.GetTubes();
             PropertyChanged += Tube_PropertyChanged;
+            //PropertyChanged += TubeCount_PropertyChanged;
         }
+        //private void TubeCount_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        //{
+        //    TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
+        //}
+
         public bool LevelComplete { get; set; }
         #endregion
         #region Navigation
@@ -182,7 +203,12 @@ namespace WaterSortGame.ViewModels
             throw new NotImplementedException();
         }
 
-        
+        public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack());
+        private void StepBack()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
         #region OptionsWindow
         private IWindowService windowService;
