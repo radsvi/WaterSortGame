@@ -15,7 +15,7 @@
         Width="{Binding OptionsWindowWidth, Mode=TwoWay}"
         >
     <Window.Resources>
-        <models:TubesManager x:Key="TubesList"/>
+        <models:TubesManager x:Key="TubesManager"/>
         <converters:BoolNegateConverter x:Key="StatusToEnabled"/>
     </Window.Resources>
     <Window.InputBindings>
@@ -24,7 +24,7 @@
     <Grid Margin="10">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
-                <GroupBox Header="Tubes" DataContext="{Binding Source={StaticResource TubesList}}">
+                <GroupBox Header="Tubes" DataContext="{Binding Source={StaticResource TubesManager}}">
                     <StackPanel>
                         <DockPanel>
                             <Label Content="Limit extra tubes to maximum of"/>

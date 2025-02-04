@@ -105,15 +105,16 @@ namespace WaterSortGame.ViewModels
         public int TubeCount
         {
             get {
-                //return tubeCount; 
-                return (int)Math.Ceiling((decimal)Tubes.Count / 2);
+                return tubeCount; 
+                //return (int)Math.Ceiling((decimal)TubesManager.NumberOfColorsToGenerate / 2);
             }
-            //set
-            //{
-            //    tubeCount = value;
-            //    OnPropertyChanged();
-            //}
+            set
+            {
+                tubeCount = value;
+                OnPropertyChanged();
+            }
         }
+
 
         #endregion
         #region Constructor
@@ -121,14 +122,17 @@ namespace WaterSortGame.ViewModels
         //public MainWindowVM()
         {
             this.windowService = windowService;
-            Tubes = TubesManager.GetTubes();
+            //Tubes = TubesManager.GetTubes();
+            Tubes = TubesManager.Tubes;
             PropertyChanged += Tube_PropertyChanged;
             //PropertyChanged += TubeCount_PropertyChanged;
+            TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
+
         }
-        //private void TubeCount_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        //{
-        //    TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
-        //}
+        private void TubeCount_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
+        }
 
         public bool LevelComplete { get; set; }
         #endregion
