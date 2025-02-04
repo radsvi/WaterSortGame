@@ -7,6 +7,7 @@
         xmlns:viewTube="clr-namespace:WaterSortGame.Views"
         xmlns:VM="clr-namespace:WaterSortGame.ViewModels"
         xmlns:Models="clr-namespace:WaterSortGame.Models"
+        xmlns:converters="clr-namespace:WaterSortGame.Converters"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="700" MinHeight="400" d:MinHeight="150" d:Height="340"
@@ -26,6 +27,7 @@
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
         <Models:TubesManager x:Key="TubesList"/>
         <!--<VM:MainWindowVM x:Key="MainWindowVM"/>-->
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
     </Window.Resources>
     <!--<Grid DataContext="{Binding Source={StaticResource MainWindowVM}}" Margin="5">-->
     <Border Style="{StaticResource BackgroundStyle}" Margin="10">
@@ -37,16 +39,18 @@
             </Grid.RowDefinitions>
             <Border Grid.Row="1" Style="{StaticResource Separator}"/>
             <StackPanel Style="{StaticResource NavigationButtonsPrimary}">
-                <Label Content="{Binding TubeCount}" Foreground="White"/>
                 <Button Content="New Level" Command="{Binding NewLevelCommand}"/>
                 <Button Content="Restart level" Command="{Binding RestartCommand}"/>
                 <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}"/>
                 <Button Content="Exit" Command="{Binding CloseWindowCommand}" Width="30"/>
             </StackPanel>
-            <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
+            <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding DeveloperOptionsVisible}">
                 <Button Content="Load Level" Command="{Binding LoadLevelCommand}"/>
-                <Button Content="Save Level" Command="{Binding SaveLevelCommand}" />
+                <Button Content="Save Level" Command="{Binding SaveLevelCommand}"/>
                 <Button Content="Step back" Command="{Binding StepBackCommand}"/>
+                <Button Content="[temp] LevelCompleteWindow" Command="{Binding LevelCompleteWindowCommand}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                 <Button Content="Add Extra Vial" Command="{Binding AddExtraTubeCommand}"/>
             </StackPanel>
 

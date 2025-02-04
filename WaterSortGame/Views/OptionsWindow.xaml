@@ -10,7 +10,6 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type local:OptionsWindow}}"
         Title="OptionsWindow"
-        WindowStartupLocation="CenterScreen"
         Height="{Binding OptionsWindowHeight, Mode=TwoWay}"
         Width="{Binding OptionsWindowWidth, Mode=TwoWay}"
         >
@@ -19,15 +18,15 @@
         <converters:BoolNegateConverter x:Key="StatusToEnabled"/>
     </Window.Resources>
     <Window.InputBindings>
-        <KeyBinding Key="Esc" Command="{Binding CloseOptionsWindowCommand}"/>
+        <KeyBinding Key="Esc" Command="{Binding CloseWindowCommand}"/>
     </Window.InputBindings>
     <Grid Margin="10">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
-                <GroupBox Header="Tubes" DataContext="{Binding Source={StaticResource TubesManager}}">
+                <GroupBox Header="Vials" DataContext="{Binding Source={StaticResource TubesManager}}">
                     <StackPanel>
                         <DockPanel>
-                            <Label Content="Limit extra tubes to maximum of"/>
+                            <Label Content="Limit extra vial to maximum of"/>
                             <TextBox
                                  Text="{Binding MaximumExtraTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                  VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />
@@ -46,10 +45,10 @@
                         </DockPanel>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Dev options - not implemented yet">
+                <GroupBox Header="Dev options">
                     <StackPanel>
                         <DockPanel>
-                            <CheckBox x:Name="DevOptionsEnabled" IsChecked="False">
+                            <CheckBox x:Name="DevOptionsEnabled" IsChecked="{Binding DeveloperOptionsVisibleBool}">
                                 <Label Content="Enable dev options"/>
                             </CheckBox>
                         </DockPanel>

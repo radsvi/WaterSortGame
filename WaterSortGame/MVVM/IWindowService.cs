@@ -8,7 +8,8 @@ namespace WaterSortGame.MVVM
 {
     interface IWindowService
     {
-        void OpenWindow(object dataContext);
+        void OpenOptionsWindow(object sender);
+        void OpenLevelCompleteWindow(object sender);
         void CloseWindow();
     }
 }

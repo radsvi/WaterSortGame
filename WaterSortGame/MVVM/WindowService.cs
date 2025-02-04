@@ -6,32 +6,46 @@ using System.Threading.Tasks;
 using System.Windows;
 using WaterSortGame.Views;
 using WaterSortGame.ViewModels;
+using System.Runtime.CompilerServices;
 
 namespace WaterSortGame.MVVM
 {
     public class WindowService : IWindowService
     {
-        public void OpenWindow(object mainWindowVM)
+        public void OpenOptionsWindow(object sender)
         {
-            // Create an instance of the new window
-            //new OptionsWindow().DataContext = new OptionsWindowVM();
             var window = new OptionsWindow();
-            var viewModel = new OptionsWindowVM(mainWindowVM);
-            window.DataContext = viewModel;
+            window.DataContext = sender;
+            MainWindowVM mainWindowVM = (MainWindowVM)sender;
+            MainWindow mainWindow = mainWindowVM.MainWindow;
 
-            // Show the new window
+            window.Top = (mainWindow.Top + 30);
+            window.Left = (mainWindow.Left + (mainWindow.Width - mainWindowVM.OptionsWindowWidth) / 2);
+
             window.ShowDialog();
         }
+        public void OpenLevelCompleteWindow(object sender)
+        {
+            var window = new LevelCompleteWindow();
+            window.DataContext = sender;
+            MainWindowVM mainWindowVM = (MainWindowVM)sender;
+            MainWindow mainWindow = mainWindowVM.MainWindow;
+
+            window.Top = (mainWindow.Top + 90);
+            window.Left = (mainWindow.Left + (mainWindow.Width - window.Width) / 2);
+            
+            window.ShowDialog();
+        }
+
         public void CloseWindow()
         {
-            // Get a reference to the current window
             var window = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
 
-            // Close the window
             if (window is not null)
             {
                 window.Close();
             }
         }
+
     }
 }
