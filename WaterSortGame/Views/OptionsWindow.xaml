@@ -41,7 +41,7 @@
                                    ToolTip="This number coresponds to the latest number of colors generated.">
                             <Label Content="Number of colors to generate"/>
                             <TextBox
-                                 Text="{Binding NumberOfColorsToGenerate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 Text="{Binding NumberOfColorsToGenerate, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
                                  VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />
                         </DockPanel>
                     </StackPanel>
