@@ -315,14 +315,13 @@ namespace WaterSortGame.Models
                 Tubes.Add(new Tube());
             }
 
-            SaveStartingTubes();
+            StoreStartingTubes();
         }
         public static void GenerateNewTubes()
         {
             ExtraTubes = 0; // resets how much extra tubes has been added
             Random rnd = new Random();
-            
-            Tubes?.Clear();
+
             ObservableCollection<Color> colorsList = new ObservableCollection<Color>();
             if (RandomNumberOfTubes)
             {
@@ -347,6 +346,8 @@ namespace WaterSortGame.Models
                 colorsList.Add(new Color(color));
             }
 
+            Tubes?.Clear();
+            //var tubes = new ObservableCollection<Tube>();
             for (int i = 0; i < NumberOfColorsToGenerate; i++)
             {
                 Color[] layer = new Color[4];
@@ -362,9 +363,14 @@ namespace WaterSortGame.Models
             Tubes.Add(new Tube());
             Tubes.Add(new Tube());
 
-            SaveStartingTubes();
+            //Tubes?.Clear();
+            //Tubes.AddRange(tubes); // have it here like this because I dont want to call CollectionChanged event during the generation
+            // ## change into BulkObservableCollection<T> Class ? 
+
+
+            StoreStartingTubes();
         }
-        private static void SaveStartingTubes()
+        private static void StoreStartingTubes()
         {
             SavedStartingTubes?.Clear();
             foreach (var tube in Tubes)
