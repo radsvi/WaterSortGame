@@ -46,7 +46,7 @@
                         </DockPanel>
                     </StackPanel>
                 </GroupBox>
-                <!--<GroupBox Header="Dev options - not implemented yet">
+                <GroupBox Header="Dev options">
                     <StackPanel>
                         <DockPanel>
                             <CheckBox x:Name="DevOptionsEnabled" IsChecked="False">
@@ -54,7 +54,7 @@
                             </CheckBox>
                         </DockPanel>
                     </StackPanel>
-                </GroupBox>-->
+                </GroupBox>
             </StackPanel>
         </ScrollViewer>
     </Grid>

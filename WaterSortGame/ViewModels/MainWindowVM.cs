@@ -119,10 +119,8 @@ namespace WaterSortGame.ViewModels
         #endregion
         #region Constructor
         public MainWindowVM(IWindowService windowService)
-        //public MainWindowVM()
         {
             this.windowService = windowService;
-            //Tubes = TubesManager.GetTubes();
             Tubes = TubesManager.Tubes;
             PropertyChanged += Tube_PropertyChanged;
             //PropertyChanged += TubeCount_PropertyChanged;
@@ -133,13 +131,13 @@ namespace WaterSortGame.ViewModels
 
         private void Tubes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            //TubeCount = Tubes.Count;
-            //TubeCount = Tubes.Where(tube => tube.Layers.Count > 0).Count();
-
             TubesPerLineCalculation();
         }
         private void TubesPerLineCalculation()
         {
+            //TubeCount = Tubes.Count;
+            //TubeCount = Tubes.Where(tube => tube.Layers.Count > 0).Count();
+
             TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
         }
 

@@ -43,9 +43,9 @@
                 <Button Content="Exit" Command="{Binding CloseWindowCommand}" Width="30"/>
             </StackPanel>
             <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
-                <!--<Button Content="Load Level" Command="{Binding LoadLevelCommand}"/>
+                <Button Content="Load Level" Command="{Binding LoadLevelCommand}" Visibility="Hidden"/>
                 <Button Content="Save Level" Command="{Binding SaveLevelCommand}" />
-                <Button Content="Step back" Command="{Binding StepBackCommand}"/>-->
+                <Button Content="Step back" Command="{Binding StepBackCommand}"/>
                 <Button Content="Add Extra Vial" Command="{Binding AddExtraTubeCommand}"/>
             </StackPanel>
 
