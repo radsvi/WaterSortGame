@@ -133,7 +133,9 @@ namespace WaterSortGame.ViewModels
         private void Tubes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             //TubeCount = Tubes.Count;
-            TubeCount = 5;
+            //TubeCount = Tubes.Where(tube => tube.Layers.Count > 0).Count();
+
+            TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
         }
 
         //private void TubeCount_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -317,6 +319,7 @@ namespace WaterSortGame.ViewModels
         }
         private bool CompareAllTubes()
         {
+            if (Tubes.Count == 0) return false; // this is here in case we are calling the function from CollectionChanged event and it is currently count=0
             foreach (var tube in Tubes)
             {
                 if (tube.Layers.Count != 4 && tube.Layers.Count != 0) // pokud zkumavka neni plna, nebo uplne prazdna, nemuze to byt level dokoncenej
