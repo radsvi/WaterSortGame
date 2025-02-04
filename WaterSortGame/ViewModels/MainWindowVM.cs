@@ -128,6 +128,7 @@ namespace WaterSortGame.ViewModels
             //PropertyChanged += TubeCount_PropertyChanged;
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
             Tubes.CollectionChanged += Tubes_CollectionChanged;
+            TubesPerLineCalculation();
         }
 
         private void Tubes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -135,6 +136,10 @@ namespace WaterSortGame.ViewModels
             //TubeCount = Tubes.Count;
             //TubeCount = Tubes.Where(tube => tube.Layers.Count > 0).Count();
 
+            TubesPerLineCalculation();
+        }
+        private void TubesPerLineCalculation()
+        {
             TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
         }
 

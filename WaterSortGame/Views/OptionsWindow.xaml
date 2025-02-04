@@ -24,10 +24,10 @@
     <Grid Margin="10">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
-                <GroupBox Header="Tubes" DataContext="{Binding Source={StaticResource TubesManager}}">
+                <GroupBox Header="Vials" DataContext="{Binding Source={StaticResource TubesManager}}">
                     <StackPanel>
                         <DockPanel>
-                            <Label Content="Limit extra tubes to maximum of"/>
+                            <Label Content="Limit extra vial to maximum of"/>
                             <TextBox
                                  Text="{Binding MaximumExtraTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                  VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />
@@ -46,7 +46,7 @@
                         </DockPanel>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Dev options - not implemented yet">
+                <!--<GroupBox Header="Dev options - not implemented yet">
                     <StackPanel>
                         <DockPanel>
                             <CheckBox x:Name="DevOptionsEnabled" IsChecked="False">
@@ -54,7 +54,7 @@
                             </CheckBox>
                         </DockPanel>
                     </StackPanel>
-                </GroupBox>
+                </GroupBox>-->
             </StackPanel>
         </ScrollViewer>
     </Grid>
