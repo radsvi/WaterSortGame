@@ -10,7 +10,6 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type local:OptionsWindow}}"
         Title="OptionsWindow"
-        WindowStartupLocation="CenterScreen"
         Height="{Binding OptionsWindowHeight, Mode=TwoWay}"
         Width="{Binding OptionsWindowWidth, Mode=TwoWay}"
         >
@@ -19,7 +18,7 @@
         <converters:BoolNegateConverter x:Key="StatusToEnabled"/>
     </Window.Resources>
     <Window.InputBindings>
-        <KeyBinding Key="Esc" Command="{Binding CloseOptionsWindowCommand}"/>
+        <KeyBinding Key="Esc" Command="{Binding CloseWindowCommand}"/>
     </Window.InputBindings>
     <Grid Margin="10">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">

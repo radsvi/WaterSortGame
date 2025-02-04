@@ -16,12 +16,16 @@ using System.Windows.Input;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 using WaterSortGame.Properties;
+using WaterSortGame.Views;
 
 namespace WaterSortGame.ViewModels
 {
     class MainWindowVM : ViewModelBase
     {
         #region Properties
+
+        private IWindowService windowService;
+        public MainWindow MainWindow { get; set; }
 
         private ViewModelBase _selectedViewModel;
         public ViewModelBase SelectedViewModel
@@ -118,24 +122,22 @@ namespace WaterSortGame.ViewModels
         public bool LevelComplete { get; set; }
         #endregion
         #region Constructor
-        public MainWindowVM(IWindowService windowService)
+        public MainWindowVM(MainWindow mainWindow)
         {
-            this.windowService = windowService;
+            this.windowService = new WindowService();
+            MainWindow = mainWindow;
             Tubes = TubesManager.Tubes;
             PropertyChanged += Tube_PropertyChanged;
             //PropertyChanged += TubeCount_PropertyChanged;
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
             Tubes.CollectionChanged += Tubes_CollectionChanged;
             TubesPerLineCalculation();
-
-
         }
 
         
         #endregion
         #region Navigation
         public RelayCommand CloseWindowCommand => new RelayCommand(execute => windowService?.CloseWindow());
-
         public RelayCommand RestartCommand => new RelayCommand(execute => Restart());
         private void Restart(bool force = false)
         {
@@ -210,12 +212,37 @@ namespace WaterSortGame.ViewModels
             throw new NotImplementedException();
         }
 
+        public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
+        public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
+
+        #endregion
+        #region LevelCompleteWindow
+
         #endregion
         #region OptionsWindow
-        private IWindowService windowService;
 
-        public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenWindow(this));
-        public RelayCommand CloseOptionsWindowCommand => new RelayCommand(execute => windowService?.CloseWindow());
+        private int optionsWindowHeight = Settings.Default.OptionsWindowHeight;
+        public int OptionsWindowHeight
+        {
+            get { return optionsWindowHeight; }
+            set
+            {
+                optionsWindowHeight = value;
+                Settings.Default.OptionsWindowHeight = value;
+                Settings.Default.Save();
+            }
+        }
+        private int optionsWindowWidth = Settings.Default.OptionsWindowWidth;
+        public int OptionsWindowWidth
+        {
+            get { return optionsWindowWidth; }
+            set
+            {
+                optionsWindowWidth = value;
+                Settings.Default.OptionsWindowWidth = value;
+                Settings.Default.Save();
+            }
+        }
 
         private bool developerOptionsVisibleBool = Settings.Default.DeveloperOptionsVisibleBool;
         public bool DeveloperOptionsVisibleBool

@@ -44,10 +44,11 @@
                 <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}"/>
                 <Button Content="Exit" Command="{Binding CloseWindowCommand}" Width="30"/>
             </StackPanel>
-            <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}">
-                <Button Content="Load Level" Command="{Binding LoadLevelCommand}" Visibility="{Binding DeveloperOptionsVisible}"/>
-                <Button Content="Save Level" Command="{Binding SaveLevelCommand}" Visibility="{Binding DeveloperOptionsVisible}"/>
-                <Button Content="Step back" Command="{Binding StepBackCommand}" Visibility="{Binding DeveloperOptionsVisible}"/>
+            <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding DeveloperOptionsVisible}">
+                <Button Content="Load Level" Command="{Binding LoadLevelCommand}"/>
+                <Button Content="Save Level" Command="{Binding SaveLevelCommand}"/>
+                <Button Content="Step back" Command="{Binding StepBackCommand}"/>
+                <Button Content="[temp] LevelCompleteWindow" Command="{Binding LevelCompleteWindowCommand}"/>
             </StackPanel>
             <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                 <Button Content="Add Extra Vial" Command="{Binding AddExtraTubeCommand}"/>
