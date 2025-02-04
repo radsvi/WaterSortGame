@@ -13,7 +13,18 @@
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding CloseWindowCommand}"/>
     </Window.InputBindings><!--Tohle pravdepodobne budu chtit pozdejc odstranit-->
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="7 0 7 0" />
+            <Setter Property="Width" Value="150" />
+        </Style>
+    </Window.Resources>
     <Grid>
-        
+        <TextBlock Text="Congratulation! You finished a level!"/>
+        <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center">
+            <Button Content="Next level" Command="{Binding ForceNewLevelCommand}"/>
+            <Button Content="Restart current level" Command="{Binding ForceRestartCommand}"/>
+            <Button Content="Return" Command="{Binding CloseWindowCommand}"/>
+        </StackPanel>
     </Grid>
 </Window>

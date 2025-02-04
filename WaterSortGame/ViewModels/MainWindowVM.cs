@@ -167,19 +167,19 @@ namespace WaterSortGame.ViewModels
             TubesManager.StartNewLevel();
             ChangingLevel();
         }
-        private void LevelWonMessage()
-        {
-            var result = MessageBox.Show("Level complete!\nYes - next level\nNo - restart current level", "Level complete!", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
-            if (result == MessageBoxResult.Yes)
-            {
-                StartNewLevel(true);
-            }
-            else if (result == MessageBoxResult.No)
-            {
-                Restart(true);
-            }
-            // zkusit udelat nejakou grafiku, ohnostroj
-        }
+        //private void LevelWonMessage()
+        //{
+        //    var result = MessageBox.Show("Level complete!\nYes - next level\nNo - restart current level", "Level complete!", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
+        //    if (result == MessageBoxResult.Yes)
+        //    {
+        //        StartNewLevel(true);
+        //    }
+        //    else if (result == MessageBoxResult.No)
+        //    {
+        //        Restart(true);
+        //    }
+        //    // zkusit udelat nejakou grafiku, ohnostroj
+        //}
         public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
         private void LoadLevel(bool force = false)
         {
@@ -217,7 +217,8 @@ namespace WaterSortGame.ViewModels
 
         #endregion
         #region LevelCompleteWindow
-
+        public RelayCommand ForceRestartCommand => new RelayCommand(execute => { Restart(true); windowService?.CloseWindow(); });
+        public RelayCommand ForceNewLevelCommand => new RelayCommand(execute => { StartNewLevel(true); windowService?.CloseWindow(); });
         #endregion
         #region OptionsWindow
 
@@ -359,7 +360,8 @@ namespace WaterSortGame.ViewModels
             if (CompareAllTubes() && LevelComplete == false)
             {
                 LevelComplete = true;
-                LevelWonMessage();
+                windowService?.OpenLevelCompleteWindow(this);
+                //LevelWonMessage();
             }
         }
         private bool CompareAllTubes()
