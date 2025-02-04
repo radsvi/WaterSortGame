@@ -49,7 +49,7 @@
                 <GroupBox Header="Dev options">
                     <StackPanel>
                         <DockPanel>
-                            <CheckBox x:Name="DevOptionsEnabled" IsChecked="False">
+                            <CheckBox x:Name="DevOptionsEnabled" IsChecked="{Binding DeveloperOptionsVisibleBool}">
                                 <Label Content="Enable dev options"/>
                             </CheckBox>
                         </DockPanel>

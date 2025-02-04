@@ -17,7 +17,8 @@ namespace WaterSortGame.MVVM
             //new OptionsWindow().DataContext = new OptionsWindowVM();
             var window = new OptionsWindow();
             var viewModel = new OptionsWindowVM(mainWindowVM);
-            window.DataContext = viewModel;
+            //window.DataContext = viewModel;
+            window.DataContext = mainWindowVM;
 
             // Show the new window
             window.ShowDialog();

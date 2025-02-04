@@ -46,6 +46,6 @@ namespace WaterSortGame.ViewModels
 
         }
 
-        public RelayCommand CloseOptionsWindowCommand => new RelayCommand(execute => windowService?.CloseWindow());
+        
     }
 }

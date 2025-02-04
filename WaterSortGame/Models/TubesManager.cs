@@ -306,11 +306,12 @@ namespace WaterSortGame.Models
                 Tubes.Add(new Tube(6, 6, 6, 6));
                 Tubes.Add(new Tube(7, 7, 7, 7));
                 Tubes.Add(new Tube(8, 8, 8, 8));
-                //Tubes.Add(new Tube(9, 9, 9, 9));
-                //Tubes.Add(new Tube(10, 10, 10, 10));
-                //Tubes.Add(new Tube(11, 11, 11, 11));
-                Tubes.Add(new Tube(9, 11, 10, 11));
-                Tubes.Add(new Tube(9, 10, 11, 10));
+                Tubes.Add(new Tube(9, 9, 9, 9));
+                Tubes.Add(new Tube(10, 10, 10, 10));
+                Tubes.Add(new Tube(11, 11, 11));
+                Tubes.Add(new Tube(11));
+                //Tubes.Add(new Tube(9, 11, 10, 11));
+                //Tubes.Add(new Tube(9, 10, 11, 10));
                 Tubes.Add(new Tube());
                 Tubes.Add(new Tube());
             }

@@ -115,7 +115,7 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-
+        public bool LevelComplete { get; set; }
         #endregion
         #region Constructor
         public MainWindowVM(IWindowService windowService)
@@ -127,27 +127,11 @@ namespace WaterSortGame.ViewModels
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
             Tubes.CollectionChanged += Tubes_CollectionChanged;
             TubesPerLineCalculation();
+
+
         }
 
-        private void Tubes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            TubesPerLineCalculation();
-        }
-        private void TubesPerLineCalculation()
-        {
-            //TubeCount = Tubes.Count;
-            //TubeCount = Tubes.Where(tube => tube.Layers.Count > 0).Count();
-
-            TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
-        }
-
-        //private void TubeCount_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        //{
-        //    //TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
-        //    TubeCount = Tubes.Count;
-        //}
-
-        public bool LevelComplete { get; set; }
+        
         #endregion
         #region Navigation
         public RelayCommand CloseWindowCommand => new RelayCommand(execute => windowService?.CloseWindow());
@@ -231,6 +215,37 @@ namespace WaterSortGame.ViewModels
         private IWindowService windowService;
 
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenWindow(this));
+        public RelayCommand CloseOptionsWindowCommand => new RelayCommand(execute => windowService?.CloseWindow());
+
+        private bool developerOptionsVisibleBool = Settings.Default.DeveloperOptionsVisibleBool;
+        public bool DeveloperOptionsVisibleBool
+        {
+            get { return developerOptionsVisibleBool; }
+            set
+            {
+                if (value != developerOptionsVisibleBool)
+                {
+                    developerOptionsVisibleBool = value;
+                    Settings.Default.DeveloperOptionsVisibleBool = developerOptionsVisibleBool;
+                    Settings.Default.Save();
+                    OnPropertyChanged(nameof(DeveloperOptionsVisible));
+                }
+            }
+        }
+        public string DeveloperOptionsVisible {
+            get
+            {
+                if (developerOptionsVisibleBool == true)
+                {
+                    return "Visible";
+                }
+                else
+                {
+                    return "Hidden";
+                }
+            }
+            
+        }
         #endregion
         #region Moving Liquids
         public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTube(execute));
@@ -342,6 +357,25 @@ namespace WaterSortGame.ViewModels
             }
             return true;
         }
+        #endregion
+        #region Other Methods
+        private void Tubes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            TubesPerLineCalculation();
+        }
+        private void TubesPerLineCalculation()
+        {
+            //TubeCount = Tubes.Count;
+            //TubeCount = Tubes.Where(tube => tube.Layers.Count > 0).Count();
+
+            TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
+        }
+
+        //private void TubeCount_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        //{
+        //    //TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
+        //    TubeCount = Tubes.Count;
+        //}
         #endregion
     }
 }
