@@ -16,26 +16,6 @@ namespace WaterSortGame.Models
 {
     internal class TubesManager : ViewModelBase
     {
-        //public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>();
-        private static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>();
-        public static ObservableCollection<Tube> Tubes
-        {
-            get { return _tubes; }
-            set
-            {
-                if (value != _tubes)
-                {
-                    _tubes = value;
-                    OnGlobalPropertyChanged("NumberOfColorsToGenerate");
-                }
-            }
-        }
-        static TubesManager()
-        {
-            if (Tubes.Count == 0)
-                StartNewLevel();
-        }
-
         //public event PropertyChangedEventHandler? PropertyChanged;
         //protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         //{
@@ -87,7 +67,7 @@ namespace WaterSortGame.Models
                         numberOfColorsToGenerate = Color.ColorKeys.Count;
                     }
                     //OnPropertyChanged();
-                    //OnGlobalPropertyChanged("NumberOfColorsToGenerate");
+                    OnGlobalPropertyChanged("NumberOfColorsToGenerate");
                     Settings.Default.NumberOfColorsToGenerate = numberOfColorsToGenerate;
                     Settings.Default.Save();
                 }
@@ -196,21 +176,21 @@ namespace WaterSortGame.Models
         //    };
         //}
 
-        
+        public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>();
         public static ObservableCollection<Tube> SavedStartingTubes = new ObservableCollection<Tube>();
 
-        //private int countTubes;
-        //public int CountTubes
-        //{
-        //    get
-        //    {
-        //        return (int)Math.Ceiling((decimal)_tubes.Count / 2);
-        //    }
-        //    //set
-        //    //{
-        //    //    countTubes = value;
-        //    //}
-        //}
+        private int countTubes;
+        public int CountTubes
+        {
+            get
+            {
+                return (int)Math.Ceiling((decimal)_tubes.Count / 2);
+            }
+            //set
+            //{
+            //    countTubes = value;
+            //}
+        }
         //public static void StartNewLevel(bool regenerate = false)
         public static void StartNewLevel()
         {
@@ -262,57 +242,57 @@ namespace WaterSortGame.Models
         {
             if (ExtraTubes <= MaximumExtraTubes)
             {
-                Tubes.Add(new Tube());
+                _tubes.Add(new Tube());
                 ExtraTubes++;
             }
         }
         public static void RestartLevel()
         {
             //SavedStartingTubes?.Clear();
-            Tubes?.Clear();
+            _tubes?.Clear();
             foreach (var tube in SavedStartingTubes)
             {
-                Tubes.Add((Tube)tube.DeepCopy());
+                _tubes.Add((Tube)tube.DeepCopy());
             }
         }
         public static void LoadLevel()
         {
-            Tubes?.Clear();
+            _tubes?.Clear();
             if (false)
             {
-                Tubes.Add(new Tube(8, 1, 3, 0));
-                Tubes.Add(new Tube(2, 7, 10, 4));
-                Tubes.Add(new Tube(8, 10, 10, 11));
-                Tubes.Add(new Tube(2, 2, 1, 4));
-                Tubes.Add(new Tube(0, 6, 5, 9));
-                Tubes.Add(new Tube(2, 3, 6, 3));
-                Tubes.Add(new Tube(3, 7, 4, 9));
-                Tubes.Add(new Tube(5, 0, 1, 8));
-                Tubes.Add(new Tube(10, 9, 6, 5));
-                Tubes.Add(new Tube(4, 6, 9, 3));
-                Tubes.Add(new Tube(7, 11, 5, 11));
-                Tubes.Add(new Tube(0, 11, 7, 8));
-                Tubes.Add(new Tube());
-                Tubes.Add(new Tube());
+                _tubes.Add(new Tube(8, 1, 3, 0));
+                _tubes.Add(new Tube(2, 7, 10, 4));
+                _tubes.Add(new Tube(8, 10, 10, 11));
+                _tubes.Add(new Tube(2, 2, 1, 4));
+                _tubes.Add(new Tube(0, 6, 5, 9));
+                _tubes.Add(new Tube(2, 3, 6, 3));
+                _tubes.Add(new Tube(3, 7, 4, 9));
+                _tubes.Add(new Tube(5, 0, 1, 8));
+                _tubes.Add(new Tube(10, 9, 6, 5));
+                _tubes.Add(new Tube(4, 6, 9, 3));
+                _tubes.Add(new Tube(7, 11, 5, 11));
+                _tubes.Add(new Tube(0, 11, 7, 8));
+                _tubes.Add(new Tube());
+                _tubes.Add(new Tube());
             }
             else
             {
-                Tubes.Add(new Tube(0, 0, 0, 0));
-                Tubes.Add(new Tube(1, 1, 1, 1));
-                Tubes.Add(new Tube(2, 2, 2, 2));
-                Tubes.Add(new Tube(3, 3, 3, 3));
-                Tubes.Add(new Tube(4, 4, 4, 4));
-                Tubes.Add(new Tube(5, 5, 5, 5));
-                Tubes.Add(new Tube(6, 6, 6, 6));
-                Tubes.Add(new Tube(7, 7, 7, 7));
-                Tubes.Add(new Tube(8, 8, 8, 8));
-                //Tubes.Add(new Tube(9, 9, 9, 9));
-                //Tubes.Add(new Tube(10, 10, 10, 10));
-                //Tubes.Add(new Tube(11, 11, 11, 11));
-                Tubes.Add(new Tube(9, 11, 10, 11));
-                Tubes.Add(new Tube(9, 10, 11, 10));
-                Tubes.Add(new Tube());
-                Tubes.Add(new Tube());
+                _tubes.Add(new Tube(0, 0, 0, 0));
+                _tubes.Add(new Tube(1, 1, 1, 1));
+                _tubes.Add(new Tube(2, 2, 2, 2));
+                _tubes.Add(new Tube(3, 3, 3, 3));
+                _tubes.Add(new Tube(4, 4, 4, 4));
+                _tubes.Add(new Tube(5, 5, 5, 5));
+                _tubes.Add(new Tube(6, 6, 6, 6));
+                _tubes.Add(new Tube(7, 7, 7, 7));
+                _tubes.Add(new Tube(8, 8, 8, 8));
+                //_tubes.Add(new Tube(9, 9, 9, 9));
+                //_tubes.Add(new Tube(10, 10, 10, 10));
+                //_tubes.Add(new Tube(11, 11, 11, 11));
+                _tubes.Add(new Tube(9, 11, 10, 11));
+                _tubes.Add(new Tube(9, 10, 11, 10));
+                _tubes.Add(new Tube());
+                _tubes.Add(new Tube());
             }
 
             SaveStartingTubes();
@@ -322,7 +302,7 @@ namespace WaterSortGame.Models
             ExtraTubes = 0; // resets how much extra tubes has been added
             Random rnd = new Random();
             
-            Tubes?.Clear();
+            _tubes?.Clear();
             ObservableCollection<Color> colorsList = new ObservableCollection<Color>();
             if (RandomNumberOfTubes)
             {
@@ -357,33 +337,33 @@ namespace WaterSortGame.Models
                     colorsList.Remove(colorsList[colorNumber]);
                 }
 
-                Tubes.Add(new Tube(layer[0], layer[1], layer[2], layer[3]));
+                _tubes.Add(new Tube(layer[0], layer[1], layer[2], layer[3]));
             }
-            Tubes.Add(new Tube());
-            Tubes.Add(new Tube());
+            _tubes.Add(new Tube());
+            _tubes.Add(new Tube());
 
             SaveStartingTubes();
         }
         private static void SaveStartingTubes()
         {
             SavedStartingTubes?.Clear();
-            foreach (var tube in Tubes)
+            foreach (var tube in _tubes)
             {
                 SavedStartingTubes.Add((Tube)tube.DeepCopy());
             }
         }
 
-        //public static ObservableCollection<Tube> GetTubes()
-        //{
-        //    if (Tubes.Count == 0)
-        //        StartNewLevel();
+        public static ObservableCollection<Tube> GetTubes()
+        {
+            if (_tubes.Count == 0)
+                StartNewLevel();
 
-        //    return Tubes;
-        //}
-        //private static ObservableCollection<Tube> tubesProperty;
-        //public static ObservableCollection<Tube> TubesProperty
-        //{
-        //    get { return Tubes; }
-        //}
+            return _tubes;
+        }
+        private static ObservableCollection<Tube> tubesProperty;
+        public static ObservableCollection<Tube> TubesProperty
+        {
+            get { return _tubes; }
+        }
     }
 }

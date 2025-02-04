@@ -122,8 +122,7 @@ namespace WaterSortGame.ViewModels
         //public MainWindowVM()
         {
             this.windowService = windowService;
-            //Tubes = TubesManager.GetTubes();
-            Tubes = TubesManager.Tubes;
+            Tubes = TubesManager.GetTubes();
             PropertyChanged += Tube_PropertyChanged;
             //PropertyChanged += TubeCount_PropertyChanged;
             TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
