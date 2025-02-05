@@ -132,6 +132,7 @@ namespace WaterSortGame.ViewModels
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
             Tubes.CollectionChanged += Tubes_CollectionChanged;
             TubesPerLineCalculation();
+            UpdateViewCommand = new UpdateViewCommand(this);
         }
 
         
