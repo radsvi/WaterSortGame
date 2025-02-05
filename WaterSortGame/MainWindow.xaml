@@ -30,11 +30,10 @@
         <Models:TubesManager x:Key="TubesList"/>
         <!--<VM:MainWindowVM x:Key="MainWindowVM"/>-->
         <views:LevelCompleteScreen x:Key="LevelCompleteScreen"/>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
 
-        <DataTemplate DataType="{x:Type viewmodels:LevelCompleteVM}">
+        <!--<DataTemplate DataType="{x:Type viewmodels:LevelCompleteVM}">
             <views:LevelCompleteScreen/>
-        </DataTemplate>
+        </DataTemplate>-->
     </Window.Resources>
 
     <!--<Grid DataContext="{Binding Source={StaticResource MainWindowVM}}" Margin="5">-->
@@ -60,7 +59,7 @@
                     <Button Content="Save Level" Command="{Binding SaveLevelCommand}"/>
                     <Button Content="Step back" Command="{Binding StepBackCommand}"/>
                     <Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
-                    <Button Content="[temp2]" Command="{Binding UpdateViewCommand}" CommandParameter="LevelComplete"/>
+                    <Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                     <Button Content="Add Extra Vial" Command="{Binding AddExtraTubeCommand}"/>
@@ -137,11 +136,10 @@
                     </WrapPanel>
                 </ScrollViewer>
             </Grid>
-            <!--<Grid Width="400" Height="200" Background="Yellow" Visibility="Visible">
-                <ContentControl Content="{Binding SelectedViewModel}"/>
+            <Grid Width="400" Height="170" Visibility="{Binding LevelCompleteVisibility}" d:Visibility="Hidden">
                 <views:LevelCompleteScreen/>
-            </Grid>-->
-            <ContentControl Content="{Binding SelectedViewModel}" Width="400" Height="200"/>
+            </Grid>
+            <!--<ContentControl Content="{Binding SelectedViewModel}" Width="400" Height="200"/>-->
         </Grid>
     </Border>
 </Window>

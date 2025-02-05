@@ -119,7 +119,38 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        public bool LevelComplete { get; set; }
+        //public bool LevelComplete { get; set; }
+        private bool levelComplete;
+        public bool LevelComplete
+        {
+            get { return levelComplete; }
+            set
+            {
+                if (value != levelComplete)
+                {
+                    levelComplete = value;
+                    OnPropertyChanged(nameof(LevelCompleteVisibility));
+                }
+            }
+        }
+
+        private string levelCompleteVisibility;
+        public string LevelCompleteVisibility
+        {
+            get
+            {
+                if (levelComplete == true)
+                {
+                    return "Visible";
+                }
+                else
+                {
+                    return "Hidden";
+                }
+            }
+        }
+        [Obsolete] public RelayCommand TempLevelFinished => new RelayCommand(execute => LevelComplete = true);
+
         #endregion
         #region Constructor
         public MainWindowVM(MainWindow mainWindow)
@@ -219,8 +250,9 @@ namespace WaterSortGame.ViewModels
 
         #endregion
         #region LevelCompleteWindow
-        public RelayCommand ForceRestartCommand => new RelayCommand(execute => { Restart(true); windowService?.CloseWindow(); });
-        public RelayCommand ForceNewLevelCommand => new RelayCommand(execute => { StartNewLevel(true); windowService?.CloseWindow(); });
+        public RelayCommand ForceRestartCommand => new RelayCommand(execute => { Restart(true); });
+        public RelayCommand ForceNewLevelCommand => new RelayCommand(execute => { StartNewLevel(true); });
+        //public RelayCommand CloseLevelCompleteWindowCommand => new RelayCommand(execute => LevelComplete = false); // tohle nefunguje, protoze kdyz necham zkumavky ve vyresenym stavu tak se LevelComplete okamzite zase premeni na true. i kdyz proc se premeni? prece v ten moment neni zadnej update zkumavek tak se neposle zadnej event.. hm
         #endregion
         #region OptionsWindow
 
@@ -340,13 +372,11 @@ namespace WaterSortGame.ViewModels
             //SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
             return true;
         }
-
         private void RemoveColorFromSourceTube(Tube targetTube)
         {
             SelectedTube.Layers.Remove(SourceLiquid);
             //SourceColor.TubeNumber = targetTube.TubeId;
         }
-
         private void DeselectTube()
         {
             if (SelectedTube is not null)
@@ -355,14 +385,12 @@ namespace WaterSortGame.ViewModels
                 SelectedTube = null;
             }
         }
-
         private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            
             if (CompareAllTubes() && LevelComplete == false)
             {
                 LevelComplete = true;
-                windowService?.OpenLevelCompleteWindow(this);
+                //windowService?.OpenLevelCompleteWindow(this);
                 //LevelWonMessage();
             }
         }
