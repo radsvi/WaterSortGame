@@ -239,11 +239,7 @@ namespace WaterSortGame.ViewModels
             throw new NotImplementedException();
         }
 
-        public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack());
-        private void StepBack()
-        {
-            throw new NotImplementedException();
-        }
+        public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => SolvingSteps.Count > 0);
 
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
@@ -387,6 +383,8 @@ namespace WaterSortGame.ViewModels
         }
         private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            SolvingSteps.Add(new Status(Tubes));
+
             if (CompareAllTubes() && LevelComplete == false)
             {
                 LevelComplete = true;
@@ -415,6 +413,44 @@ namespace WaterSortGame.ViewModels
                 }
             }
             return true;
+        }
+
+        //ObservableCollection<Tube> status;
+        private ObservableCollection<Status> solvingSteps = new ObservableCollection<Status>();
+        public ObservableCollection<Status> SolvingSteps
+        {
+            get { return solvingSteps; }
+            set
+            {
+                if (value != solvingSteps)
+                {
+                    solvingSteps = value;
+                    //OnPropertyChanged();
+                }
+            }
+        }
+
+        private void StepBack()
+        {
+            Tubes?.Clear();
+
+            if (SolvingSteps.Count == 0)
+            {
+                return;
+            }
+
+            var lastGameStatus = SolvingSteps[SolvingSteps.Count - 1];
+            //Tubes.CollectionChanged -= Tubes_CollectionChanged;
+            foreach (var tubes in (lastGameStatus.Step))
+            {
+                Tubes.Add(tubes);
+                // tady bych mel nejak udelat aby se ignorovaly events na zmenu Tubes.
+                
+            }
+            SolvingSteps.Remove(lastGameStatus);
+
+
+            //Tubes.CollectionChanged += Tubes_CollectionChanged;
         }
         #endregion
         #region Other Methods
