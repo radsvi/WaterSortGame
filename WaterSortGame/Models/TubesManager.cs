@@ -146,7 +146,7 @@ namespace WaterSortGame.Models
         }
         public static void RestartLevel()
         {
-            ExtraTubes = 0; // resets how much extra tubes has been added
+            SettingFreshGameState();
             //SavedStartingTubes?.Clear();
             Tubes?.Clear();
             foreach (var tube in SavedStartingTubes)
@@ -199,7 +199,7 @@ namespace WaterSortGame.Models
         }
         public static void GenerateNewTubes()
         {
-            ExtraTubes = 0; // resets how much extra tubes has been added
+            SettingFreshGameState();
             Random rnd = new Random();
 
             ObservableCollection<Color> colorsList = new ObservableCollection<Color>();
@@ -250,6 +250,10 @@ namespace WaterSortGame.Models
 
 
             StoreStartingTubes();
+        }
+        private static void SettingFreshGameState()
+        {
+            ExtraTubes = 0; // resets how much extra tubes has been added
         }
         private static void StoreStartingTubes()
         {

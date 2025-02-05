@@ -157,7 +157,10 @@ namespace WaterSortGame.ViewModels
         {
             this.windowService = new WindowService();
             MainWindow = mainWindow;
+            
             Tubes = TubesManager.Tubes;
+            DeepCopyTubes();
+
             PropertyChanged += Tube_PropertyChanged;
             //PropertyChanged += TubeCount_PropertyChanged;
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
@@ -239,7 +242,7 @@ namespace WaterSortGame.ViewModels
             throw new NotImplementedException();
         }
 
-        public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => SolvingSteps.Count > 0);
+        public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 1);
 
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
@@ -394,13 +397,13 @@ namespace WaterSortGame.ViewModels
         }
         private void SaveGameState()
         {
-            if (SolvingSteps.Count == 0)
-            {
-                DeepCopyTubes();
-                return;
-            }
-            //if (GameStateChanged() == true)
-            if (SolvingSteps[SolvingSteps.Count - 1] != Tubes)
+            //if (GameStates.Count == 0) // tohle by nemelo nikdy nastat, rovnou to kopiruju v constructoru
+            //{
+            //    DeepCopyTubes();
+            //    return;
+            //}
+            if (GameStateChanged() == true)
+            //if (SolvingSteps[SolvingSteps.Count - 1] != Tubes)
             {
                 DeepCopyTubes();
                 return;
@@ -408,7 +411,34 @@ namespace WaterSortGame.ViewModels
         }
         private bool GameStateChanged()
         {
-            return true;
+            var lastStateTubes = GameStates[GameStates.Count - 1];
+
+            if (lastStateTubes.Count != Tubes.Count) // pokud jen pridam extra prazdnou zkumavku tak to neukladat!
+            {
+                return false;
+            }
+
+            for (int i = 0; i < lastStateTubes.Count; i++)
+            {
+                if (lastStateTubes[i].Layers.Count != Tubes[i].Layers.Count)
+                {
+                    return true;
+                }
+                
+                //var storedTube = lastState[i];
+                //var currentTube = Tubes[i];
+                //// ## jak to budu porovnavat kdyz jsem mezi stepy pridal extra prazdnou Tube?
+                //// ## prvne to udelam bez tohohle checku
+
+                //// ono mozna bude stacit kdyz porovnam pocet layeru a nemusim ani nic dalsiho!
+
+
+                //for (int j = 0; j < storedTube.Layers.Count; j++)
+                //{
+                //    // co kdyz se mi ale zmeni pocet layeru mezi kroky?? prvne porov
+                //}
+            }
+            return false;
         }
         private void DeepCopyTubes()
         {
@@ -417,8 +447,15 @@ namespace WaterSortGame.ViewModels
             {
                 tubesClone.Add(tube.DeepCopy());
             }
+            foreach (Tube tube in tubesClone)
+            {
+                if (tube.Selected == true)
+                {
+                    tube.Selected = false;
+                }
+            }
             
-            SolvingSteps.Add(tubesClone);
+            GameStates.Add(tubesClone);
         }
         private bool CompareAllTubes()
         {
@@ -445,7 +482,7 @@ namespace WaterSortGame.ViewModels
 
         //ObservableCollection<Tube> status;
         private ObservableCollection<ObservableCollection<Tube>> solvingSteps = new ObservableCollection<ObservableCollection<Tube>>();
-        public ObservableCollection<ObservableCollection<Tube>> SolvingSteps
+        public ObservableCollection<ObservableCollection<Tube>> GameStates
         {
             get { return solvingSteps; }
             set
@@ -460,12 +497,12 @@ namespace WaterSortGame.ViewModels
 
         private void StepBack()
         {
-            if (SolvingSteps.Count == 0)
+            if (GameStates.Count == 0)
             {
                 return;
             }
 
-            var lastGameStatus = SolvingSteps[SolvingSteps.Count - 1];
+            var lastGameStatus = GameStates[GameStates.Count - 1];
             //Tubes.CollectionChanged -= Tubes_CollectionChanged;
             PropertyChanged -= Tube_PropertyChanged;
             Tubes?.Clear();
@@ -475,7 +512,7 @@ namespace WaterSortGame.ViewModels
                 // tady bych mel nejak udelat aby se ignorovaly events na zmenu Tubes.
                 
             }
-            SolvingSteps.Remove(lastGameStatus);
+            GameStates.Remove(lastGameStatus);
 
 
             //Tubes.CollectionChanged += Tubes_CollectionChanged;
