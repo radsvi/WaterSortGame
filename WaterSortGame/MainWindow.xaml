@@ -58,8 +58,8 @@
                     <Button Content="Load Level" Command="{Binding LoadLevelCommand}"/>
                     <Button Content="Save Level" Command="{Binding SaveLevelCommand}"/>
                     <Button Content="Step back" Command="{Binding StepBackCommand}"/>
-                    <Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
-                    <Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>
+                    <!--<Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
+                    <Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                     <Button Content="Add Extra Vial" Command="{Binding AddExtraTubeCommand}"/>
