@@ -209,14 +209,15 @@ namespace WaterSortGame.Models
             }
 
             List<int> selectedColors = new List<int>();
-            for (int i = 0; i < NumberOfColorsToGenerate; i++) // generate list of all 12 colors
+            for (int i = 0; i < Color.ColorKeys.Count; i++) // generate list of all 12 colors
             {
                 selectedColors.Add(i);
             }
 
-            for (int i = 0; i < selectedColors.Count - NumberOfColorsToGenerate; i++) // now remove some random ones
+            for (int i = 0; i < Color.ColorKeys.Count - NumberOfColorsToGenerate; i++) // now remove some random ones
             {
-                selectedColors.Remove(selectedColors[NumberOfColorsToGenerate]);
+                //selectedColors.Remove(selectedColors[NumberOfColorsToGenerate]); // this always keeps the same colors
+                selectedColors.Remove(selectedColors[rnd.Next(0, selectedColors.Count)]);
             }
             foreach (var color in selectedColors)
             {
