@@ -383,7 +383,7 @@ namespace WaterSortGame.ViewModels
         }
         private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            SolvingSteps.Add(new Status(Tubes));
+            SaveGameState();
 
             if (CompareAllTubes() && LevelComplete == false)
             {
@@ -391,6 +391,34 @@ namespace WaterSortGame.ViewModels
                 //windowService?.OpenLevelCompleteWindow(this);
                 //LevelWonMessage();
             }
+        }
+        private void SaveGameState()
+        {
+            if (SolvingSteps.Count == 0)
+            {
+                DeepCopyTubes();
+                return;
+            }
+            //if (GameStateChanged() == true)
+            if (SolvingSteps[SolvingSteps.Count - 1] != Tubes)
+            {
+                DeepCopyTubes();
+                return;
+            }
+        }
+        private bool GameStateChanged()
+        {
+            return true;
+        }
+        private void DeepCopyTubes()
+        {
+            ObservableCollection<Tube> tubesClone = new ObservableCollection<Tube>();
+            foreach (Tube tube in Tubes)
+            {
+                tubesClone.Add(tube.DeepCopy());
+            }
+            
+            SolvingSteps.Add(tubesClone);
         }
         private bool CompareAllTubes()
         {
@@ -416,8 +444,8 @@ namespace WaterSortGame.ViewModels
         }
 
         //ObservableCollection<Tube> status;
-        private ObservableCollection<Status> solvingSteps = new ObservableCollection<Status>();
-        public ObservableCollection<Status> SolvingSteps
+        private ObservableCollection<ObservableCollection<Tube>> solvingSteps = new ObservableCollection<ObservableCollection<Tube>>();
+        public ObservableCollection<ObservableCollection<Tube>> SolvingSteps
         {
             get { return solvingSteps; }
             set
@@ -432,8 +460,6 @@ namespace WaterSortGame.ViewModels
 
         private void StepBack()
         {
-            Tubes?.Clear();
-
             if (SolvingSteps.Count == 0)
             {
                 return;
@@ -441,7 +467,9 @@ namespace WaterSortGame.ViewModels
 
             var lastGameStatus = SolvingSteps[SolvingSteps.Count - 1];
             //Tubes.CollectionChanged -= Tubes_CollectionChanged;
-            foreach (var tubes in (lastGameStatus.Step))
+            PropertyChanged -= Tube_PropertyChanged;
+            Tubes?.Clear();
+            foreach (var tubes in lastGameStatus)
             {
                 Tubes.Add(tubes);
                 // tady bych mel nejak udelat aby se ignorovaly events na zmenu Tubes.
@@ -451,6 +479,7 @@ namespace WaterSortGame.ViewModels
 
 
             //Tubes.CollectionChanged += Tubes_CollectionChanged;
+            PropertyChanged += Tube_PropertyChanged;
         }
         #endregion
         #region Other Methods

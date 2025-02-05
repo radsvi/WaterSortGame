@@ -254,9 +254,9 @@ namespace WaterSortGame.Models
         private static void StoreStartingTubes()
         {
             SavedStartingTubes?.Clear();
-            foreach (var tube in Tubes)
+            foreach (Tube tube in Tubes)
             {
-                SavedStartingTubes.Add((Tube)tube.DeepCopy());
+                SavedStartingTubes.Add(tube.DeepCopy());
             }
         }
     }
