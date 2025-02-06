@@ -242,7 +242,7 @@ namespace WaterSortGame.ViewModels
             throw new NotImplementedException();
         }
 
-        public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 1);
+        public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
 
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
@@ -409,8 +409,14 @@ namespace WaterSortGame.ViewModels
                 return;
             }
         }
+
+
         private bool GameStateChanged()
         {
+            if(GameStates.Count == 0)
+            {
+                return true;
+            }
             var lastStateTubes = GameStates[GameStates.Count - 1];
 
             if (lastStateTubes.Count != Tubes.Count) // pokud jen pridam extra prazdnou zkumavku tak to neukladat!
@@ -494,6 +500,7 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
+        //public ObservableCollection<Tube> CurrentGameStateClone { get; set; }
 
         private void StepBack()
         {
@@ -502,11 +509,13 @@ namespace WaterSortGame.ViewModels
                 return;
             }
 
-            var lastGameStatus = GameStates[GameStates.Count - 1];
+            GameStates.Remove(GameStates[GameStates.Count - 1]); // vymazu posledni, protoze to odpovida current state-u
+
+            ObservableCollection<Tube> lastGameStatus = GameStates[GameStates.Count - 1];
             //Tubes.CollectionChanged -= Tubes_CollectionChanged;
             PropertyChanged -= Tube_PropertyChanged;
             Tubes?.Clear();
-            foreach (var tubes in lastGameStatus)
+            foreach (Tube tubes in lastGameStatus)
             {
                 Tubes.Add(tubes);
                 // tady bych mel nejak udelat aby se ignorovaly events na zmenu Tubes.
