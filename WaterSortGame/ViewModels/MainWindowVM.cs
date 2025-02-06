@@ -159,7 +159,7 @@ namespace WaterSortGame.ViewModels
             MainWindow = mainWindow;
             
             Tubes = TubesManager.Tubes;
-            DeepCopyTubes();
+            CopyTubes();
 
             PropertyChanged += Tube_PropertyChanged;
             //PropertyChanged += TubeCount_PropertyChanged;
@@ -386,6 +386,10 @@ namespace WaterSortGame.ViewModels
         }
         private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (PropertyChangedEventPaused == true)
+            {
+                return;
+            }
             SaveGameState();
 
             if (CompareAllTubes() && LevelComplete == false)
@@ -405,7 +409,7 @@ namespace WaterSortGame.ViewModels
             if (DidGameStateChange() == true)
             //if (SolvingSteps[SolvingSteps.Count - 1] != Tubes)
             {
-                DeepCopyTubes();
+                CopyTubes();
                 return;
             }
         }
@@ -419,7 +423,7 @@ namespace WaterSortGame.ViewModels
             }
             //var lastStateTubes = GameStates[GameStates.Count - 1];
 
-            if (LastGameState.Count != Tubes.Count) // pokud jen pridam extra prazdnou zkumavku tak to neukladat!
+            if (LastGameState.Count != Tubes.Count) // pokud jen pridavam extra prazdnou zkumavku tak to neukladat!
             {
                 return false;
             }
@@ -446,7 +450,7 @@ namespace WaterSortGame.ViewModels
             }
             return false;
         }
-        private void DeepCopyTubes()
+        private void CopyTubes()
         {
             //if (LastGameState.Count != 0) // pridavam to tady, protoze nechci v game states mit i current game state.
             //{
@@ -467,10 +471,11 @@ namespace WaterSortGame.ViewModels
 
             LastGameState?.Clear();
             //ObservableCollection<Tube> tubesClone = new ObservableCollection<Tube>();
-            foreach (Tube tube in Tubes)
-            {
-                LastGameState.Add(tube.DeepCopy());
-            }
+            //foreach (Tube tube in Tubes)
+            //{
+            //    LastGameState.Add(tube.DeepCopy());
+            //}
+            LastGameState = DeepCopyTubesCollection(Tubes);
             foreach (Tube tube in LastGameState)
             {
                 if (tube.Selected == true)
@@ -531,21 +536,35 @@ namespace WaterSortGame.ViewModels
 
             ObservableCollection<Tube> lastGameStatus = GameStates[GameStates.Count - 1];
             //Tubes.CollectionChanged -= Tubes_CollectionChanged;
-            PropertyChanged -= Tube_PropertyChanged;
+            //PropertyChanged -= Tube_PropertyChanged;
+            PropertyChangedEventPaused = true;
             Tubes?.Clear();
             foreach (Tube tubes in lastGameStatus)
             {
                 Tubes.Add(tubes);
-                // tady bych mel nejak udelat aby se ignorovaly events na zmenu Tubes.
-                
             }
-            if (GameStates.Count > 0)
-            {
-                GameStates.Remove(lastGameStatus);
-            }
+            //Tubes = new ObservableCollection<Tube>(DeepCopyTubesCollection(lastGameStatus));
+            PropertyChangedEventPaused = false;
+            //if (GameStates.Count > 1)
+            //{
+            //LastGameState = new ObservableCollection<Tube>(lastGameStatus);
+
+            LastGameState = DeepCopyTubesCollection(lastGameStatus);
+            //}
+            GameStates.Remove(lastGameStatus);
 
             //Tubes.CollectionChanged += Tubes_CollectionChanged;
-            PropertyChanged += Tube_PropertyChanged;
+            //PropertyChanged += Tube_PropertyChanged;
+            
+        }
+        private ObservableCollection<Tube> DeepCopyTubesCollection(ObservableCollection<Tube> tubes)
+        {
+            ObservableCollection <Tube> newTubes = new ObservableCollection<Tube>();
+            foreach (Tube tube in tubes)
+            {
+                newTubes.Add(tube.DeepCopy());
+            }
+            return newTubes;
         }
         #endregion
         #region Other Methods
