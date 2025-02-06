@@ -49,6 +49,7 @@
 
                 <Border Grid.Row="1" Style="{StaticResource Separator}"/>
                 <StackPanel Style="{StaticResource NavigationButtonsPrimary}">
+                    <TextBlock Text="{Binding GameStates.Count}" />
                     <Button Content="New Level" Command="{Binding NewLevelCommand}"/>
                     <Button Content="Restart level" Command="{Binding RestartCommand}"/>
                     <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}"/>

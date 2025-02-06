@@ -150,7 +150,7 @@ namespace WaterSortGame.ViewModels
             }
         }
         [Obsolete] public RelayCommand TempLevelFinished => new RelayCommand(execute => LevelComplete = true);
-
+        public bool PropertyChangedEventPaused { get; set; } = false;
         #endregion
         #region Constructor
         public MainWindowVM(MainWindow mainWindow)
@@ -402,7 +402,7 @@ namespace WaterSortGame.ViewModels
             //    DeepCopyTubes();
             //    return;
             //}
-            if (GameStateChanged() == true)
+            if (DidGameStateChange() == true)
             //if (SolvingSteps[SolvingSteps.Count - 1] != Tubes)
             {
                 DeepCopyTubes();
@@ -411,22 +411,22 @@ namespace WaterSortGame.ViewModels
         }
 
 
-        private bool GameStateChanged()
+        private bool DidGameStateChange()
         {
-            if(GameStates.Count == 0)
+            if(GameStates.Count == 0 && LastGameState.Count == 0)
             {
                 return true;
             }
-            var lastStateTubes = GameStates[GameStates.Count - 1];
+            //var lastStateTubes = GameStates[GameStates.Count - 1];
 
-            if (lastStateTubes.Count != Tubes.Count) // pokud jen pridam extra prazdnou zkumavku tak to neukladat!
+            if (LastGameState.Count != Tubes.Count) // pokud jen pridam extra prazdnou zkumavku tak to neukladat!
             {
                 return false;
             }
 
-            for (int i = 0; i < lastStateTubes.Count; i++)
+            for (int i = 0; i < LastGameState.Count; i++)
             {
-                if (lastStateTubes[i].Layers.Count != Tubes[i].Layers.Count)
+                if (LastGameState[i].Layers.Count != Tubes[i].Layers.Count)
                 {
                     return true;
                 }
@@ -448,12 +448,30 @@ namespace WaterSortGame.ViewModels
         }
         private void DeepCopyTubes()
         {
-            ObservableCollection<Tube> tubesClone = new ObservableCollection<Tube>();
+            //if (LastGameState.Count != 0) // pridavam to tady, protoze nechci v game states mit i current game state.
+            //{
+            //    //GameStates.Add(LastGameState);
+            //    ObservableCollection<Tube> clone = new ObservableCollection<Tube>();
+            //    foreach (Tube tube in LastGameState)
+            //    {
+            //        clone.Add(tube.DeepCopy());
+            //    }
+            //    GameStates.Add(clone);
+            //}
+
+            if (LastGameState.Count != 0) // pridavam to tady, protoze nechci v game states mit i current game state.
+            {
+                GameStates.Add(LastGameState);
+                LastGameState = new ObservableCollection<Tube>();
+            }
+
+            LastGameState?.Clear();
+            //ObservableCollection<Tube> tubesClone = new ObservableCollection<Tube>();
             foreach (Tube tube in Tubes)
             {
-                tubesClone.Add(tube.DeepCopy());
+                LastGameState.Add(tube.DeepCopy());
             }
-            foreach (Tube tube in tubesClone)
+            foreach (Tube tube in LastGameState)
             {
                 if (tube.Selected == true)
                 {
@@ -461,7 +479,7 @@ namespace WaterSortGame.ViewModels
                 }
             }
             
-            GameStates.Add(tubesClone);
+            //GameStates.Add(CurrentGameStateClone);
         }
         private bool CompareAllTubes()
         {
@@ -500,7 +518,7 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
-        //public ObservableCollection<Tube> CurrentGameStateClone { get; set; }
+        public ObservableCollection<Tube> LastGameState { get; set; } = new ObservableCollection<Tube>();
 
         private void StepBack()
         {
@@ -509,7 +527,7 @@ namespace WaterSortGame.ViewModels
                 return;
             }
 
-            GameStates.Remove(GameStates[GameStates.Count - 1]); // vymazu posledni, protoze to odpovida current state-u
+            //GameStates.Remove(GameStates[GameStates.Count - 1]); // vymazu posledni, protoze to odpovida current state-u.//zmenil jsem to ze pridavam current state az o iteraci pozdeji
 
             ObservableCollection<Tube> lastGameStatus = GameStates[GameStates.Count - 1];
             //Tubes.CollectionChanged -= Tubes_CollectionChanged;
@@ -521,8 +539,10 @@ namespace WaterSortGame.ViewModels
                 // tady bych mel nejak udelat aby se ignorovaly events na zmenu Tubes.
                 
             }
-            GameStates.Remove(lastGameStatus);
-
+            if (GameStates.Count > 0)
+            {
+                GameStates.Remove(lastGameStatus);
+            }
 
             //Tubes.CollectionChanged += Tubes_CollectionChanged;
             PropertyChanged += Tube_PropertyChanged;
