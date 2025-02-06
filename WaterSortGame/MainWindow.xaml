@@ -94,6 +94,18 @@
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <Grid>
+                                                        <!--<Rectangle Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top">
+                                                            <Rectangle.Fill>
+                                                                <VisualBrush>
+                                                                    <VisualBrush.Visual>
+                                                                        <Border CornerRadius="0,0,20,20" Background="LightBlue" Width="40" Height="150" />
+                                                                    </VisualBrush.Visual>
+                                                                </VisualBrush>
+                                                            </Rectangle.Fill>
+                                                        </Rectangle>-->
+                                                        
+                                                        <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
+                                                            CornerRadius="0,0,5,5" Background="LightBlue"/>
                                                         <Rectangle Margin="10" MinWidth="60" Width="60" Height="242">
                                                             <Rectangle.Fill>
                                                                 <VisualBrush>

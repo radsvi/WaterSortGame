@@ -22,7 +22,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="1">
-                <TextBlock Text="Congratulation! You finished a level!" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
+                <TextBlock Text="Congratulation! You won!" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
                         Style="{StaticResource NavigationButtonsPrimary}">
                     <Button Content="Next level" Command="{Binding ForceNewLevelCommand}" Width="150"/>
