@@ -173,36 +173,92 @@ namespace WaterSortGame.ViewModels
         #endregion
         #region Navigation
         public RelayCommand CloseWindowCommand => new RelayCommand(execute => windowService?.CloseWindow());
-
-        public RelayCommand RestartCommand => new RelayCommand(execute => Restart());
-        private void Restart(bool force = false)
-        {
-            if (force == false)
-            {
-                var result = MessageBox.Show("Do you want to restart current level?", "Restart", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                if (result != MessageBoxResult.OK)
-                {
-                    return;
-                }
-            }
-            TubesManager.RestartLevel();
-            OnStartingLevel();
-        }
         public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesManager.AddExtraTube(), canExecute => TubesManager.ExtraTubes < TubesManager.MaximumExtraTubes);
-        public RelayCommand NewLevelCommand => new RelayCommand(execute => StartNewLevel());
-        private void StartNewLevel(bool force = false)
+        //public RelayCommand NewLevelCommand => new RelayCommand(execute => StartNewLevel());
+        //private void StartNewLevel(bool force = false)
+        //{
+        //    if (force == false)
+        //    {
+        //        var result = MessageBox.Show("Do you want to start new level?", "New level", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+        //        if (result != MessageBoxResult.OK)
+        //        {
+        //            return;
+        //        }
+        //    }
+        //    TubesManager.StartNewLevel();
+        //    OnStartingLevel();
+        //}
+        #region Popup Screens
+        private string startNewLevelScreenVisibility;
+        public string StartNewLevelScreenVisibility
         {
-            if (force == false)
-            {
-                var result = MessageBox.Show("Do you want to start new level?", "New level", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                if (result != MessageBoxResult.OK)
+            get
+            { 
+                if (startNewLevelScreenVisibility == "true")
                 {
-                    return;
+                    return "Visible";
+                }
+                else
+                {
+                    return "Hidden";
                 }
             }
+            set
+            {
+                if (value != startNewLevelScreenVisibility)
+                {
+                    startNewLevelScreenVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public RelayCommand ShowScreen_StartNewLevel_Command => new RelayCommand(execute => StartNewLevelScreenVisibility = "true", canExecute => true);
+        public RelayCommand StartNewLevel_Command => new RelayCommand(execute => StartNewLevel());
+        private void StartNewLevel()
+        {
+            StartNewLevelScreenVisibility = "false";
             TubesManager.StartNewLevel();
             OnStartingLevel();
         }
+        public RelayCommand PopupScreen_Cancel_Command => new RelayCommand(execute => CancelScreen());
+        private void CancelScreen()
+        {
+            LevelComplete = false;
+            StartNewLevelScreenVisibility = "false";
+            RestartLevelScreenVisibility = "false";
+        }
+        private string restartLevelScreenVisibility;
+        public string RestartLevelScreenVisibility
+        {
+            get
+            {
+                if (restartLevelScreenVisibility == "true")
+                {
+                    return "Visible";
+                }
+                else
+                {
+                    return "Hidden";
+                }
+            }
+            set
+            {
+                if (value != restartLevelScreenVisibility)
+                {
+                    restartLevelScreenVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public RelayCommand ShowScreen_RestartLevel_Command => new RelayCommand(execute => RestartLevelScreenVisibility = "true");
+        public RelayCommand RestartLevel_Command => new RelayCommand(execute => Restart());
+        private void Restart()
+        {
+            RestartLevelScreenVisibility = "false";
+            TubesManager.RestartLevel();
+            OnStartingLevel();
+        }
+        #endregion
         //private void LevelWonMessage()
         //{
         //    var result = MessageBox.Show("Level complete!\nYes - next level\nNo - restart current level", "Level complete!", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
@@ -249,11 +305,6 @@ namespace WaterSortGame.ViewModels
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
 
-        #endregion
-        #region LevelCompleteWindow
-        public RelayCommand ForceRestartCommand => new RelayCommand(execute => { Restart(true); });
-        public RelayCommand ForceNewLevelCommand => new RelayCommand(execute => { StartNewLevel(true); });
-        //public RelayCommand CloseLevelCompleteWindowCommand => new RelayCommand(execute => LevelComplete = false); // tohle nefunguje, protoze kdyz necham zkumavky ve vyresenym stavu tak se LevelComplete okamzite zase premeni na true. i kdyz proc se premeni? prece v ten moment neni zadnej update zkumavek tak se neposle zadnej event.. hm
         #endregion
         #region OptionsWindow
 

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WaterSortGame.Views.LevelCompleteScreen"
+﻿<UserControl x:Class="WaterSortGame.Views.NewLevelScreen"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -14,16 +14,12 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="1">
-                <TextBlock Text="Congratulation! You won!" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
+                <TextBlock Text="Do you want to start a new level?" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
-                        Style="{StaticResource NavigationButtonsPrimary}">
-                    <Button Content="Next level" Command="{Binding StartNewLevel_Command}" Width="150"/>
-                    <Button Content="Restart level" Command="{Binding RestartLevel_Command}" Width="150"/>
+                    Style="{StaticResource NavigationButtonsPrimary}">
+                    <Button Content="OK" Command="{Binding StartNewLevel_Command}" Width="150"/>
+                    <Button Content="Cancel" Command="{Binding PopupScreen_Cancel_Command}" Width="150"/>
                 </StackPanel>
-                <!--<StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
-                        Style="{StaticResource NavigationButtonsPrimary}">
-                    <Button Content="Return" Command="{Binding CloseLevelCompleteWindowCommand}"/>
-                </StackPanel>-->
             </StackPanel>
         </Grid>
     </Border>

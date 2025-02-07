@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WaterSortGame"
-        xmlns:viewTube="clr-namespace:WaterSortGame.Views"
         xmlns:VM="clr-namespace:WaterSortGame.ViewModels"
         xmlns:Models="clr-namespace:WaterSortGame.Models"
         xmlns:converters="clr-namespace:WaterSortGame.Converters"
@@ -30,6 +29,8 @@
         <Models:TubesManager x:Key="TubesList"/>
         <!--<VM:MainWindowVM x:Key="MainWindowVM"/>-->
         <views:LevelCompleteScreen x:Key="LevelCompleteScreen"/>
+        <views:NewLevelScreen x:Key="NewLevelScreen"/>
+        <views:RestartLevelScreen x:Key="RestartLevelScreen"/>
 
         <!--<DataTemplate DataType="{x:Type viewmodels:LevelCompleteVM}">
             <views:LevelCompleteScreen/>
@@ -50,8 +51,8 @@
                 <Border Grid.Row="1" Style="{StaticResource Separator}"/>
                 <StackPanel Style="{StaticResource NavigationButtonsPrimary}">
                     <!--<TextBlock Text="{Binding GameStates.Count}" Foreground="White" />-->
-                    <Button Content="New Level" Command="{Binding NewLevelCommand}"/>
-                    <Button Content="Restart level" Command="{Binding RestartCommand}"/>
+                    <Button Content="New Level" Command="{Binding ShowScreen_StartNewLevel_Command}"/>
+                    <Button Content="Restart level" Command="{Binding ShowScreen_RestartLevel_Command}"/>
                     <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}"/>
                     <Button Content="Exit" Command="{Binding CloseWindowCommand}" Width="30"/>
                 </StackPanel>
@@ -151,6 +152,12 @@
             </Grid>
             <Grid Width="400" Height="170" Visibility="{Binding LevelCompleteVisibility}" d:Visibility="Hidden">
                 <views:LevelCompleteScreen/>
+            </Grid>
+            <Grid Width="400" Height="170" Visibility="{Binding StartNewLevelScreenVisibility}" d:Visibility="Hidden">
+                <views:NewLevelScreen/>
+            </Grid>
+            <Grid Width="400" Height="170" Visibility="{Binding RestartLevelScreenVisibility}" d:Visibility="Hidden">
+                <views:RestartLevelScreen/>
             </Grid>
             <!--<ContentControl Content="{Binding SelectedViewModel}" Width="400" Height="200"/>-->
         </Grid>
