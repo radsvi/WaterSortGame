@@ -31,13 +31,14 @@
                                  Text="{Binding MaximumExtraTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                  VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />
                         </DockPanel>
+                        <TextBlock Text="Recommended to leave at just 1. Raising it any higher make the game too easy."/>
                         <DockPanel>
                             <CheckBox x:Name="RandomColors" IsChecked="{Binding RandomNumberOfTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                                 <Label Content="Random number of colors"/>
                             </CheckBox>
                         </DockPanel>
                         <DockPanel IsEnabled="{Binding ElementName=RandomColors,Path=IsChecked,Converter={StaticResource StatusToEnabled}}"
-                                   ToolTip="This number coresponds to the latest number of colors generated.">
+                                   ToolTip="This number (3~12) coresponds to the latest number of colors generated.">
                             <Label Content="Number of colors to generate"/>
                             <TextBox
                                  Text="{Binding NumberOfColorsToGenerate, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
