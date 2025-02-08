@@ -312,9 +312,14 @@ namespace WaterSortGame.ViewModels
         }
         #endregion
         #region Moving Liquids
-        public RelayCommand SelectTubeCommand => new RelayCommand(execute => SelectTube(execute));
+        public RelayCommand SelectTubeCommand => new RelayCommand(tube => SelectTube(tube));
         private void SelectTube(object obj)
         {
+            if (LevelComplete == true)
+            {
+                return;
+            }
+            
             var tube = obj as Tube;
 
             if (SelectedTube == null)
