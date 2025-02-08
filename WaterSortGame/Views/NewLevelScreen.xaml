@@ -19,7 +19,7 @@
                 <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
                     Style="{StaticResource NavigationButtonsPrimary}">
                     <Button Content="OK" Command="{Binding StartNewLevel_Command}" Width="150"/>
-                    <Button Content="Cancel" Command="{Binding PopupScreen_Cancel_Command}" Width="150"/>
+                    <Button Content="Cancel" Command="{Binding UpdateViewCommand}" Width="150"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

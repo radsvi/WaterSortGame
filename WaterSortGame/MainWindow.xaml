@@ -26,7 +26,7 @@
     <Window.Resources>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
         <Models:TubesManager x:Key="TubesList"/>
-        <!--<VM:MainWindowVM x:Key="MainWindowVM"/>-->
+        <!--<viewmodels:MainWindowVM x:Key="MainWindowVM"/>-->
         <views:LevelCompleteScreen x:Key="LevelCompleteScreen"/>
         <views:NewLevelScreen x:Key="NewLevelScreen"/>
         <views:RestartLevelScreen x:Key="RestartLevelScreen"/>
@@ -35,10 +35,11 @@
             <views:LevelCompleteScreen/>
         </DataTemplate>-->
         <DataTemplate DataType="{x:Type viewmodels:NewLevelVM}">
-            <views:NewLevelScreen/>
+            <!--<views:NewLevelScreen DataContext="{Binding RelativeSource={RelativeSource Self}}"/>-->
+            <views:NewLevelScreen DataContext="{Binding MainWindowVM}"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodels:RestartLevelVM}">
-            <views:RestartLevelScreen/>
+            <views:RestartLevelScreen DataContext="{Binding MainWindowVM}"/>
         </DataTemplate>
     </Window.Resources>
 
@@ -161,7 +162,7 @@
                     </WrapPanel>
                 </ScrollViewer>
             </Grid>
-            <Grid Width="400" Height="170" Visibility="{Binding LevelCompleteVisibility}" d:Visibility="Hidden">
+            <!--<Grid Width="400" Height="170" Visibility="{Binding LevelCompleteVisibility}" d:Visibility="Hidden">
                 <views:LevelCompleteScreen/>
             </Grid>
             <Grid Width="400" Height="170" Visibility="{Binding StartNewLevelScreenVisibility}" d:Visibility="Hidden">
@@ -169,10 +170,10 @@
             </Grid>
             <Grid Width="400" Height="170" Visibility="{Binding RestartLevelScreenVisibility}" d:Visibility="Hidden">
                 <views:RestartLevelScreen/>
-            </Grid>
-            <Grid Width="400" Height="170" Visibility="Visible" d:Visibility="Visible">
-                <ContentControl Content="{Binding SelectedViewModel}" Width="400" Height="200"/>
-            </Grid>
+            </Grid>-->
+            
+            <ContentControl Content="{Binding SelectedViewModel}" Width="400" Height="200"/>
+            
         </Grid>
     </Border>
 </Window>

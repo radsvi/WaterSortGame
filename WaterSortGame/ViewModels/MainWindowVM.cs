@@ -189,72 +189,18 @@ namespace WaterSortGame.ViewModels
         //    OnStartingLevel();
         //}
         #region Popup Screens
-        private string startNewLevelScreenVisibility;
-        public string StartNewLevelScreenVisibility
-        {
-            get
-            { 
-                if (startNewLevelScreenVisibility == "true")
-                {
-                    return "Visible";
-                }
-                else
-                {
-                    return "Hidden";
-                }
-            }
-            set
-            {
-                if (value != startNewLevelScreenVisibility)
-                {
-                    startNewLevelScreenVisibility = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public RelayCommand ShowScreen_StartNewLevel_Command => new RelayCommand(execute => StartNewLevelScreenVisibility = "true", canExecute => true);
+        //public RelayCommand ShowScreen_StartNewLevel_Command => new RelayCommand(execute => StartNewLevelScreenVisibility = "true", canExecute => true);
         public RelayCommand StartNewLevel_Command => new RelayCommand(execute => StartNewLevel());
         private void StartNewLevel()
         {
-            StartNewLevelScreenVisibility = "false";
+            UpdateViewCommand.Execute(null);
             TubesManager.StartNewLevel();
             OnStartingLevel();
         }
-        public RelayCommand PopupScreen_Cancel_Command => new RelayCommand(execute => CancelScreen());
-        private void CancelScreen()
-        {
-            LevelComplete = false;
-            StartNewLevelScreenVisibility = "false";
-            RestartLevelScreenVisibility = "false";
-        }
-        private string restartLevelScreenVisibility;
-        public string RestartLevelScreenVisibility
-        {
-            get
-            {
-                if (restartLevelScreenVisibility == "true")
-                {
-                    return "Visible";
-                }
-                else
-                {
-                    return "Hidden";
-                }
-            }
-            set
-            {
-                if (value != restartLevelScreenVisibility)
-                {
-                    restartLevelScreenVisibility = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public RelayCommand ShowScreen_RestartLevel_Command => new RelayCommand(execute => RestartLevelScreenVisibility = "true");
         public RelayCommand RestartLevel_Command => new RelayCommand(execute => Restart());
         private void Restart()
         {
-            RestartLevelScreenVisibility = "false";
+            UpdateViewCommand.Execute(null);
             TubesManager.RestartLevel();
             OnStartingLevel();
         }

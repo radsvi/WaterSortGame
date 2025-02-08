@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WaterSortGame.ViewModels;
-using WaterSortGame.Views;
 
 namespace WaterSortGame.MVVM
 {
@@ -25,13 +24,19 @@ namespace WaterSortGame.MVVM
 
         public void Execute(object? parameter)
         {
+            if (parameter is null)
+            {
+                viewModel.SelectedViewModel = null;
+                return;
+            }
+
             if (parameter.ToString() == "NewLevel")
             {
-                viewModel.SelectedViewModel = new NewLevelVM();
+                viewModel.SelectedViewModel = new NewLevelVM(viewModel);
             }
             else if (parameter.ToString() == "RestartLevel")
             {
-                viewModel.SelectedViewModel = new RestartLevelVM();
+                viewModel.SelectedViewModel = new RestartLevelVM(viewModel);
             }
         }
     }
