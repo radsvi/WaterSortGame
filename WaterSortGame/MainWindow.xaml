@@ -22,6 +22,7 @@
     <!--d:DataContext="{d:DesignInstance Type=local:MainWindow}"-->
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding CloseWindowCommand}"/>
+        <KeyBinding Key="Return"  Command="{Binding ConfirmCommand}"/>
     </Window.InputBindings>
     <Window.Resources>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
@@ -62,8 +63,8 @@
                 <Border Grid.Row="1" Style="{StaticResource Separator}"/>
                 <StackPanel Style="{StaticResource NavigationButtonsPrimary}">
                     <!--<TextBlock Text="{Binding GameStates.Count}" Foreground="White" />-->
-                    <Button Content="New Level" Command="{Binding OpenPopupWindow}" CommandParameter="NewLevel"/>
-                    <Button Content="Restart level" Command="{Binding OpenPopupWindow}" CommandParameter="RestartLevel"/>
+                    <Button Content="New Level" Command="{Binding PopupWindow}" CommandParameter="NewLevel"/>
+                    <Button Content="Restart level" Command="{Binding PopupWindow}" CommandParameter="RestartLevel"/>
                     <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}"/>
                     <Button Command="{Binding CloseWindowCommand}" Style="{StaticResource CloseButton}">
                         <TextBlock Text="×" FontSize="25" Margin="0,-6,0,0"/>
@@ -78,7 +79,7 @@
                     
                     <!--<Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
                     <Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->
-                    <!--<Button Content="[temp3]" Command="{Binding OpenPopupWindow}" CommandParameter="Help"/>-->
+                    <!--<Button Content="[temp3]" Command="{Binding PopupWindow}" CommandParameter="Help"/>-->
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                     <Button Command="{Binding StepBackCommand}">
@@ -115,6 +116,7 @@
                                         CommandParameter="{Binding .}"
                                         Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
                                         Margin="{Binding Margin}"
+                                        Focusable="False"
                                         >
                                             <Button.Template>
                                                 <ControlTemplate>
@@ -174,18 +176,9 @@
                     </WrapPanel>
                 </ScrollViewer>
             </Grid>
-            <!--<Grid Width="400" Height="170" Visibility="{Binding LevelCompleteVisibility}" d:Visibility="Hidden">
-                <views:LevelCompleteScreen/>
-            </Grid>
-            <Grid Width="400" Height="170" Visibility="{Binding StartNewLevelScreenVisibility}" d:Visibility="Hidden">
-                <views:NewLevelScreen/>
-            </Grid>
-            <Grid Width="400" Height="170" Visibility="{Binding RestartLevelScreenVisibility}" d:Visibility="Hidden">
-                <views:RestartLevelScreen/>
-            </Grid>-->
-            
-            <ContentControl Content="{Binding SelectedViewModel}" Width="400" Height="200"/>
-            
+
+            <ContentControl Content="{Binding SelectedViewModel}" d:Visibility="Hidden"/>
+        
         </Grid>
     </Border>
 </Window>
