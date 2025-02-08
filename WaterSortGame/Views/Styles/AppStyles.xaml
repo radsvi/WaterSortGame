@@ -74,5 +74,4 @@
         <Setter Property="BorderBrush" Value="#b2cbde" />
         <Setter Property="BorderThickness" Value="2" />
     </Style>
-
 </ResourceDictionary>

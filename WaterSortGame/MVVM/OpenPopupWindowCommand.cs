@@ -42,6 +42,10 @@ namespace WaterSortGame.MVVM
             {
                 viewModel.SelectedViewModel = new LevelCompleteVM(viewModel);
             }
+            else if (parameter.ToString() == "Help")
+            {
+                viewModel.SelectedViewModel = new HelpVM(viewModel);
+            }
         }
     }
 }

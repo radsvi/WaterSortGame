@@ -43,6 +43,9 @@
         <DataTemplate DataType="{x:Type viewmodels:LevelCompleteVM}">
             <views:LevelCompleteScreen DataContext="{Binding MainWindowVM}"/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:HelpVM}">
+            <views:HelpScreen DataContext="{Binding MainWindowVM}"/>
+        </DataTemplate>
     </Window.Resources>
 
     <!--<Grid DataContext="{Binding Source={StaticResource MainWindowVM}}" Margin="5">-->
@@ -76,6 +79,7 @@
                     </Button>
                     <!--<Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
                     <Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->
+                    <Button Content="[temp3]" Command="{Binding OpenPopupWindow}" CommandParameter="Help"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                     <Button Content="Add Extra Vial" Command="{Binding AddExtraTubeCommand}"/>

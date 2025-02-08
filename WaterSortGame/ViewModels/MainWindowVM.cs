@@ -25,6 +25,21 @@ namespace WaterSortGame.ViewModels
         #region Properties
 
         private IWindowService windowService;
+        private bool dontShowHelpScreenAtStart = Settings.Default.DontShowHelpScreenAtStart;
+        public bool DontShowHelpScreenAtStart
+        {
+            get { return dontShowHelpScreenAtStart; }
+            set
+            {
+                if (value != dontShowHelpScreenAtStart)
+                {
+                    dontShowHelpScreenAtStart = value;
+                    Settings.Default.DontShowHelpScreenAtStart = dontShowHelpScreenAtStart;
+                    Settings.Default.Save();
+                    //OnPropertyChanged();
+                }
+            }
+        }
         public MainWindow MainWindow { get; set; }
 
         private ViewModelBase _selectedViewModel;
@@ -148,9 +163,11 @@ namespace WaterSortGame.ViewModels
             Tubes.CollectionChanged += Tubes_CollectionChanged;
             TubesPerLineCalculation();
             OpenPopupWindow = new OpenPopupWindowCommand(this);
+            if (dontShowHelpScreenAtStart == false)
+            {
+                SelectedViewModel = new HelpVM(this);
+            }
         }
-
-        
         #endregion
         #region Navigation
         public RelayCommand CloseWindowCommand => new RelayCommand(execute => windowService?.CloseWindow());
@@ -231,6 +248,12 @@ namespace WaterSortGame.ViewModels
 
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
+
+        public RelayCommand OpenHelpFromOptionsCommand => new RelayCommand(execute =>
+        {
+            windowService?.CloseWindow();
+            SelectedViewModel = new HelpVM(this);
+        });
 
         #endregion
         #region OptionsWindow

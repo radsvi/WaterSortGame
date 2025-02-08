@@ -10,8 +10,8 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type local:OptionsWindow}}"
         Title="OptionsWindow"
-        Height="{Binding OptionsWindowHeight, Mode=TwoWay}"
-        Width="{Binding OptionsWindowWidth, Mode=TwoWay}"
+        Height="{Binding OptionsWindowHeight, Mode=TwoWay}" d:Height="400"
+        Width="{Binding OptionsWindowWidth, Mode=TwoWay}" d:Width="600"
         >
     <Window.Resources>
         <models:TubesManager x:Key="TubesManager"/>
@@ -45,13 +45,15 @@
                         </DockPanel>
                     </StackPanel>
                 </GroupBox>
+                <GroupBox Header="Help">
+                    <StackPanel>
+                        <CheckBox IsChecked="{Binding DontShowHelpScreenAtStart}" Content="Don't show help at startup"/>
+                        <Button Content="Open Help window" Command="{Binding OpenHelpFromOptionsCommand}" Width="150" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+                    </StackPanel>
+                </GroupBox>
                 <GroupBox Header="Dev options">
                     <StackPanel>
-                        <DockPanel>
-                            <CheckBox x:Name="DevOptionsEnabled" IsChecked="{Binding DeveloperOptionsVisibleBool}">
-                                <Label Content="Enable dev options"/>
-                            </CheckBox>
-                        </DockPanel>
+                        <CheckBox IsChecked="{Binding DeveloperOptionsVisibleBool}" Content="Enable dev options"/>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

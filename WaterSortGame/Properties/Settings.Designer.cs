@@ -94,5 +94,17 @@ namespace WaterSortGame.Properties {
                 this["DeveloperOptionsVisibleBool"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DontShowHelpScreenAtStart {
+            get {
+                return ((bool)(this["DontShowHelpScreenAtStart"]));
+            }
+            set {
+                this["DontShowHelpScreenAtStart"] = value;
+            }
+        }
     }
 }
