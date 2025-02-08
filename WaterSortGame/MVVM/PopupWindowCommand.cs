@@ -8,10 +8,10 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.MVVM
 {
-    internal class OpenPopupWindowCommand : ICommand
+    internal class PopupWindowCommand : ICommand
     {
         private MainWindowVM viewModel;
-        public OpenPopupWindowCommand(MainWindowVM viewModel)
+        public PopupWindowCommand(MainWindowVM viewModel)
         {
             this.viewModel = viewModel;
         }
