@@ -35,11 +35,13 @@
             <views:LevelCompleteScreen/>
         </DataTemplate>-->
         <DataTemplate DataType="{x:Type viewmodels:NewLevelVM}">
-            <!--<views:NewLevelScreen DataContext="{Binding RelativeSource={RelativeSource Self}}"/>-->
             <views:NewLevelScreen DataContext="{Binding MainWindowVM}"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodels:RestartLevelVM}">
             <views:RestartLevelScreen DataContext="{Binding MainWindowVM}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:LevelCompleteVM}">
+            <views:LevelCompleteScreen DataContext="{Binding MainWindowVM}"/>
         </DataTemplate>
     </Window.Resources>
 
@@ -57,8 +59,8 @@
                 <Border Grid.Row="1" Style="{StaticResource Separator}"/>
                 <StackPanel Style="{StaticResource NavigationButtonsPrimary}">
                     <!--<TextBlock Text="{Binding GameStates.Count}" Foreground="White" />-->
-                    <Button Content="New Level" Command="{Binding UpdateViewCommand}" CommandParameter="NewLevel"/>
-                    <Button Content="Restart level" Command="{Binding UpdateViewCommand}" CommandParameter="RestartLevel"/>
+                    <Button Content="New Level" Command="{Binding OpenPopupWindow}" CommandParameter="NewLevel"/>
+                    <Button Content="Restart level" Command="{Binding OpenPopupWindow}" CommandParameter="RestartLevel"/>
                     <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}"/>
                     <Button Content="Exit" Command="{Binding CloseWindowCommand}" Width="30"/>
                 </StackPanel>

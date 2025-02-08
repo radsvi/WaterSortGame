@@ -37,7 +37,7 @@ namespace WaterSortGame.ViewModels
                 OnPropertyChanged();
             }
         }
-        public ICommand UpdateViewCommand { get; set; }
+        public ICommand OpenPopupWindow { get; set; }
 
         private Tube selectedTube;
         public Tube SelectedTube
@@ -119,7 +119,6 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        //public bool LevelComplete { get; set; }
         private bool levelComplete;
         public bool LevelComplete
         {
@@ -129,27 +128,9 @@ namespace WaterSortGame.ViewModels
                 if (value != levelComplete)
                 {
                     levelComplete = value;
-                    OnPropertyChanged(nameof(LevelCompleteVisibility));
                 }
             }
         }
-
-        private string levelCompleteVisibility;
-        public string LevelCompleteVisibility
-        {
-            get
-            {
-                if (levelComplete == true)
-                {
-                    return "Visible";
-                }
-                else
-                {
-                    return "Hidden";
-                }
-            }
-        }
-        [Obsolete] public RelayCommand TempLevelFinished => new RelayCommand(execute => LevelComplete = true);
         public bool PropertyChangedEventPaused { get; set; } = false;
         #endregion
         #region Constructor
@@ -166,7 +147,7 @@ namespace WaterSortGame.ViewModels
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
             Tubes.CollectionChanged += Tubes_CollectionChanged;
             TubesPerLineCalculation();
-            UpdateViewCommand = new UpdateViewCommand(this);
+            OpenPopupWindow = new OpenPopupWindowCommand(this);
         }
 
         
@@ -193,14 +174,14 @@ namespace WaterSortGame.ViewModels
         public RelayCommand StartNewLevel_Command => new RelayCommand(execute => StartNewLevel());
         private void StartNewLevel()
         {
-            UpdateViewCommand.Execute(null);
+            OpenPopupWindow.Execute(null);
             TubesManager.StartNewLevel();
             OnStartingLevel();
         }
         public RelayCommand RestartLevel_Command => new RelayCommand(execute => Restart());
         private void Restart()
         {
-            UpdateViewCommand.Execute(null);
+            OpenPopupWindow.Execute(null);
             TubesManager.RestartLevel();
             OnStartingLevel();
         }
@@ -396,6 +377,7 @@ namespace WaterSortGame.ViewModels
                 LevelComplete = true;
                 //windowService?.OpenLevelCompleteWindow(this);
                 //LevelWonMessage();
+                OpenPopupWindow.Execute("LevelComplete");
             }
         }
         private void SaveGameState()

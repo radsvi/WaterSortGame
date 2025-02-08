@@ -8,10 +8,10 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.MVVM
 {
-    internal class UpdateViewCommand : ICommand
+    internal class OpenPopupWindowCommand : ICommand
     {
         private MainWindowVM viewModel;
-        public UpdateViewCommand(MainWindowVM viewModel)
+        public OpenPopupWindowCommand(MainWindowVM viewModel)
         {
             this.viewModel = viewModel;
         }
@@ -37,6 +37,10 @@ namespace WaterSortGame.MVVM
             else if (parameter.ToString() == "RestartLevel")
             {
                 viewModel.SelectedViewModel = new RestartLevelVM(viewModel);
+            }
+            else if (parameter.ToString() == "LevelComplete")
+            {
+                viewModel.SelectedViewModel = new LevelCompleteVM(viewModel);
             }
         }
     }
