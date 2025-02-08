@@ -70,6 +70,12 @@
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding DeveloperOptionsVisible}">
                     <Button Content="Load Level" Command="{Binding LoadLevelCommand}"/>
                     <Button Content="Save Level" Command="{Binding SaveLevelCommand}"/>
+                    
+                    <!--<Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
+                    <Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->
+                    <!--<Button Content="[temp3]" Command="{Binding OpenPopupWindow}" CommandParameter="Help"/>-->
+                </StackPanel>
+                <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                     <Button Command="{Binding StepBackCommand}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Step back ("/>
@@ -77,11 +83,6 @@
                             <TextBlock Text=")"/>
                         </StackPanel>
                     </Button>
-                    <!--<Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
-                    <Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->
-                    <Button Content="[temp3]" Command="{Binding OpenPopupWindow}" CommandParameter="Help"/>
-                </StackPanel>
-                <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                     <Button Content="Add Extra Vial" Command="{Binding AddExtraTubeCommand}"/>
                 </StackPanel>
 
