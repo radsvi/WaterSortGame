@@ -8,5 +8,10 @@ namespace WaterSortGame.ViewModels
 {
     internal class RestartLevelVM : ViewModelBase
     {
+        public MainWindowVM MainWindowVM { get; set; }
+        public RestartLevelVM(object viewModel)
+        {
+            MainWindowVM = (MainWindowVM)viewModel;
+        }
     }
 }
