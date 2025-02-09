@@ -29,7 +29,6 @@ namespace WaterSortGame.MVVM
                 viewModel.SelectedViewModel = null;
                 return;
             }
-
             if (parameter.ToString() == "NewLevel")
             {
                 viewModel.SelectedViewModel = new NewLevelVM(viewModel);
