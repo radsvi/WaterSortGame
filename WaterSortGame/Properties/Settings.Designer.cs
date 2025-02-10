@@ -106,5 +106,17 @@ namespace WaterSortGame.Properties {
                 this["DontShowHelpScreenAtStart"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SavedLevels {
+            get {
+                return ((string)(this["SavedLevels"]));
+            }
+            set {
+                this["SavedLevels"] = value;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -191,7 +192,7 @@ namespace WaterSortGame.ViewModels
             //}
             if (SelectedViewModel is NewLevelVM)
             {
-                StartNewLevel();
+                GenerateNewLevel();
             }
             else if (SelectedViewModel is RestartLevelVM)
             {
@@ -199,7 +200,7 @@ namespace WaterSortGame.ViewModels
             }
             else if (SelectedViewModel is LevelCompleteVM)
             {
-                StartNewLevel();
+                GenerateNewLevel();
             }
             else if (SelectedViewModel is HelpVM)
             {
@@ -224,11 +225,11 @@ namespace WaterSortGame.ViewModels
         //}
         #region Popup Screens
         //public RelayCommand ShowScreen_StartNewLevel_Command => new RelayCommand(execute => StartNewLevelScreenVisibility = "true", canExecute => true);
-        public RelayCommand StartNewLevel_Command => new RelayCommand(execute => StartNewLevel());
-        private void StartNewLevel()
+        public RelayCommand StartNewLevel_Command => new RelayCommand(execute => GenerateNewLevel());
+        private void GenerateNewLevel()
         {
             PopupWindow.Execute(null);
-            TubesManager.StartNewLevel();
+            TubesManager.GenerateNewLevel();
             OnStartingLevel();
         }
         public RelayCommand RestartLevel_Command => new RelayCommand(execute => Restart());
@@ -252,20 +253,6 @@ namespace WaterSortGame.ViewModels
         //    }
         //    // zkusit udelat nejakou grafiku, ohnostroj
         //}
-        public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
-        private void LoadLevel(bool force = false)
-        {
-            if (force == false)
-            {
-                var result = MessageBox.Show("Do you want to load level?", "Load level", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-                if (result != MessageBoxResult.OK)
-                {
-                    return;
-                }
-            }
-            TubesManager.LoadLevel();
-            OnStartingLevel();
-        }
         private void OnStartingLevel()
         {
             LevelComplete = false;
@@ -276,8 +263,34 @@ namespace WaterSortGame.ViewModels
 
         private void SaveLevel()
         {
-            //throw new NotImplementedException();
-            MessageBox.Show("NotImplementedException");
+            ObservableCollection<ObservableCollection<Tube>> savedLevels = new ObservableCollection<ObservableCollection<Tube>>();
+            savedLevels.Add(TubesManager.SavedStartingTubes);
+
+            var jsonTubes = JsonConvert.SerializeObject(savedLevels);
+            Settings.Default.SavedLevels = jsonTubes;
+            Settings.Default.Save();
+        }
+        public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
+        private void LoadLevel(bool force = false)
+        {
+            //if (force == false)
+            //{
+            //    var result = MessageBox.Show("Do you want to load level?", "Load level", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            //    if (result != MessageBoxResult.OK)
+            //    {
+            //        return;
+            //    }
+            //}
+            //TubesManager.LoadLevel();
+            //OnStartingLevel();
+
+            var savedLevels = JsonConvert.DeserializeObject<ObservableCollection<ObservableCollection<Tube>>>(Properties.Settings.Default.SavedLevels);
+
+            TubesManager.SavedStartingTubes = DeepCopyTubesCollection(savedLevels[0]);
+            TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
+            Tubes?.Clear();
+            Tubes = TubesManager.Tubes; // delam to na dvakrat, protoze potrebuju aby hodnota byla prepsana i v TubesManager
+            OnStartingLevel();
         }
 
         public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
@@ -555,15 +568,15 @@ namespace WaterSortGame.ViewModels
         }
 
         //ObservableCollection<Tube> status;
-        private ObservableCollection<ObservableCollection<Tube>> solvingSteps = new ObservableCollection<ObservableCollection<Tube>>();
+        private ObservableCollection<ObservableCollection<Tube>> gameStates = new ObservableCollection<ObservableCollection<Tube>>();
         public ObservableCollection<ObservableCollection<Tube>> GameStates
         {
-            get { return solvingSteps; }
+            get { return gameStates; }
             set
             {
-                if (value != solvingSteps)
+                if (value != gameStates)
                 {
-                    solvingSteps = value;
+                    gameStates = value;
                     //OnPropertyChanged();
                 }
             }

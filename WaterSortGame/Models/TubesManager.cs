@@ -33,7 +33,7 @@ namespace WaterSortGame.Models
         static TubesManager()
         {
             if (Tubes.Count == 0)
-                StartNewLevel();
+                GenerateNewLevel();
         }
 
         //public event PropertyChangedEventHandler? PropertyChanged;
@@ -131,7 +131,7 @@ namespace WaterSortGame.Models
             }
         }
         public static ObservableCollection<Tube> SavedStartingTubes = new ObservableCollection<Tube>();
-        public static void StartNewLevel()
+        public static void GenerateNewLevel()
         {
             GenerateNewTubes();
         }
