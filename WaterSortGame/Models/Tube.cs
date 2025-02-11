@@ -12,10 +12,10 @@ using WaterSortGame.Views;
 
 namespace WaterSortGame.Models
 {
-    internal class Tube : ViewModelBase
+    internal class Tube : ViewModelBase, ITube
     {
         public int TubeId { get; set; }
-        private static int TubeIdCounter;
+        protected static int TubeIdCounter;
 
         private ObservableCollection<Color> layers = new ObservableCollection<Color>();
         public ObservableCollection<Color> Layers
@@ -52,9 +52,9 @@ namespace WaterSortGame.Models
                 OnPropertyChanged("Margin");
             }
         }
-        public Tube DeepCopy()
+        public ITube DeepCopy()
         {
-            Tube clone = (Tube)MemberwiseClone();
+            ITube clone = (ITube)MemberwiseClone();
             clone.Layers = new ObservableCollection<Color>();
             for (int i = 0; i < this.Layers.Count; i++)
             {

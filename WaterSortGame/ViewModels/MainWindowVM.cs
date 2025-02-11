@@ -111,8 +111,8 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        private ObservableCollection<Tube> tubes;
-        public ObservableCollection<Tube> Tubes
+        private ObservableCollection<ITube> tubes;
+        public ObservableCollection<ITube> Tubes
         {
             get { return tubes; }
             set {
@@ -263,8 +263,23 @@ namespace WaterSortGame.ViewModels
 
         private void SaveLevel()
         {
-            ObservableCollection<ObservableCollection<Tube>> savedLevels = new ObservableCollection<ObservableCollection<Tube>>();
-            savedLevels.Add(TubesManager.SavedStartingTubes);
+            //ObservableCollection<ObservableCollection<StoredLevel>> savedLevels = new ObservableCollection<ObservableCollection<StoredLevel>>();
+            //ObservableCollection <StoredLevel> storedLevel = new ObservableCollection<StoredLevel>();
+            //foreach (var tube in TubesManager.SavedStartingTubes)
+            //{
+            //    storedLevel.Add(new StoredLevel(tube));
+            //}
+            //savedLevels.Add(storedLevel);
+
+
+            //ObservableCollection<ObservableCollection<ITube>> savedLevels = new ObservableCollection<ObservableCollection<ITube>>();
+            ITube[] classroom = new ITube[] { TubesManager.SavedStartingTubes[0] };
+            ObservableCollection<ITube> classroomList = new ObservableCollection<ITube>() { TubesManager.SavedStartingTubes[0] };
+
+            //ObservableCollection<ObservableCollection<ITube>> savedLevels = new ObservableCollection<ObservableCollection<ITube>>();
+            ObservableCollection<ObservableCollection<ITube>> savedLevels = new ObservableCollection<ObservableCollection<ITube>>() { Tubes };
+            //savedLevels.Add(TubesManager.SavedStartingTubes);
+            //savedLevels.Add(Tubes);
 
             var jsonTubes = JsonConvert.SerializeObject(savedLevels);
             Settings.Default.SavedLevels = jsonTubes;
@@ -284,13 +299,27 @@ namespace WaterSortGame.ViewModels
             //TubesManager.LoadLevel();
             //OnStartingLevel();
 
-            var savedLevels = JsonConvert.DeserializeObject<ObservableCollection<ObservableCollection<Tube>>>(Properties.Settings.Default.SavedLevels);
+            var storedLevels = JsonConvert.DeserializeObject<ObservableCollection<ObservableCollection<Tube>>>(Properties.Settings.Default.SavedLevels);
+            //ObservableCollection<ObservableCollection<ITube>> temp = (ObservableCollection<ObservableCollection<ITube>>)storedLevels;
+            ObservableCollection<ObservableCollection<ITube>> temp = new ObservableCollection<ObservableCollection<ITube>>();
+            foreach (var storedLvl in storedLevels)
+            {
+                var storedILvl = new ObservableCollection<ITube>();
+                foreach (var t in storedLvl)
+                {
+                    storedILvl.Add(t);
+                }
+                temp.Add((ObservableCollection<ITube>)storedILvl);
+            }
 
-            TubesManager.SavedStartingTubes = DeepCopyTubesCollection(savedLevels[0]);
+            TubesManager.SavedStartingTubes = DeepCopyTubesCollection(temp[0]);
             TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
             Tubes?.Clear();
             Tubes = TubesManager.Tubes; // delam to na dvakrat, protoze potrebuju aby hodnota byla prepsana i v TubesManager
             OnStartingLevel();
+
+
+
         }
 
         public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
@@ -471,8 +500,6 @@ namespace WaterSortGame.ViewModels
                 return;
             }
         }
-
-
         private bool DidGameStateChange()
         {
             if(GameStates.Count == 0 && LastGameState.Count == 0)
@@ -524,7 +551,7 @@ namespace WaterSortGame.ViewModels
             if (LastGameState.Count != 0) // pridavam to tady, protoze nechci v game states mit i current game state.
             {
                 GameStates.Add(LastGameState);
-                LastGameState = new ObservableCollection<Tube>();
+                LastGameState = new ObservableCollection<ITube>();
             }
 
             LastGameState?.Clear();
@@ -568,8 +595,8 @@ namespace WaterSortGame.ViewModels
         }
 
         //ObservableCollection<Tube> status;
-        private ObservableCollection<ObservableCollection<Tube>> gameStates = new ObservableCollection<ObservableCollection<Tube>>();
-        public ObservableCollection<ObservableCollection<Tube>> GameStates
+        private ObservableCollection<ObservableCollection<ITube>> gameStates = new ObservableCollection<ObservableCollection<ITube>>();
+        public ObservableCollection<ObservableCollection<ITube>> GameStates
         {
             get { return gameStates; }
             set
@@ -581,7 +608,7 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
-        public ObservableCollection<Tube> LastGameState { get; set; } = new ObservableCollection<Tube>();
+        public ObservableCollection<ITube> LastGameState { get; set; } = new ObservableCollection<ITube>();
 
         private void StepBack()
         {
@@ -592,12 +619,12 @@ namespace WaterSortGame.ViewModels
 
             //GameStates.Remove(GameStates[GameStates.Count - 1]); // vymazu posledni, protoze to odpovida current state-u.//zmenil jsem to ze pridavam current state az o iteraci pozdeji
 
-            ObservableCollection<Tube> lastGameStatus = GameStates[GameStates.Count - 1];
+            ObservableCollection<ITube> lastGameStatus = GameStates[GameStates.Count - 1];
             //Tubes.CollectionChanged -= Tubes_CollectionChanged;
             //PropertyChanged -= Tube_PropertyChanged;
             PropertyChangedEventPaused = true;
             Tubes?.Clear();
-            foreach (Tube tubes in lastGameStatus)
+            foreach (ITube tubes in lastGameStatus)
             {
                 Tubes.Add(tubes);
             }
@@ -615,10 +642,10 @@ namespace WaterSortGame.ViewModels
             //PropertyChanged += Tube_PropertyChanged;
             
         }
-        private ObservableCollection<Tube> DeepCopyTubesCollection(ObservableCollection<Tube> tubes)
+        private ObservableCollection<ITube> DeepCopyTubesCollection(ObservableCollection<ITube> tubes)
         {
-            ObservableCollection <Tube> newTubes = new ObservableCollection<Tube>();
-            foreach (Tube tube in tubes)
+            ObservableCollection <ITube> newTubes = new ObservableCollection<ITube>();
+            foreach (ITube tube in tubes)
             {
                 newTubes.Add(tube.DeepCopy());
             }

@@ -17,8 +17,8 @@ namespace WaterSortGame.Models
     internal class TubesManager : ViewModelBase
     {
         //public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>();
-        private static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>();
-        public static ObservableCollection<Tube> Tubes
+        private static ObservableCollection<ITube> _tubes = new ObservableCollection<ITube>();
+        public static ObservableCollection<ITube> Tubes
         {
             get { return _tubes; }
             set
@@ -130,7 +130,7 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        public static ObservableCollection<Tube> SavedStartingTubes = new ObservableCollection<Tube>();
+        public static ObservableCollection<ITube> SavedStartingTubes = new ObservableCollection<ITube>();
         public static void GenerateNewLevel()
         {
             GenerateNewTubes();
