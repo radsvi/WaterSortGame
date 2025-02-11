@@ -286,6 +286,7 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
+        [Obsolete]public RelayCommand LoadLevelScreenCommand => new RelayCommand(execute => LoadLevelScreen());
         internal void LoadLevelScreen(bool force = false)
         {
             string jsonString = Settings.Default.SavedLevels;
