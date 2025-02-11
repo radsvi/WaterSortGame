@@ -223,7 +223,7 @@ namespace WaterSortGame.ViewModels
         //    TubesManager.StartNewLevel();
         //    OnStartingLevel();
         //}
-        #region Popup Screens
+        
         //public RelayCommand ShowScreen_StartNewLevel_Command => new RelayCommand(execute => StartNewLevelScreenVisibility = "true", canExecute => true);
         public RelayCommand StartNewLevel_Command => new RelayCommand(execute => GenerateNewLevel());
         private void GenerateNewLevel()
@@ -239,7 +239,6 @@ namespace WaterSortGame.ViewModels
             TubesManager.RestartLevel();
             OnStartingLevel();
         }
-        #endregion
         //private void LevelWonMessage()
         //{
         //    var result = MessageBox.Show("Level complete!\nYes - next level\nNo - restart current level", "Level complete!", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
@@ -313,29 +312,24 @@ namespace WaterSortGame.ViewModels
         {
             PopupWindow.Execute(null); // close popup window
             TubesManager.SavedStartingTubes = DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
-            TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
-            Tubes?.Clear();
 
-            foreach(Tube tube in TubesManager.Tubes)
-            { // Tubes = TubesManager.Tubes; // kdyz bych to udelal takhle, tak se prestane refreshovat TubesPerLineCalculation();
-                Tubes.Add(tube);
+            //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
+
+            TubesManager.Tubes?.Clear();
+            foreach (Tube tube in TubesManager.SavedStartingTubes)
+            { // kdyz bych to udelal takhle, tak se prestane refreshovat TubesPerLineCalculation(); a GenerateNewLevel() taky
+                TubesManager.Tubes.Add(tube.DeepCopy());
             }
-
-            //Tubes = TubesManager.Tubes; // delam to na dvakrat, protoze potrebuju aby hodnota byla prepsana i v TubesManager
             OnStartingLevel();
         }
-
         public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
-
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
-
         public RelayCommand OpenHelpFromOptionsCommand => new RelayCommand(execute =>
         {
             windowService?.CloseWindow();
             SelectedViewModel = new HelpVM(this);
         });
-
         #endregion
         #region OptionsWindow
 
