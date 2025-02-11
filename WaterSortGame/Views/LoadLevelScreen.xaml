@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="WaterSortGame.Views.LoadLevel"
+﻿<UserControl x:Class="WaterSortGame.Views.LoadLevelScreen"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WaterSortGame.Views"
-             mc:Ignorable="d"
+             mc:Ignorable="d" 
              d:DesignHeight="620" d:DesignWidth="600">
     <Grid Style="{StaticResource PopupScreenOuter}">
         <Border Style="{StaticResource PopupScreen}" Width="580" Height="280">
@@ -18,11 +18,11 @@
                     <TextBlock Text="Load level:" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
 
                     <DataGrid Margin="0,10,0,0"
-                        ItemsSource="{Binding Items}" d:ItemsSource="{d:SampleData ItemCount=2}"
-                        SelectedItem="{Binding SelectedItem}"
-                        CanUserAddRows="False" CanUserDeleteRows="False"
-                        IsReadOnly="True"
-                        AutoGenerateColumns="False">
+                    ItemsSource="{Binding Items}" d:ItemsSource="{d:SampleData ItemCount=2}"
+                    SelectedItem="{Binding SelectedItem}"
+                    CanUserAddRows="False" CanUserDeleteRows="False"
+                    IsReadOnly="True"
+                    AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Name" Binding="{Binding VideoDisplayName}" />
                             <DataGridTemplateColumn Header="Item Collection">
@@ -36,7 +36,7 @@
                     </DataGrid>
 
                     <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
-                                Style="{StaticResource NavigationButtonsPrimary}">
+                            Style="{StaticResource NavigationButtonsPrimary}">
                         <Button Content="OK" Command="{Binding }" Width="150"/>
                         <Button Content="Cancel" Command="{Binding PopupWindow}" Width="150"/>
                     </StackPanel>

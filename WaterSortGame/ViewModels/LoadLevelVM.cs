@@ -12,6 +12,7 @@ namespace WaterSortGame.ViewModels
         public LoadLevelVM(object viewModel)
         {
             MainWindowVM = (MainWindowVM)viewModel;
+            MainWindowVM.LoadLevelScreen();
         }
     }
 }

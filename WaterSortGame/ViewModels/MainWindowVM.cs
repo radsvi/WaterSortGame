@@ -263,14 +263,35 @@ namespace WaterSortGame.ViewModels
 
         private void SaveLevel()
         {
-            ObservableCollection<ObservableCollection<Tube>> savedLevels = new ObservableCollection<ObservableCollection<Tube>>();
-            savedLevels.Add(TubesManager.SavedStartingTubes);
+            ObservableCollection<StoredLevel> savedLevels = new ObservableCollection<StoredLevel>();
+            savedLevels.Add(new StoredLevel(TubesManager.SavedStartingTubes));
 
-            var jsonTubes = JsonConvert.SerializeObject(savedLevels);
-            Settings.Default.SavedLevels = jsonTubes;
+            string savedLevelsSerialized = JsonConvert.SerializeObject(savedLevels);
+            Settings.Default.SavedLevels = savedLevelsSerialized;
+            //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
             Settings.Default.Save();
         }
         public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
+
+        private ObservableCollection<StoredLevel> loadLevelPrompt;
+        public ObservableCollection<StoredLevel> LoadLevelPrompt
+        {
+            get { return loadLevelPrompt; }
+            set
+            {
+                if (value != loadLevelPrompt)
+                {
+                    loadLevelPrompt = value;
+                    //OnPropertyChanged();
+                }
+            }
+        }
+        internal void LoadLevelScreen(bool force = false)
+        {
+            string jsonString = Settings.Default.SavedLevels;
+            ObservableCollection<StoredLevel> savedLevels = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(jsonString);
+            LoadLevelPrompt = savedLevels;
+        }
         private void LoadLevel(bool force = false)
         {
             //if (force == false)
@@ -284,13 +305,17 @@ namespace WaterSortGame.ViewModels
             //TubesManager.LoadLevel();
             //OnStartingLevel();
 
-            var savedLevels = JsonConvert.DeserializeObject<ObservableCollection<ObservableCollection<Tube>>>(Properties.Settings.Default.SavedLevels);
+            //var savedLevels = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Properties.Settings.Default.SavedLevels);
+            //LoadLevelPrompt = savedLevels;
 
-            TubesManager.SavedStartingTubes = DeepCopyTubesCollection(savedLevels[0]);
-            TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
-            Tubes?.Clear();
-            Tubes = TubesManager.Tubes; // delam to na dvakrat, protoze potrebuju aby hodnota byla prepsana i v TubesManager
-            OnStartingLevel();
+
+
+
+            //TubesManager.SavedStartingTubes = DeepCopyTubesCollection(savedLevels[0]);
+            //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
+            //Tubes?.Clear();
+            //Tubes = TubesManager.Tubes; // delam to na dvakrat, protoze potrebuju aby hodnota byla prepsana i v TubesManager
+            //OnStartingLevel();
         }
 
         public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
@@ -471,8 +496,6 @@ namespace WaterSortGame.ViewModels
                 return;
             }
         }
-
-
         private bool DidGameStateChange()
         {
             if(GameStates.Count == 0 && LastGameState.Count == 0)
@@ -566,7 +589,6 @@ namespace WaterSortGame.ViewModels
             }
             return true;
         }
-
         //ObservableCollection<Tube> status;
         private ObservableCollection<ObservableCollection<Tube>> gameStates = new ObservableCollection<ObservableCollection<Tube>>();
         public ObservableCollection<ObservableCollection<Tube>> GameStates
@@ -582,7 +604,6 @@ namespace WaterSortGame.ViewModels
             }
         }
         public ObservableCollection<Tube> LastGameState { get; set; } = new ObservableCollection<Tube>();
-
         private void StepBack()
         {
             if (GameStates.Count == 0)
@@ -637,7 +658,6 @@ namespace WaterSortGame.ViewModels
 
             TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
         }
-
         //private void TubeCount_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         //{
         //    //TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
