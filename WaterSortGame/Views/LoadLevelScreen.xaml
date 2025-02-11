@@ -19,7 +19,7 @@
 
                     <DataGrid Margin="0,10,0,0"
                     ItemsSource="{Binding LoadLevelList}" d:ItemsSource="{d:SampleData ItemCount=2}"
-                    SelectedItem="{Binding SelectedItem}"
+                    SelectedItem="{Binding SelectedLevelForLoading}"
                     CanUserAddRows="False" CanUserDeleteRows="False"
                     IsReadOnly="True"
                     AutoGenerateColumns="False">
@@ -32,10 +32,10 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>-->
                             
-                            <DataGridTextColumn Header="NumberOfColors" Binding="{Binding NumberOfColors}" />
                             <DataGridTextColumn Header="Save Date" Binding="{Binding Date}" />
+                            <DataGridTextColumn Header="Colors" Binding="{Binding NumberOfColors}" Width="45" />
                             
-                            <DataGridTemplateColumn Header="Preview">
+                            <DataGridTemplateColumn Header="Preview" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <ItemsControl ItemsSource="{Binding GameState}" d:ItemsSource="{d:SampleData ItemCount=3}" >
@@ -76,12 +76,20 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Delete?">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="×" FontSize="22"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
 
                     <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
                             Style="{StaticResource NavigationButtonsPrimary}">
-                        <Button Content="OK" Command="{Binding }" Width="150"/>
+                        <Button Content="OK" Command="{Binding LoadLevelCommand}" Width="150"/>
                         <Button Content="Cancel" Command="{Binding PopupWindow}" Width="150"/>
                     </StackPanel>
                 </StackPanel>

@@ -263,15 +263,30 @@ namespace WaterSortGame.ViewModels
 
         private void SaveLevel()
         {
-            ObservableCollection<StoredLevel> savedLevels = new ObservableCollection<StoredLevel>();
-            savedLevels.Add(new StoredLevel(TubesManager.SavedStartingTubes));
+            ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
 
-            string savedLevelsSerialized = JsonConvert.SerializeObject(savedLevels);
+
+            //ObservableCollection<StoredLevel> savedLevels = new ObservableCollection<StoredLevel>();
+            savedLevelList.Add(new StoredLevel(TubesManager.SavedStartingTubes));
+
+            string savedLevelsSerialized = JsonConvert.SerializeObject(savedLevelList);
             Settings.Default.SavedLevels = savedLevelsSerialized;
             //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
             Settings.Default.Save();
         }
-        public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
+        private StoredLevel selectedLevelForLoading;
+        public StoredLevel SelectedLevelForLoading
+        {
+            get { return selectedLevelForLoading; }
+            set
+            {
+                if (value != selectedLevelForLoading)
+                {
+                    selectedLevelForLoading = value;
+                    //OnPropertyChanged();
+                }
+            }
+        }
 
         private ObservableCollection<StoredLevel> loadLevelPrompt;
         public ObservableCollection<StoredLevel> LoadLevelList
@@ -290,33 +305,24 @@ namespace WaterSortGame.ViewModels
         internal void LoadLevelScreen(bool force = false)
         {
             string jsonString = Settings.Default.SavedLevels;
-            ObservableCollection<StoredLevel> savedLevels = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(jsonString);
-            LoadLevelList = savedLevels;
+            LoadLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(jsonString);
         }
-        private void LoadLevel(bool force = false)
+        public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
+        //private void LoadLevel(bool force = false)
+        private void LoadLevel()
         {
-            //if (force == false)
-            //{
-            //    var result = MessageBox.Show("Do you want to load level?", "Load level", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            //    if (result != MessageBoxResult.OK)
-            //    {
-            //        return;
-            //    }
-            //}
-            //TubesManager.LoadLevel();
-            //OnStartingLevel();
+            PopupWindow.Execute(null); // close popup window
+            TubesManager.SavedStartingTubes = DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
+            TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
+            Tubes?.Clear();
 
-            //var savedLevels = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Properties.Settings.Default.SavedLevels);
-            //LoadLevelPrompt = savedLevels;
+            foreach(Tube tube in TubesManager.Tubes)
+            { // Tubes = TubesManager.Tubes; // kdyz bych to udelal takhle, tak se prestane refreshovat TubesPerLineCalculation();
+                Tubes.Add(tube);
+            }
 
-
-
-
-            //TubesManager.SavedStartingTubes = DeepCopyTubesCollection(savedLevels[0]);
-            //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
-            //Tubes?.Clear();
             //Tubes = TubesManager.Tubes; // delam to na dvakrat, protoze potrebuju aby hodnota byla prepsana i v TubesManager
-            //OnStartingLevel();
+            OnStartingLevel();
         }
 
         public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
