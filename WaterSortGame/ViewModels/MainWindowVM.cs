@@ -268,8 +268,7 @@ namespace WaterSortGame.ViewModels
             //ObservableCollection<StoredLevel> savedLevels = new ObservableCollection<StoredLevel>();
             savedLevelList.Add(new StoredLevel(TubesManager.SavedStartingTubes));
 
-            string savedLevelsSerialized = JsonConvert.SerializeObject(savedLevelList);
-            Settings.Default.SavedLevels = savedLevelsSerialized;
+            Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
             //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
             Settings.Default.Save();
         }
@@ -301,10 +300,9 @@ namespace WaterSortGame.ViewModels
             }
         }
         [Obsolete]public RelayCommand LoadLevelScreenCommand => new RelayCommand(execute => LoadLevelScreen());
-        internal void LoadLevelScreen(bool force = false)
+        internal void LoadLevelScreen()
         {
-            string jsonString = Settings.Default.SavedLevels;
-            LoadLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(jsonString);
+            LoadLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
         }
         public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
         //private void LoadLevel(bool force = false)
@@ -321,6 +319,25 @@ namespace WaterSortGame.ViewModels
                 TubesManager.Tubes.Add(tube.DeepCopy());
             }
             OnStartingLevel();
+        }
+        public RelayCommand DeleteSavedLevelCommand => new RelayCommand(savedGame => DeleteSavedLevel(savedGame));
+        private void DeleteSavedLevel(object obj)
+        {
+            var savedGame = obj as StoredLevel;
+            //SelectedLevelForLoading
+            //LoadLevelList
+            // RelayCommand(tube => SelectTube(tube))
+
+            LoadLevelList.Remove(savedGame);
+            Settings.Default.SavedLevels = JsonConvert.SerializeObject(LoadLevelList);
+            Settings.Default.Save();
+
+
+            //foreach (var item in LoadLevelList)
+            //{
+            //    LoadLevelList.Remove(item);
+            //    break;
+            //}
         }
         public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));

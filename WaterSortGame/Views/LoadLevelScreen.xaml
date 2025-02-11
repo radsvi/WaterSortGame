@@ -80,7 +80,7 @@
                             <DataGridTemplateColumn Header="Delete?">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="×" FontSize="22"/>
+                                        <Button Content="×" Command="{Binding Path=DataContext.DeleteSavedLevelCommand, ElementName=ListTubes}" CommandParameter="{Binding .}" FontSize="22"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -89,8 +89,8 @@
 
                     <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
                             Style="{StaticResource NavigationButtonsPrimary}">
-                        <Button Content="OK" Command="{Binding LoadLevelCommand}" Width="150"/>
-                        <Button Content="Cancel" Command="{Binding PopupWindow}" Width="150"/>
+                        <Button Content="Load" Command="{Binding LoadLevelCommand}" Width="150"/>
+                        <Button Content="Close" Command="{Binding PopupWindow}" Width="150"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
