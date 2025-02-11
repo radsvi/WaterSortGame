@@ -45,6 +45,10 @@ namespace WaterSortGame.MVVM
             {
                 viewModel.SelectedViewModel = new HelpVM(viewModel);
             }
+            else if (parameter.ToString() == "LoadLevel")
+            {
+                viewModel.SelectedViewModel = new LoadLevelVM(viewModel);
+            }
         }
     }
 }

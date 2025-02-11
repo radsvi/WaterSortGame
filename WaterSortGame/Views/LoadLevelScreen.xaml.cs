@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace WaterSortGame.Views
 {
     /// <summary>
-    /// Interaction logic for LoadLevel.xaml
+    /// Interaction logic for LoadLevelScreen.xaml
     /// </summary>
-    public partial class LoadLevel : UserControl
+    public partial class LoadLevelScreen : UserControl
     {
-        public LoadLevel()
+        public LoadLevelScreen()
         {
             InitializeComponent();
         }

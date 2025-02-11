@@ -111,8 +111,8 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        private ObservableCollection<ITube> tubes;
-        public ObservableCollection<ITube> Tubes
+        private ObservableCollection<Tube> tubes;
+        public ObservableCollection<Tube> Tubes
         {
             get { return tubes; }
             set {
@@ -223,7 +223,7 @@ namespace WaterSortGame.ViewModels
         //    TubesManager.StartNewLevel();
         //    OnStartingLevel();
         //}
-        #region Popup Screens
+        
         //public RelayCommand ShowScreen_StartNewLevel_Command => new RelayCommand(execute => StartNewLevelScreenVisibility = "true", canExecute => true);
         public RelayCommand StartNewLevel_Command => new RelayCommand(execute => GenerateNewLevel());
         private void GenerateNewLevel()
@@ -239,7 +239,6 @@ namespace WaterSortGame.ViewModels
             TubesManager.RestartLevel();
             OnStartingLevel();
         }
-        #endregion
         //private void LevelWonMessage()
         //{
         //    var result = MessageBox.Show("Level complete!\nYes - next level\nNo - restart current level", "Level complete!", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
@@ -263,76 +262,91 @@ namespace WaterSortGame.ViewModels
 
         private void SaveLevel()
         {
-            //ObservableCollection<ObservableCollection<StoredLevel>> savedLevels = new ObservableCollection<ObservableCollection<StoredLevel>>();
-            //ObservableCollection <StoredLevel> storedLevel = new ObservableCollection<StoredLevel>();
-            //foreach (var tube in TubesManager.SavedStartingTubes)
-            //{
-            //    storedLevel.Add(new StoredLevel(tube));
-            //}
-            //savedLevels.Add(storedLevel);
+            ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
 
 
-            //ObservableCollection<ObservableCollection<ITube>> savedLevels = new ObservableCollection<ObservableCollection<ITube>>();
-            ITube[] classroom = new ITube[] { TubesManager.SavedStartingTubes[0] };
-            ObservableCollection<ITube> classroomList = new ObservableCollection<ITube>() { TubesManager.SavedStartingTubes[0] };
+            //ObservableCollection<StoredLevel> savedLevels = new ObservableCollection<StoredLevel>();
+            savedLevelList.Add(new StoredLevel(TubesManager.SavedStartingTubes));
 
-            //ObservableCollection<ObservableCollection<ITube>> savedLevels = new ObservableCollection<ObservableCollection<ITube>>();
-            ObservableCollection<ObservableCollection<ITube>> savedLevels = new ObservableCollection<ObservableCollection<ITube>>() { Tubes };
-            //savedLevels.Add(TubesManager.SavedStartingTubes);
-            //savedLevels.Add(Tubes);
-
-            var jsonTubes = JsonConvert.SerializeObject(savedLevels);
-            Settings.Default.SavedLevels = jsonTubes;
+            Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
+            //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
             Settings.Default.Save();
         }
-        public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
-        private void LoadLevel(bool force = false)
+        private StoredLevel selectedLevelForLoading;
+        public StoredLevel SelectedLevelForLoading
         {
-            //if (force == false)
-            //{
-            //    var result = MessageBox.Show("Do you want to load level?", "Load level", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            //    if (result != MessageBoxResult.OK)
-            //    {
-            //        return;
-            //    }
-            //}
-            //TubesManager.LoadLevel();
-            //OnStartingLevel();
-
-            var storedLevels = JsonConvert.DeserializeObject<ObservableCollection<ObservableCollection<Tube>>>(Properties.Settings.Default.SavedLevels);
-            //ObservableCollection<ObservableCollection<ITube>> temp = (ObservableCollection<ObservableCollection<ITube>>)storedLevels;
-            ObservableCollection<ObservableCollection<ITube>> temp = new ObservableCollection<ObservableCollection<ITube>>();
-            foreach (var storedLvl in storedLevels)
+            get { return selectedLevelForLoading; }
+            set
             {
-                var storedILvl = new ObservableCollection<ITube>();
-                foreach (var t in storedLvl)
+                if (value != selectedLevelForLoading)
                 {
-                    storedILvl.Add(t);
+                    selectedLevelForLoading = value;
+                    //OnPropertyChanged();
                 }
-                temp.Add((ObservableCollection<ITube>)storedILvl);
             }
-
-            TubesManager.SavedStartingTubes = DeepCopyTubesCollection(temp[0]);
-            TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
-            Tubes?.Clear();
-            Tubes = TubesManager.Tubes; // delam to na dvakrat, protoze potrebuju aby hodnota byla prepsana i v TubesManager
-            OnStartingLevel();
-
-
-
         }
 
-        public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
+        private ObservableCollection<StoredLevel> loadLevelPrompt;
+        public ObservableCollection<StoredLevel> LoadLevelList
+        {
+            get { return loadLevelPrompt; }
+            set
+            {
+                if (value != loadLevelPrompt)
+                {
+                    loadLevelPrompt = value;
+                    //OnPropertyChanged();
+                }
+            }
+        }
+        [Obsolete]public RelayCommand LoadLevelScreenCommand => new RelayCommand(execute => LoadLevelScreen());
+        internal void LoadLevelScreen()
+        {
+            LoadLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+        }
+        public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
+        //private void LoadLevel(bool force = false)
+        private void LoadLevel()
+        {
+            PopupWindow.Execute(null); // close popup window
+            TubesManager.SavedStartingTubes = DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
 
+            //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
+
+            TubesManager.Tubes?.Clear();
+            foreach (Tube tube in TubesManager.SavedStartingTubes)
+            { // kdyz bych to udelal takhle, tak se prestane refreshovat TubesPerLineCalculation(); a GenerateNewLevel() taky
+                TubesManager.Tubes.Add(tube.DeepCopy());
+            }
+            OnStartingLevel();
+        }
+        public RelayCommand DeleteSavedLevelCommand => new RelayCommand(savedGame => DeleteSavedLevel(savedGame));
+        private void DeleteSavedLevel(object obj)
+        {
+            var savedGame = obj as StoredLevel;
+            //SelectedLevelForLoading
+            //LoadLevelList
+            // RelayCommand(tube => SelectTube(tube))
+
+            LoadLevelList.Remove(savedGame);
+            Settings.Default.SavedLevels = JsonConvert.SerializeObject(LoadLevelList);
+            Settings.Default.Save();
+
+
+            //foreach (var item in LoadLevelList)
+            //{
+            //    LoadLevelList.Remove(item);
+            //    break;
+            //}
+        }
+        public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
-
         public RelayCommand OpenHelpFromOptionsCommand => new RelayCommand(execute =>
         {
             windowService?.CloseWindow();
             SelectedViewModel = new HelpVM(this);
         });
-
         #endregion
         #region OptionsWindow
 
@@ -551,7 +565,7 @@ namespace WaterSortGame.ViewModels
             if (LastGameState.Count != 0) // pridavam to tady, protoze nechci v game states mit i current game state.
             {
                 GameStates.Add(LastGameState);
-                LastGameState = new ObservableCollection<ITube>();
+                LastGameState = new ObservableCollection<Tube>();
             }
 
             LastGameState?.Clear();
@@ -593,10 +607,9 @@ namespace WaterSortGame.ViewModels
             }
             return true;
         }
-
         //ObservableCollection<Tube> status;
-        private ObservableCollection<ObservableCollection<ITube>> gameStates = new ObservableCollection<ObservableCollection<ITube>>();
-        public ObservableCollection<ObservableCollection<ITube>> GameStates
+        private ObservableCollection<ObservableCollection<Tube>> gameStates = new ObservableCollection<ObservableCollection<Tube>>();
+        public ObservableCollection<ObservableCollection<Tube>> GameStates
         {
             get { return gameStates; }
             set
@@ -608,8 +621,7 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
-        public ObservableCollection<ITube> LastGameState { get; set; } = new ObservableCollection<ITube>();
-
+        public ObservableCollection<Tube> LastGameState { get; set; } = new ObservableCollection<Tube>();
         private void StepBack()
         {
             if (GameStates.Count == 0)
@@ -619,12 +631,12 @@ namespace WaterSortGame.ViewModels
 
             //GameStates.Remove(GameStates[GameStates.Count - 1]); // vymazu posledni, protoze to odpovida current state-u.//zmenil jsem to ze pridavam current state az o iteraci pozdeji
 
-            ObservableCollection<ITube> lastGameStatus = GameStates[GameStates.Count - 1];
+            ObservableCollection<Tube> lastGameStatus = GameStates[GameStates.Count - 1];
             //Tubes.CollectionChanged -= Tubes_CollectionChanged;
             //PropertyChanged -= Tube_PropertyChanged;
             PropertyChangedEventPaused = true;
             Tubes?.Clear();
-            foreach (ITube tubes in lastGameStatus)
+            foreach (Tube tubes in lastGameStatus)
             {
                 Tubes.Add(tubes);
             }
@@ -642,10 +654,10 @@ namespace WaterSortGame.ViewModels
             //PropertyChanged += Tube_PropertyChanged;
             
         }
-        private ObservableCollection<ITube> DeepCopyTubesCollection(ObservableCollection<ITube> tubes)
+        private ObservableCollection<Tube> DeepCopyTubesCollection(ObservableCollection<Tube> tubes)
         {
-            ObservableCollection <ITube> newTubes = new ObservableCollection<ITube>();
-            foreach (ITube tube in tubes)
+            ObservableCollection <Tube> newTubes = new ObservableCollection<Tube>();
+            foreach (Tube tube in tubes)
             {
                 newTubes.Add(tube.DeepCopy());
             }
@@ -664,7 +676,6 @@ namespace WaterSortGame.ViewModels
 
             TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
         }
-
         //private void TubeCount_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         //{
         //    //TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
