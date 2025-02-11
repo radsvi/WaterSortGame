@@ -274,7 +274,7 @@ namespace WaterSortGame.ViewModels
         public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
 
         private ObservableCollection<StoredLevel> loadLevelPrompt;
-        public ObservableCollection<StoredLevel> LoadLevelPrompt
+        public ObservableCollection<StoredLevel> LoadLevelList
         {
             get { return loadLevelPrompt; }
             set
@@ -291,7 +291,7 @@ namespace WaterSortGame.ViewModels
         {
             string jsonString = Settings.Default.SavedLevels;
             ObservableCollection<StoredLevel> savedLevels = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(jsonString);
-            LoadLevelPrompt = savedLevels;
+            LoadLevelList = savedLevels;
         }
         private void LoadLevel(bool force = false)
         {
