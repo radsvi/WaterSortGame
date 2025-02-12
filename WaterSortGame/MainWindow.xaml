@@ -82,7 +82,7 @@
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding DeveloperOptionsVisible}">
                     <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="LoadLevel"/>
                     <Button Content="Save level" Command="{Binding SaveLevelCommand}"/>
-                    <Button Content="[temp1]" Command="{Binding PopupWindow}" CommandParameter="GameSaved"/>
+                    <!--<Button Content="[temp1]" Command="{Binding PopupWindow}" CommandParameter="GameSaved"/>-->
                     <!--<Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
                     <Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->
                     <!--<Button Content="[temp3]" Command="{Binding PopupWindow}" CommandParameter="Help"/>-->

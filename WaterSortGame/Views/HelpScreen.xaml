@@ -9,47 +9,51 @@
     <Grid Style="{StaticResource PopupScreenOuter}">
         <Border Style="{StaticResource PopupScreen}" Height="200">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="1">
-                    <TextBlock Text="Help" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
-                    <StackPanel Margin="10">
-                        <BulletDecorator VerticalAlignment="Top">
-                            <BulletDecorator.Bullet>
-                                <Ellipse Fill="Black" Width="5" Height="5"/>
-                            </BulletDecorator.Bullet>
-                            <TextBlock Text="Separate each color into different vials." Margin="3.25,0,-3.25,0"/>
-                        </BulletDecorator>
-                        <BulletDecorator VerticalAlignment="Top">
-                            <BulletDecorator.Bullet>
-                                <Ellipse Fill="Black" Width="5" Height="5"/>
-                            </BulletDecorator.Bullet>
-                            <TextBlock Text="You can only move matching colors onto each other." Margin="3.25,0,-3.25,0"/>
-                        </BulletDecorator>
-                        <BulletDecorator VerticalAlignment="Top">
-                            <BulletDecorator.Bullet>
-                                <Ellipse Fill="Black" Width="5" Height="5"/>
-                            </BulletDecorator.Bullet>
-                            <TextBlock Text="You can always move colors to empty vial." Margin="3.25,0,-3.25,0"/>
-                        </BulletDecorator>
-                        <BulletDecorator VerticalAlignment="Top">
-                            <BulletDecorator.Bullet>
-                                <Ellipse Fill="Black" Width="5" Height="5"/>
-                            </BulletDecorator.Bullet>
-                            <TextBlock Text="You can add empty vials, if you are really stuck." Margin="3.25,0,-3.25,0"/>
-                        </BulletDecorator>
-                        <CheckBox Content="Don't show help again." Margin="0,10,0,0" IsChecked="{Binding DontShowHelpScreenAtStart}"/>
-                    </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Help" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
+                        <StackPanel Margin="10">
+                            <BulletDecorator VerticalAlignment="Top">
+                                <BulletDecorator.Bullet>
+                                    <Ellipse Fill="Black" Width="5" Height="5"/>
+                                </BulletDecorator.Bullet>
+                                <TextBlock Text="Separate each color into different vials." Margin="3.25,0,-3.25,0"/>
+                            </BulletDecorator>
+                            <BulletDecorator VerticalAlignment="Top">
+                                <BulletDecorator.Bullet>
+                                    <Ellipse Fill="Black" Width="5" Height="5"/>
+                                </BulletDecorator.Bullet>
+                                <TextBlock Text="You can only move matching colors onto each other." Margin="3.25,0,-3.25,0"/>
+                            </BulletDecorator>
+                            <BulletDecorator VerticalAlignment="Top">
+                                <BulletDecorator.Bullet>
+                                    <Ellipse Fill="Black" Width="5" Height="5"/>
+                                </BulletDecorator.Bullet>
+                                <TextBlock Text="You can always move colors to empty vial." Margin="3.25,0,-3.25,0"/>
+                            </BulletDecorator>
+                            <BulletDecorator VerticalAlignment="Top">
+                                <BulletDecorator.Bullet>
+                                    <Ellipse Fill="Black" Width="5" Height="5"/>
+                                </BulletDecorator.Bullet>
+                                <TextBlock Text="You can add empty vials, if you are really stuck." Margin="3.25,0,-3.25,0"/>
+                            </BulletDecorator>
+                            <CheckBox Content="Don't show help again." Margin="0,10,0,0" IsChecked="{Binding DontShowHelpScreenAtStart}"/>
+                        </StackPanel>
 
 
-                    <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
-                        Style="{StaticResource NavigationButtonsPrimary}">
-                        <Button Content="Close" Command="{Binding PopupWindow}" Width="150"/>
+                        <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
+                            Style="{StaticResource NavigationButtonsPrimary}">
+                            <Button Content="Close" Command="{Binding PopupWindow}" Width="150"/>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
+                </Grid>
+
+                <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding PopupWindow}"/>
             </Grid>
         </Border>
     </Grid>

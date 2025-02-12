@@ -9,19 +9,23 @@
     <Grid Style="{StaticResource PopupScreenOuter}">
         <Border Style="{StaticResource PopupScreen}">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="1">
-                    <TextBlock Text="Do you want to restart current level?" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
-                    <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Do you want to restart current level?" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
                         Style="{StaticResource NavigationButtonsPrimary}">
-                        <Button Content="OK" Command="{Binding RestartLevel_Command}" Width="150"/>
-                        <Button Content="Cancel" Command="{Binding PopupWindow}" Width="150"/>
+                            <Button Content="OK" Command="{Binding RestartLevel_Command}" Width="150"/>
+                            <Button Content="Cancel" Command="{Binding PopupWindow}" Width="150"/>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
+                </Grid>
+
+                <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding PopupWindow}"/>
             </Grid>
         </Border>
     </Grid>
