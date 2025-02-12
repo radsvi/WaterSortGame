@@ -107,7 +107,7 @@
                             <GridView ><!--ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}"-->
                                 <GridViewColumn Header="Save Date" DisplayMemberBinding="{Binding Date}"/>
                                 <GridViewColumn Header="Colors" DisplayMemberBinding="{Binding NumberOfColors}"/>
-                                <GridViewColumn Header="Preview">
+                                <GridViewColumn Header="Preview" Width="150">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <ItemsControl ItemsSource="{Binding GameState}" d:ItemsSource="{d:SampleData ItemCount=3}" >
