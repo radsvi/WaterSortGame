@@ -168,6 +168,10 @@ namespace WaterSortGame.ViewModels
             {
                 SelectedViewModel = new HelpVM(this);
             }
+
+            //OnLoadLevelListChanged += LoadLevelListChangedCalculation;
+            LoadLevelList.CollectionChanged += LoadLevelList_CollectionChanged;
+
         }
         #endregion
         #region Navigation
@@ -286,23 +290,82 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        private ObservableCollection<StoredLevel> loadLevelPrompt;
+        private ObservableCollection<StoredLevel> loadLevelList = new ObservableCollection<StoredLevel>();
         public ObservableCollection<StoredLevel> LoadLevelList
         {
-            get { return loadLevelPrompt; }
+            get { return loadLevelList; }
             set
             {
-                if (value != loadLevelPrompt)
+                if (value != loadLevelList)
                 {
-                    loadLevelPrompt = value;
+                    loadLevelList = value;
                     //OnPropertyChanged();
+                    //OnLoadLevelListChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
-        [Obsolete]public RelayCommand LoadLevelScreenCommand => new RelayCommand(execute => LoadLevelScreen());
+        private int loadLevelScreenHeight;
+        public int LoadLevelScreenHeight
+        {
+            get { return loadLevelScreenHeight; }
+            set
+            {
+                if (value != loadLevelScreenHeight)
+                {
+                    loadLevelScreenHeight = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        //public event EventHandler? OnLoadLevelListChanged;
+        private void LoadLevelList_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (LoadLevelList.Count > 3)
+            {
+                var increaseHeight = (LoadLevelList.Count - 3) * 45; //vyska jedne polozky je 45
+                LoadLevelScreenHeight = 280 + increaseHeight;
+            }
+            else
+            {
+                LoadLevelScreenHeight = 280;
+            }
+        }
+        //private void LoadLevelListChangedCalculation(object? sender, EventArgs e)
+        //{
+
+        //    if (LoadLevelList.Count > 3)
+        //    {
+        //        var increaseHeight = (LoadLevelList.Count - 3) * 45; //vyska jedne polozky je 45
+        //        LoadLevelScreenHeight = 280 + increaseHeight;
+        //    }
+        //    else
+        //    {
+        //        LoadLevelScreenHeight = 280;
+        //    }
+        //}
         internal void LoadLevelScreen()
         {
-            LoadLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+            //LoadLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+            
+            LoadLevelList?.Clear();
+            var deserializedList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+            foreach (var item in deserializedList)
+            {
+                LoadLevelList.Add(item);
+            }
+
+            //OnLoadLevelListChanged?.Invoke(this, EventArgs.Empty);
+            //LoadLevelScreenHeight = 280;
+            //if (LoadLevelList.Count > 3)
+            //{
+            //    var increaseHeight = (LoadLevelList.Count - 3) * 45; //vyska jedne polozky je 45
+            //    LoadLevelScreenHeight += increaseHeight;
+            //}
+            //else
+            //{
+            //    LoadLevelScreenHeight = 280;
+            //}
         }
         public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
         //private void LoadLevel(bool force = false)
