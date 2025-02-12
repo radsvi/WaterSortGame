@@ -42,59 +42,16 @@
     <Grid Style="{StaticResource PopupScreenOuter}">
         <Border Style="{StaticResource PopupScreen}" Width="580" Height="{Binding LoadLevelScreenHeight}" d:Height="280">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="1">
-                    <TextBlock Text="Load level" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-                    <!--<DataGrid Margin="0,10,0,0"
-                    ItemsSource="{Binding LoadLevelList}" d:ItemsSource="{d:SampleData ItemCount=2}"
-                    SelectedItem="{Binding SelectedLevelForLoading}"
-                    CanUserAddRows="False" CanUserDeleteRows="False"
-                    IsReadOnly="True"
-                    AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Save Date" Binding="{Binding Date}" />
-                            <DataGridTextColumn Header="Colors" Binding="{Binding NumberOfColors}" Width="45" />
-                            
-                            <DataGridTemplateColumn Header="Preview" Width="*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ItemsControl ItemsSource="{Binding GameState}" d:ItemsSource="{d:SampleData ItemCount=3}" >
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <WrapPanel IsItemsHost="True" />
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Margin="0,0,5,0">
-                                                        <Border Background="{Binding Layers[0].Rgb}" Width="10" Height="10"/>
-                                                        <Border Background="{Binding Layers[1].Rgb}" Width="10" Height="10"/>
-                                                        <Border Background="{Binding Layers[2].Rgb}" Width="10" Height="10"/>
-                                                        <Border Background="{Binding Layers[3].Rgb}" Width="10" Height="10"/>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                            <DataGridTemplateColumn Header="Delete">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="×" Style="{StaticResource DeleteButton}" Command="{Binding Path=DataContext.DeleteSavedLevelCommand, ElementName=ListTubes}" CommandParameter="{Binding .}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>-->
-
-                    <ListView Margin="20,10,20,0"
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Load level" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
+                        <ListView Margin="20,10,20,0"
                               ItemsSource="{Binding LoadLevelList}" d:ItemsSource="{d:SampleData ItemCount=2}"
                               SelectedItem="{Binding SelectedLevelForLoading}"
                               ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -103,66 +60,71 @@
                               MaxHeight="520"
                               >
 
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
 
-                        <ListView.View>
-                            <GridView ><!--ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}"-->
-                                <GridViewColumn Header="Save Date" Width="80">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding Date, StringFormat=yyyy-MM-dd}" d:Text="2025-02-12" HorizontalAlignment="Center"/>
-                                                <TextBlock Text="{Binding Date, StringFormat=HH:mm}" d:Text="15:00" HorizontalAlignment="Center"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Colors" DisplayMemberBinding="{Binding NumberOfColors}" Width="40"/>
-                                <GridViewColumn Header="Preview" Width="352">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <ItemsControl ItemsSource="{Binding GameState}" d:ItemsSource="{d:SampleData ItemCount=3}" >
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <WrapPanel IsItemsHost="True" />
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <StackPanel Margin="0,0,5,0">
-                                                            <Border Background="{Binding Layers[3].Rgb}" Width="10" Height="10"/>
-                                                            <Border Background="{Binding Layers[2].Rgb}" Width="10" Height="10"/>
-                                                            <Border Background="{Binding Layers[1].Rgb}" Width="10" Height="10"/>
-                                                            <Border Background="{Binding Layers[0].Rgb}" Width="10" Height="10"/>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Delete" Width="40">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Content="❌" Style="{StaticResource DeleteButton}" Command="{Binding Path=DataContext.DeleteSavedLevelCommand, ElementName=ListTubes}" CommandParameter="{Binding .}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                            <ListView.View>
+                                <GridView >
+                                    <!--ColumnHeaderContainerStyle="{StaticResource myHeaderStyle}"-->
+                                    <GridViewColumn Header="Save Date" Width="80">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Date, StringFormat=yyyy-MM-dd}" d:Text="2025-02-12" HorizontalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Date, StringFormat=HH:mm}" d:Text="15:00" HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Colors" DisplayMemberBinding="{Binding NumberOfColors}" Width="40"/>
+                                    <GridViewColumn Header="Preview" Width="352">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ItemsControl ItemsSource="{Binding GameState}" d:ItemsSource="{d:SampleData ItemCount=3}" >
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel IsItemsHost="True" />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Margin="0,0,5,0">
+                                                                <Border Background="{Binding Layers[3].Rgb}" Width="10" Height="10"/>
+                                                                <Border Background="{Binding Layers[2].Rgb}" Width="10" Height="10"/>
+                                                                <Border Background="{Binding Layers[1].Rgb}" Width="10" Height="10"/>
+                                                                <Border Background="{Binding Layers[0].Rgb}" Width="10" Height="10"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Delete" Width="40">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="❌" Style="{StaticResource DeleteButton}" Command="{Binding Path=DataContext.DeleteSavedLevelCommand, ElementName=ListTubes}" CommandParameter="{Binding .}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
 
-                    <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
+                        <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
                             Style="{StaticResource NavigationButtonsPrimary}">
-                        <Button Content="Load" Command="{Binding LoadLevelCommand}" Width="150"/>
-                        <Button Content="Close" Command="{Binding PopupWindow}" Width="150"/>
+                            <Button Content="Load" Command="{Binding LoadLevelCommand}" Width="150"/>
+                            <Button Content="Close" Command="{Binding PopupWindow}" Width="150"/>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
+                </Grid>
+
+                <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding PopupWindow}"/>
             </Grid>
+            
         </Border>
     </Grid>
 </UserControl>

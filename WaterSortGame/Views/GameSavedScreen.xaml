@@ -9,7 +9,7 @@
     <Grid Style="{StaticResource PopupScreenOuter}">
         <Border Style="{StaticResource PopupScreen}" Width="250" Height="90">
             <Button Style="{StaticResource CloseNotificationButton}" Command="{Binding PopupWindow}">
-                <TextBlock Text="Game saved!" Grid.Row="1" FontSize="20" HorizontalAlignment="Center" Height="auto"/>
+                <TextBlock Text="Game saved..." Grid.Row="1" FontSize="20" HorizontalAlignment="Center" Height="auto"/>
             </Button>
         </Border>
     </Grid>
