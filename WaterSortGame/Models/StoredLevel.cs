@@ -20,18 +20,19 @@ namespace WaterSortGame.Models
             this.GameState = tubes;
             Date = DateTime.Now;
 
-            if(tubes is not null)
+            if(tubes is null)
             {
-                List<int?> colorIds = new List<int?>();
-                foreach (var tube in tubes)
+                return;
+            }
+            List<int?> colorIds = new List<int?>();
+            foreach (var tube in tubes)
+            {
+                foreach (var layer in tube.Layers)
                 {
-                    foreach (var layer in tube.Layers)
+                    if (colorIds.Contains(layer.Id) == false)
                     {
-                        if (colorIds.Contains(layer.Id) == false)
-                        {
-                            colorIds.Add(layer.Id);
-                            NumberOfColors++;
-                        }
+                        colorIds.Add(layer.Id);
+                        NumberOfColors++;
                     }
                 }
             }

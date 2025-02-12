@@ -321,14 +321,33 @@ namespace WaterSortGame.ViewModels
         //public event EventHandler? OnLoadLevelListChanged;
         private void LoadLevelList_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (LoadLevelList.Count > 3)
+            int increaseHeight = 0;
+            if (LoadLevelList.Count > 3 && LoadLevelList.Count < 12)
             {
-                var increaseHeight = (LoadLevelList.Count - 3) * 45; //vyska jedne polozky je 45
+                increaseHeight = (LoadLevelList.Count - 3) * 45; //vyska jedne polozky je 45
                 LoadLevelScreenHeight = 280 + increaseHeight;
             }
-            else
+            else if (LoadLevelList.Count <= 3)
             {
                 LoadLevelScreenHeight = 280;
+            }
+            else if (LoadLevelList.Count >= 12)
+            {
+                LoadLevelScreenHeight = 640;
+                LoadLevelScreenScroll = true;
+            }
+        }
+        private bool loadLevelScreenScroll;
+        public bool LoadLevelScreenScroll
+        {
+            get { return loadLevelScreenScroll; }
+            set
+            {
+                if (value != loadLevelScreenScroll)
+                {
+                    loadLevelScreenScroll = value;
+                    OnPropertyChanged();
+                }
             }
         }
         //private void LoadLevelListChangedCalculation(object? sender, EventArgs e)
