@@ -134,10 +134,10 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel Margin="0,0,5,0">
-                                                            <Border Background="{Binding Layers[0].Rgb}" Width="10" Height="10"/>
-                                                            <Border Background="{Binding Layers[1].Rgb}" Width="10" Height="10"/>
-                                                            <Border Background="{Binding Layers[2].Rgb}" Width="10" Height="10"/>
                                                             <Border Background="{Binding Layers[3].Rgb}" Width="10" Height="10"/>
+                                                            <Border Background="{Binding Layers[2].Rgb}" Width="10" Height="10"/>
+                                                            <Border Background="{Binding Layers[1].Rgb}" Width="10" Height="10"/>
+                                                            <Border Background="{Binding Layers[0].Rgb}" Width="10" Height="10"/>
                                                         </StackPanel>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>

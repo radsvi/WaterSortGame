@@ -31,11 +31,11 @@
                                  Text="{Binding MaximumExtraTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                  VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />
                         </DockPanel>
-                        <TextBlock Text="Recommended to leave at just 1. Raising it any higher make the game too easy."/>
                         <DockPanel>
-                            <CheckBox x:Name="RandomColors" IsChecked="{Binding RandomNumberOfTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                                <Label Content="Random number of colors"/>
-                            </CheckBox>
+                            <Label Content="Recommended to leave at just 1. Raising it any higher make the game too easy."/>
+                        </DockPanel>
+                        <DockPanel>
+                            <CheckBox x:Name="RandomColors" IsChecked="{Binding RandomNumberOfTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Random number of colors"/>
                         </DockPanel>
                         <DockPanel IsEnabled="{Binding ElementName=RandomColors,Path=IsChecked,Converter={StaticResource StatusToEnabled}}"
                                    ToolTip="This number (3~12) coresponds to the latest number of colors generated.">
@@ -54,7 +54,9 @@
                 </GroupBox>
                 <GroupBox Header="Dev options">
                     <StackPanel>
-                        <CheckBox IsChecked="{Binding DeveloperOptionsVisibleBool}" Content="Enable dev options"/>
+                        <DockPanel>
+                            <CheckBox IsChecked="{Binding DeveloperOptionsVisibleBool}" Content="Enable dev options"/>
+                        </DockPanel>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

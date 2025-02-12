@@ -210,6 +210,14 @@ namespace WaterSortGame.ViewModels
             {
                 PopupWindow.Execute(null);
             }
+            else if (SelectedViewModel is LoadLevelVM)
+            {
+                LoadLevel();
+            }
+            else if (SelectedViewModel is GameSavedVM)
+            {
+                PopupWindow.Execute(null);
+            }
         }
 
         public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesManager.AddExtraTube(), canExecute => TubesManager.ExtraTubes < TubesManager.MaximumExtraTubes);
@@ -263,11 +271,9 @@ namespace WaterSortGame.ViewModels
             GameStates.Clear();
         }
         public RelayCommand SaveLevelCommand => new RelayCommand(execute => SaveLevel());
-
         private void SaveLevel()
         {
             ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
-
 
             //ObservableCollection<StoredLevel> savedLevels = new ObservableCollection<StoredLevel>();
             savedLevelList.Add(new StoredLevel(TubesManager.SavedStartingTubes));
@@ -275,6 +281,15 @@ namespace WaterSortGame.ViewModels
             Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
             //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
             Settings.Default.Save();
+
+            PopupWindowNotification();
+        }
+        private void PopupWindowNotification()
+        {
+            PopupWindow.Execute("GameSaved");
+            //Thread.Sleep(500);
+            //await Task.Delay(2000);
+            //PopupWindow.Execute(null);
         }
         private StoredLevel selectedLevelForLoading;
         public StoredLevel SelectedLevelForLoading
@@ -386,21 +401,27 @@ namespace WaterSortGame.ViewModels
             //    LoadLevelScreenHeight = 280;
             //}
         }
-        public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel());
+        public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel(), canExecute => SelectedLevelForLoading is not null);
         //private void LoadLevel(bool force = false)
         private void LoadLevel()
         {
+            if (SelectedLevelForLoading == null)
+            {
+                return;
+            }
             PopupWindow.Execute(null); // close popup window
             TubesManager.SavedStartingTubes = DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
 
             //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
 
-            TubesManager.Tubes?.Clear();
-            foreach (Tube tube in TubesManager.SavedStartingTubes)
-            { // kdyz bych to udelal takhle, tak se prestane refreshovat TubesPerLineCalculation(); a GenerateNewLevel() taky
-                TubesManager.Tubes.Add(tube.DeepCopy());
-            }
-            OnStartingLevel();
+            //TubesManager.Tubes?.Clear();
+            //foreach (Tube tube in TubesManager.SavedStartingTubes)
+            //{ // kdyz bych to udelal takhle, tak se prestane refreshovat TubesPerLineCalculation(); a GenerateNewLevel() taky
+            //    TubesManager.Tubes.Add(tube.DeepCopy());
+            //}
+            //OnStartingLevel();
+
+            Restart();
         }
         public RelayCommand DeleteSavedLevelCommand => new RelayCommand(savedGame => DeleteSavedLevel(savedGame));
         private void DeleteSavedLevel(object obj)

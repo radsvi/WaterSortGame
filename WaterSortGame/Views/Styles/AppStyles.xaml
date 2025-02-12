@@ -116,7 +116,33 @@
         <!--<Setter Property="Margin" Value="10" />-->
     </Style>
     <Style TargetType="GroupBox">
-        <Setter Property="Padding" Value="0,10,0,5" />
+        <Setter Property="Padding" Value="0,10,0,0" />
         <Setter Property="Margin" Value="0,0,0,5" />
+        <Style.Resources>
+            <Style TargetType="DockPanel">
+                <Setter Property="Margin" Value="0,0,0,5" />
+            </Style>
+        </Style.Resources>
+    </Style>
+    <Style TargetType="Button" x:Key="CloseNotificationButton">
+        <Setter Property="Background" Value="Transparent" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>
