@@ -221,22 +221,6 @@ namespace WaterSortGame.ViewModels
         }
 
         public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesManager.AddExtraTube(), canExecute => TubesManager.ExtraTubes < TubesManager.MaximumExtraTubes);
-        //public RelayCommand NewLevelCommand => new RelayCommand(execute => StartNewLevel());
-        //private void StartNewLevel(bool force = false)
-        //{
-        //    if (force == false)
-        //    {
-        //        var result = MessageBox.Show("Do you want to start new level?", "New level", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-        //        if (result != MessageBoxResult.OK)
-        //        {
-        //            return;
-        //        }
-        //    }
-        //    TubesManager.StartNewLevel();
-        //    OnStartingLevel();
-        //}
-        
-        //public RelayCommand ShowScreen_StartNewLevel_Command => new RelayCommand(execute => StartNewLevelScreenVisibility = "true", canExecute => true);
         public RelayCommand StartNewLevel_Command => new RelayCommand(execute => GenerateNewLevel());
         private void GenerateNewLevel()
         {
@@ -269,6 +253,7 @@ namespace WaterSortGame.ViewModels
             LevelComplete = false;
             DeselectTube();
             GameStates.Clear();
+            LastGameState = new ObservableCollection<Tube>();
         }
         public RelayCommand SaveLevelCommand => new RelayCommand(execute => SaveLevel());
         private void SaveLevel()
