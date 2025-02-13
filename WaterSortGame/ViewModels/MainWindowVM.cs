@@ -269,12 +269,12 @@ namespace WaterSortGame.ViewModels
 
             PopupWindowNotification();
         }
-        private void PopupWindowNotification()
+        private async void PopupWindowNotification()
         {
             PopupWindow.Execute("GameSaved");
             //Thread.Sleep(500);
-            //await Task.Delay(2000);
-            //PopupWindow.Execute(null);
+            await Task.Delay(2000);
+            PopupWindow.Execute(null);
         }
         private StoredLevel selectedLevelForLoading;
         public StoredLevel SelectedLevelForLoading
