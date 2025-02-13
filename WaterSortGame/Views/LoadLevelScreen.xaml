@@ -16,12 +16,13 @@
             <Setter Property="Foreground" Value="LightGray" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="BorderBrush" Value="LightGray" />
-            <Setter Property="Height" Value="40" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Content" Value="❌" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}" Height="{TemplateBinding Height}" BorderBrush="{TemplateBinding BorderBrush}"
-                                
+                        <Border Background="{TemplateBinding Background}" Height="{TemplateBinding Height}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"
                                 >
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
@@ -31,7 +32,6 @@
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="Black" />
-                    
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Background" Value="Red" />
@@ -106,7 +106,7 @@
                                     <GridViewColumn Header="Delete" Width="40">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button Content="❌" Style="{StaticResource DeleteButton}" Command="{Binding Path=DataContext.DeleteSavedLevelCommand, ElementName=ListTubes}" CommandParameter="{Binding .}"/>
+                                                <Button Style="{StaticResource DeleteButton}" Command="{Binding Path=DataContext.DeleteSavedLevelCommand, ElementName=ListTubes}" CommandParameter="{Binding .}"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -117,6 +117,7 @@
                         <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
                             Style="{StaticResource NavigationButtonsPrimary}">
                             <Button Content="Load" Command="{Binding LoadLevelCommand}" Width="150"/>
+                            <Button Content="Delete" Command="{Binding DeleteSelectedLevelsCommand}" Width="150"/>
                             <Button Content="Close" Command="{Binding PopupWindow}" Width="150"/>
                         </StackPanel>
                     </StackPanel>

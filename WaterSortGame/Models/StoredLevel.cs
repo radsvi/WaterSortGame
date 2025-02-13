@@ -13,6 +13,30 @@ namespace WaterSortGame.Models
         public int NumberOfColors { get; set; }
         public DateTime Date { get; set; }
         public ObservableCollection<Tube> GameState { get; set; }
+        private bool markedForDeletion;
+        public bool MarkedForDeletion
+        {
+            //get { return markedForDeletion; }
+            set
+            {
+                if (value != markedForDeletion)
+                {
+                    markedForDeletion = value;
+                    //OnPropertyChanged();
+                }
+            }
+        }
+        public string GetMarkedStatus()
+        {
+            if (markedForDeletion == true)
+            {
+                return "marked";
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         [JsonConstructor]
         public StoredLevel(ObservableCollection<Tube> tubes)

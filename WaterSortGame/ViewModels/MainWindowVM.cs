@@ -408,6 +408,12 @@ namespace WaterSortGame.ViewModels
 
             Restart();
         }
+        public RelayCommand DeleteSelectedLevelsCommand => new RelayCommand(execute => DeleteSelectedLevels(), canExecute => false);
+        private void DeleteSelectedLevels()
+        {
+            throw new NotImplementedException();
+        }
+
         public RelayCommand DeleteSavedLevelCommand => new RelayCommand(savedGame => DeleteSavedLevel(savedGame));
         private void DeleteSavedLevel(object obj)
         {
