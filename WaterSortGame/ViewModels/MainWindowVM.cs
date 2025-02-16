@@ -547,20 +547,21 @@ namespace WaterSortGame.ViewModels
 
             // if selecting different tube
             bool success = false;
-            bool successAtLeastOnce = false;
+            //bool successAtLeastOnce = false;
 
             do {
                 success = AddLiquidToTargetTube(tube);
                 if (success == true)
                 {
-                    successAtLeastOnce = true;
+                    //successAtLeastOnce = true;
                     SelectLiquid(SelectedTube); // vyber dalsi liquid ze stejne zkumavky
                 }
             } while (success == true && SourceLiquid is not null);
-            if (successAtLeastOnce == true)
-            {
-                DeselectTube();
-            }
+            //if (successAtLeastOnce == true)
+            //{
+            //    DeselectTube();
+            //}
+            DeselectTube(); // deselect pokazde
         }
         private void SelectLiquid(Tube sourceTube) // selects topmost liquid in a sourceTube
         {
