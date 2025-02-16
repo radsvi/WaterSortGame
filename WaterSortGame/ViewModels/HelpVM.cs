@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace WaterSortGame.ViewModels
 {
-    internal class HelpVM : ViewModelBase
+    internal class HelpVM : PopupScreenBase
     {
-        public MainWindowVM MainWindowVM { get; set; }
-        public HelpVM(object viewModel)
-        {
-            MainWindowVM = (MainWindowVM)viewModel;
-        }
+        public HelpVM(object viewModel) : base(viewModel) { }
     }
 }

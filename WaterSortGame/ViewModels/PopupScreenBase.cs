@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace WaterSortGame.ViewModels
 {
-    class LoadLevelVM : PopupScreenBase
+    internal class PopupScreenBase : ViewModelBase
     {
-        public LoadLevelVM(object viewModel) : base(viewModel)
+        public MainWindowVM MainWindowVM { get; set; }
+        public PopupScreenBase(object viewModel)
         {
             MainWindowVM = (MainWindowVM)viewModel;
-            MainWindowVM.LoadLevelScreen();
         }
     }
 }

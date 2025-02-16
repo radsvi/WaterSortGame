@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace WaterSortGame.ViewModels
 {
-    class GameSavedVM : ViewModelBase
+    class GameSavedVM : PopupScreenBase
     {
-        public MainWindowVM MainWindowVM { get; set; }
-        public GameSavedVM(object viewModel)
-        {
-            MainWindowVM = (MainWindowVM)viewModel;
-        }
+        public GameSavedVM(object viewModel) : base(viewModel) { }
     }
 }
