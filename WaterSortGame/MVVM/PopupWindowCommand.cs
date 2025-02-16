@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WaterSortGame.Models;
 using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.MVVM
@@ -29,29 +30,34 @@ namespace WaterSortGame.MVVM
                 viewModel.SelectedViewModel = null;
                 return;
             }
-            if (parameter.ToString() == "NewLevel")
+
+            switch ((PopupParameters)parameter)
             {
-                viewModel.SelectedViewModel = new NewLevelVM(viewModel);
-            }
-            else if (parameter.ToString() == "RestartLevel")
-            {
-                viewModel.SelectedViewModel = new RestartLevelVM(viewModel);
-            }
-            else if (parameter.ToString() == "LevelComplete")
-            {
-                viewModel.SelectedViewModel = new LevelCompleteVM(viewModel);
-            }
-            else if (parameter.ToString() == "Help")
-            {
-                viewModel.SelectedViewModel = new HelpVM(viewModel);
-            }
-            else if (parameter.ToString() == "LoadLevel")
-            {
-                viewModel.SelectedViewModel = new LoadLevelVM(viewModel);
-            }
-            else if (parameter.ToString() == "GameSaved")
-            {
-                viewModel.SelectedViewModel = new GameSavedVM(viewModel);
+                case PopupParameters.NewLevel:
+                    viewModel.SelectedViewModel = new NewLevelVM(viewModel);
+                    break;
+                case PopupParameters.RestartLevel:
+                    viewModel.SelectedViewModel = new RestartLevelVM(viewModel);
+                    break;
+                case PopupParameters.LevelComplete:
+                    viewModel.SelectedViewModel = new LevelCompleteVM(viewModel);
+                    break;
+                case PopupParameters.Help:
+                    viewModel.SelectedViewModel = new HelpVM(viewModel);
+                    break;
+                case PopupParameters.LoadLevel:
+                    viewModel.SelectedViewModel = new LoadLevelVM(viewModel);
+                    break;
+                case PopupParameters.GameSaved:
+                    viewModel.SelectedViewModel = new GameSavedVM(viewModel);
+                    break;
+                case PopupParameters.CloseNotification: // closing GameSavedScreen
+                    viewModel.SelectedViewModel = null;
+                    //
+                    break;
+                default:
+                    viewModel.SelectedViewModel = null;
+                    break;
             }
         }
     }

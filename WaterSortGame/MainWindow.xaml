@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WaterSortGame"
-        xmlns:Models="clr-namespace:WaterSortGame.Models"
+        xmlns:models="clr-namespace:WaterSortGame.Models"
         xmlns:converters="clr-namespace:WaterSortGame.Converters"
         xmlns:views="clr-namespace:WaterSortGame.Views"
         xmlns:viewmodels="clr-namespace:WaterSortGame.ViewModels"
@@ -26,7 +26,7 @@
     </Window.InputBindings>
     <Window.Resources>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
-        <Models:TubesManager x:Key="TubesList"/>
+        <models:TubesManager x:Key="TubesList"/>
         <!--<viewmodels:MainWindowVM x:Key="MainWindowVM"/>-->
         <views:LevelCompleteScreen x:Key="LevelCompleteScreen"/>
         <views:NewLevelScreen x:Key="NewLevelScreen"/>
@@ -69,8 +69,8 @@
                 <Border Grid.Row="1" Style="{StaticResource Separator}"/>
                 <StackPanel Style="{StaticResource NavigationButtonsPrimary}">
                     <!--<TextBlock Text="{Binding GameStates.Count}" Foreground="White" />-->
-                    <Button Content="New level" Command="{Binding PopupWindow}" CommandParameter="NewLevel"/>
-                    <Button Content="Restart level" Command="{Binding PopupWindow}" CommandParameter="RestartLevel"/>
+                    <Button Content="New level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParameters.NewLevel}"/>
+                    <Button Content="Restart level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParameters.RestartLevel}"/>
                     <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}"/>
                     <Button Command="{Binding CloseWindowCommand}" Style="{StaticResource CloseButton}">
                         <TextBlock Text="×" FontSize="25" Margin="0,-6,0,0"/>
@@ -80,7 +80,7 @@
                     </Button>-->
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding DeveloperOptionsVisible}">
-                    <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="LoadLevel"/>
+                    <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParameters.LoadLevel}"/>
                     <Button Content="Save level" Command="{Binding SaveLevelCommand}"/>
                     <!--<Button Content="[temp1]" Command="{Binding PopupWindow}" CommandParameter="GameSaved"/>-->
                     <!--<Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
