@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    class StoredLevel
+    class StoredLevel : ViewModelBase
     {
         public int NumberOfColors { get; set; }
         public DateTime Date { get; set; }
@@ -16,13 +17,13 @@ namespace WaterSortGame.Models
         private bool markedForDeletion;
         public bool MarkedForDeletion
         {
-            //get { return markedForDeletion; }
+            get { return markedForDeletion; }
             set
             {
                 if (value != markedForDeletion)
                 {
                     markedForDeletion = value;
-                    //OnPropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }

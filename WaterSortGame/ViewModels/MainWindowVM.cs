@@ -413,26 +413,33 @@ namespace WaterSortGame.ViewModels
         {
             throw new NotImplementedException();
         }
+        public RelayCommand MarkForDeletionCommand => new RelayCommand(savedGame => MarkForDeletion(savedGame));
 
-        public RelayCommand DeleteSavedLevelCommand => new RelayCommand(savedGame => DeleteSavedLevel(savedGame));
-        private void DeleteSavedLevel(object obj)
+        private void MarkForDeletion(object obj)
         {
             var savedGame = obj as StoredLevel;
-            //SelectedLevelForLoading
-            //LoadLevelList
-            // RelayCommand(tube => SelectTube(tube))
-
-            LoadLevelList.Remove(savedGame);
-            Settings.Default.SavedLevels = JsonConvert.SerializeObject(LoadLevelList);
-            Settings.Default.Save();
-
-
-            //foreach (var item in LoadLevelList)
-            //{
-            //    LoadLevelList.Remove(item);
-            //    break;
-            //}
+            savedGame.MarkedForDeletion = !savedGame.MarkedForDeletion;
         }
+
+        //public RelayCommand DeleteSavedLevelCommand => new RelayCommand(savedGame => DeleteSavedLevel(savedGame));
+        //private void DeleteSavedLevel(object obj)
+        //{
+        //    var savedGame = obj as StoredLevel;
+        //    //SelectedLevelForLoading
+        //    //LoadLevelList
+        //    // RelayCommand(tube => SelectTube(tube))
+
+        //    LoadLevelList.Remove(savedGame);
+        //    Settings.Default.SavedLevels = JsonConvert.SerializeObject(LoadLevelList);
+        //    Settings.Default.Save();
+
+
+        //    //foreach (var item in LoadLevelList)
+        //    //{
+        //    //    LoadLevelList.Remove(item);
+        //    //    break;
+        //    //}
+        //}
         public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));

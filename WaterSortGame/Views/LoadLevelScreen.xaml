@@ -36,6 +36,10 @@
                 <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Background" Value="Red" />
                 </Trigger>
+                <DataTrigger Binding="{Binding MarkedForDeletion}" Value="True">
+                    <Setter Property="Background" Value="Blue" />
+                    <Setter Property="Margin" Value="0" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
@@ -106,7 +110,7 @@
                                     <GridViewColumn Header="Delete" Width="40">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button Style="{StaticResource DeleteButton}" Command="{Binding Path=DataContext.DeleteSavedLevelCommand, ElementName=ListTubes}" CommandParameter="{Binding .}"/>
+                                                <Button Style="{StaticResource DeleteButton}" Command="{Binding Path=DataContext.MarkForDeletionCommand, ElementName=ListTubes}" CommandParameter="{Binding .}"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
