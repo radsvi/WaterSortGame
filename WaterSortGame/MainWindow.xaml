@@ -44,13 +44,16 @@
         <DataTemplate DataType="{x:Type viewmodels:LevelCompleteVM}">
             <views:LevelCompleteScreen DataContext="{Binding MainWindowVM}"/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:SaveLevelVM}">
+            <views:SaveLevelScreen DataContext="{Binding MainWindowVM}"/>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodels:HelpVM}">
             <views:HelpScreen DataContext="{Binding MainWindowVM}"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodels:LoadLevelVM}">
             <views:LoadLevelScreen DataContext="{Binding MainWindowVM}"/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewmodels:GameSavedVM}">
+        <DataTemplate DataType="{x:Type viewmodels:GameSavedNotificationVM}">
             <views:GameSavedScreen DataContext="{Binding MainWindowVM}"/>
         </DataTemplate>
     </Window.Resources>
@@ -81,7 +84,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding DeveloperOptionsVisible}">
                     <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.LoadLevel}"/>
-                    <Button Content="Save level" Command="{Binding SaveLevelCommand}"/>
+                    <Button Content="Save level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.SaveLevel}"/>
                     <!--<Button Content="[temp1]" Command="{Binding PopupWindow}" CommandParameter="GameSaved"/>-->
                     <!--<Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
                     <Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->

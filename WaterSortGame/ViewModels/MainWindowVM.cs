@@ -185,7 +185,7 @@ namespace WaterSortGame.ViewModels
             }
             else
             {
-                PopupWindow.Execute(null);
+                ClosePopupWindow();
             }
         }
         public RelayCommand ConfirmCommand => new RelayCommand(execute => ConfirmPopup());
@@ -209,30 +209,33 @@ namespace WaterSortGame.ViewModels
             }
             else if (SelectedViewModel is HelpVM)
             {
-                PopupWindow.Execute(null);
+                ClosePopupWindow();
             }
             else if (SelectedViewModel is LoadLevelVM)
             {
                 LoadLevel();
             }
-            else if (SelectedViewModel is GameSavedVM)
+            else if (SelectedViewModel is GameSavedNotificationVM)
             {
-                PopupWindow.Execute(null);
+                ClosePopupWindow();
             }
         }
-
+        private void ClosePopupWindow()
+        {
+            PopupWindow.Execute(null);
+        }
         public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesManager.AddExtraTube(), canExecute => TubesManager.ExtraTubes < TubesManager.MaximumExtraTubes);
         public RelayCommand StartNewLevel_Command => new RelayCommand(execute => GenerateNewLevel());
         private void GenerateNewLevel()
         {
-            PopupWindow.Execute(null);
+            ClosePopupWindow();
             TubesManager.GenerateNewLevel();
             OnStartingLevel();
         }
         public RelayCommand RestartLevel_Command => new RelayCommand(execute => Restart());
         private void Restart()
         {
-            PopupWindow.Execute(null);
+            ClosePopupWindow();
             TubesManager.RestartLevel();
             OnStartingLevel();
         }
@@ -257,12 +260,27 @@ namespace WaterSortGame.ViewModels
             LastGameState = new ObservableCollection<Tube>();
         }
         public RelayCommand SaveLevelCommand => new RelayCommand(execute => SaveLevel());
+        private string noteForSavedLevel;
+        public string NoteForSavedLevel
+        {
+            get { return noteForSavedLevel; }
+            set
+            {
+                if (value != noteForSavedLevel)
+                {
+                    noteForSavedLevel = value;
+                    //OnPropertyChanged();
+                }
+            }
+        }
         private void SaveLevel()
         {
+            ClosePopupWindow();
+
             ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
 
             //ObservableCollection<StoredLevel> savedLevels = new ObservableCollection<StoredLevel>();
-            savedLevelList.Add(new StoredLevel(TubesManager.SavedStartingTubes));
+            savedLevelList.Add(new StoredLevel(TubesManager.SavedStartingTubes, NoteForSavedLevel));
 
             Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
             //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
@@ -275,7 +293,7 @@ namespace WaterSortGame.ViewModels
             PopupWindow.Execute(PopupParams.GameSaved);
             //Thread.Sleep(500);
             await Task.Delay(2000);
-            PopupWindow.Execute(null);
+            ClosePopupWindow();
         }
         private StoredLevel selectedLevelForLoading;
         public StoredLevel SelectedLevelForLoading
@@ -395,7 +413,7 @@ namespace WaterSortGame.ViewModels
             {
                 return;
             }
-            PopupWindow.Execute(null); // close popup window
+            ClosePopupWindow();
             TubesManager.SavedStartingTubes = DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
 
             //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);

@@ -79,14 +79,28 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel>
-                                                    <TextBlock Text="{Binding Date, StringFormat=yyyy-MM-dd}" d:Text="2025-02-12" HorizontalAlignment="Center"/>
-                                                    <TextBlock Text="{Binding Date, StringFormat=HH:mm}" d:Text="15:00" HorizontalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Date, StringFormat=yyyy-MM-dd}" d:Text="2025-02-12"/>
+                                                    <TextBlock Text="{Binding Date, StringFormat=HH:mm}" d:Text="15:00"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Colors" DisplayMemberBinding="{Binding NumberOfColors}" Width="40"/>
-                                    <GridViewColumn Header="Preview" Width="352">
+                                    <GridViewColumn Header="Note" Width="130">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Note}"
+                                                               HorizontalAlignment="Center" Height="40" TextWrapping="Wrap"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               FontSize="10"
+                                                               d:Text="0123456789012345678901234567890123456789012345678912345"
+                                                               />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Preview" Width="222">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <ItemsControl ItemsSource="{Binding GameState}" d:ItemsSource="{d:SampleData ItemCount=3}" >

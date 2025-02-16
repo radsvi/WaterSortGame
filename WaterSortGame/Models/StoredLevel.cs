@@ -13,6 +13,7 @@ namespace WaterSortGame.Models
     {
         public int NumberOfColors { get; set; }
         public DateTime Date { get; set; }
+        public string Note { get; set; }
         public ObservableCollection<Tube> GameState { get; set; }
         private bool markedForDeletion;
         public bool MarkedForDeletion
@@ -40,10 +41,11 @@ namespace WaterSortGame.Models
         }
 
         [JsonConstructor]
-        public StoredLevel(ObservableCollection<Tube> tubes)
+        public StoredLevel(ObservableCollection<Tube> tubes, string noteForSavedLevel)
         {
             this.GameState = tubes;
-            Date = DateTime.Now;
+            this.Date = DateTime.Now;
+            this.Note = noteForSavedLevel;
 
             if(tubes is null)
             {
@@ -57,7 +59,7 @@ namespace WaterSortGame.Models
                     if (colorIds.Contains(layer.Id) == false)
                     {
                         colorIds.Add(layer.Id);
-                        NumberOfColors++;
+                        this.NumberOfColors++;
                     }
                 }
             }

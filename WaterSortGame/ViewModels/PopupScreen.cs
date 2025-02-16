@@ -38,8 +38,12 @@ namespace WaterSortGame.ViewModels
     {
         public RestartLevelVM(object viewModel) : base(viewModel) { }
     }
-    class GameSavedVM : PopupScreenBase
+    class GameSavedNotificationVM : PopupScreenBase
     {
-        public GameSavedVM(object viewModel) : base(viewModel) { }
+        public GameSavedNotificationVM(object viewModel) : base(viewModel) { }
+    }
+    class SaveLevelVM : PopupScreenBase
+    {
+        public SaveLevelVM(object viewModel) : base(viewModel) { }
     }
 }

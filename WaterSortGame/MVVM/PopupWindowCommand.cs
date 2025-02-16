@@ -40,7 +40,8 @@ namespace WaterSortGame.MVVM
                 { PopupParams.LevelComplete, () => new LevelCompleteVM(viewModel) },
                 { PopupParams.Help, () => new HelpVM(viewModel) },
                 { PopupParams.LoadLevel, () => new LoadLevelVM(viewModel) },
-                { PopupParams.GameSaved, () => new GameSavedVM(viewModel) },
+                { PopupParams.GameSaved, () => new GameSavedNotificationVM(viewModel) },
+                { PopupParams.SaveLevel, () => new SaveLevelVM(viewModel) },
                 { PopupParams.CloseNotification, () => null },
             };
 

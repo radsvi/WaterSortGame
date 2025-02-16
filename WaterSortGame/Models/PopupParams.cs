@@ -14,6 +14,7 @@ namespace WaterSortGame.Models
         Help,
         LoadLevel,
         GameSaved,
+        SaveLevel,
         CloseNotification
     }
 }
