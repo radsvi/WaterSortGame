@@ -32,20 +32,25 @@ namespace WaterSortGame.MVVM
                 return;
             }
 
-            Dictionary<PopupParams, ViewModelBase> viewModelsList = new Dictionary<PopupParams, ViewModelBase>
+            //Dictionary<PopupParams, ViewModelBase> viewModelsList = new Dictionary<PopupParams, ViewModelBase>
+            Dictionary<PopupParams, Func<ViewModelBase>> viewModelsList = new Dictionary<PopupParams, Func<ViewModelBase>>
             {
-                { PopupParams.NewLevel, new NewLevelVM(viewModel)},
-                { PopupParams.RestartLevel, new RestartLevelVM(viewModel)},
-                { PopupParams.LevelComplete, new LevelCompleteVM(viewModel)},
-                { PopupParams.Help, new HelpVM(viewModel)},
-                { PopupParams.LoadLevel, new LoadLevelVM(viewModel)},
-                { PopupParams.GameSaved, new GameSavedVM(viewModel)},
-                { PopupParams.CloseNotification, null},
+                { PopupParams.NewLevel, () => new NewLevelVM(viewModel) },
+                { PopupParams.RestartLevel, () => new RestartLevelVM(viewModel) },
+                { PopupParams.LevelComplete, () => new LevelCompleteVM(viewModel) },
+                { PopupParams.Help, () => new HelpVM(viewModel) },
+                { PopupParams.LoadLevel, () => new LoadLevelVM(viewModel) },
+                { PopupParams.GameSaved, () => new GameSavedVM(viewModel) },
+                { PopupParams.CloseNotification, () => null },
             };
 
-            if (viewModelsList.ContainsKey((PopupParams)parameter))
+            //if (viewModelsList.ContainsKey((PopupParams)parameter))
+            //{
+            //    viewModel.SelectedViewModel = viewModelsList[(PopupParams)parameter];
+            //}
+            if (viewModelsList.TryGetValue((PopupParams)parameter, out var output))
             {
-                viewModel.SelectedViewModel = viewModelsList[(PopupParams)parameter];
+                viewModel.SelectedViewModel = output();
             }
         }
     }
