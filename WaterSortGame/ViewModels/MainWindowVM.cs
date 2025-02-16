@@ -272,7 +272,7 @@ namespace WaterSortGame.ViewModels
         }
         private async void PopupWindowNotification()
         {
-            PopupWindow.Execute(PopupParameters.GameSaved);
+            PopupWindow.Execute(PopupParams.GameSaved);
             //Thread.Sleep(500);
             await Task.Delay(2000);
             PopupWindow.Execute(null);
@@ -617,7 +617,7 @@ namespace WaterSortGame.ViewModels
                 LevelComplete = true;
                 //windowService?.OpenLevelCompleteWindow(this);
                 //LevelWonMessage();
-                PopupWindow.Execute(PopupParameters.LevelComplete);
+                PopupWindow.Execute(PopupParams.LevelComplete);
             }
         }
         private void SaveGameState()

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WaterSortGame.Models
 {
-    internal enum PopupParameters
+    internal enum PopupParams
     {
         NewLevel,
         RestartLevel,
