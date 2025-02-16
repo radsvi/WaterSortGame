@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,33 +32,20 @@ namespace WaterSortGame.MVVM
                 return;
             }
 
-            switch ((PopupParameters)parameter)
+            Dictionary<PopupParams, ViewModelBase> viewModelsList = new Dictionary<PopupParams, ViewModelBase>
             {
-                case PopupParameters.NewLevel:
-                    viewModel.SelectedViewModel = new NewLevelVM(viewModel);
-                    break;
-                case PopupParameters.RestartLevel:
-                    viewModel.SelectedViewModel = new RestartLevelVM(viewModel);
-                    break;
-                case PopupParameters.LevelComplete:
-                    viewModel.SelectedViewModel = new LevelCompleteVM(viewModel);
-                    break;
-                case PopupParameters.Help:
-                    viewModel.SelectedViewModel = new HelpVM(viewModel);
-                    break;
-                case PopupParameters.LoadLevel:
-                    viewModel.SelectedViewModel = new LoadLevelVM(viewModel);
-                    break;
-                case PopupParameters.GameSaved:
-                    viewModel.SelectedViewModel = new GameSavedVM(viewModel);
-                    break;
-                case PopupParameters.CloseNotification: // closing GameSavedScreen
-                    viewModel.SelectedViewModel = null;
-                    //
-                    break;
-                default:
-                    viewModel.SelectedViewModel = null;
-                    break;
+                { PopupParams.NewLevel, new NewLevelVM(viewModel)},
+                { PopupParams.RestartLevel, new RestartLevelVM(viewModel)},
+                { PopupParams.LevelComplete, new LevelCompleteVM(viewModel)},
+                { PopupParams.Help, new HelpVM(viewModel)},
+                { PopupParams.LoadLevel, new LoadLevelVM(viewModel)},
+                { PopupParams.GameSaved, new GameSavedVM(viewModel)},
+                { PopupParams.CloseNotification, null},
+            };
+
+            if (viewModelsList.ContainsKey((PopupParams)parameter))
+            {
+                viewModel.SelectedViewModel = viewModelsList[(PopupParams)parameter];
             }
         }
     }

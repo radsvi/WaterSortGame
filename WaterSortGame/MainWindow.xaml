@@ -69,8 +69,8 @@
                 <Border Grid.Row="1" Style="{StaticResource Separator}"/>
                 <StackPanel Style="{StaticResource NavigationButtonsPrimary}">
                     <!--<TextBlock Text="{Binding GameStates.Count}" Foreground="White" />-->
-                    <Button Content="New level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParameters.NewLevel}"/>
-                    <Button Content="Restart level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParameters.RestartLevel}"/>
+                    <Button Content="New level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.NewLevel}"/>
+                    <Button Content="Restart level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.RestartLevel}"/>
                     <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}"/>
                     <Button Command="{Binding CloseWindowCommand}" Style="{StaticResource CloseButton}">
                         <TextBlock Text="×" FontSize="25" Margin="0,-6,0,0"/>
@@ -80,7 +80,7 @@
                     </Button>-->
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding DeveloperOptionsVisible}">
-                    <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParameters.LoadLevel}"/>
+                    <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.LoadLevel}"/>
                     <Button Content="Save level" Command="{Binding SaveLevelCommand}"/>
                     <!--<Button Content="[temp1]" Command="{Binding PopupWindow}" CommandParameter="GameSaved"/>-->
                     <!--<Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
