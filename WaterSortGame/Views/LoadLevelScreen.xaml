@@ -32,13 +32,15 @@
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="#bee6fd" />
                 </Trigger>
-                <Trigger Property="IsPressed" Value="True">
+                <!--<Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Foreground" Value="White" />
                     <Setter Property="Background" Value="Red" />
-                </Trigger>
+                </Trigger>-->
                 <DataTrigger Binding="{Binding MarkedForDeletion}" Value="True">
-                    <Setter Property="Background" Value="Blue" />
-                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Background" Value="Red" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>

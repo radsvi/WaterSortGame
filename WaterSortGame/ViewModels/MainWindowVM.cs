@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -408,10 +409,28 @@ namespace WaterSortGame.ViewModels
 
             Restart();
         }
-        public RelayCommand DeleteSelectedLevelsCommand => new RelayCommand(execute => DeleteSelectedLevels(), canExecute => false);
+        public RelayCommand DeleteSelectedLevelsCommand => new RelayCommand(execute => DeleteSelectedLevels(), canExecute => CanDelete());
+        private bool CanDelete()
+        {
+            foreach (var savedLevel in LoadLevelList)
+            {
+                if (savedLevel.MarkedForDeletion is true)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private void DeleteSelectedLevels()
         {
-            throw new NotImplementedException();
+            var levelsToRemove = LoadLevelList.Where(item => item.MarkedForDeletion == true).ToList();
+            foreach (var levelToRemove in levelsToRemove)
+            {
+                LoadLevelList.Remove(levelToRemove);
+            }
+
+            Settings.Default.SavedLevels = JsonConvert.SerializeObject(LoadLevelList);
+            Settings.Default.Save();
         }
         public RelayCommand MarkForDeletionCommand => new RelayCommand(savedGame => MarkForDeletion(savedGame));
 
