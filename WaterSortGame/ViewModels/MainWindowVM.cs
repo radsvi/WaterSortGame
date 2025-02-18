@@ -217,7 +217,11 @@ namespace WaterSortGame.ViewModels
             }
             else if (SelectedViewModel is GameSavedNotificationVM)
             {
-                ClosePopupWindow();
+                CloseNotification();
+            }
+            else if (SelectedViewModel is SaveLevelVM)
+            {
+                SaveLevel();
             }
         }
         private void ClosePopupWindow()
