@@ -44,6 +44,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        
     </UserControl.Resources>
     <Grid Style="{StaticResource PopupScreenOuter}">
         <Border Style="{StaticResource PopupScreen}" Width="580" Height="{Binding LoadLevelScreenHeight}" d:Height="280">
@@ -137,7 +138,7 @@
                         <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
                             Style="{StaticResource NavigationButtonsPrimary}">
                             <Button Content="Load" Command="{Binding LoadLevelCommand}" Width="150"/>
-                            <Button Content="Delete" Command="{Binding DeleteSelectedLevelsCommand}" Width="150"/>
+                            <Button Content="Delete" Command="{Binding DeleteSelectedLevelsCommand}" Style="{StaticResource ConfirmDeleteButton}" Width="150"/>
                             <Button Content="Close" Command="{Binding PopupWindow}" Width="150"/>
                         </StackPanel>
                     </StackPanel>

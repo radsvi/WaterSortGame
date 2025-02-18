@@ -74,6 +74,36 @@
             </Style>
         </Style.Resources>
     </Style>
+    <Style TargetType="Button" BasedOn="{StaticResource DefaultButton}" x:Key="ConfirmDeleteButton">
+        <Setter Property="Width" Value="100" />
+        <Setter Property="Margin" Value="7,0,0,0" />
+        <Setter Property="Background" Value="OrangeRed" />
+        <Setter Property="BorderBrush" Value="PaleVioletRed" />
+        <Setter Property="Foreground" Value="White" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="#f4f4f4" />
+                <Setter Property="Foreground" Value="#838383" />
+                <Setter Property="BorderBrush" Value="#adb2b5" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Red" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+
+            </Trigger>
+        </Style.Triggers>
+    </Style>
     <Style TargetType="StackPanel" x:Key="NavigationButtonsSecondary" BasedOn="{StaticResource DefaultStackPanel}">
         <Setter Property="Height" Value="18" />
         <Style.Resources>
