@@ -9,7 +9,7 @@
              d:DesignHeight="220" d:DesignWidth="600">
     <Grid Style="{StaticResource PopupScreenOuter}">
         <Border Style="{StaticResource PopupScreen}" Width="250" Height="90">
-            <Button Style="{StaticResource CloseNotificationButton}" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.CloseNotification}">
+            <Button Style="{StaticResource CloseNotificationButton}" Command="{Binding CloseNotification_Command}">
                 <TextBlock Text="Game saved..." Grid.Row="1" FontSize="20" HorizontalAlignment="Center" Height="auto"/>
             </Button>
         </Border>

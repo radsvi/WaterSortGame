@@ -260,19 +260,7 @@ namespace WaterSortGame.ViewModels
             LastGameState = new ObservableCollection<Tube>();
         }
         public RelayCommand SaveLevelCommand => new RelayCommand(execute => SaveLevel());
-        private string noteForSavedLevel;
-        public string NoteForSavedLevel
-        {
-            get { return noteForSavedLevel; }
-            set
-            {
-                if (value != noteForSavedLevel)
-                {
-                    noteForSavedLevel = value;
-                    //OnPropertyChanged();
-                }
-            }
-        }
+        public string NoteForSavedLevel { get; set; }
         private void SaveLevel()
         {
             ClosePopupWindow();
@@ -285,16 +273,36 @@ namespace WaterSortGame.ViewModels
             Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
             //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
             Settings.Default.Save();
+            NoteForSavedLevel = null;
 
-            PopupWindowNotification();
+            tokenSource = new CancellationTokenSource();
+            var token = tokenSource.Token;
+            PopupWindowNotification(token);
         }
-        private async void PopupWindowNotification()
+        CancellationTokenSource tokenSource = null;
+        private async void PopupWindowNotification(CancellationToken token)
         {
             PopupWindow.Execute(PopupParams.GameSaved);
             //Thread.Sleep(500);
-            await Task.Delay(2000);
+            //await Task.Delay(2000);
+            //Task.Delay(2000);
+            for (int i = 0; i < 20; i++)
+            {
+                await Task.Delay(100);
+                if(token.IsCancellationRequested)
+                {
+                    break;
+                }
+            }
+            
             ClosePopupWindow();
         }
+        public RelayCommand CloseNotification_Command => new RelayCommand(execute => CloseNotification());
+        private void CloseNotification()
+        {
+            tokenSource?.Cancel();
+        }
+
         private StoredLevel selectedLevelForLoading;
         public StoredLevel SelectedLevelForLoading
         {
