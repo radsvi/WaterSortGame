@@ -10,12 +10,36 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.MVVM
 {
+    internal class ViewModelListPopup
+    {
+        public Func<ViewModelBase> InitializeType { get; set; }
+        public Action ConfirmAction { get; set; }
+        public ViewModelListPopup(Func<ViewModelBase> initializeType, Action confirmAction)
+        {
+            InitializeType = initializeType;
+            ConfirmAction = confirmAction;
+        }
+    }
     internal class PopupWindowCommand : ICommand
     {
+        public Dictionary<PopupParams, ViewModelListPopup> ViewModelsList { get; set; }
         private MainWindowVM viewModel;
         public PopupWindowCommand(MainWindowVM viewModel)
         {
             this.viewModel = viewModel;
+
+            ViewModelsList = new Dictionary<PopupParams, ViewModelListPopup>
+            {
+                { PopupParams.NewLevel, new ViewModelListPopup(() => new NewLevelVM(viewModel), () => Execute(viewModel)) },
+                { PopupParams.RestartLevel, new ViewModelListPopup(() => new RestartLevelVM(viewModel), () => Execute(viewModel)) },
+                { PopupParams.LevelComplete, new ViewModelListPopup(() => new LevelCompleteVM(viewModel), () => Execute(viewModel)) },
+                { PopupParams.Help, new ViewModelListPopup(() => new HelpVM(viewModel), () => Execute(viewModel)) },
+                { PopupParams.LoadLevel, new ViewModelListPopup(() => new LoadLevelVM(viewModel), () => Execute(viewModel)) },
+                { PopupParams.GameSaved, new ViewModelListPopup(() => new GameSavedNotificationVM(viewModel), () => Execute(viewModel)) },
+                { PopupParams.SaveLevel, new ViewModelListPopup(() => new SaveLevelVM(viewModel), () => Execute(viewModel)) },
+
+                //{ PopupParams.CloseNotification, () => null },
+            };
         }
         public event EventHandler? CanExecuteChanged;
 
@@ -32,26 +56,9 @@ namespace WaterSortGame.MVVM
                 return;
             }
 
-            //Dictionary<PopupParams, ViewModelBase> viewModelsList = new Dictionary<PopupParams, ViewModelBase>
-            Dictionary<PopupParams, Func<ViewModelBase>> viewModelsList = new Dictionary<PopupParams, Func<ViewModelBase>>
+            if (ViewModelsList.TryGetValue((PopupParams)parameter, out var output))
             {
-                { PopupParams.NewLevel, () => new NewLevelVM(viewModel) },
-                { PopupParams.RestartLevel, () => new RestartLevelVM(viewModel) },
-                { PopupParams.LevelComplete, () => new LevelCompleteVM(viewModel) },
-                { PopupParams.Help, () => new HelpVM(viewModel) },
-                { PopupParams.LoadLevel, () => new LoadLevelVM(viewModel) },
-                { PopupParams.GameSaved, () => new GameSavedNotificationVM(viewModel) },
-                { PopupParams.SaveLevel, () => new SaveLevelVM(viewModel) },
-                //{ PopupParams.CloseNotification, () => null },
-            };
-
-            //if (viewModelsList.ContainsKey((PopupParams)parameter))
-            //{
-            //    viewModel.SelectedViewModel = viewModelsList[(PopupParams)parameter];
-            //}
-            if (viewModelsList.TryGetValue((PopupParams)parameter, out var output))
-            {
-                viewModel.SelectedViewModel = output();
+                viewModel.SelectedViewModel = output.InitializeType();
             }
         }
     }
