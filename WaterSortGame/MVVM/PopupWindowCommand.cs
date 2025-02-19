@@ -22,24 +22,10 @@ namespace WaterSortGame.MVVM
     }
     internal class PopupWindowCommand : ICommand
     {
-        public Dictionary<PopupParams, ViewModelListPopup> ViewModelsList { get; set; }
         private MainWindowVM viewModel;
         public PopupWindowCommand(MainWindowVM viewModel)
         {
             this.viewModel = viewModel;
-
-            ViewModelsList = new Dictionary<PopupParams, ViewModelListPopup>
-            {
-                { PopupParams.NewLevel, new ViewModelListPopup(() => new NewLevelVM(viewModel), () => Execute(viewModel)) },
-                { PopupParams.RestartLevel, new ViewModelListPopup(() => new RestartLevelVM(viewModel), () => Execute(viewModel)) },
-                { PopupParams.LevelComplete, new ViewModelListPopup(() => new LevelCompleteVM(viewModel), () => Execute(viewModel)) },
-                { PopupParams.Help, new ViewModelListPopup(() => new HelpVM(viewModel), () => Execute(viewModel)) },
-                { PopupParams.LoadLevel, new ViewModelListPopup(() => new LoadLevelVM(viewModel), () => Execute(viewModel)) },
-                { PopupParams.GameSaved, new ViewModelListPopup(() => new GameSavedNotificationVM(viewModel), () => Execute(viewModel)) },
-                { PopupParams.SaveLevel, new ViewModelListPopup(() => new SaveLevelVM(viewModel), () => Execute(viewModel)) },
-
-                //{ PopupParams.CloseNotification, () => null },
-            };
         }
         public event EventHandler? CanExecuteChanged;
 
@@ -56,7 +42,7 @@ namespace WaterSortGame.MVVM
                 return;
             }
 
-            if (ViewModelsList.TryGetValue((PopupParams)parameter, out var output))
+            if (viewModel.PopupActions.TryGetValue((PopupParams)parameter, out var output))
             {
                 viewModel.SelectedViewModel = output.InitializeType();
             }

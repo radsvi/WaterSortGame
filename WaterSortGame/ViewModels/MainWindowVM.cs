@@ -149,6 +149,9 @@ namespace WaterSortGame.ViewModels
             }
         }
         public bool PropertyChangedEventPaused { get; set; } = false;
+
+        public Dictionary<PopupParams, ViewModelListPopup> PopupActions { get; set; }
+
         #endregion
         #region Constructor
         public MainWindowVM(MainWindow mainWindow)
@@ -173,6 +176,18 @@ namespace WaterSortGame.ViewModels
             //OnLoadLevelListChanged += LoadLevelListChangedCalculation;
             LoadLevelList.CollectionChanged += LoadLevelList_CollectionChanged;
 
+            PopupActions = new Dictionary<PopupParams, ViewModelListPopup>
+            {
+                { PopupParams.NewLevel, new ViewModelListPopup(() => new NewLevelVM(this), () => GenerateNewLevel() ) },
+                { PopupParams.RestartLevel, new ViewModelListPopup(() => new RestartLevelVM(this), () => Restart() ) },
+                { PopupParams.LevelComplete, new ViewModelListPopup(() => new LevelCompleteVM(this), () => GenerateNewLevel() ) },
+                { PopupParams.Help, new ViewModelListPopup(() => new HelpVM(this), () => ClosePopupWindow() ) },
+                { PopupParams.LoadLevel, new ViewModelListPopup(() => new LoadLevelVM(this), () => LoadLevel() ) },
+                { PopupParams.GameSaved, new ViewModelListPopup(() => new GameSavedNotificationVM(this), () => CloseNotification() ) },
+                { PopupParams.SaveLevel, new ViewModelListPopup(() => new SaveLevelVM(this), () => SaveLevel() ) },
+
+                //{ PopupParams.CloseNotification, () => null },
+            };
         }
         #endregion
         #region Navigation
