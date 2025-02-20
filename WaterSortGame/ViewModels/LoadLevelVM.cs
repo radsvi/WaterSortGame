@@ -16,7 +16,7 @@ namespace WaterSortGame.ViewModels
         public LoadLevelVM(object viewModel) : base(viewModel)
         {
             MainWindowVM = (MainWindowVM)viewModel;
-            //LoadLevelList.CollectionChanged += LoadLevelList_CollectionChanged;
+            LoadLevelList.CollectionChanged += LoadLevelList_CollectionChanged;
             //MainWindowVM.LoadLevelScreen();
 
             //MainWindowVM.LoadLevelList = LoadLevelList;

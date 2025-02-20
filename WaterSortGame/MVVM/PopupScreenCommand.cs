@@ -12,10 +12,10 @@ namespace WaterSortGame.MVVM
 {
     internal class PopupScreenCommand : ICommand
     {
-        private MainWindowVM viewModel;
+        private MainWindowVM mainWindowVM;
         public PopupScreenCommand(MainWindowVM viewModel)
         {
-            this.viewModel = viewModel;
+            this.mainWindowVM = viewModel;
         }
         public event EventHandler? CanExecuteChanged;
 
@@ -28,15 +28,15 @@ namespace WaterSortGame.MVVM
         {
             if (parameter is null)
             {
-                viewModel.SelectedViewModel = null;
+                mainWindowVM.SelectedViewModel = null;
                 return;
             }
 
-            var output = viewModel.PopupActions.Where(x => x.Key == (PopupParams)parameter);
+            var output = mainWindowVM.PopupActions.Where(x => x.Key == (PopupParams)parameter);
             //var output = Array.Find(viewModel.PopupActions, x => x.Key == (PopupParams)parameter);
             if (output != null && output.Count() == 1)
             {
-                viewModel.SelectedViewModel = output.ElementAt(0).SelectedViewModel;
+                mainWindowVM.SelectedViewModel = output.ElementAt(0).SelectedViewModel;
                 output.ElementAt(0).OnShowingWindow?.Invoke();
             }
         }

@@ -153,22 +153,8 @@ namespace WaterSortGame.ViewModels
         }
         public bool PropertyChangedEventPaused { get; set; } = false;
 
-        //public Dictionary<Tuple<PopupParams, Func<ViewModelBase>>, Action> PopupActions { get; set; }
         public ObservableCollection<PopupScreenActions> PopupActions { get; set; }
-        //private ObservableCollection<StoredLevel> loadLevelList = new ObservableCollection<StoredLevel>();
-        //public ObservableCollection<StoredLevel> LoadLevelList
-        //{
-        //    get { return loadLevelList; }
-        //    set
-        //    {
-        //        if (value != loadLevelList)
-        //        {
-        //            loadLevelList = value;
-        //            //OnPropertyChanged();
-        //            //OnLoadLevelListChanged?.Invoke(this, EventArgs.Empty);
-        //        }
-        //    }
-        //}
+
         private LoadLevelVM loadLevelVM;
         public LoadLevelVM LoadLevelVM
         {
@@ -204,28 +190,8 @@ namespace WaterSortGame.ViewModels
                 SelectedViewModel = new HelpVM(this);
             }
 
-            //OnLoadLevelListChanged += LoadLevelListChangedCalculation;
-            
-
-            //PopupActions = new Dictionary<Tuple<PopupParams, Func<ViewModelBase>>, Action>
-            //{
-            //    { new Tuple<PopupParams, Func<ViewModelBase>>( PopupParams.NewLevel, () => new NewLevelVM(this) ), () => GenerateNewLevel() },
-            //    { new Tuple<PopupParams, Func<ViewModelBase>>( PopupParams.RestartLevel, () => new RestartLevelVM(this) ), () => Restart() },
-            //    { new Tuple<PopupParams, Func<ViewModelBase>>( PopupParams.LevelComplete, () => new LevelCompleteVM(this) ), () => GenerateNewLevel() },
-            //    { new Tuple<PopupParams, Func<ViewModelBase>>( PopupParams.Help, () => new HelpVM(this) ), () => ClosePopupWindow() },
-            //    { new Tuple<PopupParams, Func<ViewModelBase>>( PopupParams.LoadLevel, () => new LoadLevelVM(this) ), () => LoadLevel() },
-            //    { new Tuple<PopupParams, Func<ViewModelBase>>( PopupParams.GameSaved, () => new GameSavedNotificationVM(this) ), () => CloseNotification() },
-            //    { new Tuple<PopupParams, Func<ViewModelBase>>( PopupParams.SaveLevel, () => new SaveLevelVM(this) ), () => SaveLevel() },
-            //};
-
-            //var klic = new Tuple<PopupParams, Func<ViewModelBase>>(PopupParams.NewLevel, () => new NewLevelVM(this));
-
-            //if (PopupActions.ContainsKey(klic))
-            //{
-            //    Debug.WriteLine("obsahuje klic!");
-            //}
             var loadLevelVM = new LoadLevelVM(this);
-            loadLevelVM.LoadLevelList.CollectionChanged += loadLevelVM.LoadLevelList_CollectionChanged;
+            //loadLevelVM.LoadLevelList.CollectionChanged += loadLevelVM.LoadLevelList_CollectionChanged;
             PopupActions = new ObservableCollection<PopupScreenActions>
             {
                 new PopupScreenActions(PopupParams.NewLevel, new NewLevelVM(this), null, () => GenerateNewLevel()),
@@ -279,19 +245,6 @@ namespace WaterSortGame.ViewModels
             TubesManager.RestartLevel();
             OnStartingLevel();
         }
-        //private void LevelWonMessage()
-        //{
-        //    var result = MessageBox.Show("Level complete!\nYes - next level\nNo - restart current level", "Level complete!", MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
-        //    if (result == MessageBoxResult.Yes)
-        //    {
-        //        StartNewLevel(true);
-        //    }
-        //    else if (result == MessageBoxResult.No)
-        //    {
-        //        Restart(true);
-        //    }
-        //    // zkusit udelat nejakou grafiku, ohnostroj
-        //}
         private void OnStartingLevel()
         {
             LevelComplete = false;
@@ -340,28 +293,6 @@ namespace WaterSortGame.ViewModels
         {
             tokenSource?.Cancel();
         }
-
-        
-
-        //public RelayCommand DeleteSavedLevelCommand => new RelayCommand(savedGame => DeleteSavedLevel(savedGame));
-        //private void DeleteSavedLevel(object obj)
-        //{
-        //    var savedGame = obj as StoredLevel;
-        //    //SelectedLevelForLoading
-        //    //LoadLevelList
-        //    // RelayCommand(tube => SelectTube(tube))
-
-        //    LoadLevelList.Remove(savedGame);
-        //    Settings.Default.SavedLevels = JsonConvert.SerializeObject(LoadLevelList);
-        //    Settings.Default.Save();
-
-
-        //    //foreach (var item in LoadLevelList)
-        //    //{
-        //    //    LoadLevelList.Remove(item);
-        //    //    break;
-        //    //}
-        //}
         public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
