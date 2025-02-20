@@ -23,7 +23,7 @@
                              MaxLength="60"/>
                         <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
                     Style="{StaticResource NavigationButtonsPrimary}">
-                            <Button Content="OK" Command="{Binding SaveLevelCommand}" Width="150"/>
+                            <Button Content="OK" Command="{Binding ConfirmCommand}" Width="150"/>
                             <Button Content="Cancel" Command="{Binding PopupWindow}" Width="150"/>
                         </StackPanel>
                     </StackPanel>

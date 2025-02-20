@@ -238,14 +238,12 @@ namespace WaterSortGame.ViewModels
             PopupWindow.Execute(null);
         }
         public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesManager.AddExtraTube(), canExecute => TubesManager.ExtraTubes < TubesManager.MaximumExtraTubes);
-        public RelayCommand StartNewLevel_Command => new RelayCommand(execute => GenerateNewLevel());
         private void GenerateNewLevel()
         {
             ClosePopupWindow();
             TubesManager.GenerateNewLevel();
             OnStartingLevel();
         }
-        public RelayCommand RestartLevel_Command => new RelayCommand(execute => RestartLevel());
         private void RestartLevel()
         {
             ClosePopupWindow();
@@ -272,7 +270,6 @@ namespace WaterSortGame.ViewModels
             GameStates.Clear();
             LastGameState = new ObservableCollection<Tube>();
         }
-        public RelayCommand SaveLevelCommand => new RelayCommand(execute => SaveLevel());
         public string NoteForSavedLevel { get; set; }
         private void SaveLevel()
         {
@@ -310,7 +307,6 @@ namespace WaterSortGame.ViewModels
             
             ClosePopupWindow();
         }
-        public RelayCommand CloseNotification_Command => new RelayCommand(execute => CloseNotification());
         private void CloseNotification()
         {
             tokenSource?.Cancel();
