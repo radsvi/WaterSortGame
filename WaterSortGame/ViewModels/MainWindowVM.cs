@@ -200,13 +200,13 @@ namespace WaterSortGame.ViewModels
 
             PopupActions = new List<ViewModelListPopup>()
             {
-                new ViewModelListPopup(PopupParams.NewLevel, () => new NewLevelVM(this), () => GenerateNewLevel()),
-                new ViewModelListPopup(PopupParams.RestartLevel, () => new RestartLevelVM(this), () => Restart()),
-                new ViewModelListPopup(PopupParams.LevelComplete, () => new LevelCompleteVM(this), () => GenerateNewLevel()),
-                new ViewModelListPopup(PopupParams.Help, () => new HelpVM(this), () => ClosePopupWindow()),
-                new ViewModelListPopup(PopupParams.LoadLevel, () => new LoadLevelVM(this), () => LoadLevel()),
-                new ViewModelListPopup(PopupParams.GameSaved, () => new GameSavedNotificationVM(this), () => CloseNotification()),
-                new ViewModelListPopup(PopupParams.SaveLevel, () => new SaveLevelVM(this), () => SaveLevel()),
+                new ViewModelListPopup(PopupParams.NewLevel, new NewLevelVM(this), () => GenerateNewLevel()),
+                new ViewModelListPopup(PopupParams.RestartLevel, new RestartLevelVM(this), () => Restart()),
+                new ViewModelListPopup(PopupParams.LevelComplete, new LevelCompleteVM(this), () => GenerateNewLevel()),
+                new ViewModelListPopup(PopupParams.Help, new HelpVM(this), () => ClosePopupWindow()),
+                new ViewModelListPopup(PopupParams.LoadLevel, new LoadLevelVM(this), () => LoadLevel()),
+                new ViewModelListPopup(PopupParams.GameSaved, new GameSavedNotificationVM(this), () => CloseNotification()),
+                new ViewModelListPopup(PopupParams.SaveLevel, new SaveLevelVM(this), () => SaveLevel()),
             };
         }
         #endregion
@@ -226,57 +226,8 @@ namespace WaterSortGame.ViewModels
         public RelayCommand ConfirmCommand => new RelayCommand(execute => ConfirmPopup());
         private void ConfirmPopup()
         {
-            //if (SelectedViewModel == null)
-            //{
-            //    return;
-            //}
-            //if (SelectedViewModel is NewLevelVM)
-            //{
-            //    GenerateNewLevel();
-            //}
-            //else if (SelectedViewModel is RestartLevelVM)
-            //{
-            //    Restart();
-            //}
-            //else if (SelectedViewModel is LevelCompleteVM)
-            //{
-            //    GenerateNewLevel();
-            //}
-            //else if (SelectedViewModel is HelpVM)
-            //{
-            //    ClosePopupWindow();
-            //}
-            //else if (SelectedViewModel is LoadLevelVM)
-            //{
-            //    LoadLevel();
-            //}
-            //else if (SelectedViewModel is GameSavedNotificationVM)
-            //{
-            //    CloseNotification();
-            //}
-            //else if (SelectedViewModel is SaveLevelVM)
-            //{
-            //    SaveLevel();
-            //}
-
-            //PopupWindow.Execute(PopupParams.LevelComplete);
-            //if (viewModel.PopupActions.TryGetValue((PopupParams)parameter, out var output))
-            //{
-            //    viewModel.SelectedViewModel = output.InitializeType();
-            //}
-
-            //SelectedViewModel = new SaveLevelVM(this);
-            //if (SelectedViewModel == null)
-            //{
-            //    return;
-            //}
-
-            var output = PopupActions.Find(x => x.SelectedViewModel.GetType() == SelectedViewModel.GetType());
-            if (output != null)
-            {
-                output.ConfirmAction?.Invoke();
-            }
-
+            var action = PopupActions.Find(x => x.SelectedViewModel.GetType() == SelectedViewModel.GetType());
+            action?.ConfirmationAction.Invoke();
         }
         private void ClosePopupWindow()
         {

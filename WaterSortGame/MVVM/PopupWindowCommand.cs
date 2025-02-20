@@ -12,15 +12,15 @@ namespace WaterSortGame.MVVM
 {
     internal class ViewModelListPopup
     {
-        public ViewModelListPopup(PopupParams key, Func<ViewModelBase> initializeType, Action confirmAction)
+        public ViewModelListPopup(PopupParams key, ViewModelBase initializeType, Action confirmAction)
         {
             Key = key;
             SelectedViewModel = initializeType;
-            ConfirmAction = confirmAction;
+            ConfirmationAction = confirmAction;
         }
         public PopupParams Key { get; set; }
-        public Func<ViewModelBase> SelectedViewModel { get; set; }
-        public Action ConfirmAction { get; set; }
+        public ViewModelBase SelectedViewModel { get; set; }
+        public Action ConfirmationAction { get; set; }
     }
     internal class PopupWindowCommand : ICommand
     {
@@ -44,14 +44,10 @@ namespace WaterSortGame.MVVM
                 return;
             }
 
-            //if (viewModel.PopupActions.TryGetValue((PopupParams)parameter, out var output))
-            //{
-            //    viewModel.SelectedViewModel = output.InitializeType();
-            //}
             var output = viewModel.PopupActions.Find(x => x.Key == (PopupParams)parameter);
             if (output != null)
             {
-                viewModel.SelectedViewModel = output.SelectedViewModel?.Invoke();
+                viewModel.SelectedViewModel = output.SelectedViewModel;
             }
         }
     }
