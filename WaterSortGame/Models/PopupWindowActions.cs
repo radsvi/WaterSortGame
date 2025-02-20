@@ -7,16 +7,18 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    internal class ViewModelListPopup
+    internal class PopupWindowActions
     {
-        public ViewModelListPopup(PopupParams key, ViewModelBase initializeType, Action confirmAction)
+        public PopupWindowActions(PopupParams key, Action onShowingWindow, ViewModelBase initializeType, Action confirmAction)
         {
             Key = key;
             SelectedViewModel = initializeType;
+            OnShowingWindow = onShowingWindow;
             ConfirmationAction = confirmAction;
         }
         public PopupParams Key { get; set; }
         public ViewModelBase SelectedViewModel { get; set; }
+        public Action? OnShowingWindow { get; set; }
         public Action ConfirmationAction { get; set; }
     }
 }

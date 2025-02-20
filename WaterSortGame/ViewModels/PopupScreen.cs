@@ -14,6 +14,8 @@ namespace WaterSortGame.ViewModels
             MainWindowVM = (MainWindowVM)viewModel;
         }
     }
+
+
     internal class HelpVM : PopupScreenBase
     {
         public HelpVM(object viewModel) : base(viewModel) { }
@@ -27,7 +29,7 @@ namespace WaterSortGame.ViewModels
         public LoadLevelVM(object viewModel) : base(viewModel)
         {
             MainWindowVM = (MainWindowVM)viewModel;
-            MainWindowVM.LoadLevelScreen();
+            //MainWindowVM.LoadLevelScreen();
         }
     }
     internal class NewLevelVM : PopupScreenBase

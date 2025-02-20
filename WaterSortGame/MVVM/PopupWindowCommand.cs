@@ -37,6 +37,7 @@ namespace WaterSortGame.MVVM
             if (output != null)
             {
                 viewModel.SelectedViewModel = output.SelectedViewModel;
+                output.OnShowingWindow?.Invoke();
             }
         }
     }

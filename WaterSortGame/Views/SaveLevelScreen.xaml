@@ -20,7 +20,7 @@
                         <Label Content="Add note (optional):"/>
                         <TextBox Text="{Binding NoteForSavedLevel, UpdateSourceTrigger=PropertyChanged}"
                              Margin="5" Height="50" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                             MaxLength="55"/>
+                             MaxLength="60"/>
                         <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
                     Style="{StaticResource NavigationButtonsPrimary}">
                             <Button Content="OK" Command="{Binding SaveLevelCommand}" Width="150"/>

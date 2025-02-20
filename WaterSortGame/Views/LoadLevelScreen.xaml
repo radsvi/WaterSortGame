@@ -95,7 +95,7 @@
                                                                HorizontalAlignment="Center" Height="40" TextWrapping="Wrap"
                                                                TextTrimming="CharacterEllipsis"
                                                                FontSize="10"
-                                                               d:Text="0123456789012345678901234567890123456789012345678912345"
+                                                               d:Text="012345678901234567890123456789012345678901234567891234567890"
                                                                />
                                                 </StackPanel>
                                             </DataTemplate>
