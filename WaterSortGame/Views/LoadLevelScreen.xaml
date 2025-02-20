@@ -65,6 +65,7 @@
                               ScrollViewer.VerticalScrollBarVisibility="Visible"
                               ScrollViewer.CanContentScroll="True"
                               MaxHeight="520"
+                              Name="ListSavedLevels"
                               >
 
                             <ListView.ItemContainerStyle>
@@ -127,7 +128,7 @@
                                     <GridViewColumn Header="Delete" Width="40">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button Style="{StaticResource DeleteButton}" Command="{Binding Path=DataContext.MarkForDeletionCommand, ElementName=ListTubes}" CommandParameter="{Binding .}"/>
+                                                <Button Style="{StaticResource DeleteButton}" Command="{Binding Path=DataContext.MarkForDeletionCommand, ElementName=ListSavedLevels}" CommandParameter="{Binding .}"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
