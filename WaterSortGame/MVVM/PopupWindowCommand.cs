@@ -10,18 +10,6 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.MVVM
 {
-    internal class ViewModelListPopup
-    {
-        public ViewModelListPopup(PopupParams key, ViewModelBase initializeType, Action confirmAction)
-        {
-            Key = key;
-            SelectedViewModel = initializeType;
-            ConfirmationAction = confirmAction;
-        }
-        public PopupParams Key { get; set; }
-        public ViewModelBase SelectedViewModel { get; set; }
-        public Action ConfirmationAction { get; set; }
-    }
     internal class PopupWindowCommand : ICommand
     {
         private MainWindowVM viewModel;
@@ -44,7 +32,8 @@ namespace WaterSortGame.MVVM
                 return;
             }
 
-            var output = viewModel.PopupActions.Find(x => x.Key == (PopupParams)parameter);
+            //var output = viewModel.PopupActions.Find(x => x.Key == (PopupParams)parameter);
+            var output = Array.Find(viewModel.PopupActions, x => x.Key == (PopupParams)parameter);
             if (output != null)
             {
                 viewModel.SelectedViewModel = output.SelectedViewModel;

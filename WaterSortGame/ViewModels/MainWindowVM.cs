@@ -154,7 +154,7 @@ namespace WaterSortGame.ViewModels
         public bool PropertyChangedEventPaused { get; set; } = false;
 
         //public Dictionary<Tuple<PopupParams, Func<ViewModelBase>>, Action> PopupActions { get; set; }
-        public List<ViewModelListPopup> PopupActions { get; set; }
+        public new ViewModelListPopup[] PopupActions { get; set; }
 
         #endregion
         #region Constructor
@@ -198,7 +198,7 @@ namespace WaterSortGame.ViewModels
             //    Debug.WriteLine("obsahuje klic!");
             //}
 
-            PopupActions = new List<ViewModelListPopup>()
+            PopupActions = new ViewModelListPopup[]
             {
                 new ViewModelListPopup(PopupParams.NewLevel, new NewLevelVM(this), () => GenerateNewLevel()),
                 new ViewModelListPopup(PopupParams.RestartLevel, new RestartLevelVM(this), () => Restart()),
@@ -226,7 +226,7 @@ namespace WaterSortGame.ViewModels
         public RelayCommand ConfirmCommand => new RelayCommand(execute => ConfirmPopup());
         private void ConfirmPopup()
         {
-            var action = PopupActions.Find(x => x.SelectedViewModel.GetType() == SelectedViewModel.GetType());
+            var action = Array.Find(PopupActions, x => x.SelectedViewModel.GetType() == SelectedViewModel.GetType());
             action?.ConfirmationAction.Invoke();
         }
         private void ClosePopupWindow()
