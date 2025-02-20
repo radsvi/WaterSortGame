@@ -51,7 +51,7 @@
             <views:HelpScreen DataContext="{Binding MainWindowVM}"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodels:LoadLevelVM}">
-            <views:LoadLevelScreen DataContext="{Binding MainWindowVM}"/>
+            <views:LoadLevelScreen DataContext="{Binding MainWindowVM.LoadLevelVM}"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodels:GameSavedNotificationVM}">
             <views:GameSavedScreen DataContext="{Binding MainWindowVM}"/>

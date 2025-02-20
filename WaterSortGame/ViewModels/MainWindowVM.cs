@@ -154,7 +154,34 @@ namespace WaterSortGame.ViewModels
         public bool PropertyChangedEventPaused { get; set; } = false;
 
         //public Dictionary<Tuple<PopupParams, Func<ViewModelBase>>, Action> PopupActions { get; set; }
-        public new PopupWindowActions[] PopupActions { get; set; }
+        public ObservableCollection<PopupScreenActions> PopupActions { get; set; }
+        //private ObservableCollection<StoredLevel> loadLevelList = new ObservableCollection<StoredLevel>();
+        //public ObservableCollection<StoredLevel> LoadLevelList
+        //{
+        //    get { return loadLevelList; }
+        //    set
+        //    {
+        //        if (value != loadLevelList)
+        //        {
+        //            loadLevelList = value;
+        //            //OnPropertyChanged();
+        //            //OnLoadLevelListChanged?.Invoke(this, EventArgs.Empty);
+        //        }
+        //    }
+        //}
+        private LoadLevelVM loadLevelVM;
+        public LoadLevelVM LoadLevelVM
+        {
+            get { return loadLevelVM; }
+            set
+            {
+                if (value != loadLevelVM)
+                {
+                    loadLevelVM = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         #endregion
         #region Constructor
@@ -171,14 +198,14 @@ namespace WaterSortGame.ViewModels
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
             Tubes.CollectionChanged += Tubes_CollectionChanged;
             TubesPerLineCalculation();
-            PopupWindow = new PopupWindowCommand(this);
+            PopupWindow = new PopupScreenCommand(this);
             if (dontShowHelpScreenAtStart == false)
             {
                 SelectedViewModel = new HelpVM(this);
             }
 
             //OnLoadLevelListChanged += LoadLevelListChangedCalculation;
-            LoadLevelList.CollectionChanged += LoadLevelList_CollectionChanged;
+            
 
             //PopupActions = new Dictionary<Tuple<PopupParams, Func<ViewModelBase>>, Action>
             //{
@@ -198,15 +225,16 @@ namespace WaterSortGame.ViewModels
             //    Debug.WriteLine("obsahuje klic!");
             //}
             var loadLevelVM = new LoadLevelVM(this);
-            PopupActions = new PopupWindowActions[]
+            loadLevelVM.LoadLevelList.CollectionChanged += loadLevelVM.LoadLevelList_CollectionChanged;
+            PopupActions = new ObservableCollection<PopupScreenActions>
             {
-                new PopupWindowActions(PopupParams.NewLevel, new NewLevelVM(this), null, () => GenerateNewLevel()),
-                new PopupWindowActions(PopupParams.RestartLevel, new RestartLevelVM(this), null, () => RestartLevel()),
-                new PopupWindowActions(PopupParams.LevelComplete, new LevelCompleteVM(this), null, () => GenerateNewLevel()),
-                new PopupWindowActions(PopupParams.Help, new HelpVM(this), null, () => ClosePopupWindow()),
-                new PopupWindowActions(PopupParams.LoadLevel, loadLevelVM, () => loadLevelVM.LoadLevelScreen(), () => loadLevelVM.LoadLevel()),
-                new PopupWindowActions(PopupParams.GameSaved, new GameSavedNotificationVM(this), null, () => CloseNotification()),
-                new PopupWindowActions(PopupParams.SaveLevel, new SaveLevelVM(this), null, () => SaveLevel()),
+                new PopupScreenActions(PopupParams.NewLevel, new NewLevelVM(this), null, () => GenerateNewLevel()),
+                new PopupScreenActions(PopupParams.RestartLevel, new RestartLevelVM(this), null, () => RestartLevel()),
+                new PopupScreenActions(PopupParams.LevelComplete, new LevelCompleteVM(this), null, () => GenerateNewLevel()),
+                new PopupScreenActions(PopupParams.Help, new HelpVM(this), null, () => ClosePopupWindow()),
+                new PopupScreenActions(PopupParams.LoadLevel, loadLevelVM, () => loadLevelVM.LoadLevelScreen(), () => loadLevelVM.LoadLevel()),
+                new PopupScreenActions(PopupParams.GameSaved, new GameSavedNotificationVM(this), null, () => CloseNotification()),
+                new PopupScreenActions(PopupParams.SaveLevel, new SaveLevelVM(this), null, () => SaveLevel()),
             };
         }
         #endregion
@@ -230,8 +258,9 @@ namespace WaterSortGame.ViewModels
             {
                 return;
             }
-            var action = Array.Find(PopupActions, x => x.SelectedViewModel.GetType() == SelectedViewModel.GetType());
-            action?.ConfirmationAction.Invoke();
+            //var action = Array.Find(PopupActions, x => x.SelectedViewModel.GetType() == SelectedViewModel.GetType());
+            var action = PopupActions.Where(x => x.SelectedViewModel.GetType() == SelectedViewModel.GetType());
+            action.ElementAt(0)?.ConfirmationAction.Invoke();
         }
         internal void ClosePopupWindow()
         {

@@ -139,12 +139,12 @@
                             Style="{StaticResource NavigationButtonsPrimary}">
                             <Button Content="Load" Command="{Binding LoadLevelCommand}" Width="150"/>
                             <Button Content="Delete" Command="{Binding DeleteSelectedLevelsCommand}" Style="{StaticResource ConfirmDeleteButton}" Width="150"/>
-                            <Button Content="Close" Command="{Binding PopupWindow}" Width="150"/>
+                            <Button Content="Close" Command="{Binding MainWindowVM.PopupWindow}" Width="150"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
 
-                <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding PopupWindow}"/>
+                <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding MainWindowVM.PopupWindow}"/>
             </Grid>
             
         </Border>

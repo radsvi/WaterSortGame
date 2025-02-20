@@ -16,7 +16,11 @@ namespace WaterSortGame.ViewModels
         public LoadLevelVM(object viewModel) : base(viewModel)
         {
             MainWindowVM = (MainWindowVM)viewModel;
+            //LoadLevelList.CollectionChanged += LoadLevelList_CollectionChanged;
             //MainWindowVM.LoadLevelScreen();
+
+            //MainWindowVM.LoadLevelList = LoadLevelList;
+            MainWindowVM.LoadLevelVM = this;
         }
 
         private StoredLevel selectedLevelForLoading;
@@ -62,7 +66,7 @@ namespace WaterSortGame.ViewModels
         }
 
         //public event EventHandler? OnLoadLevelListChanged;
-        private void LoadLevelList_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        internal void LoadLevelList_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             int increaseHeight = 0;
             if (LoadLevelList.Count > 3 && LoadLevelList.Count < 12)
