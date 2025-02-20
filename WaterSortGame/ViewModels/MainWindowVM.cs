@@ -197,16 +197,16 @@ namespace WaterSortGame.ViewModels
             //{
             //    Debug.WriteLine("obsahuje klic!");
             //}
-
+            var loadLevelVM = new LoadLevelVM(this);
             PopupActions = new PopupWindowActions[]
             {
-                new PopupWindowActions(PopupParams.NewLevel, null, new NewLevelVM(this), () => GenerateNewLevel()),
-                new PopupWindowActions(PopupParams.RestartLevel, null, new RestartLevelVM(this), () => RestartLevel()),
-                new PopupWindowActions(PopupParams.LevelComplete, null, new LevelCompleteVM(this), () => GenerateNewLevel()),
-                new PopupWindowActions(PopupParams.Help, null, new HelpVM(this), () => ClosePopupWindow()),
-                new PopupWindowActions(PopupParams.LoadLevel, () => LoadLevelScreen(), new LoadLevelVM(this), () => LoadLevel()),
-                new PopupWindowActions(PopupParams.GameSaved, null, new GameSavedNotificationVM(this), () => CloseNotification()),
-                new PopupWindowActions(PopupParams.SaveLevel, null, new SaveLevelVM(this), () => SaveLevel()),
+                new PopupWindowActions(PopupParams.NewLevel, new NewLevelVM(this), null, () => GenerateNewLevel()),
+                new PopupWindowActions(PopupParams.RestartLevel, new RestartLevelVM(this), null, () => RestartLevel()),
+                new PopupWindowActions(PopupParams.LevelComplete, new LevelCompleteVM(this), null, () => GenerateNewLevel()),
+                new PopupWindowActions(PopupParams.Help, new HelpVM(this), null, () => ClosePopupWindow()),
+                new PopupWindowActions(PopupParams.LoadLevel, loadLevelVM, () => loadLevelVM.LoadLevelScreen(), () => loadLevelVM.LoadLevel()),
+                new PopupWindowActions(PopupParams.GameSaved, new GameSavedNotificationVM(this), null, () => CloseNotification()),
+                new PopupWindowActions(PopupParams.SaveLevel, new SaveLevelVM(this), null, () => SaveLevel()),
             };
         }
         #endregion
@@ -233,7 +233,7 @@ namespace WaterSortGame.ViewModels
             var action = Array.Find(PopupActions, x => x.SelectedViewModel.GetType() == SelectedViewModel.GetType());
             action?.ConfirmationAction.Invoke();
         }
-        private void ClosePopupWindow()
+        internal void ClosePopupWindow()
         {
             PopupWindow.Execute(null);
         }
@@ -244,7 +244,7 @@ namespace WaterSortGame.ViewModels
             TubesManager.GenerateNewLevel();
             OnStartingLevel();
         }
-        private void RestartLevel()
+        internal void RestartLevel()
         {
             ClosePopupWindow();
             TubesManager.RestartLevel();
@@ -312,168 +312,7 @@ namespace WaterSortGame.ViewModels
             tokenSource?.Cancel();
         }
 
-        private StoredLevel selectedLevelForLoading;
-        public StoredLevel SelectedLevelForLoading
-        {
-            get { return selectedLevelForLoading; }
-            set
-            {
-                if (value != selectedLevelForLoading)
-                {
-                    selectedLevelForLoading = value;
-                    //OnPropertyChanged();
-                }
-            }
-        }
-
-        private ObservableCollection<StoredLevel> loadLevelList = new ObservableCollection<StoredLevel>();
-        public ObservableCollection<StoredLevel> LoadLevelList
-        {
-            get { return loadLevelList; }
-            set
-            {
-                if (value != loadLevelList)
-                {
-                    loadLevelList = value;
-                    //OnPropertyChanged();
-                    //OnLoadLevelListChanged?.Invoke(this, EventArgs.Empty);
-                }
-            }
-        }
-        private int loadLevelScreenHeight;
-        public int LoadLevelScreenHeight
-        {
-            get { return loadLevelScreenHeight; }
-            set
-            {
-                if (value != loadLevelScreenHeight)
-                {
-                    loadLevelScreenHeight = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        //public event EventHandler? OnLoadLevelListChanged;
-        private void LoadLevelList_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            int increaseHeight = 0;
-            if (LoadLevelList.Count > 3 && LoadLevelList.Count < 12)
-            {
-                increaseHeight = (LoadLevelList.Count - 3) * 45; //vyska jedne polozky je 45
-                LoadLevelScreenHeight = 280 + increaseHeight;
-            }
-            else if (LoadLevelList.Count <= 3)
-            {
-                LoadLevelScreenHeight = 280;
-            }
-            else if (LoadLevelList.Count >= 12)
-            {
-                LoadLevelScreenHeight = 640;
-                LoadLevelScreenScroll = true;
-            }
-        }
-        private bool loadLevelScreenScroll;
-        public bool LoadLevelScreenScroll
-        {
-            get { return loadLevelScreenScroll; }
-            set
-            {
-                if (value != loadLevelScreenScroll)
-                {
-                    loadLevelScreenScroll = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        //private void LoadLevelListChangedCalculation(object? sender, EventArgs e)
-        //{
-
-        //    if (LoadLevelList.Count > 3)
-        //    {
-        //        var increaseHeight = (LoadLevelList.Count - 3) * 45; //vyska jedne polozky je 45
-        //        LoadLevelScreenHeight = 280 + increaseHeight;
-        //    }
-        //    else
-        //    {
-        //        LoadLevelScreenHeight = 280;
-        //    }
-        //}
-        internal void LoadLevelScreen()
-        {
-            //LoadLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
-            
-            LoadLevelList?.Clear();
-            var deserializedList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
-            foreach (var item in deserializedList)
-            {
-                LoadLevelList.Add(item);
-            }
-
-            //OnLoadLevelListChanged?.Invoke(this, EventArgs.Empty);
-            //LoadLevelScreenHeight = 280;
-            //if (LoadLevelList.Count > 3)
-            //{
-            //    var increaseHeight = (LoadLevelList.Count - 3) * 45; //vyska jedne polozky je 45
-            //    LoadLevelScreenHeight += increaseHeight;
-            //}
-            //else
-            //{
-            //    LoadLevelScreenHeight = 280;
-            //}
-        }
-        public RelayCommand LoadLevelCommand => new RelayCommand(execute => LoadLevel(), canExecute => SelectedLevelForLoading is not null);
-        //private void LoadLevel(bool force = false)
-        private void LoadLevel()
-        {
-            if (SelectedLevelForLoading == null)
-            {
-                return;
-            }
-            ClosePopupWindow();
-            TubesManager.SavedStartingTubes = DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
-
-            //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
-
-            //TubesManager.Tubes?.Clear();
-            //foreach (Tube tube in TubesManager.SavedStartingTubes)
-            //{ // kdyz bych to udelal takhle, tak se prestane refreshovat TubesPerLineCalculation(); a GenerateNewLevel() taky
-            //    TubesManager.Tubes.Add(tube.DeepCopy());
-            //}
-            //OnStartingLevel();
-
-            RestartLevel();
-        }
-        public RelayCommand DeleteSelectedLevelsCommand => new RelayCommand(execute => DeleteSelectedLevels(), canExecute => CanDelete());
-        private bool CanDelete()
-        {
-            foreach (var savedLevel in LoadLevelList)
-            {
-                if (savedLevel.MarkedForDeletion is true)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        private void DeleteSelectedLevels()
-        {
-            var levelsToRemove = LoadLevelList.Where(item => item.MarkedForDeletion == true).ToList();
-            foreach (var levelToRemove in levelsToRemove)
-            {
-                LoadLevelList.Remove(levelToRemove);
-            }
-
-            Settings.Default.SavedLevels = JsonConvert.SerializeObject(LoadLevelList);
-            Settings.Default.Save();
-        }
-        public RelayCommand MarkForDeletionCommand => new RelayCommand(savedGame => MarkForDeletion(savedGame));
-
-        private void MarkForDeletion(object obj)
-        {
-            var savedGame = obj as StoredLevel;
-            savedGame.MarkedForDeletion = !savedGame.MarkedForDeletion;
-        }
+        
 
         //public RelayCommand DeleteSavedLevelCommand => new RelayCommand(savedGame => DeleteSavedLevel(savedGame));
         //private void DeleteSavedLevel(object obj)
@@ -810,7 +649,7 @@ namespace WaterSortGame.ViewModels
             //PropertyChanged += Tube_PropertyChanged;
             
         }
-        private ObservableCollection<Tube> DeepCopyTubesCollection(ObservableCollection<Tube> tubes)
+        internal ObservableCollection<Tube> DeepCopyTubesCollection(ObservableCollection<Tube> tubes)
         {
             ObservableCollection <Tube> newTubes = new ObservableCollection<Tube>();
             foreach (Tube tube in tubes)

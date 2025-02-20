@@ -24,14 +24,6 @@ namespace WaterSortGame.ViewModels
     {
         public LevelCompleteVM(object viewModel) : base(viewModel) { }
     }
-    class LoadLevelVM : PopupScreenBase
-    {
-        public LoadLevelVM(object viewModel) : base(viewModel)
-        {
-            MainWindowVM = (MainWindowVM)viewModel;
-            //MainWindowVM.LoadLevelScreen();
-        }
-    }
     internal class NewLevelVM : PopupScreenBase
     {
         public NewLevelVM(object viewModel) : base(viewModel) { }

@@ -9,7 +9,7 @@ namespace WaterSortGame.Models
 {
     internal class PopupWindowActions
     {
-        public PopupWindowActions(PopupParams key, Action onShowingWindow, ViewModelBase initializeType, Action confirmAction)
+        public PopupWindowActions(PopupParams key, ViewModelBase initializeType, Action onShowingWindow, Action confirmAction)
         {
             Key = key;
             SelectedViewModel = initializeType;
