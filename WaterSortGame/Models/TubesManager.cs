@@ -154,49 +154,49 @@ namespace WaterSortGame.Models
                 Tubes.Add((Tube)tube.DeepCopy());
             }
         }
-        public static void LoadLevel()
-        {
-            Tubes?.Clear();
-            if (false)
-            {
-                Tubes.Add(new Tube(8, 1, 3, 0));
-                Tubes.Add(new Tube(2, 7, 10, 4));
-                Tubes.Add(new Tube(8, 10, 10, 11));
-                Tubes.Add(new Tube(2, 2, 1, 4));
-                Tubes.Add(new Tube(0, 6, 5, 9));
-                Tubes.Add(new Tube(2, 3, 6, 3));
-                Tubes.Add(new Tube(3, 7, 4, 9));
-                Tubes.Add(new Tube(5, 0, 1, 8));
-                Tubes.Add(new Tube(10, 9, 6, 5));
-                Tubes.Add(new Tube(4, 6, 9, 3));
-                Tubes.Add(new Tube(7, 11, 5, 11));
-                Tubes.Add(new Tube(0, 11, 7, 8));
-                Tubes.Add(new Tube());
-                Tubes.Add(new Tube());
-            }
-            else
-            {
-                Tubes.Add(new Tube(0, 0, 0, 0));
-                Tubes.Add(new Tube(1, 1, 1, 1));
-                Tubes.Add(new Tube(2, 2, 2, 2));
-                Tubes.Add(new Tube(3, 3, 3, 3));
-                Tubes.Add(new Tube(4, 4, 4, 4));
-                Tubes.Add(new Tube(5, 5, 5, 5));
-                Tubes.Add(new Tube(6, 6, 6, 6));
-                Tubes.Add(new Tube(7, 7, 7, 7));
-                Tubes.Add(new Tube(8, 8, 8, 8));
-                Tubes.Add(new Tube(9, 9, 9, 9));
-                Tubes.Add(new Tube(10, 10, 10, 10));
-                Tubes.Add(new Tube(11, 11, 11));
-                Tubes.Add(new Tube(11));
-                //Tubes.Add(new Tube(9, 11, 10, 11));
-                //Tubes.Add(new Tube(9, 10, 11, 10));
-                Tubes.Add(new Tube());
-                Tubes.Add(new Tube());
-            }
+        //public static void LoadLevel()
+        //{
+        //    Tubes?.Clear();
+        //    if (false)
+        //    {
+        //        Tubes.Add(new Tube(8, 1, 3, 0));
+        //        Tubes.Add(new Tube(2, 7, 10, 4));
+        //        Tubes.Add(new Tube(8, 10, 10, 11));
+        //        Tubes.Add(new Tube(2, 2, 1, 4));
+        //        Tubes.Add(new Tube(0, 6, 5, 9));
+        //        Tubes.Add(new Tube(2, 3, 6, 3));
+        //        Tubes.Add(new Tube(3, 7, 4, 9));
+        //        Tubes.Add(new Tube(5, 0, 1, 8));
+        //        Tubes.Add(new Tube(10, 9, 6, 5));
+        //        Tubes.Add(new Tube(4, 6, 9, 3));
+        //        Tubes.Add(new Tube(7, 11, 5, 11));
+        //        Tubes.Add(new Tube(0, 11, 7, 8));
+        //        Tubes.Add(new Tube());
+        //        Tubes.Add(new Tube());
+        //    }
+        //    else
+        //    {
+        //        Tubes.Add(new Tube(0, 0, 0, 0));
+        //        Tubes.Add(new Tube(1, 1, 1, 1));
+        //        Tubes.Add(new Tube(2, 2, 2, 2));
+        //        Tubes.Add(new Tube(3, 3, 3, 3));
+        //        Tubes.Add(new Tube(4, 4, 4, 4));
+        //        Tubes.Add(new Tube(5, 5, 5, 5));
+        //        Tubes.Add(new Tube(6, 6, 6, 6));
+        //        Tubes.Add(new Tube(7, 7, 7, 7));
+        //        Tubes.Add(new Tube(8, 8, 8, 8));
+        //        Tubes.Add(new Tube(9, 9, 9, 9));
+        //        Tubes.Add(new Tube(10, 10, 10, 10));
+        //        Tubes.Add(new Tube(11, 11, 11));
+        //        Tubes.Add(new Tube(11));
+        //        //Tubes.Add(new Tube(9, 11, 10, 11));
+        //        //Tubes.Add(new Tube(9, 10, 11, 10));
+        //        Tubes.Add(new Tube());
+        //        Tubes.Add(new Tube());
+        //    }
 
-            StoreStartingTubes();
-        }
+        //    StoreStartingTubes();
+        //}
         public static void GenerateNewTubes()
         {
             SettingFreshGameState();

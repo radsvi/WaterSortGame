@@ -118,5 +118,17 @@ namespace WaterSortGame.Properties {
                 this["SavedLevels"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UnselectTubeEvenOnIllegalMove {
+            get {
+                return ((bool)(this["UnselectTubeEvenOnIllegalMove"]));
+            }
+            set {
+                this["UnselectTubeEvenOnIllegalMove"] = value;
+            }
+        }
     }
 }

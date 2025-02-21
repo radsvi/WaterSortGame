@@ -239,6 +239,7 @@ namespace WaterSortGame.ViewModels
             TubesManager.GenerateNewLevel();
             OnStartingLevel();
         }
+        public RelayCommand RestartLevel_Command => new RelayCommand(execute => RestartLevel());
         internal void RestartLevel()
         {
             ClosePopupWindow();
@@ -259,7 +260,6 @@ namespace WaterSortGame.ViewModels
 
             ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
 
-            //ObservableCollection<StoredLevel> savedLevels = new ObservableCollection<StoredLevel>();
             savedLevelList.Add(new StoredLevel(TubesManager.SavedStartingTubes, NoteForSavedLevel));
 
             Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
@@ -270,6 +270,50 @@ namespace WaterSortGame.ViewModels
             tokenSource = new CancellationTokenSource();
             var token = tokenSource.Token;
             PopupWindowNotification(token);
+        }
+        public RelayCommand AddPresetLevels_Command => new RelayCommand(execute => AddPresetLevels());
+        private void AddPresetLevels()
+        {
+            windowService?.CloseWindow(); // close options menu
+
+            ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+
+            savedLevelList.Insert(0, new StoredLevel(new ObservableCollection<Tube> {
+                { new Tube(8, 1, 3, 0) },
+                { new Tube(2, 7, 10, 4) },
+                { new Tube(8, 10, 10, 11) },
+                { new Tube(2, 2, 1, 4) },
+                { new Tube(0, 6, 5, 9) },
+                { new Tube(2, 3, 6, 3) },
+                { new Tube(3, 7, 4, 9) },
+                { new Tube(5, 0, 1, 8) },
+                { new Tube(10, 9, 6, 5) },
+                { new Tube(4, 6, 9, 3) },
+                { new Tube(7, 11, 5, 11) },
+                { new Tube(0, 11, 7, 8) },
+                { new Tube() },
+                { new Tube() },
+            }, "Never solved this level without adding extra tubes."));
+
+            savedLevelList.Insert(0, new StoredLevel(new ObservableCollection<Tube> {
+                { new Tube(0, 0, 0, 0) },
+                { new Tube(1, 1, 1, 1) },
+                { new Tube(2, 2, 2, 2) },
+                { new Tube(3, 3, 3, 3) },
+                { new Tube(4, 4, 4, 4) },
+                { new Tube(5, 5, 5, 5) },
+                { new Tube(6, 6, 6, 6) },
+                { new Tube(7, 7, 7, 7) },
+                { new Tube(8, 8, 8, 8) },
+                { new Tube(9, 9, 9, 9) },
+                { new Tube(10, 10, 10, 10) },
+                { new Tube(11) },
+                { new Tube(11, 11, 11) },
+                { new Tube() },
+            }, "One step before finish."));
+
+            Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
+            Settings.Default.Save();
         }
         CancellationTokenSource tokenSource = null;
         private async void PopupWindowNotification(CancellationToken token)
@@ -356,6 +400,21 @@ namespace WaterSortGame.ViewModels
             }
             
         }
+        private bool unselectTubeEvenOnIllegalMove = Settings.Default.UnselectTubeEvenOnIllegalMove;
+        public bool UnselectTubeEvenOnIllegalMove
+        {
+            get { return unselectTubeEvenOnIllegalMove; }
+            set
+            {
+                if (value != unselectTubeEvenOnIllegalMove)
+                {
+                    unselectTubeEvenOnIllegalMove = value;
+                    Settings.Default.UnselectTubeEvenOnIllegalMove = unselectTubeEvenOnIllegalMove;
+                    Settings.Default.Save();
+                    //OnPropertyChanged();
+                }
+            }
+        }
         #endregion
         #region Moving Liquids
         public RelayCommand SelectTubeCommand => new RelayCommand(tube => SelectTube(tube));
@@ -381,21 +440,20 @@ namespace WaterSortGame.ViewModels
 
             // if selecting different tube
             bool success = false;
-            //bool successAtLeastOnce = false;
+            bool successAtLeastOnce = false;
 
             do {
                 success = AddLiquidToTargetTube(tube);
                 if (success == true)
                 {
-                    //successAtLeastOnce = true;
+                    successAtLeastOnce = true;
                     SelectLiquid(SelectedTube); // vyber dalsi liquid ze stejne zkumavky
                 }
             } while (success == true && SourceLiquid is not null);
-            //if (successAtLeastOnce == true)
-            //{
-            //    DeselectTube();
-            //}
-            DeselectTube(); // deselect pokazde
+            if (successAtLeastOnce == true || UnselectTubeEvenOnIllegalMove == true)
+            {
+                DeselectTube();
+            }
         }
         private void SelectLiquid(Tube sourceTube) // selects topmost liquid in a sourceTube
         {

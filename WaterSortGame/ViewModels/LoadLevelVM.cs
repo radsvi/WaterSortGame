@@ -142,7 +142,9 @@ namespace WaterSortGame.ViewModels
                 return;
             }
             MainWindowVM.ClosePopupWindow();
+            MainWindowVM.PropertyChangedEventPaused = true;
             TubesManager.SavedStartingTubes = MainWindowVM.DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
+            
 
             //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
 
@@ -154,6 +156,7 @@ namespace WaterSortGame.ViewModels
             //OnStartingLevel();
 
             MainWindowVM.RestartLevel();
+            MainWindowVM.PropertyChangedEventPaused = false;
         }
         public RelayCommand DeleteSelectedLevelsCommand => new RelayCommand(execute => DeleteSelectedLevels(), canExecute => CanDelete());
         private bool CanDelete()
