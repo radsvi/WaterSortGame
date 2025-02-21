@@ -67,7 +67,7 @@
                         <Grid Background="{TemplateBinding Background}" Margin="{TemplateBinding Margin}">
                             <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
                                 CornerRadius="0,0,5,5" Background="LightBlue"/>
-                            <Rectangle Margin="10" MinWidth="60" Width="60" Height="242">
+                            <Rectangle Margin="10" Height="242">
                                 <Rectangle.Fill>
                                     <VisualBrush>
                                         <VisualBrush.Visual>
@@ -104,7 +104,8 @@
                 </Setter.Value>
             </Setter>
 
-            <Style.Triggers>
+            <!--<Style.Triggers>
+
                 <Trigger Property="IsMouseOver" Value="True">
                     <Trigger.EnterActions>
                         <BeginStoryboard>
@@ -121,7 +122,7 @@
                         </BeginStoryboard>
                     </Trigger.ExitActions>
                 </Trigger>
-            </Style.Triggers>
+            </Style.Triggers>-->
         </Style>
     </Window.Resources>
 
@@ -181,21 +182,15 @@
                                     <UniformGrid d:Columns="8" Columns="{Binding TubeCount}"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
-                            <!--<ListBoxItem/>
-                        <ListBoxItem/>
-                        <ListBoxItem/>-->
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
-                                        <!--https://stackoverflow.com/questions/32064308/pass-command-parameter-to-method-in-viewmodel-in-wpf-->
                                         <Button Style="{StaticResource TubeButton}"
                                         CommandParameter="{Binding .}"
                                         Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
                                         Margin="{Binding Margin}"
                                         Focusable="False"
-                                        >
-                                            
-                                        </Button>
+                                        />
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
