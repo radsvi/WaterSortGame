@@ -56,6 +56,75 @@
         <DataTemplate DataType="{x:Type viewmodels:GameSavedNotificationVM}">
             <views:GameSavedScreen DataContext="{Binding MainWindowVM}"/>
         </DataTemplate>
+
+        <Style TargetType="Button" x:Key="TubeButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid>
+                            <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
+                                CornerRadius="0,0,5,5" Background="LightBlue"/>
+                            <Rectangle Margin="10" MinWidth="60" Width="60" Height="242">
+                                <Rectangle.Fill>
+                                    <VisualBrush>
+                                        <VisualBrush.Visual>
+                                            <Border CornerRadius="0,0,20,20" Background="LightBlue" Width="40" Height="150" />
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Grid Margin="0,15" Height="232">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Rectangle d:Fill="#145DEF" Fill="{Binding Path=Layers[3].Rgb}" Margin="15,0" Grid.Row="1"/>
+                                <Rectangle d:Fill="#3F4482" Fill="{Binding Path=Layers[2].Rgb}" Margin="15,-1" Grid.Row="2"/>
+                                <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=Layers[1].Rgb}" Margin="15,-1" Grid.Row="3"/>
+
+                                <Rectangle Grid.Row="4" Margin="15,-1" Width="50">
+                                    <Rectangle.Fill>
+                                        <VisualBrush>
+                                            <VisualBrush.Visual>
+                                                <Border CornerRadius="0,0,20,20" d:Background="#F27914" Width="40" Height="40"
+                                                    Background="{Binding Path=Layers[0].Rgb}" />
+                                            </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <!--<DoubleAnimation Storyboard.TargetProperty="Width" To="130" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Height" To="150" Duration="0:0:0.15"/>
+                                <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" To="Coral" Duration="0:0:0.15"/>-->
+                                <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" To="Red" Duration="0:0:0.15"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <!--<DoubleAnimation Storyboard.TargetProperty="Width" To="100" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Height" To="120" Duration="0:0:0.15"/>
+                                <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" To="White" Duration="0:0:0.15"/>-->
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <!--<Grid DataContext="{Binding Source={StaticResource MainWindowVM}}" Margin="5">-->
@@ -121,62 +190,13 @@
                                 <DataTemplate>
                                     <Grid>
                                         <!--https://stackoverflow.com/questions/32064308/pass-command-parameter-to-method-in-viewmodel-in-wpf-->
-                                        <Button x:Name="btTubeNumber"
+                                        <Button Style="{StaticResource TubeButton}"
                                         CommandParameter="{Binding .}"
                                         Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
                                         Margin="{Binding Margin}"
                                         Focusable="False"
                                         >
-                                            <Button.Template>
-                                                <ControlTemplate>
-                                                    <Grid>
-                                                        <!--<Rectangle Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top">
-                                                            <Rectangle.Fill>
-                                                                <VisualBrush>
-                                                                    <VisualBrush.Visual>
-                                                                        <Border CornerRadius="0,0,20,20" Background="LightBlue" Width="40" Height="150" />
-                                                                    </VisualBrush.Visual>
-                                                                </VisualBrush>
-                                                            </Rectangle.Fill>
-                                                        </Rectangle>-->
-                                                        
-                                                        <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
-                                                            CornerRadius="0,0,5,5" Background="LightBlue"/>
-                                                        <Rectangle Margin="10" MinWidth="60" Width="60" Height="242">
-                                                            <Rectangle.Fill>
-                                                                <VisualBrush>
-                                                                    <VisualBrush.Visual>
-                                                                        <Border CornerRadius="0,0,20,20" Background="LightBlue" Width="40" Height="150" />
-                                                                    </VisualBrush.Visual>
-                                                                </VisualBrush>
-                                                            </Rectangle.Fill>
-                                                        </Rectangle>
-                                                        <Grid Margin="0,15" Height="232">
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="20"/>
-                                                                <RowDefinition/>
-                                                                <RowDefinition/>
-                                                                <RowDefinition/>
-                                                                <RowDefinition/>
-                                                            </Grid.RowDefinitions>
-                                                            <Rectangle d:Fill="#145DEF" Fill="{Binding Path=Layers[3].Rgb}" Margin="15,0" Grid.Row="1"/>
-                                                            <Rectangle d:Fill="#3F4482" Fill="{Binding Path=Layers[2].Rgb}" Margin="15,-1" Grid.Row="2"/>
-                                                            <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=Layers[1].Rgb}" Margin="15,-1" Grid.Row="3"/>
-
-                                                            <Rectangle Grid.Row="4" Margin="15,-1" Width="50">
-                                                                <Rectangle.Fill>
-                                                                    <VisualBrush>
-                                                                        <VisualBrush.Visual>
-                                                                            <Border CornerRadius="0,0,20,20" d:Background="#F27914" Width="40" Height="40"
-                                                                            Background="{Binding Path=Layers[0].Rgb}" />
-                                                                        </VisualBrush.Visual>
-                                                                    </VisualBrush>
-                                                                </Rectangle.Fill>
-                                                            </Rectangle>
-                                                        </Grid>
-                                                    </Grid>
-                                                </ControlTemplate>
-                                            </Button.Template>
+                                            
                                         </Button>
                                     </Grid>
                                 </DataTemplate>
