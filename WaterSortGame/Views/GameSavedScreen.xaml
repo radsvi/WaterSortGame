@@ -7,11 +7,11 @@
              xmlns:models="clr-namespace:WaterSortGame.Models"
              mc:Ignorable="d" 
              d:DesignHeight="220" d:DesignWidth="600">
-    <Grid Style="{StaticResource PopupScreenOuter}">
-        <Border Style="{StaticResource PopupScreen}" Width="250" Height="90">
-            <Button Style="{StaticResource CloseNotificationButton}" Command="{Binding ConfirmCommand}">
-                <TextBlock Text="Game saved..." Grid.Row="1" FontSize="20" HorizontalAlignment="Center" Height="auto"/>
-            </Button>
-        </Border>
+    <Grid Style="{StaticResource NotificationScreenOuter}">
+        <Button Style="{StaticResource CloseNotificationButton}" Command="{Binding ConfirmCommand}">
+            <Border Width="250" Height="90">
+                <TextBlock Text="Game saved..." Grid.Row="1" FontSize="20"/>
+            </Border>
+        </Button>
     </Grid>
 </UserControl>
