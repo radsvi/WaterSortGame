@@ -18,6 +18,7 @@ using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 using WaterSortGame.Properties;
@@ -424,12 +425,20 @@ namespace WaterSortGame.ViewModels
             {
                 return;
             }
-            
+
             var tube = obj as Tube;
+            var button = (Button)obj;
+            
+
+
 
             if (SelectedTube == null)
             {
                 SelectLiquid(tube);
+                
+                //var HeightAnimation = new DoubleAnimation() { To = 150, Duration = TimeSpan.FromSeconds(0.3) };
+                //button.BeginAnimation(Button.HeightProperty, HeightAnimation);
+
                 return;
             }
             if (SelectedTube == tube)
@@ -442,7 +451,8 @@ namespace WaterSortGame.ViewModels
             bool success = false;
             bool successAtLeastOnce = false;
 
-            do {
+            do
+            {
                 success = AddLiquidToTargetTube(tube);
                 if (success == true)
                 {
@@ -455,6 +465,43 @@ namespace WaterSortGame.ViewModels
                 DeselectTube();
             }
         }
+        //private void SelectTube(object obj)
+        //{
+        //    if (LevelComplete == true)
+        //    {
+        //        return;
+        //    }
+
+        //    var tube = obj as Tube;
+
+        //    if (SelectedTube == null)
+        //    {
+        //        SelectLiquid(tube);
+        //        return;
+        //    }
+        //    if (SelectedTube == tube)
+        //    {
+        //        DeselectTube();
+        //        return;
+        //    }
+
+        //    // if selecting different tube
+        //    bool success = false;
+        //    bool successAtLeastOnce = false;
+
+        //    do {
+        //        success = AddLiquidToTargetTube(tube);
+        //        if (success == true)
+        //        {
+        //            successAtLeastOnce = true;
+        //            SelectLiquid(SelectedTube); // vyber dalsi liquid ze stejne zkumavky
+        //        }
+        //    } while (success == true && SourceLiquid is not null);
+        //    if (successAtLeastOnce == true || UnselectTubeEvenOnIllegalMove == true)
+        //    {
+        //        DeselectTube();
+        //    }
+        //}
         private void SelectLiquid(Tube sourceTube) // selects topmost liquid in a sourceTube
         {
             SourceLiquid = null;

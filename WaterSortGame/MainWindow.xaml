@@ -8,6 +8,9 @@
         xmlns:converters="clr-namespace:WaterSortGame.Converters"
         xmlns:views="clr-namespace:WaterSortGame.Views"
         xmlns:viewmodels="clr-namespace:WaterSortGame.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        x:Name="window"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="700" MinHeight="400" d:MinHeight="150" d:Height="340"
@@ -25,6 +28,7 @@
         <KeyBinding Key="Return"  Command="{Binding ConfirmCommand}"/>
     </Window.InputBindings>
     <Window.Resources>
+        <converters:ParameterConverter x:Key="ParameterConv"/>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
         <models:TubesManager x:Key="TubesList"/>
         <!--<viewmodels:MainWindowVM x:Key="MainWindowVM"/>-->
@@ -60,11 +64,12 @@
         <Style TargetType="Button" x:Key="TubeButton">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Margin" Value="0,15,0,0" />
+            <!--<Setter Property="Margin" Value="0,0,0,0" />-->
 
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate>
-                        <Grid Background="{TemplateBinding Background}" Margin="{TemplateBinding Margin}">
+                        <Grid Margin="{TemplateBinding Margin}">
                             <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
                                 CornerRadius="0,0,5,5" Background="LightBlue"/>
                             <Rectangle Margin="10" Height="242">
@@ -188,9 +193,22 @@
                                         <Button Style="{StaticResource TubeButton}"
                                         CommandParameter="{Binding .}"
                                         Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
-                                        Margin="{Binding Margin}"
+                                        
                                         Focusable="False"
-                                        />
+                                        >
+                                            <i:Interaction.Triggers>
+                                                <!--<ei:DataTrigger Binding="{Binding FlashingBackground, Mode=OneWay}" Value="ON">
+                                                    <ei:ControlStoryboardAction Storyboard="{StaticResource MyAnimation}"     
+                                                ControlStoryboardOption="Play"/>
+                                                </ei:DataTrigger>-->
+                                            </i:Interaction.Triggers>
+                                            <!--<Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource ParameterConv}">
+                                                    
+                                                </MultiBinding>
+                                            </Button.CommandParameter>-->
+                                            
+                                        </Button>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
