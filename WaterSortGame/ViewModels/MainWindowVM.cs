@@ -418,7 +418,7 @@ namespace WaterSortGame.ViewModels
         }
         #endregion
         #region Moving Liquids
-        public RelayCommand SelectTubeCommand => new RelayCommand(tube => SelectTube(tube));
+        public RelayCommand SelectTubeCommand => new RelayCommand(obj => SelectTube(obj));
         private void SelectTube(object obj)
         {
             if (LevelComplete == true)
@@ -426,23 +426,41 @@ namespace WaterSortGame.ViewModels
                 return;
             }
 
-            var tube = obj as Tube;
-            var button = (Button)obj;
-            
+            var tubeButton = obj as TubeButton;
+            var tube = tubeButton?.Contents[0] as Tube;
+            var button = tubeButton?.Contents[1] as Button;
+            //var button = (Button)obj;
+
 
 
 
             if (SelectedTube == null)
             {
                 SelectLiquid(tube);
-                
-                //var HeightAnimation = new DoubleAnimation() { To = 150, Duration = TimeSpan.FromSeconds(0.3) };
-                //button.BeginAnimation(Button.HeightProperty, HeightAnimation);
+
+                //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 30, 0, 0), Duration = TimeSpan.FromSeconds(0.3) };
+                //button.BeginAnimation(Button.MarginProperty, HeightAnimation);
+
+                //var storyBoard = new Storyboard();
+                //var thicknessAnimation = new ThicknessAnimation();
+                //thicknessAnimation.BeginTime = new TimeSpan(0);
+                //thicknessAnimation.SetValue(Storyboard.TargetNameProperty, "TubeButtonSomething");
+                //Storyboard.SetTargetProperty(thicknessAnimation, new PropertyPath(MainWindow.MarginProperty));
+
+                //thicknessAnimation.From = new Thickness(0, 0, 0, 0);
+                //thicknessAnimation.To = new Thickness(-900, 0, 0, 0);
+                //thicknessAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
+
+                //storyBoard.Children.Add(thicknessAnimation);
+                //storyBoard.Begin(MainWindow);
 
                 return;
             }
             if (SelectedTube == tube)
             {
+                //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 30), Duration = TimeSpan.FromSeconds(0.3) };
+                //button.BeginAnimation(Button.MarginProperty, HeightAnimation);
+
                 DeselectTube();
                 return;
             }

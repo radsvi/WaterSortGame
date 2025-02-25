@@ -8,8 +8,6 @@
         xmlns:converters="clr-namespace:WaterSortGame.Converters"
         xmlns:views="clr-namespace:WaterSortGame.Views"
         xmlns:viewmodels="clr-namespace:WaterSortGame.ViewModels"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         x:Name="window"
         mc:Ignorable="d"
         Title="MainWindow"
@@ -28,7 +26,7 @@
         <KeyBinding Key="Return"  Command="{Binding ConfirmCommand}"/>
     </Window.InputBindings>
     <Window.Resources>
-        <converters:ParameterConverter x:Key="ParameterConv"/>
+        <converters:MultiValueConverter x:Key="MultiValueConv"/>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
         <models:TubesManager x:Key="TubesList"/>
         <!--<viewmodels:MainWindowVM x:Key="MainWindowVM"/>-->
@@ -189,25 +187,20 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid>
+                                    <Grid><!--CommandParameter="{Binding RelativeSource={RelativeSource Self}}"--><!--CommandParameter="{Binding .}"-->
                                         <Button Style="{StaticResource TubeButton}"
-                                        CommandParameter="{Binding .}"
-                                        Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
-                                        
-                                        Focusable="False"
-                                        >
-                                            <i:Interaction.Triggers>
-                                                <!--<ei:DataTrigger Binding="{Binding FlashingBackground, Mode=OneWay}" Value="ON">
-                                                    <ei:ControlStoryboardAction Storyboard="{StaticResource MyAnimation}"     
-                                                ControlStoryboardOption="Play"/>
-                                                </ei:DataTrigger>-->
-                                            </i:Interaction.Triggers>
-                                            <!--<Button.CommandParameter>
-                                                <MultiBinding Converter="{StaticResource ParameterConv}">
-                                                    
+                                                Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
+                                                Name="TubeButtonSomething"
+                                                Margin="0,30,0,0"
+                                                Focusable="False">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource MultiValueConv}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding/>
+                                                        <Binding RelativeSource="{RelativeSource Mode=Self}"/>
+                                                    </MultiBinding.Bindings>
                                                 </MultiBinding>
-                                            </Button.CommandParameter>-->
-                                            
+                                            </Button.CommandParameter>
                                         </Button>
                                     </Grid>
                                 </DataTemplate>
