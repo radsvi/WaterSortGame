@@ -61,13 +61,13 @@
 
         <Style TargetType="Button" x:Key="TubeButton">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Margin" Value="0,30,0,0" />
+            <!--<Setter Property="Margin" Value="0,30,0,0" />-->
             <!--<Setter Property="Margin" Value="0,0,0,0" />-->
 
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate>
-                        <Grid Margin="{TemplateBinding Margin}">
+                        <Grid>
                             <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
                                 CornerRadius="0,0,5,5" Background="LightBlue"/>
                             <Rectangle Margin="10" Height="242">

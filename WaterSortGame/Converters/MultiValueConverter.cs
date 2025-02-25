@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Data;
 using WaterSortGame.Models;
 
@@ -13,17 +14,12 @@ namespace WaterSortGame.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length > 0)
+            if (values.Length > 1)
             {
-                TubeButton obj = new TubeButton();
-                foreach (var item in values)
-                {
-                    obj.Contents.Add(item);
-                }
-
-                return obj;
+                Tube tube = (Tube)values[0];
+                tube.TubeButton = (Button)values[1];
+                return tube;
             }
-
             return null;
         }
 

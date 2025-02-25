@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using WaterSortGame.ViewModels;
 using WaterSortGame.Views;
 
@@ -16,6 +17,7 @@ namespace WaterSortGame.Models
     {
         public int TubeId { get; set; }
         private static int TubeIdCounter;
+        public Button TubeButton { get; set; }
 
         private ObservableCollection<Color> layers = new ObservableCollection<Color>();
         public ObservableCollection<Color> Layers
