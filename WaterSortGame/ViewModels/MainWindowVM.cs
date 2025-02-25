@@ -534,7 +534,7 @@ namespace WaterSortGame.ViewModels
 
                     if (sourceTube.ButtonElement is not null)
                     {
-                        var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 30), Duration = TimeSpan.FromSeconds(0.3) };
+                        var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
                         sourceTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
                     }
                     return;
@@ -567,7 +567,7 @@ namespace WaterSortGame.ViewModels
             {
                 if (SelectedTube.ButtonElement is not null)
                 {
-                    var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 30, 0, 0), Duration = TimeSpan.FromSeconds(0.3) };
+                    var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 15, 0, 0), Duration = TimeSpan.FromSeconds(0.1) };
                     SelectedTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
                 }
 

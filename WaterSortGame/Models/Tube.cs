@@ -33,16 +33,16 @@ namespace WaterSortGame.Models
             }
         }
 
-        private string margin;
-        public string Margin
-        {
-            get {
-                if (selected == true)
-                    return "0,0,0,30";
-                else
-                    return "0,30,0,0";
-            }
-        }
+        //private string margin;
+        //public string Margin
+        //{
+        //    get {
+        //        if (selected == true)
+        //            return "0,0,0,30";
+        //        else
+        //            return "0,30,0,0";
+        //    }
+        //}
         private bool selected = false;
         public bool Selected
         {
