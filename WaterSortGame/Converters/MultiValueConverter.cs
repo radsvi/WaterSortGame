@@ -14,12 +14,28 @@ namespace WaterSortGame.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length > 1)
+            //if (values.Length > 1)
+            //{
+            //    Tube tube = (Tube)values[0];
+            //    tube.TubeButton = (Button)values[1];
+            //    return tube;
+            //}
+
+            if (values.Length > 0)
             {
-                Tube tube = (Tube)values[0];
-                tube.TubeButton = (Button)values[1];
-                return tube;
+                TubeButton obj = new TubeButton();
+                foreach (var item in values)
+                {
+                    obj.Contents.Add(item);
+                }
+
+                return obj;
             }
+
+            //if (values.Length > 1)
+            //{
+            //    return new TubeButton { Tube = (Tube)values[0], ButtonElement = (Button)values[1] };
+            //}
             return null;
         }
 

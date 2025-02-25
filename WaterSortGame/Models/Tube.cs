@@ -17,7 +17,7 @@ namespace WaterSortGame.Models
     {
         public int TubeId { get; set; }
         private static int TubeIdCounter;
-        public Button TubeButton { get; set; }
+        public Button ButtonElement { get; set; }
 
         private ObservableCollection<Color> layers = new ObservableCollection<Color>();
         public ObservableCollection<Color> Layers

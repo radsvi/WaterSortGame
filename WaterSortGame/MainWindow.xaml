@@ -11,7 +11,7 @@
         x:Name="window"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="700" MinHeight="400" d:MinHeight="150" d:Height="340"
+        Height="700" MinHeight="400" d:MinHeight="150" d:Height="400"
         Width="720" MinWidth="700"
         d:DataContext="{d:DesignInstance Type={x:Type local:MainWindow}}"
         Background="Transparent"
@@ -67,7 +67,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate>
-                        <Grid>
+                        <Grid Margin="0,30,0,0">
                             <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
                                 CornerRadius="0,0,5,5" Background="LightBlue"/>
                             <Rectangle Margin="10" Height="242">
@@ -187,6 +187,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
+                                    <!--<Grid Height="262">-->
                                     <Grid>
                                         <!--CommandParameter="{Binding RelativeSource={RelativeSource Self}}"-->
                                         <!--CommandParameter="{Binding .}"-->

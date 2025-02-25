@@ -426,12 +426,16 @@ namespace WaterSortGame.ViewModels
                 return;
             }
 
-            //var tubeButton = obj as TubeButton;
-            //var tube = tubeButton?.Contents[0] as Tube;
+            var tubeButton = obj as TubeButton;
+            var tube = tubeButton?.Contents[0] as Tube;
             //var button = tubeButton?.Contents[1] as Button;
-            Tube tube = (Tube)obj;
+            tube.ButtonElement = tubeButton.Contents[1] as Button;
 
+            //Tube tube = (Tube)obj;
 
+            //TubeButton tubeButton = obj as TubeButton;
+            //Tube tube = tubeButton.Tube;
+            //tube.ButtonElement = tubeButton.ButtonElement;
 
 
             if (SelectedTube == null)
@@ -528,10 +532,10 @@ namespace WaterSortGame.ViewModels
                         SelectedTube = sourceTube;
                     SourceLiquid = sourceTube.Layers[i];
 
-                    if (sourceTube.TubeButton is not null)
+                    if (sourceTube.ButtonElement is not null)
                     {
                         var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 30, 0, 30), Duration = TimeSpan.FromSeconds(0.3) };
-                        sourceTube.TubeButton.BeginAnimation(Button.MarginProperty, HeightAnimation);
+                        sourceTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
                     }
                     return;
                 }
@@ -561,10 +565,10 @@ namespace WaterSortGame.ViewModels
         {
             if (SelectedTube is not null)
             {
-                if (SelectedTube.TubeButton is not null)
+                if (SelectedTube.ButtonElement is not null)
                 {
                     var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 30), Duration = TimeSpan.FromSeconds(0.3) };
-                    SelectedTube.TubeButton.BeginAnimation(Button.MarginProperty, HeightAnimation);
+                    SelectedTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
                 }
 
                 SelectedTube.Selected = false;
