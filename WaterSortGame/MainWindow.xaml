@@ -67,7 +67,11 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate>
-                        <Grid Margin="0,30,0,0">
+                        <!--<Grid Margin="{TemplateBinding Margin}">-->
+                        <!--<Grid Margin="0,30,0,0">-->
+                        <Grid Margin="{TemplateBinding Margin}"><!--vratit sem templateBinding-->
+                            <!--Background="red" Height="200" Width="50"-->
+                            <!--<TextBlock Text="T" Background="Blue" Margin="3"/>-->
                             <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
                                 CornerRadius="0,0,5,5" Background="LightBlue"/>
                             <Rectangle Margin="10" Height="242">
@@ -194,6 +198,7 @@
                                         <Button Style="{StaticResource TubeButton}"
                                                 Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
                                                 Name="TubeButtonSomething"
+                                                Margin="0,30,0,0"
                                                 Focusable="False">
                                             <Button.CommandParameter>
                                                 <MultiBinding Converter="{StaticResource MultiValueConv}">
