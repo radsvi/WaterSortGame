@@ -61,7 +61,7 @@
 
         <Style TargetType="Button" x:Key="TubeButton">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Margin" Value="0,15,0,0" />
+            <Setter Property="Margin" Value="0,30,0,0" />
             <!--<Setter Property="Margin" Value="0,0,0,0" />-->
 
             <Setter Property="Template">
@@ -187,11 +187,12 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid><!--CommandParameter="{Binding RelativeSource={RelativeSource Self}}"--><!--CommandParameter="{Binding .}"-->
+                                    <Grid>
+                                        <!--CommandParameter="{Binding RelativeSource={RelativeSource Self}}"-->
+                                        <!--CommandParameter="{Binding .}"-->
                                         <Button Style="{StaticResource TubeButton}"
                                                 Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
                                                 Name="TubeButtonSomething"
-                                                Margin="0,30,0,0"
                                                 Focusable="False">
                                             <Button.CommandParameter>
                                                 <MultiBinding Converter="{StaticResource MultiValueConv}">
@@ -211,7 +212,7 @@
             </Grid>
 
             <ContentControl Content="{Binding SelectedViewModel}" d:Visibility="Hidden"/>
-        
+
         </Grid>
     </Border>
 </Window>

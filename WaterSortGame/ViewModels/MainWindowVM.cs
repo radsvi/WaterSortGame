@@ -438,8 +438,8 @@ namespace WaterSortGame.ViewModels
             {
                 SelectLiquid(tube);
 
-                //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 30, 0, 0), Duration = TimeSpan.FromSeconds(0.3) };
-                //button.BeginAnimation(Button.MarginProperty, HeightAnimation);
+                var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 30, 0, 0), Duration = TimeSpan.FromSeconds(0.3) };
+                button.BeginAnimation(Button.MarginProperty, HeightAnimation);
 
                 //var storyBoard = new Storyboard();
                 //var thicknessAnimation = new ThicknessAnimation();
@@ -458,8 +458,8 @@ namespace WaterSortGame.ViewModels
             }
             if (SelectedTube == tube)
             {
-                //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 30), Duration = TimeSpan.FromSeconds(0.3) };
-                //button.BeginAnimation(Button.MarginProperty, HeightAnimation);
+                var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 30), Duration = TimeSpan.FromSeconds(0.3) };
+                button.BeginAnimation(Button.MarginProperty, HeightAnimation);
 
                 DeselectTube();
                 return;
