@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices.Marshalling;
 using System.Security.Cryptography;
@@ -16,9 +17,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 using WaterSortGame.Properties;
@@ -95,8 +99,8 @@ namespace WaterSortGame.ViewModels
                 
             }
         }
-        private Color sourceLiquid;
-        public Color SourceLiquid
+        private LiquidColor sourceLiquid;
+        public LiquidColor SourceLiquid
         {
             get { return sourceLiquid; }
             set
@@ -418,8 +422,8 @@ namespace WaterSortGame.ViewModels
         }
         #endregion
         #region Moving Liquids
-        public RelayCommand SelectTubeCommand => new RelayCommand(obj => SelectTube(obj));
-        private void SelectTube(object obj)
+        public RelayCommand SelectTubeCommand => new RelayCommand(obj => OnClickingTube(obj));
+        private void OnClickingTube(object obj)
         {
             if (LevelComplete == true)
             {
@@ -430,6 +434,7 @@ namespace WaterSortGame.ViewModels
             var tube = tubeButton?.Contents[0] as Tube;
             //var button = tubeButton?.Contents[1] as Button;
             tube.ButtonElement = tubeButton.Contents[1] as Button;
+            tube.GridElement = tubeButton.Contents[2] as Grid;
 
             //Tube tube = (Tube)obj;
 
@@ -437,27 +442,9 @@ namespace WaterSortGame.ViewModels
             //Tube tube = tubeButton.Tube;
             //tube.ButtonElement = tubeButton.ButtonElement;
 
-
             if (SelectedTube == null)
             {
                 SelectLiquid(tube);
-
-                //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 30, 0, 30), Duration = TimeSpan.FromSeconds(0.3) };
-                //button.BeginAnimation(Button.MarginProperty, HeightAnimation);
-
-                //var storyBoard = new Storyboard();
-                //var thicknessAnimation = new ThicknessAnimation();
-                //thicknessAnimation.BeginTime = new TimeSpan(0);
-                //thicknessAnimation.SetValue(Storyboard.TargetNameProperty, "TubeButtonSomething");
-                //Storyboard.SetTargetProperty(thicknessAnimation, new PropertyPath(MainWindow.MarginProperty));
-
-                //thicknessAnimation.From = new Thickness(0, 0, 0, 0);
-                //thicknessAnimation.To = new Thickness(-900, 0, 0, 0);
-                //thicknessAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
-
-                //storyBoard.Children.Add(thicknessAnimation);
-                //storyBoard.Begin(MainWindow);
-
                 return;
             }
             if (SelectedTube == tube)
@@ -484,43 +471,6 @@ namespace WaterSortGame.ViewModels
                 DeselectTube();
             }
         }
-        //private void SelectTube(object obj)
-        //{
-        //    if (LevelComplete == true)
-        //    {
-        //        return;
-        //    }
-
-        //    var tube = obj as Tube;
-
-        //    if (SelectedTube == null)
-        //    {
-        //        SelectLiquid(tube);
-        //        return;
-        //    }
-        //    if (SelectedTube == tube)
-        //    {
-        //        DeselectTube();
-        //        return;
-        //    }
-
-        //    // if selecting different tube
-        //    bool success = false;
-        //    bool successAtLeastOnce = false;
-
-        //    do {
-        //        success = AddLiquidToTargetTube(tube);
-        //        if (success == true)
-        //        {
-        //            successAtLeastOnce = true;
-        //            SelectLiquid(SelectedTube); // vyber dalsi liquid ze stejne zkumavky
-        //        }
-        //    } while (success == true && SourceLiquid is not null);
-        //    if (successAtLeastOnce == true || UnselectTubeEvenOnIllegalMove == true)
-        //    {
-        //        DeselectTube();
-        //    }
-        //}
         private void SelectLiquid(Tube sourceTube) // selects topmost liquid in a sourceTube
         {
             SourceLiquid = null;
@@ -532,11 +482,8 @@ namespace WaterSortGame.ViewModels
                         SelectedTube = sourceTube;
                     SourceLiquid = sourceTube.Layers[i];
 
-                    if (sourceTube.ButtonElement is not null)
-                    {
-                        var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
-                        sourceTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
-                    }
+                    RaiseTubeAnimation(sourceTube);
+
                     return;
                 }
             }
@@ -550,6 +497,7 @@ namespace WaterSortGame.ViewModels
                 if (targetTube.Layers[targetTube.Layers.Count - 1].Id != SourceLiquid.Id)
                     return false;
 
+            RippleSurfaceAnimation(targetTube);
             targetTube.Layers.Add(SourceLiquid);
             RemoveColorFromSourceTube(targetTube);
             //SourceColor.LayerNumber = targetTube.Layers.Count - 1;
@@ -565,11 +513,7 @@ namespace WaterSortGame.ViewModels
         {
             if (SelectedTube is not null)
             {
-                if (SelectedTube.ButtonElement is not null)
-                {
-                    var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 15, 0, 0), Duration = TimeSpan.FromSeconds(0.1) };
-                    SelectedTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
-                }
+                LowerTubeAnimation(SelectedTube);
 
                 SelectedTube.Selected = false;
                 SelectedTube = null;
@@ -753,6 +697,99 @@ namespace WaterSortGame.ViewModels
                 newTubes.Add(tube.DeepCopy());
             }
             return newTubes;
+        }
+        #endregion
+        #region Animation
+        private void RaiseTubeAnimation(Tube sourceTube)
+        {
+            if (sourceTube.ButtonElement is null)
+            {
+                return;
+            }
+
+            var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
+            sourceTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
+        }
+        private void LowerTubeAnimation(Tube sourceTube)
+        {
+            if (SelectedTube.ButtonElement is null)
+            {
+                return;
+            }
+            var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 15, 0, 0), Duration = TimeSpan.FromSeconds(0.1) };
+            SelectedTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
+
+        }
+        private void RippleSurfaceAnimation(Tube tube)
+        {
+            //DrawSurfaceFromSin(tube);
+            SurfaceAnimation();
+        }
+        private void DrawSurfaceFromSin(object container)
+        {
+            Brush color = Brushes.LightSteelBlue;
+            DrawSurfaceFromSin(container, color);
+        }
+        private void DrawSurfaceFromSin(object container, Brush color)
+        {
+            //Button buttonElement = ((container as Tube).ButtonElement as Button);
+            Grid gridElement = ((container as Tube).GridElement as Grid);
+            //buttonElement.Template.Template.
+            //PropertyInfo highlightedItemProperty = cb.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "HighlightedItem");
+            //object highlightedItemValue = highlightedItemProperty.GetValue(cb, null);
+            //PropertyInfo highlightedItemProperty = buttonElement.Template.Template.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "HighlightedItem");
+            //object highlightedItemValue = highlightedItemProperty.GetValue(buttonElement.Template.Template, null);
+
+
+            float lengthMultiplier = 3;
+            float topMargin = 0;
+            float leftMargin = 0;
+
+            float x1 = 0;
+            float y1 = 0;
+            float x2 = x1;
+            float y2 = y1;
+            Polygon newShape;
+            int iterations = (int)x1 + 100;
+            //for (float x1 = 0; x1 < 20; x1 += 0.1F)
+            do
+            {
+                y2 = (float)Math.Sin(x1);
+
+                newShape = new Polygon();
+                float drawX1 = x2 * lengthMultiplier + leftMargin;
+                float drawY1 = y1 * lengthMultiplier / 3 + topMargin;
+                float drawX2 = x1 * lengthMultiplier + leftMargin;
+                float drawY2 = y2 * lengthMultiplier / 3 + topMargin;
+                newShape.Points = new PointCollection() {
+                    new Point(drawX1, drawY1),
+                    new Point(drawX2, drawY2),
+                    new Point(drawX2, 10),
+                    new Point(drawX1, 10),
+                };
+
+
+
+                //newShape.StrokeThickness = 2;
+                newShape.Fill = color;
+
+                
+
+                //newShape.MaxWidth = "{Binding ActualWidth, ElementName=NameOfYourParentElement}";
+
+
+                gridElement.Children.Add(newShape);
+
+                x2 = x1;
+                y1 = y2;
+
+                x1 += 0.1F;
+            }
+            while (x1 < iterations);
+        }
+        private void SurfaceAnimation()
+        {
+
         }
         #endregion
         #region Other Methods

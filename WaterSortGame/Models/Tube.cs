@@ -18,9 +18,10 @@ namespace WaterSortGame.Models
         public int TubeId { get; set; }
         private static int TubeIdCounter;
         public Button ButtonElement { get; set; }
+        public Grid GridElement { get; set; }
 
-        private ObservableCollection<Color> layers = new ObservableCollection<Color>();
-        public ObservableCollection<Color> Layers
+        private ObservableCollection<LiquidColor> layers = new ObservableCollection<LiquidColor>();
+        public ObservableCollection<LiquidColor> Layers
         {
             get { return layers; }
             set
@@ -57,10 +58,10 @@ namespace WaterSortGame.Models
         public Tube DeepCopy()
         {
             Tube clone = (Tube)MemberwiseClone();
-            clone.Layers = new ObservableCollection<Color>();
+            clone.Layers = new ObservableCollection<LiquidColor>();
             for (int i = 0; i < this.Layers.Count; i++)
             {
-                clone.Layers.Add(new Color((int)this.Layers[i].Id));
+                clone.Layers.Add(new LiquidColor((int)this.Layers[i].Id));
             }
             return clone;
         }
@@ -73,12 +74,12 @@ namespace WaterSortGame.Models
         {
             TubeId = TubeIdCounter++;
 
-            if (firstLayer is not null) Layers.Add(new Color((int)firstLayer));
-            if (secondLayer is not null) Layers.Add(new Color((int)secondLayer));
-            if (thirdLayer is not null) Layers.Add(new Color((int)thirdLayer));
-            if (fourthLayer is not null) Layers.Add(new Color((int)fourthLayer));
+            if (firstLayer is not null) Layers.Add(new LiquidColor((int)firstLayer));
+            if (secondLayer is not null) Layers.Add(new LiquidColor((int)secondLayer));
+            if (thirdLayer is not null) Layers.Add(new LiquidColor((int)thirdLayer));
+            if (fourthLayer is not null) Layers.Add(new LiquidColor((int)fourthLayer));
         }
-        public Tube(Color? firstLayer = null, Color? secondLayer = null, Color? thirdLayer = null, Color? fourthLayer = null)
+        public Tube(LiquidColor? firstLayer = null, LiquidColor? secondLayer = null, LiquidColor? thirdLayer = null, LiquidColor? fourthLayer = null)
         {
             TubeId = TubeIdCounter++;
 

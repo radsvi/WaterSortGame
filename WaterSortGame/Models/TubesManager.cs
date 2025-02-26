@@ -74,7 +74,7 @@ namespace WaterSortGame.Models
             {
                 if (numberOfColorsToGenerate != value)
                 {
-                    if (value >= 3 && value <= Color.ColorKeys.Count)
+                    if (value >= 3 && value <= LiquidColor.ColorKeys.Count)
                     {
                         numberOfColorsToGenerate = value;
                     }
@@ -82,9 +82,9 @@ namespace WaterSortGame.Models
                     {
                         numberOfColorsToGenerate = 3;
                     }
-                    else if (value > Color.ColorKeys.Count)
+                    else if (value > LiquidColor.ColorKeys.Count)
                     {
-                        numberOfColorsToGenerate = Color.ColorKeys.Count;
+                        numberOfColorsToGenerate = LiquidColor.ColorKeys.Count;
                     }
                     //OnPropertyChanged();
                     //OnGlobalPropertyChanged("NumberOfColorsToGenerate");
@@ -202,36 +202,36 @@ namespace WaterSortGame.Models
             SettingFreshGameState();
             Random rnd = new Random();
 
-            ObservableCollection<Color> colorsList = new ObservableCollection<Color>();
+            ObservableCollection<LiquidColor> colorsList = new ObservableCollection<LiquidColor>();
             if (RandomNumberOfTubes)
             {
-                NumberOfColorsToGenerate = rnd.Next(3, Color.ColorKeys.Count);
+                NumberOfColorsToGenerate = rnd.Next(3, LiquidColor.ColorKeys.Count);
             }
 
             List<int> selectedColors = new List<int>();
-            for (int i = 0; i < Color.ColorKeys.Count; i++) // generate list of all 12 colors
+            for (int i = 0; i < LiquidColor.ColorKeys.Count; i++) // generate list of all 12 colors
             {
                 selectedColors.Add(i);
             }
 
-            for (int i = 0; i < Color.ColorKeys.Count - NumberOfColorsToGenerate; i++) // now remove some random ones
+            for (int i = 0; i < LiquidColor.ColorKeys.Count - NumberOfColorsToGenerate; i++) // now remove some random ones
             {
                 //selectedColors.Remove(selectedColors[NumberOfColorsToGenerate]); // this always keeps the same colors
                 selectedColors.Remove(selectedColors[rnd.Next(0, selectedColors.Count)]);
             }
             foreach (var color in selectedColors)
             {
-                colorsList.Add(new Color(color));
-                colorsList.Add(new Color(color));
-                colorsList.Add(new Color(color));
-                colorsList.Add(new Color(color));
+                colorsList.Add(new LiquidColor(color));
+                colorsList.Add(new LiquidColor(color));
+                colorsList.Add(new LiquidColor(color));
+                colorsList.Add(new LiquidColor(color));
             }
 
             Tubes?.Clear();
             //var tubes = new ObservableCollection<Tube>();
             for (int i = 0; i < NumberOfColorsToGenerate; i++)
             {
-                Color[] layer = new Color[4];
+                LiquidColor[] layer = new LiquidColor[4];
                 for (int j = 0; j < 4; j++)
                 {
                     int colorNumber = rnd.Next(0, colorsList.Count);
