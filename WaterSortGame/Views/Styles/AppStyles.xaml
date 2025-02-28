@@ -154,10 +154,10 @@
             </Style>
         </Style.Resources>
     </Style>
-    <Style TargetType="Grid" x:Key="NotificationScreenOuter">
+    <!--<Style TargetType="Grid" x:Key="NotificationScreenOuter">
         <Setter Property="Background" Value="Transparent" />
-    </Style>
-    <Style TargetType="Button" x:Key="CloseNotificationButton">
+    </Style>-->
+    <Style TargetType="Button" x:Key="ClickBackgroundButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
 

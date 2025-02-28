@@ -222,6 +222,7 @@ namespace WaterSortGame.ViewModels
                 ClosePopupWindow();
             }
         }
+        public RelayCommand CancelScreenCommand => new RelayCommand(execute => ClosePopupWindow());
         public RelayCommand ConfirmCommand => new RelayCommand(execute => ConfirmPopup());
         private void ConfirmPopup()
         {

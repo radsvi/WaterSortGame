@@ -7,30 +7,32 @@
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="600">
     <Grid Style="{StaticResource PopupScreenOuter}">
-        <Border Style="{StaticResource PopupScreen}">
-            <Grid>
+        <Button Style="{StaticResource ClickBackgroundButton}" Command="{Binding CancelScreenCommand}">
+            <Border Style="{StaticResource PopupScreen}">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="1">
-                        <TextBlock Text="Save level" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
-                        <Label Content="Add note (optional):"/>
-                        <TextBox Text="{Binding NoteForSavedLevel, UpdateSourceTrigger=PropertyChanged}"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="1">
+                            <TextBlock Text="Save level" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
+                            <Label Content="Add note (optional):"/>
+                            <TextBox Text="{Binding NoteForSavedLevel, UpdateSourceTrigger=PropertyChanged}"
                              Margin="5" Height="50" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto"
                              MaxLength="60"/>
-                        <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
+                            <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
                     Style="{StaticResource NavigationButtonsPrimary}">
-                            <Button Content="OK" Command="{Binding ConfirmCommand}" Width="150"/>
-                            <Button Content="Cancel" Command="{Binding PopupWindow}" Width="150"/>
+                                <Button Content="OK" Command="{Binding ConfirmCommand}" Width="150"/>
+                                <Button Content="Cancel" Command="{Binding CancelScreenCommand}" Width="150"/>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                </Grid>
+                    </Grid>
 
-                <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding PopupWindow}"/>
-            </Grid>
-        </Border>
+                    <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding CancelScreenCommand}"/>
+                </Grid>
+            </Border>
+        </Button>
     </Grid>
 </UserControl>

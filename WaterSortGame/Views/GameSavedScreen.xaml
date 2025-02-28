@@ -7,8 +7,8 @@
              xmlns:models="clr-namespace:WaterSortGame.Models"
              mc:Ignorable="d" 
              d:DesignHeight="220" d:DesignWidth="600">
-    <Grid Style="{StaticResource NotificationScreenOuter}">
-        <Button Style="{StaticResource CloseNotificationButton}" Command="{Binding ConfirmCommand}">
+    <Grid Style="{StaticResource PopupScreenOuter}">
+        <Button Style="{StaticResource ClickBackgroundButton}" Command="{Binding CancelScreenCommand}">
             <Border Width="250" Height="90">
                 <TextBlock Text="Game saved..." Grid.Row="1" FontSize="20"/>
             </Border>
