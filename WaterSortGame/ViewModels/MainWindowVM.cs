@@ -9,6 +9,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices.Marshalling;
 using System.Security.Cryptography;
@@ -500,7 +501,7 @@ namespace WaterSortGame.ViewModels
                     return false;
 
             targetTube.Layers.Add(SourceLiquid);
-            RippleSurfaceAnimation(targetTube);
+            RippleSurfaceAnimation(targetTube, targetTube.Layers.Count - 1);
             RemoveColorFromSourceTube(targetTube);
             //SourceColor.LayerNumber = targetTube.Layers.Count - 1;
             //SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
@@ -722,41 +723,45 @@ namespace WaterSortGame.ViewModels
             SelectedTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
 
         }
-        private void RippleSurfaceAnimation(Tube tube)
+        private void RippleSurfaceAnimation(Tube tube, int layer)
         {
-            Border container = GetContainerForAnimation(tube);
+            Border container = GetContainerForAnimation(tube, layer);
             var originalChild = container.Child;
             //var grid = DrawSurfaceFromSin(container); // ## tohle mozna udelat permanentni. nemusim to generovat vzdy znova.
             var brush = DrawSurface(container);
             
             SurfaceAnimation(brush, container);
+
             // wait and then return:
             //container.Child = originalChild;
             // hm, tohle mozna nebude nutny delat takhle. spis proste odstranit jakykoliv subChild -> container.Child.Child
         }
         private ImageBrush DrawSurface(Border container)
         {
-            Grid grid = new Grid();
-            grid.VerticalAlignment = VerticalAlignment.Top;
+            Border borderElement = new Border();
+            borderElement.VerticalAlignment = VerticalAlignment.Top;
+            borderElement.CornerRadius = new CornerRadius(0, 0, 25, 25);
             ImageBrush brush = new ImageBrush();
             BitmapImage bmpImg = new BitmapImage();
             bmpImg.BeginInit();
-            bmpImg.UriSource = new Uri("Images\\TubeSurfaceRipple.png", UriKind.Relative);
+            //bmpImg.UriSource = new Uri("Images\\TubeSurfaceRipple.png", UriKind.Relative);
+            bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTall.png", UriKind.Relative);
             bmpImg.EndInit();
             brush.ImageSource = bmpImg;
             brush.TileMode = TileMode.Tile;
             brush.ViewportUnits = BrushMappingMode.Absolute;
-            brush.Viewport = new Rect(0, 0, 129, 30);
+            brush.Viewport = new Rect(0, 200, 129, 300);
 
-            Rectangle relativeTileSizeExampleRectangle = new Rectangle();
-            relativeTileSizeExampleRectangle.Width = 50;
-            relativeTileSizeExampleRectangle.Height = 30;
-            relativeTileSizeExampleRectangle.Fill = brush;
+            Rectangle tileSizeRectangle = new Rectangle();
+            tileSizeRectangle.Width = 50;
+            tileSizeRectangle.Height = 137;
+            tileSizeRectangle.Fill = brush;
 
             //grid.Background = brush;
             //grid.Children.Add(brush);
-            grid.Children.Add(relativeTileSizeExampleRectangle);
-            container.Child = grid;
+            //grid.Children.Add(tileSizeRectangle);
+            borderElement.Child = tileSizeRectangle;
+            container.Child = borderElement;
 
             return brush;
         }
@@ -767,10 +772,10 @@ namespace WaterSortGame.ViewModels
         //    var originalChild = container.Child;
         //    DrawSurfaceFromSin(container, color);
         //}
-        private Border GetContainerForAnimation(Tube tube)
+        private Border GetContainerForAnimation(Tube tube, int layer)
         {
             Button button = tube.ButtonElement as Button;
-            var descendant = GetDescendantByType(button, typeof(Border));
+            var descendant = GetDescendantByType(button, typeof(Border), layer);
             Border container = descendant as Border;
 
             return container;
@@ -855,7 +860,7 @@ namespace WaterSortGame.ViewModels
         //    //grid.Background = Brushes.White;
         //    return grid;
         //}
-        public static Visual GetDescendantByType(Visual element, Type type)
+        public static Visual GetDescendantByType(Visual element, Type type, int layer)
         {
             if (element == null)
             {
@@ -873,11 +878,11 @@ namespace WaterSortGame.ViewModels
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
             {
                 Visual visual = VisualTreeHelper.GetChild(element, i) as Visual;
-                foundElement = GetDescendantByType(visual, type);
+                foundElement = GetDescendantByType(visual, type, layer);
                 if (foundElement != null)
                 {
                     Border foundElementBorder = foundElement as Border;
-                    if (foundElementBorder.Name == "Layer0")
+                    if (foundElementBorder.Name == "Layer" + layer.ToString())
                     {
                         break;
                     }
@@ -899,7 +904,7 @@ namespace WaterSortGame.ViewModels
             //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
             //sourceTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
 
-            var viewportAnimation = new RectAnimation() { From = new Rect(0, 0, 129, 30), To = new Rect(300, 0, 129, 30), Duration = TimeSpan.FromSeconds(2) };
+            var viewportAnimation = new RectAnimation() { From = new Rect(0, 200, 129, 300), To = new Rect(400, 50, 129, 300), Duration = TimeSpan.FromSeconds(2) };
             //viewportAnimation.Completed += viewportAnimation_Completed;
             viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container));
             brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);

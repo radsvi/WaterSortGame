@@ -10,10 +10,14 @@
 
   <ItemGroup>
     <None Remove="Images\TubeSurfaceRipple.png" />
+    <None Remove="Images\TubeSurfaceRippleTall.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Images\TubeSurfaceRipple.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\TubeSurfaceRippleTall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
