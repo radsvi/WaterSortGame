@@ -77,12 +77,12 @@
                         <Grid Margin="{TemplateBinding Margin}">
                             <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
                                 CornerRadius="0,0,5,5" Background="LightBlue"/>
-                            <Border Margin="10" Height="242" CornerRadius="0,0,29,29" Background="LightBlue"  />
+                            <Border Margin="10" Height="242" CornerRadius="0,0,29,29" Background="LightBlue" />
                             
                             <StackPanel Margin="0,15" Height="232">
-                                <Border Name="Layer3" d:Background="#145DEF"  Background="{Binding Path=Layers[3].Rgb}" Margin="15,24,15,0" Height="52" Grid.Row="1"/>
-                                <Border Name="Layer2" d:Background="#3F4482"  Background="{Binding Path=Layers[2].Rgb}" Margin="15,0" Height="52" Grid.Row="2"/>
-                                <Border Name="Layer1" d:Background="#88AAFF"  Background="{Binding Path=Layers[1].Rgb}" Margin="15,0" Height="52" Grid.Row="3"/>
+                                <Border Name="Layer3" d:Background="#145DEF" Background="{Binding Path=Layers[3].Rgb}" Margin="15,24,15,0" Height="52" Grid.Row="1"/>
+                                <Border Name="Layer2" d:Background="#3F4482" Background="{Binding Path=Layers[2].Rgb}" Margin="15,0" Height="52" Grid.Row="2"/>
+                                <Border Name="Layer1" d:Background="#88AAFF" Background="{Binding Path=Layers[1].Rgb}" Margin="15,0" Height="52" Grid.Row="3"/>
                                 <Border Name="Layer0" d:Background="#F27914" Background="{Binding Path=Layers[0].Rgb}" Margin="15,0" Height="52" Grid.Row="4"
                                         CornerRadius="0,0,25,25"/>
                             </StackPanel>

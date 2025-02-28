@@ -22,6 +22,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
@@ -723,110 +724,136 @@ namespace WaterSortGame.ViewModels
         }
         private void RippleSurfaceAnimation(Tube tube)
         {
-            //DrawSurfaceFromSin(tube);
-            SurfaceAnimation();
+            Border container = GetContainerForAnimation(tube);
+            var originalChild = container.Child;
+            //var grid = DrawSurfaceFromSin(container); // ## tohle mozna udelat permanentni. nemusim to generovat vzdy znova.
+            var brush = DrawSurface(container);
+            
+            SurfaceAnimation(brush, container);
+            // wait and then return:
+            //container.Child = originalChild;
+            // hm, tohle mozna nebude nutny delat takhle. spis proste odstranit jakykoliv subChild -> container.Child.Child
         }
-        private void DrawSurfaceFromSin(Tube tube)
+        private ImageBrush DrawSurface(Border container)
         {
-            Brush color = Brushes.LightSteelBlue;
-            DrawSurfaceFromSin(tube, color);
+            Grid grid = new Grid();
+            grid.VerticalAlignment = VerticalAlignment.Top;
+            ImageBrush brush = new ImageBrush();
+            BitmapImage bmpImg = new BitmapImage();
+            bmpImg.BeginInit();
+            bmpImg.UriSource = new Uri("Images\\TubeSurfaceRipple.png", UriKind.Relative);
+            bmpImg.EndInit();
+            brush.ImageSource = bmpImg;
+            brush.TileMode = TileMode.Tile;
+            brush.ViewportUnits = BrushMappingMode.Absolute;
+            brush.Viewport = new Rect(0, 0, 129, 30);
+
+            Rectangle relativeTileSizeExampleRectangle = new Rectangle();
+            relativeTileSizeExampleRectangle.Width = 50;
+            relativeTileSizeExampleRectangle.Height = 30;
+            relativeTileSizeExampleRectangle.Fill = brush;
+
+            //grid.Background = brush;
+            //grid.Children.Add(brush);
+            grid.Children.Add(relativeTileSizeExampleRectangle);
+            container.Child = grid;
+
+            return brush;
         }
-        private void DrawSurfaceFromSin(Tube tube, Brush color)
+        //private void DrawSurfaceFromSin(Tube tube)
+        //{
+        //    Brush color = Brushes.LightSteelBlue;
+        //    var container = GetContainerForAnimation(tube);
+        //    var originalChild = container.Child;
+        //    DrawSurfaceFromSin(container, color);
+        //}
+        private Border GetContainerForAnimation(Tube tube)
         {
-            //Button buttonElement = ((container as Tube).ButtonElement as Button);
-
-            //buttonElement.Template.Template.
-            //PropertyInfo highlightedItemProperty = cb.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "HighlightedItem");
-            //object highlightedItemValue = highlightedItemProperty.GetValue(cb, null);
-            //PropertyInfo highlightedItemProperty = buttonElement.Template.Template.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "HighlightedItem");
-            //object highlightedItemValue = highlightedItemProperty.GetValue(buttonElement.Template.Template, null);
-
-            //Grid gridElement = ((container as Tube).GridElement as Grid);
-
             Button button = tube.ButtonElement as Button;
             var descendant = GetDescendantByType(button, typeof(Border));
             Border container = descendant as Border;
 
-
-            float lengthMultiplier = 3;
-            float topMargin = 0;
-            float leftMargin = 0;
-
-            float x1 = 0;
-            float y1 = 0;
-            float x2 = x1;
-            float y2 = y1;
-            Polygon newShape;
-            int iterations = (int)x1 + 100;
-
-            Grid grid = new Grid();
-            //for (float x1 = 0; x1 < 20; x1 += 0.1F)
-            do
-            {
-                y2 = (float)Math.Sin(x1);
-
-                newShape = new Polygon();
-                float drawX1 = x2 * lengthMultiplier + leftMargin;
-                float drawY1 = y1 * lengthMultiplier / 3 + topMargin;
-                float drawX2 = x1 * lengthMultiplier + leftMargin;
-                float drawY2 = y2 * lengthMultiplier / 3 + topMargin;
-                newShape.Points = new PointCollection() {
-                    new Point(drawX1, drawY1),
-                    new Point(drawX2, drawY2),
-                    new Point(drawX2, 10),
-                    new Point(drawX1, 10),
-                };
-
-
-
-                //newShape.StrokeThickness = 2;
-                newShape.Fill = color;
-
-
-
-                //newShape.MaxWidth = "{Binding ActualWidth, ElementName=NameOfYourParentElement}";
-                
-                TextBlock textBlock = new TextBlock { Text = "qwer" };
-                //grid.Children.Add(newShape);
-                grid.Children.Add(textBlock);
-
-                //gridElement.Children.Add(newShape);
-                //container.Child = newShape;
-                
-
-                x2 = x1;
-                y1 = y2;
-
-                x1 += 0.1F;
-            }
-            while (x1 < iterations);
-
-            container.Child = grid;
+            return container;
         }
-        //private Visual GetDescendantByType(Visual element, string name = "Layer0")
+        //private void DrawSurfaceFromSin(Border container, Brush color)
+        //[Obsolete]private Grid DrawSurfaceFromSin(Border container)
         //{
-        //    if (element == null)
+        //    //Button buttonElement = ((container as Tube).ButtonElement as Button);
+
+        //    //buttonElement.Template.Template.
+        //    //PropertyInfo highlightedItemProperty = cb.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "HighlightedItem");
+        //    //object highlightedItemValue = highlightedItemProperty.GetValue(cb, null);
+        //    //PropertyInfo highlightedItemProperty = buttonElement.Template.Template.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "HighlightedItem");
+        //    //object highlightedItemValue = highlightedItemProperty.GetValue(buttonElement.Template.Template, null);
+
+        //    //Grid gridElement = ((container as Tube).GridElement as Grid);
+
+            
+
+
+        //    float lengthMultiplier = 20;
+        //    float topMargin = 10;
+        //    float leftMargin = 0;
+
+        //    float x1 = 0;
+        //    float y1 = 0;
+        //    float x2 = x1;
+        //    float y2 = y1;
+        //    Polygon newShape;
+        //    int iterations = (int)x1 + 100;
+
+        //    Grid grid = new Grid();
+        //    grid.MaxWidth = container.ActualWidth;
+            
+        //    grid.Margin = new Thickness(-200, 0, 0, 0);
+
+        //    //for (float x1 = 0; x1 < 20; x1 += 0.1F)
+        //    do
         //    {
-        //        return null;
+        //        y2 = (float)Math.Sin(x1);
+
+        //        newShape = new Polygon();
+        //        float drawX1 = x2 * lengthMultiplier + leftMargin;
+        //        float drawY1 = y1 * lengthMultiplier / 2 + topMargin;
+        //        float drawX2 = x1 * lengthMultiplier + leftMargin;
+        //        float drawY2 = y2 * lengthMultiplier / 2 + topMargin;
+        //        newShape.Points = new PointCollection() {
+        //            new Point(drawX1, 0),
+        //            new Point(drawX2, 0),
+        //            new Point(drawX2, drawY2),
+        //            new Point(drawX1, drawY1),
+        //        };
+
+
+
+        //        //newShape.StrokeThickness = 2;
+        //        //newShape.Fill = color;
+        //        newShape.Fill = new SolidColorBrush(Colors.LightBlue);
+        //        //newShape.Fill = Brushes.OrangeRed;
+        //        //newShape.Fill = new SolidColorBrush(Color.FromRgb(255,255,255));
+
+
+
+        //        //newShape.MaxWidth = "{Binding ActualWidth, ElementName=NameOfYourParentElement}";
+
+        //        //TextBlock textBlock = new TextBlock { Text = "qwer" };
+        //        //grid.Children.Add(textBlock);
+        //        grid.Children.Add(newShape);
+                
+
+        //        //gridElement.Children.Add(newShape);
+        //        //container.Child = newShape;
+
+
+        //        x2 = x1;
+        //        y1 = y2;
+
+        //        x1 += 0.1F;
         //    }
-        //    Border foundElement = null;
-        //    if (element is FrameworkElement)
-        //    {
-        //        (element as FrameworkElement).ApplyTemplate();
-        //    }
-        //    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
-        //    {
-        //        foundElement = VisualTreeHelper.GetChild(element, i) as Border;
-        //        if (foundElement == null)
-        //        {
-        //            continue;
-        //        }
-        //        if (foundElement.Name == name)
-        //        {
-        //            break;
-        //        }
-        //    }
-        //    return foundElement;
+        //    while (x1 < iterations);
+
+        //    //grid.Background = Brushes.White;
+        //    return grid;
         //}
         public static Visual GetDescendantByType(Visual element, Type type)
         {
@@ -858,9 +885,29 @@ namespace WaterSortGame.ViewModels
             }
             return foundElement;
         }
-        private void SurfaceAnimation()
+        private void SurfaceAnimation(ImageBrush brush, Border container)
         {
+            if (brush is null)
+            {
+                return;
+            }
 
+            //var HeightAnimation = new ThicknessAnimation() { From = new Thickness(0, 0, 0, 0), To = new Thickness(-200, 0, 0, 0), Duration = TimeSpan.FromSeconds(1) };
+            //container.
+            //container.BeginAnimation(Button.MarginProperty, HeightAnimation);
+
+            //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
+            //sourceTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
+
+            var viewportAnimation = new RectAnimation() { From = new Rect(0, 0, 129, 30), To = new Rect(300, 0, 129, 30), Duration = TimeSpan.FromSeconds(2) };
+            //viewportAnimation.Completed += viewportAnimation_Completed;
+            viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container));
+            brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
+        }
+
+        private void ViewportAnimation_Completed(object? sender, EventArgs e, Border container)
+        {
+            container.Child = null;
         }
         #endregion
         #region Other Methods
