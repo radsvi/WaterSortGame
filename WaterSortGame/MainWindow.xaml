@@ -74,45 +74,18 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate>
-                        <!--<Grid Margin="{TemplateBinding Margin}">-->
-                        <!--<Grid Margin="0,30,0,0">-->
                         <Grid Margin="{TemplateBinding Margin}">
-                            <!--Background="red" Height="200" Width="50"-->
-                            <!--<TextBlock Text="T" Background="Blue" Margin="3"/>-->
                             <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
                                 CornerRadius="0,0,5,5" Background="LightBlue"/>
-                            <Rectangle Margin="10" Height="242">
-                                <Rectangle.Fill>
-                                    <VisualBrush>
-                                        <VisualBrush.Visual>
-                                            <Border CornerRadius="0,0,20,20" Background="LightBlue" Width="40" Height="150" />
-                                        </VisualBrush.Visual>
-                                    </VisualBrush>
-                                </Rectangle.Fill>
-                            </Rectangle>
-                            <Grid Margin="0,15" Height="232">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="20"/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Rectangle d:Fill="#145DEF" Fill="{Binding Path=Layers[3].Rgb}" Margin="15,0" Grid.Row="1"/>
-                                <Rectangle d:Fill="#3F4482" Fill="{Binding Path=Layers[2].Rgb}" Margin="15,-1" Grid.Row="2"/>
-                                <Rectangle d:Fill="#88AAFF" Fill="{Binding Path=Layers[1].Rgb}" Margin="15,-1" Grid.Row="3"/>
-
-                                <Rectangle Grid.Row="4" Margin="15,-1" Width="50">
-                                    <Rectangle.Fill>
-                                        <VisualBrush>
-                                            <VisualBrush.Visual>
-                                                <Border CornerRadius="0,0,20,20" d:Background="#F27914" Width="40" Height="40"
-                                                    Background="{Binding Path=Layers[0].Rgb}" />
-                                            </VisualBrush.Visual>
-                                        </VisualBrush>
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                            </Grid>
+                            <Border Margin="10" Height="242" CornerRadius="0,0,29,29" Background="LightBlue"  />
+                            
+                            <StackPanel Margin="0,15" Height="232">
+                                <Border Name="Layer3" d:Background="#145DEF"  Background="{Binding Path=Layers[3].Rgb}" Margin="15,24,15,0" Height="52" Grid.Row="1"/>
+                                <Border Name="Layer2" d:Background="#3F4482"  Background="{Binding Path=Layers[2].Rgb}" Margin="15,0" Height="52" Grid.Row="2"/>
+                                <Border Name="Layer1" d:Background="#88AAFF"  Background="{Binding Path=Layers[1].Rgb}" Margin="15,0" Height="52" Grid.Row="3"/>
+                                <Border Name="Layer0" d:Background="#F27914" Background="{Binding Path=Layers[0].Rgb}" Margin="15,0" Height="52" Grid.Row="4"
+                                        CornerRadius="0,0,25,25"/>
+                            </StackPanel>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>

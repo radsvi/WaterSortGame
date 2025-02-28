@@ -498,8 +498,8 @@ namespace WaterSortGame.ViewModels
                 if (targetTube.Layers[targetTube.Layers.Count - 1].Id != SourceLiquid.Id)
                     return false;
 
-            RippleSurfaceAnimation(targetTube);
             targetTube.Layers.Add(SourceLiquid);
+            RippleSurfaceAnimation(targetTube);
             RemoveColorFromSourceTube(targetTube);
             //SourceColor.LayerNumber = targetTube.Layers.Count - 1;
             //SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
@@ -726,20 +726,26 @@ namespace WaterSortGame.ViewModels
             //DrawSurfaceFromSin(tube);
             SurfaceAnimation();
         }
-        private void DrawSurfaceFromSin(object container)
+        private void DrawSurfaceFromSin(Tube tube)
         {
             Brush color = Brushes.LightSteelBlue;
-            DrawSurfaceFromSin(container, color);
+            DrawSurfaceFromSin(tube, color);
         }
-        private void DrawSurfaceFromSin(object container, Brush color)
+        private void DrawSurfaceFromSin(Tube tube, Brush color)
         {
             //Button buttonElement = ((container as Tube).ButtonElement as Button);
-            Grid gridElement = ((container as Tube).GridElement as Grid);
+
             //buttonElement.Template.Template.
             //PropertyInfo highlightedItemProperty = cb.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "HighlightedItem");
             //object highlightedItemValue = highlightedItemProperty.GetValue(cb, null);
             //PropertyInfo highlightedItemProperty = buttonElement.Template.Template.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "HighlightedItem");
             //object highlightedItemValue = highlightedItemProperty.GetValue(buttonElement.Template.Template, null);
+
+            //Grid gridElement = ((container as Tube).GridElement as Grid);
+
+            Button button = tube.ButtonElement as Button;
+            var descendant = GetDescendantByType(button, typeof(Border));
+            Border container = descendant as Border;
 
 
             float lengthMultiplier = 3;
@@ -752,6 +758,8 @@ namespace WaterSortGame.ViewModels
             float y2 = y1;
             Polygon newShape;
             int iterations = (int)x1 + 100;
+
+            Grid grid = new Grid();
             //for (float x1 = 0; x1 < 20; x1 += 0.1F)
             do
             {
@@ -774,12 +782,17 @@ namespace WaterSortGame.ViewModels
                 //newShape.StrokeThickness = 2;
                 newShape.Fill = color;
 
-                
+
 
                 //newShape.MaxWidth = "{Binding ActualWidth, ElementName=NameOfYourParentElement}";
+                
+                TextBlock textBlock = new TextBlock { Text = "qwer" };
+                //grid.Children.Add(newShape);
+                grid.Children.Add(textBlock);
 
-
-                gridElement.Children.Add(newShape);
+                //gridElement.Children.Add(newShape);
+                //container.Child = newShape;
+                
 
                 x2 = x1;
                 y1 = y2;
@@ -787,6 +800,63 @@ namespace WaterSortGame.ViewModels
                 x1 += 0.1F;
             }
             while (x1 < iterations);
+
+            container.Child = grid;
+        }
+        //private Visual GetDescendantByType(Visual element, string name = "Layer0")
+        //{
+        //    if (element == null)
+        //    {
+        //        return null;
+        //    }
+        //    Border foundElement = null;
+        //    if (element is FrameworkElement)
+        //    {
+        //        (element as FrameworkElement).ApplyTemplate();
+        //    }
+        //    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+        //    {
+        //        foundElement = VisualTreeHelper.GetChild(element, i) as Border;
+        //        if (foundElement == null)
+        //        {
+        //            continue;
+        //        }
+        //        if (foundElement.Name == name)
+        //        {
+        //            break;
+        //        }
+        //    }
+        //    return foundElement;
+        //}
+        public static Visual GetDescendantByType(Visual element, Type type)
+        {
+            if (element == null)
+            {
+                return null;
+            }
+            if (element.GetType() == type)
+            {
+                return element;
+            }
+            Visual foundElement = null;
+            if (element is FrameworkElement)
+            {
+                (element as FrameworkElement).ApplyTemplate();
+            }
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+            {
+                Visual visual = VisualTreeHelper.GetChild(element, i) as Visual;
+                foundElement = GetDescendantByType(visual, type);
+                if (foundElement != null)
+                {
+                    Border foundElementBorder = foundElement as Border;
+                    if (foundElementBorder.Name == "Layer0")
+                    {
+                        break;
+                    }
+                }
+            }
+            return foundElement;
         }
         private void SurfaceAnimation()
         {
