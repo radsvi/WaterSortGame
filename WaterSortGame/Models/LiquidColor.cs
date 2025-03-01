@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using WaterSortGame.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -42,5 +43,6 @@ namespace WaterSortGame.Models
             Name = GetCode(id).Name;
             Rgb = GetCode(id).Rgb;
         }
+        public Grid Grid { get; set; }
     }
 }

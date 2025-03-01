@@ -78,25 +78,31 @@
                             <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
                                 CornerRadius="0,0,5,5" Background="LightBlue"/>
                             <Border Margin="10" Height="242" CornerRadius="0,0,29,29" Background="LightBlue">
-                                <StackPanel Margin="0,15,0,0" Height="232">
-                                    <Grid Name="Layer3" VerticalAlignment="Top" Height="52" Margin="5,14,5,0">
+                                <Grid Margin="0,25,0,0" Height="206" Name="TubeGrid">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="52"/>
+                                        <RowDefinition Height="52"/>
+                                        <RowDefinition Height="52"/>
+                                        <RowDefinition Height="52"/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <Grid Name="Layer3" VerticalAlignment="Top" Height="52" Margin="5,0,5,0" Grid.Row="0">
                                         <Border d:Background="#145DEF" Background="{Binding Path=Layers[3].Rgb}" />
                                     </Grid>
-                                    <Grid Name="Layer2" VerticalAlignment="Top" Margin="5,0" Height="52">
+                                    <Grid Name="Layer2" VerticalAlignment="Top" Margin="5,0" Height="52" Grid.Row="1">
                                         <Border d:Background="#3F4482" Background="{Binding Path=Layers[2].Rgb}" />
                                     </Grid>
-                                    <Grid Name="Layer1" VerticalAlignment="Top" Margin="5,0" Height="52">
+                                    <Grid Name="Layer1" VerticalAlignment="Top" Margin="5,0" Height="52" Grid.Row="2">
                                         <Border d:Background="#88AAFF" Background="{Binding Path=Layers[1].Rgb}" />
                                     </Grid>
-                                    <!--<Border Name="Layer0" d:Background="#F27914" Background="{Binding Path=Layers[0].Rgb}" Margin="5,0" Height="52" Grid.Row="4" CornerRadius="0,0,25,25"/>-->
 
-                                    <Grid Name="Layer0" Background="White" Margin="5,0" Height="52" VerticalAlignment="Top">
+                                    <Grid Name="Layer0" Background="White" Margin="5,0" Height="52" VerticalAlignment="Top" Grid.Row="3">
                                         <Grid.OpacityMask>
                                             <VisualBrush Visual="{Binding ElementName=Border1}" />
                                         </Grid.OpacityMask>
                                         <Border x:Name="Border1" CornerRadius="0,0,24,24" d:Background="#F27914" Background="{Binding Path=Layers[0].Rgb}" />
                                     </Grid>
-                                </StackPanel>
+                                </Grid>
                             </Border>
                             
                             
