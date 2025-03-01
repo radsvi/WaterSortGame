@@ -175,7 +175,6 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
-
         #endregion
         #region Constructor
         public MainWindowVM(MainWindow mainWindow)
@@ -744,20 +743,33 @@ namespace WaterSortGame.ViewModels
             ImageBrush brush = new ImageBrush();
             BitmapImage bmpImg = new BitmapImage();
             bmpImg.BeginInit();
-            bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTall.png", UriKind.Relative);
+            //bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTall2.png", UriKind.Relative);
+            //bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallNonTransparent.png", UriKind.Relative);
+            bmpImg.UriSource = new Uri("Images\\JustLine.png", UriKind.Relative);
+            //bmpImg.UriSource = new Uri("Images\\NarrowLine.png", UriKind.Relative);
+            
             bmpImg.EndInit();
             brush.ImageSource = bmpImg;
             brush.TileMode = TileMode.Tile;
             brush.ViewportUnits = BrushMappingMode.Absolute;
-            brush.Viewport = new Rect(0, 200, 129, 52);
+            //brush.Viewport = new Rect(0, 200, 129, 52);
 
             Rectangle tileSizeRectangle = new Rectangle();
             tileSizeRectangle.Width = 50;
+            //tileSizeRectangle.Width = 20;
             tileSizeRectangle.Height = 52;
+            // ## smazat:
+            //tileSizeRectangle.Height = 108;
+
             tileSizeRectangle.Fill = brush;
             //tileSizeRectangle.Fill = Brushes.Pink;
             //tileSizeRectangle.Margin = new Thickness(15, 24, 15, 0);
             tileSizeRectangle.Margin = new Thickness(0, 0, 0, 0);
+
+
+            
+            
+
 
             //grid.Background = brush;
             //grid.Children.Add(brush);
@@ -910,17 +922,31 @@ namespace WaterSortGame.ViewModels
 
             //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
             //sourceTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
+            if (numberOfLiquids <= 1 ) // ## smazat if a prepocitat to numericky
+            {
+                var viewportAnimation = new RectAnimation() { From = new Rect(0, 200 * numberOfLiquids, 129, 300), To = new Rect(400 * numberOfLiquids, 50, 129, 300), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
+                viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
+                brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
+            }
+            else
+            {
+                //var tileSizeRectangle = borderElement.Child;
+                //tileSizeRectangle.Height = 108;
 
-            var viewportAnimation = new RectAnimation() { From = new Rect(0, 200 * numberOfLiquids, 129, 300), To = new Rect(400 * numberOfLiquids, 50, 129, 300), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
-            //viewportAnimation.Completed += viewportAnimation_Completed;
-            viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
-            brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
+                //var viewportAnimation = new RectAnimation() { From = new Rect(0, 170 * numberOfLiquids, 129, 500), To = new Rect(400 * numberOfLiquids, 230, 129, 500), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
+                //container.Height = 108;
+                var viewportAnimation = new RectAnimation() { From = new Rect(0, 170 * numberOfLiquids, 129, 500), To = new Rect(400, 230, 129, 500), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
+                viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
+                brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
+            }
+            
         }
 
         private void ViewportAnimation_Completed(object? sender, EventArgs e, Grid container, Border borderElement)
         {
             //container.Child = null;
             container.Children.Remove(borderElement);
+            container.Height = 52;
         }
         #endregion
         #region Other Methods

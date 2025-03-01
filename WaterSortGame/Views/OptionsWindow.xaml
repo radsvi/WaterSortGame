@@ -55,13 +55,16 @@
                 <GroupBox Header="Dev options">
                     <StackPanel>
                         <DockPanel>
-                            <CheckBox IsChecked="{Binding DeveloperOptionsVisibleBool}" Content="Enable dev options"/>
+                            <CheckBox IsChecked="{Binding DeveloperOptionsVisibleBool, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Enable dev options"/>
                         </DockPanel>
                         <DockPanel>
-                            <CheckBox IsChecked="{Binding UnselectTubeEvenOnIllegalMove}" Content="Unselect tube even when using illegal move"/>
+                            <CheckBox IsChecked="{Binding UnselectTubeEvenOnIllegalMove, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Unselect tube even when using illegal move"/>
                         </DockPanel>
                         <DockPanel>
                             <Button Content="Add couple presets to saved levels - for testing" Command="{Binding AddPresetLevels_Command}" Padding="20 1" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <CheckBox DataContext="{Binding Source={StaticResource TubesManager}}" IsChecked="{Binding LoadDebugLevel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Auto generate debug level on startup"/>
                         </DockPanel>
                     </StackPanel>
                 </GroupBox>

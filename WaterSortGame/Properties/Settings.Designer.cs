@@ -130,5 +130,17 @@ namespace WaterSortGame.Properties {
                 this["UnselectTubeEvenOnIllegalMove"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LoadDebugLevel {
+            get {
+                return ((bool)(this["LoadDebugLevel"]));
+            }
+            set {
+                this["LoadDebugLevel"] = value;
+            }
+        }
     }
 }

@@ -30,12 +30,28 @@ namespace WaterSortGame.Models
                 }
             }
         }
+        private static bool loadDebugLevel = Settings.Default.LoadDebugLevel;
+        public static bool LoadDebugLevel
+        {
+            get { return loadDebugLevel; }
+            set
+            {
+                //if (value != loadDebugLevel)
+                //{
+                    loadDebugLevel = value;
+                    Settings.Default.LoadDebugLevel = loadDebugLevel;
+                    Settings.Default.Save();
+                    //OnPropertyChanged();
+                //}
+            }
+        }
         static TubesManager()
         {
             if (Tubes.Count == 0)
+            {
                 GenerateNewLevel();
+            }
         }
-
         //public event PropertyChangedEventHandler? PropertyChanged;
         //protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         //{
@@ -133,7 +149,22 @@ namespace WaterSortGame.Models
         public static ObservableCollection<Tube> SavedStartingTubes = new ObservableCollection<Tube>();
         public static void GenerateNewLevel()
         {
-            GenerateNewTubes();
+            if (LoadDebugLevel is true)
+                GenerateDebugLevel();
+            else
+                GenerateNewTubes();
+        }
+        private static void GenerateDebugLevel()
+        {
+            SettingFreshGameState();
+            Tubes?.Clear();
+            Tubes.Add(new Tube(1, 1, 4, 4));
+            Tubes.Add(new Tube(8, 8, 1, 1));
+            Tubes.Add(new Tube(4, 4, 8, 8));
+            Tubes.Add(new Tube());
+            Tubes.Add(new Tube());
+
+            StoreStartingTubes();
         }
 
         public static void AddExtraTube()
