@@ -24,7 +24,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 using WaterSortGame.Properties;
@@ -98,7 +100,7 @@ namespace WaterSortGame.ViewModels
                     OnPropertyChanged();
                     return;
                 }
-
+                
             }
         }
         private LiquidColor sourceLiquid;
@@ -126,8 +128,7 @@ namespace WaterSortGame.ViewModels
         public ObservableCollection<Tube> Tubes
         {
             get { return tubes; }
-            set
-            {
+            set {
                 tubes = value;
                 OnPropertyChanged();
                 OnPropertyChanged("TubeCount");
@@ -136,9 +137,8 @@ namespace WaterSortGame.ViewModels
         private int tubeCount;
         public int TubeCount
         {
-            get
-            {
-                return tubeCount;
+            get {
+                return tubeCount; 
                 //return (int)Math.Ceiling((decimal)TubesManager.NumberOfColorsToGenerate / 2);
             }
             set
@@ -183,11 +183,12 @@ namespace WaterSortGame.ViewModels
         {
             this.windowService = new WindowService();
             MainWindow = mainWindow;
-
+            
             Tubes = TubesManager.Tubes;
             CopyTubes();
 
             PropertyChanged += Tube_PropertyChanged;
+            //PropertyChanged += RegenerateTubeDisplay;
             //PropertyChanged += TubeCount_PropertyChanged;
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
             Tubes.CollectionChanged += Tubes_CollectionChanged;
@@ -334,12 +335,12 @@ namespace WaterSortGame.ViewModels
             for (int i = 0; i < 20; i++)
             {
                 await Task.Delay(100);
-                if (token.IsCancellationRequested)
+                if(token.IsCancellationRequested)
                 {
                     break;
                 }
             }
-
+            
             ClosePopupWindow();
         }
         private void CloseNotification()
@@ -395,8 +396,7 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
-        public string DeveloperOptionsVisible
-        {
+        public string DeveloperOptionsVisible {
             get
             {
                 if (developerOptionsVisibleBool == true)
@@ -408,7 +408,7 @@ namespace WaterSortGame.ViewModels
                     return "Hidden";
                 }
             }
-
+            
         }
         private bool unselectTubeEvenOnIllegalMove = Settings.Default.UnselectTubeEvenOnIllegalMove;
         public bool UnselectTubeEvenOnIllegalMove
@@ -473,8 +473,9 @@ namespace WaterSortGame.ViewModels
             } while (success == true && SourceLiquid is not null);
             if (successAtLeastOnce > 0 || UnselectTubeEvenOnIllegalMove == true)
             {
-                DeselectTube();
-                RippleSurfaceAnimation(tube, tube.Layers.Count - 1, successAtLeastOnce);
+                
+                GenerateTubeDisplay(tube);
+                //RippleSurfaceAnimation(tube, tube.Layers.Count - 1, successAtLeastOnce);
             }
         }
         private void SelectLiquid(Tube sourceTube) // selects topmost liquid in a sourceTube
@@ -504,7 +505,7 @@ namespace WaterSortGame.ViewModels
                     return false;
 
             targetTube.Layers.Add(SourceLiquid);
-            RemoveColorFromSourceTube(targetTube);
+            //RemoveColorFromSourceTube(targetTube);
             //SourceColor.LayerNumber = targetTube.Layers.Count - 1;
             //SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
             return true;
@@ -512,6 +513,7 @@ namespace WaterSortGame.ViewModels
         private void RemoveColorFromSourceTube(Tube targetTube)
         {
             SelectedTube.Layers.Remove(SourceLiquid);
+            DeselectTube();
             //SourceColor.TubeNumber = targetTube.TubeId;
         }
         private void DeselectTube()
@@ -556,7 +558,7 @@ namespace WaterSortGame.ViewModels
         }
         private bool DidGameStateChange()
         {
-            if (GameStates.Count == 0 && LastGameState.Count == 0)
+            if(GameStates.Count == 0 && LastGameState.Count == 0)
             {
                 return true;
             }
@@ -573,7 +575,7 @@ namespace WaterSortGame.ViewModels
                 {
                     return true;
                 }
-
+                
                 //var storedTube = lastState[i];
                 //var currentTube = Tubes[i];
                 //// ## jak to budu porovnavat kdyz jsem mezi stepy pridal extra prazdnou Tube?
@@ -622,7 +624,7 @@ namespace WaterSortGame.ViewModels
                     tube.Selected = false;
                 }
             }
-
+            
             //GameStates.Add(CurrentGameStateClone);
         }
         private bool CompareAllTubes()
@@ -692,11 +694,11 @@ namespace WaterSortGame.ViewModels
 
             //Tubes.CollectionChanged += Tubes_CollectionChanged;
             //PropertyChanged += Tube_PropertyChanged;
-
+            
         }
         internal ObservableCollection<Tube> DeepCopyTubesCollection(ObservableCollection<Tube> tubes)
         {
-            ObservableCollection<Tube> newTubes = new ObservableCollection<Tube>();
+            ObservableCollection <Tube> newTubes = new ObservableCollection<Tube>();
             foreach (Tube tube in tubes)
             {
                 newTubes.Add(tube.DeepCopy());
@@ -750,7 +752,7 @@ namespace WaterSortGame.ViewModels
             //bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallNonTransparent.png", UriKind.Relative);
             bmpImg.UriSource = new Uri("Images\\JustLine.png", UriKind.Relative);
             //bmpImg.UriSource = new Uri("Images\\NarrowLine.png", UriKind.Relative);
-
+            
             bmpImg.EndInit();
             brush.ImageSource = bmpImg;
             brush.TileMode = TileMode.Tile;
@@ -770,8 +772,8 @@ namespace WaterSortGame.ViewModels
             tileSizeRectangle.Margin = new Thickness(0, 0, 0, 0);
 
 
-
-
+            
+            
 
 
             //grid.Background = brush;
@@ -793,7 +795,7 @@ namespace WaterSortGame.ViewModels
         private Grid GetContainerForAnimation(Tube tube, int layer)
         {
             Button button = tube.ButtonElement as Button;
-            var descendant = GetDescendantByType(button, typeof(Grid), layer);
+            var descendant = GetDescendantByTypeAndName(button, typeof(Grid), "Layer" + layer);
             Grid container = descendant as Grid;
 
             return container;
@@ -811,7 +813,7 @@ namespace WaterSortGame.ViewModels
 
         //    //Grid gridElement = ((container as Tube).GridElement as Grid);
 
-
+            
 
 
         //    float lengthMultiplier = 20;
@@ -827,7 +829,7 @@ namespace WaterSortGame.ViewModels
 
         //    Grid grid = new Grid();
         //    grid.MaxWidth = container.ActualWidth;
-
+            
         //    grid.Margin = new Thickness(-200, 0, 0, 0);
 
         //    //for (float x1 = 0; x1 < 20; x1 += 0.1F)
@@ -862,7 +864,7 @@ namespace WaterSortGame.ViewModels
         //        //TextBlock textBlock = new TextBlock { Text = "qwer" };
         //        //grid.Children.Add(textBlock);
         //        grid.Children.Add(newShape);
-
+                
 
         //        //gridElement.Children.Add(newShape);
         //        //container.Child = newShape;
@@ -878,7 +880,7 @@ namespace WaterSortGame.ViewModels
         //    //grid.Background = Brushes.White;
         //    return grid;
         //}
-        public static Visual GetDescendantByType(Visual element, Type type, int layer)
+        public static Visual GetDescendantByTypeAndName(Visual element, Type type, string name)
         {
             if (element == null)
             {
@@ -886,8 +888,8 @@ namespace WaterSortGame.ViewModels
             }
             if (element.GetType() == type)
             {
-                Grid foundElementGrid = element as Grid;
-                if (foundElementGrid.Name == "Layer" + layer.ToString())
+                Panel foundElementPanel = element as Panel;
+                if (foundElementPanel.Name == name)
                 {
                     return element;
                 }
@@ -900,14 +902,40 @@ namespace WaterSortGame.ViewModels
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
             {
                 Visual visual = VisualTreeHelper.GetChild(element, i) as Visual;
-                foundElement = GetDescendantByType(visual, type, layer);
+                foundElement = GetDescendantByTypeAndName(visual, type, name);
                 if (foundElement != null)
                 {
-                    Grid foundElementGrid = foundElement as Grid;
-                    if (foundElementGrid.Name == "Layer" + layer.ToString())
+                    Panel foundElementPanel = foundElement as Panel;
+                    if (foundElementPanel.Name == name)
                     {
                         break;
                     }
+                }
+            }
+            return foundElement;
+        }
+        public static Visual GetDescendantByType(Visual element, Type type)
+        {
+            if (element == null)
+            {
+                return null;
+            }
+            if (element.GetType() == type)
+            {
+                return element;
+            }
+            Visual foundElement = null;
+            if (element is FrameworkElement)
+            {
+                (element as FrameworkElement).ApplyTemplate();
+            }
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+            {
+                Visual visual = VisualTreeHelper.GetChild(element, i) as Visual;
+                foundElement = GetDescendantByType(visual, type);
+                if (foundElement != null)
+                {
+                    break;
                 }
             }
             return foundElement;
@@ -925,7 +953,7 @@ namespace WaterSortGame.ViewModels
 
             //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
             //sourceTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
-            if (numberOfLiquids <= 1) // ## smazat if a prepocitat to numericky
+            if (numberOfLiquids <= 1 ) // ## smazat if a prepocitat to numericky
             {
                 var viewportAnimation = new RectAnimation() { From = new Rect(0, 200 * numberOfLiquids, 129, 300), To = new Rect(400 * numberOfLiquids, 50, 129, 300), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
                 viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
@@ -936,21 +964,78 @@ namespace WaterSortGame.ViewModels
                 //var tileSizeRectangle = borderElement.Child;
                 //tileSizeRectangle.Height = 108;
 
+
                 //var viewportAnimation = new RectAnimation() { From = new Rect(0, 170 * numberOfLiquids, 129, 500), To = new Rect(400 * numberOfLiquids, 230, 129, 500), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
                 //container.Height = 108;
                 var viewportAnimation = new RectAnimation() { From = new Rect(0, 170 * numberOfLiquids, 129, 500), To = new Rect(400, 230, 129, 500), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
                 viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
                 brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
             }
-
+            
         }
-
         private void ViewportAnimation_Completed(object? sender, EventArgs e, Grid container, Border borderElement)
         {
             //container.Child = null;
             container.Children.Remove(borderElement);
             container.Height = 52;
         }
+        #endregion
+        #region Generating Tube display from code
+        private void GenerateTubeDisplay(Tube targetTube)
+        {
+            Grid container = GetContainer(targetTube) as Grid;
+            RemoveAllLiquid(container);
+            AddLiquid(container, targetTube);
+
+
+        }
+        private Visual GetContainer(Tube targetTube)
+        {
+            Button button = targetTube.ButtonElement as Button;
+            var descendant = GetDescendantByTypeAndName(button, typeof(Grid), "TubeGrid");
+            Grid container = descendant as Grid;
+
+            return container;
+        }
+        private void RemoveAllLiquid(Grid container)
+        {
+            container.Children?.Clear();
+        }
+        private void AddLiquid(Grid container, Tube targetTube)
+        {
+            //int i = 0;
+
+            int layer = targetTube.Layers.Count - 1;
+            Grid grid = new Grid();
+
+            grid.Name = "Layer" + layer;
+            grid.VerticalAlignment = VerticalAlignment.Top;
+            grid.Height = 52;
+            grid.Margin = new Thickness(5, 0, 5, 0);
+
+            var border = new Border();
+            border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(SourceLiquid.Rgb);
+            Grid.SetRow(border, 3 - layer);
+
+            grid.Children.Add(border);
+
+            container.Children.Add(grid);
+            RemoveColorFromSourceTube(targetTube);
+        }
+
+        //public Border TubeDisplay { get; set; }
+        //public Grid TubeGrid { get; set; }
+        //private void RegenerateTubeDisplay(object? sender, PropertyChangedEventArgs e)
+        //{
+        //    // mozna tu ne zacatku udelat nejakou podminku. treba PropertyChangedEventPaused
+        //    if (PropertyChangedEventPaused is true)
+        //    {
+        //        return;
+        //    }
+
+        //    GetDescendantByType
+
+        //}
         #endregion
         #region Other Methods
         private void Tubes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using WaterSortGame.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -13,7 +14,7 @@ namespace WaterSortGame.Models
         public int? Id { get; set; }
         public string? Name { get; set; }
         public string? Rgb { get; set; }
-
+        
         public static List<LiquidColor> ColorKeys { get; set; } = new List<LiquidColor>() {
             //new Color{ Id = 0, Name="EMPTY", Rgb = "#C0C0C0" },
             new LiquidColor{ Id = 0, Name="blue", Rgb = "#145DEF" },
@@ -42,5 +43,6 @@ namespace WaterSortGame.Models
             Name = GetCode(id).Name;
             Rgb = GetCode(id).Rgb;
         }
+        public Grid Grid { get; set; }
     }
 }
