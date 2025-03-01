@@ -725,18 +725,18 @@ namespace WaterSortGame.ViewModels
         }
         private void RippleSurfaceAnimation(Tube tube, int layer)
         {
-            Border container = GetContainerForAnimation(tube, layer);
-            var originalChild = container.Child;
+            Grid container = GetContainerForAnimation(tube, layer);
+            //var originalChild = container.Child;
             //var grid = DrawSurfaceFromSin(container); // ## tohle mozna udelat permanentni. nemusim to generovat vzdy znova.
-            var brush = DrawSurface(container);
-            
-            SurfaceAnimation(brush, container);
+            (var brush, var borderElement) = DrawSurface(container);
+            container.Children.Add(borderElement);
+            SurfaceAnimation(brush, container, borderElement);
 
             // wait and then return:
             //container.Child = originalChild;
             // hm, tohle mozna nebude nutny delat takhle. spis proste odstranit jakykoliv subChild -> container.Child.Child
         }
-        private ImageBrush DrawSurface(Border container)
+        private (ImageBrush, Border) DrawSurface(Grid container)
         {
             Border borderElement = new Border();
             borderElement.VerticalAlignment = VerticalAlignment.Top;
@@ -744,26 +744,29 @@ namespace WaterSortGame.ViewModels
             ImageBrush brush = new ImageBrush();
             BitmapImage bmpImg = new BitmapImage();
             bmpImg.BeginInit();
-            //bmpImg.UriSource = new Uri("Images\\TubeSurfaceRipple.png", UriKind.Relative);
             bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTall.png", UriKind.Relative);
             bmpImg.EndInit();
             brush.ImageSource = bmpImg;
             brush.TileMode = TileMode.Tile;
             brush.ViewportUnits = BrushMappingMode.Absolute;
-            brush.Viewport = new Rect(0, 200, 129, 300);
+            brush.Viewport = new Rect(0, 200, 129, 52);
 
             Rectangle tileSizeRectangle = new Rectangle();
             tileSizeRectangle.Width = 50;
-            tileSizeRectangle.Height = 137;
+            tileSizeRectangle.Height = 52;
             tileSizeRectangle.Fill = brush;
+            //tileSizeRectangle.Fill = Brushes.Pink;
+            //tileSizeRectangle.Margin = new Thickness(15, 24, 15, 0);
+            tileSizeRectangle.Margin = new Thickness(0, 0, 0, 0);
 
             //grid.Background = brush;
             //grid.Children.Add(brush);
             //grid.Children.Add(tileSizeRectangle);
             borderElement.Child = tileSizeRectangle;
-            container.Child = borderElement;
+            //container.Child = borderElement;
+            //container.Children.Add(borderElement);
 
-            return brush;
+            return (brush, borderElement);
         }
         //private void DrawSurfaceFromSin(Tube tube)
         //{
@@ -772,11 +775,11 @@ namespace WaterSortGame.ViewModels
         //    var originalChild = container.Child;
         //    DrawSurfaceFromSin(container, color);
         //}
-        private Border GetContainerForAnimation(Tube tube, int layer)
+        private Grid GetContainerForAnimation(Tube tube, int layer)
         {
             Button button = tube.ButtonElement as Button;
-            var descendant = GetDescendantByType(button, typeof(Border), layer);
-            Border container = descendant as Border;
+            var descendant = GetDescendantByType(button, typeof(Grid), layer);
+            Grid container = descendant as Grid;
 
             return container;
         }
@@ -868,7 +871,11 @@ namespace WaterSortGame.ViewModels
             }
             if (element.GetType() == type)
             {
-                return element;
+                Grid foundElementGrid = element as Grid;
+                if (foundElementGrid.Name == "Layer" + layer.ToString())
+                {
+                    return element;
+                }
             }
             Visual foundElement = null;
             if (element is FrameworkElement)
@@ -881,8 +888,8 @@ namespace WaterSortGame.ViewModels
                 foundElement = GetDescendantByType(visual, type, layer);
                 if (foundElement != null)
                 {
-                    Border foundElementBorder = foundElement as Border;
-                    if (foundElementBorder.Name == "Layer" + layer.ToString())
+                    Grid foundElementGrid = foundElement as Grid;
+                    if (foundElementGrid.Name == "Layer" + layer.ToString())
                     {
                         break;
                     }
@@ -890,7 +897,7 @@ namespace WaterSortGame.ViewModels
             }
             return foundElement;
         }
-        private void SurfaceAnimation(ImageBrush brush, Border container)
+        private void SurfaceAnimation(ImageBrush brush, Grid container, Border borderElement)
         {
             if (brush is null)
             {
@@ -906,13 +913,14 @@ namespace WaterSortGame.ViewModels
 
             var viewportAnimation = new RectAnimation() { From = new Rect(0, 200, 129, 300), To = new Rect(400, 50, 129, 300), Duration = TimeSpan.FromSeconds(2) };
             //viewportAnimation.Completed += viewportAnimation_Completed;
-            viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container));
+            viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
             brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
         }
 
-        private void ViewportAnimation_Completed(object? sender, EventArgs e, Border container)
+        private void ViewportAnimation_Completed(object? sender, EventArgs e, Grid container, Border borderElement)
         {
-            container.Child = null;
+            //container.Child = null;
+            container.Children.Remove(borderElement);
         }
         #endregion
         #region Other Methods
