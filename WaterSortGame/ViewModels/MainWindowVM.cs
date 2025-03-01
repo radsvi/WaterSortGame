@@ -458,20 +458,21 @@ namespace WaterSortGame.ViewModels
 
             // if selecting different tube
             bool success = false;
-            bool successAtLeastOnce = false;
+            int successAtLeastOnce = 0;
 
             do
             {
                 success = AddLiquidToTargetTube(tube);
                 if (success == true)
                 {
-                    successAtLeastOnce = true;
+                    successAtLeastOnce++;
                     SelectLiquid(SelectedTube); // vyber dalsi liquid ze stejne zkumavky
                 }
             } while (success == true && SourceLiquid is not null);
-            if (successAtLeastOnce == true || UnselectTubeEvenOnIllegalMove == true)
+            if (successAtLeastOnce > 0 || UnselectTubeEvenOnIllegalMove == true)
             {
                 DeselectTube();
+                RippleSurfaceAnimation(tube, tube.Layers.Count - 1, successAtLeastOnce);
             }
         }
         private void SelectLiquid(Tube sourceTube) // selects topmost liquid in a sourceTube
@@ -501,7 +502,6 @@ namespace WaterSortGame.ViewModels
                     return false;
 
             targetTube.Layers.Add(SourceLiquid);
-            RippleSurfaceAnimation(targetTube, targetTube.Layers.Count - 1);
             RemoveColorFromSourceTube(targetTube);
             //SourceColor.LayerNumber = targetTube.Layers.Count - 1;
             //SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
@@ -723,14 +723,14 @@ namespace WaterSortGame.ViewModels
             SelectedTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
 
         }
-        private void RippleSurfaceAnimation(Tube tube, int layer)
+        private void RippleSurfaceAnimation(Tube tube, int layer, int numberOfLiquids)
         {
             Grid container = GetContainerForAnimation(tube, layer);
             //var originalChild = container.Child;
             //var grid = DrawSurfaceFromSin(container); // ## tohle mozna udelat permanentni. nemusim to generovat vzdy znova.
             (var brush, var borderElement) = DrawSurface(container);
             container.Children.Add(borderElement);
-            SurfaceAnimation(brush, container, borderElement);
+            SurfaceAnimation(brush, container, borderElement, numberOfLiquids);
 
             // wait and then return:
             //container.Child = originalChild;
@@ -897,7 +897,7 @@ namespace WaterSortGame.ViewModels
             }
             return foundElement;
         }
-        private void SurfaceAnimation(ImageBrush brush, Grid container, Border borderElement)
+        private void SurfaceAnimation(ImageBrush brush, Grid container, Border borderElement, int numberOfLiquids)
         {
             if (brush is null)
             {
@@ -911,7 +911,7 @@ namespace WaterSortGame.ViewModels
             //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
             //sourceTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
 
-            var viewportAnimation = new RectAnimation() { From = new Rect(0, 200, 129, 300), To = new Rect(400, 50, 129, 300), Duration = TimeSpan.FromSeconds(2) };
+            var viewportAnimation = new RectAnimation() { From = new Rect(0, 200 * numberOfLiquids, 129, 300), To = new Rect(400 * numberOfLiquids, 50, 129, 300), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
             //viewportAnimation.Completed += viewportAnimation_Completed;
             viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
             brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
