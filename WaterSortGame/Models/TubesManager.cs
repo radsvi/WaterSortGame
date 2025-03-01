@@ -228,7 +228,7 @@ namespace WaterSortGame.Models
 
         //    StoreStartingTubes();
         //}
-        public static void GenerateNewTubes()
+        private static void GenerateNewTubes()
         {
             SettingFreshGameState();
             Random rnd = new Random();

@@ -999,7 +999,7 @@ namespace WaterSortGame.ViewModels
         }
         private void RemoveAllLiquid(Grid container)
         {
-            container.Children?.Clear();
+            //container.Children?.Clear();
         }
         private void AddLiquid(Grid container, Tube targetTube)
         {
@@ -1015,11 +1015,13 @@ namespace WaterSortGame.ViewModels
 
             var border = new Border();
             border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(SourceLiquid.Rgb);
-            Grid.SetRow(border, 3 - layer);
+            
 
             grid.Children.Add(border);
-
             container.Children.Add(grid);
+
+            Grid.SetRow(grid, 3 - layer);
+
             RemoveColorFromSourceTube(targetTube);
         }
 

@@ -86,6 +86,7 @@
                                         <RowDefinition Height="52"/>
                                     </Grid.RowDefinitions>
                                     
+                                    
                                     <Grid Name="Layer3" VerticalAlignment="Top" Height="52" Margin="5,0,5,0" Grid.Row="0">
                                         <Border d:Background="#145DEF" Background="{Binding Path=Layers[3].Rgb}" />
                                     </Grid>
