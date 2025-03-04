@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 using WaterSortGame.ViewModels;
+using WaterSortGame.Views.UserControls;
 
 namespace WaterSortGame
 {

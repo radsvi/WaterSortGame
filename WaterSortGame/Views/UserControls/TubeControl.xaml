@@ -60,7 +60,7 @@
     <!--<WrapPanel VerticalAlignment="Top" HorizontalAlignment="Center">-->
     <Grid Style="{StaticResource NumericTextBox}">
         <Button Style="{StaticResource TubeButton}"
-            Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
+            Command="{Binding Path=SelectTubeCommandInternal}"
             Name="TubeButtonSomething"
             Margin="0,15,0,0"
             Focusable="False"

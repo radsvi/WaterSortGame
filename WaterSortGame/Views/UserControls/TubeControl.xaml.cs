@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WaterSortGame.Models;
+using WaterSortGame.MVVM;
+using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Views.UserControls
 {
@@ -22,11 +24,15 @@ namespace WaterSortGame.Views.UserControls
     /// </summary>
     public partial class TubeControl : UserControl
     {
-        public TubeControl()
+        internal TubeControl(MainWindowVM mainWindowVM, Tube tubeItem)
         {
             InitializeComponent();
             (this.Content as FrameworkElement).DataContext = this;
+
+            MainWindowVM = mainWindowVM;
+            TubeItem = tubeItem;
         }
+        private MainWindowVM MainWindowVM { get; set; }
         internal Tube TubeItem
         {
             get { return (Tube)GetValue(TubeItemProperty); }
@@ -36,5 +42,8 @@ namespace WaterSortGame.Views.UserControls
         // Using a DependencyProperty as the backing store for TubeItem.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TubeItemProperty =
             DependencyProperty.Register("TubeItem", typeof(Tube), typeof(TubeControl));
+
+        public RelayCommand SelectTubeCommandInternal => new RelayCommand(execute => MainWindowVM.OnClickingTube(execute));
+        
     }
 }

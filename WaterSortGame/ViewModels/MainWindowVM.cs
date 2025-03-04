@@ -31,6 +31,7 @@ using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 using WaterSortGame.Properties;
 using WaterSortGame.Views;
+using WaterSortGame.Views.UserControls;
 
 namespace WaterSortGame.ViewModels
 {
@@ -211,6 +212,8 @@ namespace WaterSortGame.ViewModels
                 new PopupScreenActions(PopupParams.GameSaved, new GameSavedNotificationVM(this), null, () => CloseNotification()),
                 new PopupScreenActions(PopupParams.SaveLevel, new SaveLevelVM(this), null, () => SaveLevel()),
             };
+
+            DrawTubes();
         }
         #endregion
         #region Navigation
@@ -428,7 +431,7 @@ namespace WaterSortGame.ViewModels
         #endregion
         #region Moving Liquids
         public RelayCommand SelectTubeCommand => new RelayCommand(obj => OnClickingTube(obj));
-        private void OnClickingTube(object obj)
+        internal void OnClickingTube(object obj)
         {
             if (LevelComplete == true)
             {
@@ -436,7 +439,9 @@ namespace WaterSortGame.ViewModels
             }
 
             var tubeButton = obj as TubeButton;
-            var tube = tubeButton?.Contents[0] as Tube;
+            //var tube = tubeButton?.Contents[0] as Tube;
+            var tubeControl = tubeButton?.Contents[0] as TubeControl;
+            var tube = tubeControl.TubeItem as Tube;
             //var button = tubeButton?.Contents[1] as Button;
             tube.ButtonElement = tubeButton.Contents[1] as Button;
             tube.GridElement = tubeButton.Contents[2] as Grid;
@@ -1024,7 +1029,18 @@ namespace WaterSortGame.ViewModels
 
             RemoveColorFromSourceTube(targetTube);
         }
+        private void DrawTubes()
+        {
+            foreach (var tube in Tubes)
+            {
+                var tubeControl = new TubeControl(this, tube);
 
+
+
+                // ## predelat na MVVM
+                MainWindow.GridForTubes.Children.Add(tubeControl);
+            }
+        }
         //public Border TubeDisplay { get; set; }
         //public Grid TubeGrid { get; set; }
         //private void RegenerateTubeDisplay(object? sender, PropertyChangedEventArgs e)
