@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="WaterSortGame.Views.UserControls.TubeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WaterSortGame.Views.UserControls"
+             xmlns:converters="clr-namespace:WaterSortGame.Converters"
+             xmlns:viewModels="clr-namespace:WaterSortGame.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewModels:ViewModelBase}"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="200">
+    <UserControl.Resources>
+        <converters:MultiValueConverter x:Key="MultiValueConv"/>
+        <Style TargetType="Button" x:Key="TubeButton">
+            <Setter Property="Background" Value="Transparent" />
+            <!--<Setter Property="Margin" Value="0,30,0,0" />-->
+            <!--<Setter Property="Margin" Value="0,0,0,0" />-->
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid Margin="{TemplateBinding Margin}" Width="80">
+                            <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
+                            CornerRadius="0,0,5,5" Background="LightBlue"/>
+                            <Border Margin="10" Height="242" CornerRadius="0,0,29,29" Background="LightBlue" VerticalAlignment="Top">
+                                <Grid Margin="0,25,0,0" Height="208" Name="TubeGrid">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="52"/>
+                                        <RowDefinition Height="52"/>
+                                        <RowDefinition Height="52"/>
+                                        <RowDefinition Height="52"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Name="Layer3" Margin="5,0" Grid.Row="0">
+                                        <Border d:Background="#145DEF" Background="{Binding Path=TubeItem.Layers[3].Rgb}" />
+                                    </Grid>
+                                    <Grid Name="Layer2" Margin="5,-1" Grid.Row="1">
+                                        <Border d:Background="#3F4482" Background="{Binding Path=TubeItem.Layers[2].Rgb}" />
+                                    </Grid>
+                                    <Grid Name="Layer1"  Margin="5,-1" Grid.Row="2">
+                                        <Border d:Background="#88AAFF" Background="{Binding Path=TubeItem.Layers[1].Rgb}" />
+                                    </Grid>
+
+                                    <Grid Name="Layer0" Margin="5,-1"  Grid.Row="3">
+                                        <Grid.OpacityMask>
+                                            <VisualBrush Visual="{Binding ElementName=InnerBorder}" />
+                                        </Grid.OpacityMask>
+                                        <Border x:Name="InnerBorder" CornerRadius="0,0,24,24" d:Background="#F27914" Background="{Binding Path=TubeItem.Layers[0].Rgb}" />
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Grid" x:Key="NumericTextBox">
+        </Style>
+    </UserControl.Resources>
+    <!--<WrapPanel VerticalAlignment="Top" HorizontalAlignment="Center">-->
+    <Grid Style="{StaticResource NumericTextBox}">
+        <Button Style="{StaticResource TubeButton}"
+            Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
+            Name="TubeButtonSomething"
+            Margin="0,15,0,0"
+            Focusable="False"
+            >
+            <Button.CommandParameter>
+                <MultiBinding Converter="{StaticResource MultiValueConv}">
+                    <MultiBinding.Bindings>
+                        <Binding/>
+                        <Binding RelativeSource="{RelativeSource Mode=Self}"/>
+                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=Grid}"/>
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </Button.CommandParameter>
+        </Button>
+    </Grid>
+    <!--</WrapPanel>-->
+</UserControl>

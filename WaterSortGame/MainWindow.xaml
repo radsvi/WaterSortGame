@@ -8,6 +8,7 @@
         xmlns:converters="clr-namespace:WaterSortGame.Converters"
         xmlns:views="clr-namespace:WaterSortGame.Views"
         xmlns:viewmodels="clr-namespace:WaterSortGame.ViewModels"
+        xmlns:usercontrols="clr-namespace:WaterSortGame.Views.UserControls"
         x:Name="window"
         mc:Ignorable="d"
         Title="MainWindow"
@@ -66,10 +67,9 @@
             <Setter Property="Height" Value="200" />
             
         </Style>
-        <Style TargetType="Button" x:Key="TubeButton">
+        <!--<Style TargetType="Button" x:Key="TubeButton">
             <Setter Property="Background" Value="Transparent" />
-            <!--<Setter Property="Margin" Value="0,30,0,0" />-->
-            <!--<Setter Property="Margin" Value="0,0,0,0" />-->
+
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -78,7 +78,7 @@
                             <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
                                 CornerRadius="0,0,5,5" Background="LightBlue"/>
                             <Border Margin="10" Height="242" CornerRadius="0,0,29,29" Background="LightBlue">
-                                <Grid Margin="0,25,0,0" Height="206" Name="TubeGrid">
+                                <Grid Margin="0,25,0,0" Height="208" Name="TubeGrid">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="52"/>
                                         <RowDefinition Height="52"/>
@@ -87,17 +87,17 @@
                                     </Grid.RowDefinitions>
                                     
                                     
-                                    <Grid Name="Layer3" VerticalAlignment="Top" Height="52" Margin="5,0,5,0" Grid.Row="0">
+                                    <Grid Name="Layer3" Margin="5,0" Grid.Row="0">
                                         <Border d:Background="#145DEF" Background="{Binding Path=Layers[3].Rgb}" />
                                     </Grid>
-                                    <Grid Name="Layer2" VerticalAlignment="Top" Margin="5,0" Height="52" Grid.Row="1">
+                                    <Grid Name="Layer2" Margin="5,-1" Grid.Row="1">
                                         <Border d:Background="#3F4482" Background="{Binding Path=Layers[2].Rgb}" />
                                     </Grid>
-                                    <Grid Name="Layer1" VerticalAlignment="Top" Margin="5,0" Height="52" Grid.Row="2">
+                                    <Grid Name="Layer1"  Margin="5,-1"  Grid.Row="2">
                                         <Border d:Background="#88AAFF" Background="{Binding Path=Layers[1].Rgb}" />
                                     </Grid>
 
-                                    <Grid Name="Layer0" Background="White" Margin="5,0" Height="52" VerticalAlignment="Top" Grid.Row="3">
+                                    <Grid Name="Layer0" Background="White" Margin="5,-1" Grid.Row="3">
                                         <Grid.OpacityMask>
                                             <VisualBrush Visual="{Binding ElementName=Border1}" />
                                         </Grid.OpacityMask>
@@ -112,26 +112,8 @@
                 </Setter.Value>
             </Setter>
 
-            <!--<Style.Triggers>
 
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Trigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,15" Duration="0:0:0.15"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </Trigger.EnterActions>
-                    <Trigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,15,0,0" Duration="0:0:0.15"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </Trigger.ExitActions>
-                </Trigger>
-            </Style.Triggers>-->
-        </Style>
+        </Style>-->
     </Window.Resources>
 
     <!--<Grid DataContext="{Binding Source={StaticResource MainWindowVM}}" Margin="5">-->
@@ -178,49 +160,10 @@
                 </StackPanel>
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,5,0,0">
-                    <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Center">
-                        <ItemsControl
-                        Name="ListTubes"
-                        HorizontalContentAlignment="Stretch"
-                        ItemsSource="{Binding Tubes}"
-                        d:ItemsSource="{d:SampleData ItemCount=4}"
-                        >
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid d:Columns="8" Columns="{Binding TubeCount}"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <!--<Grid Height="262">-->
-                                    <Grid>
-                                        <!--CommandParameter="{Binding RelativeSource={RelativeSource Self}}"-->
-                                        <!--CommandParameter="{Binding .}"-->
-                                        <!--
-                                        Style="{StaticResource TubeButton}"
-                                        Style="{StaticResource TestButton}"
-                                        -->
-                                        <Button Style="{StaticResource TubeButton}"
-                                            Command="{Binding Path=DataContext.SelectTubeCommand, ElementName=ListTubes}"
-                                            Name="TubeButtonSomething"
-                                            Margin="0,15,0,0"
-                                            Focusable="False"
-                                            >
-                                            <Button.CommandParameter>
-                                                <MultiBinding Converter="{StaticResource MultiValueConv}">
-                                                    <MultiBinding.Bindings>
-                                                        <Binding/>
-                                                        <Binding RelativeSource="{RelativeSource Mode=Self}"/>
-                                                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=Grid}"/>
-                                                    </MultiBinding.Bindings>
-                                                </MultiBinding>
-                                            </Button.CommandParameter>
-                                        </Button>
-                                    </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </WrapPanel>
+                    <Grid>
+                        <usercontrols:TubeControl TubeItem="{Binding Tubes[0]}"/>
+                        <!--<usercontrols:NumericTextBox d:NumTextBoxText="6" />-->
+                    </Grid>
                 </ScrollViewer>
             </Grid>
 
