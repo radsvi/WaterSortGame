@@ -275,7 +275,7 @@ namespace WaterSortGame.ViewModels
 
             ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
 
-            savedLevelList.Add(new StoredLevel(TubesManager.SavedStartingPosition, NoteForSavedLevel));
+            savedLevelList.Add(new StoredLevel(TubesManager.StartingPosition, NoteForSavedLevel));
 
             Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
             //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });

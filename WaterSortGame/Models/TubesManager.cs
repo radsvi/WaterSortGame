@@ -147,7 +147,7 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        public static ObservableCollection<Tube> SavedStartingPosition = new ObservableCollection<Tube>();
+        public static ObservableCollection<Tube> StartingPosition = new ObservableCollection<Tube>();
         public static void GenerateNewLevel()
         {
             if (LoadDebugLevel is true)
@@ -181,7 +181,7 @@ namespace WaterSortGame.Models
             SettingFreshGameState();
             //SavedStartingTubes?.Clear();
             Tubes?.Clear();
-            foreach (var tube in SavedStartingPosition)
+            foreach (var tube in StartingPosition)
             {
                 Tubes.Add((Tube)tube.DeepCopy());
             }
@@ -289,10 +289,10 @@ namespace WaterSortGame.Models
         }
         private static void StoreStartingTubes()
         {
-            SavedStartingPosition?.Clear();
+            StartingPosition?.Clear();
             foreach (Tube tube in Tubes)
             {
-                SavedStartingPosition.Add(tube.DeepCopy());
+                StartingPosition.Add(tube.DeepCopy());
             }
         }
     }

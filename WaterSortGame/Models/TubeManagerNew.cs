@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using WaterSortGame.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WaterSortGame.Models
 {
@@ -13,35 +15,99 @@ namespace WaterSortGame.Models
         private MainWindowVM MainWindowVM;
         private AppSettings AppSettings;
         //private MainWindowVM MainWindow;
-        private readonly int[,] grid;
-        public int Tubes { get; }
-        public int Layers { get; }
-        public int this[int tubes, int layers]
+        //private readonly int[,] gameState;
+        public int Tubes { get; set; }
+        public int Layers { get; } = 4;
+        //public int this[int tubes, int layers]
+        //{
+        //    get => gameState[tubes, layers];
+        //    set
+        //    {
+        //        gameState[tubes, layers] = value;
+        //        //OnLiquidMoving();
+        //    }
+        //}
+
+        private List<List<LiquidColorNew>> gameState;
+        public LiquidColorNew this[int tube, int layer]
         {
-            get => grid[tubes, layers];
+            get
+            {
+                //return gameStateList.ElementAt(tubes).ElementAt(layers);
+                return gameState[tube][layer];
+            }
             set
             {
-                grid[tubes, layers] = value;
-                //OnLiquidMoving();
+                gameState[tube][layer] = value;
             }
         }
+        //ElementAt
+
         public int ExtraTubesAdded { get; set; } = 0;
-        public ObservableCollection<Tube> SavedStartingPosition = new ObservableCollection<Tube>();
+        public ObservableCollection<Tube> StartingPosition = new ObservableCollection<Tube>();
 
         //public TubeManagerNew(int tubes, MainWindowVM mainWindow)
         public TubeManagerNew(MainWindowVM mainWindowVM, int tubes)
         {
-            Layers = 4;
             Tubes = tubes;
-            grid = new int[Tubes, Layers];
+            //gameState = new int[Tubes, Layers];
+            gameState = new List<List<LiquidColorNew>>();
+            for (int i = 0; i < Tubes; i++)
+            {
+                var t = new List<LiquidColorNew>();
+                for (int j = 0; j < Layers; j++)
+                {
+                    t.Add(new LiquidColorNew());
+                }
+                gameState.Add(t);
+            }
 
             MainWindowVM = mainWindowVM;
             AppSettings = mainWindowVM.AppSettings;
+        }
+        public TubeManagerNew(int tubes)
+        {
+            gameState = new List<List<LiquidColorNew>>();
+            for (int i = 0; i < Tubes; i++)
+            {
+                var t = new List<LiquidColorNew>();
+                for (int j = 0; j < Layers; j++)
+                {
+                    t.Add(new LiquidColorNew());
+                }
+                gameState.Add(t);
+            }
         }
         //private void OnLiquidMoving()
         //{
         //    MainWindow.DrawTubes();
         //}
+        private void AddTube()
+        {
+            Tubes++;
+            for (int i = 0; i < Layers; i++)
+            {
+                this[++Tubes, i] = new LiquidColorNew();
+            }
+        }
+        private void AddTube(LiquidColorNames[] colorNames)
+        {
+            Tubes++;
+            int i = 0;
+            foreach (LiquidColorNames name in colorNames)
+            {
+                this[Tubes, i] = new LiquidColorNew(name);
+            }
+            //for (int i = 0; i < Layers; i++)
+            //{
+            //    this[Tubes, i] = new LiquidColorNew(colorName);
+            //}
+        }
+        private void AddTube(int[] colorIds)
+        {
+            var colorNames = Array.ConvertAll(colorIds, item => (LiquidColorNames)item);
+            AddTube(colorNames);
+        }
 
         public void GenerateNewLevel()
         {
@@ -53,20 +119,21 @@ namespace WaterSortGame.Models
         private void GenerateDebugLevel()
         {
             SettingFreshGameState();
-            Tubes?.Clear();
-            Tubes.Add(new Tube(1, 1, 4, 4));
-            Tubes.Add(new Tube(8, 8, 1, 1));
-            Tubes.Add(new Tube(4, 4, 8, 8));
-            Tubes.Add(new Tube());
-            Tubes.Add(new Tube());
+            gameState?.Clear();
+
+            AddTube(new int[] { 1, 1, 4, 4 });
+            AddTube(new int[] { 8, 8, 1, 1 });
+            AddTube(new int[] { 4, 4, 8, 8 });
+            AddTube();
+            AddTube();
 
             StoreStartingTubes();
         }
-        public void AddExtraTube()
+        public void AddExtraTube() // this is for adding extra tube during gameplay
         {
             if (ExtraTubesAdded <= AppSettings.MaximumExtraTubes)
             {
-                Tubes.Add(new Tube());
+                AddTube();
                 ExtraTubesAdded++;
             }
         }
@@ -74,10 +141,11 @@ namespace WaterSortGame.Models
         {
             SettingFreshGameState();
             //SavedStartingTubes?.Clear();
-            Tubes?.Clear();
-            foreach (var tube in SavedStartingPosition)
+            gameState?.Clear();
+            foreach (var tube in StartingPosition)
             {
                 Tubes.Add((Tube)tube.DeepCopy());
+                AddTube()
             }
         }
         private void GenerateStandardLevel()
@@ -140,10 +208,10 @@ namespace WaterSortGame.Models
         }
         private void StoreStartingTubes()
         {
-            SavedStartingPosition?.Clear();
+            StartingPosition?.Clear();
             foreach (Tube tube in Tubes)
             {
-                SavedStartingPosition.Add(tube.DeepCopy());
+                StartingPosition.Add(tube.DeepCopy());
             }
         }
 
