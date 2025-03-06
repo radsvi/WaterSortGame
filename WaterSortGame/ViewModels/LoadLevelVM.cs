@@ -143,7 +143,7 @@ namespace WaterSortGame.ViewModels
             }
             MainWindowVM.ClosePopupWindow();
             MainWindowVM.PropertyChangedEventPaused = true;
-            TubesManager.SavedStartingTubes = MainWindowVM.DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
+            TubesManager.SavedStartingPosition = MainWindowVM.DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
             
 
             //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);

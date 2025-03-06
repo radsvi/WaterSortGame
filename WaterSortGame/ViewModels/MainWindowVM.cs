@@ -55,7 +55,8 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
-        public MainWindow MainWindow { get; set; }
+        public MainWindow MainWindow { get; }
+        public AppSettings AppSettings { get; }
 
         private ViewModelBase _selectedViewModel;
         public ViewModelBase SelectedViewModel
@@ -184,7 +185,8 @@ namespace WaterSortGame.ViewModels
         {
             this.windowService = new WindowService();
             MainWindow = mainWindow;
-            
+            AppSettings = new AppSettings();
+
             Tubes = TubesManager.Tubes;
             CopyTubes();
 
@@ -245,7 +247,7 @@ namespace WaterSortGame.ViewModels
         {
             PopupWindow.Execute(null);
         }
-        public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesManager.AddExtraTube(), canExecute => TubesManager.ExtraTubes < TubesManager.MaximumExtraTubes);
+        public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesManager.AddExtraTube(), canExecute => TubesManager.ExtraTubesAdded < TubesManager.MaximumExtraTubes);
         private void GenerateNewLevel()
         {
             ClosePopupWindow();
@@ -273,7 +275,7 @@ namespace WaterSortGame.ViewModels
 
             ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
 
-            savedLevelList.Add(new StoredLevel(TubesManager.SavedStartingTubes, NoteForSavedLevel));
+            savedLevelList.Add(new StoredLevel(TubesManager.SavedStartingPosition, NoteForSavedLevel));
 
             Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
             //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
@@ -1029,7 +1031,7 @@ namespace WaterSortGame.ViewModels
 
             RemoveColorFromSourceTube(targetTube);
         }
-        private void DrawTubes()
+        public void DrawTubes()
         {
             foreach (var tube in Tubes)
             {

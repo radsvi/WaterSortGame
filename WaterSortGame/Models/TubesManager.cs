@@ -14,6 +14,7 @@ using WaterSortGame.Views;
 
 namespace WaterSortGame.Models
 {
+    [Obsolete]
     internal class TubesManager : ViewModelBase
     {
         //public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>();
@@ -81,7 +82,7 @@ namespace WaterSortGame.Models
         //    }
         //}
 
-        public static int ExtraTubes { get; set; } = 0;
+        public static int ExtraTubesAdded { get; set; } = 0;
         private static int numberOfColorsToGenerate = Settings.Default.NumberOfColorsToGenerate;
         public static int NumberOfColorsToGenerate
         {
@@ -146,13 +147,13 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        public static ObservableCollection<Tube> SavedStartingTubes = new ObservableCollection<Tube>();
+        public static ObservableCollection<Tube> SavedStartingPosition = new ObservableCollection<Tube>();
         public static void GenerateNewLevel()
         {
             if (LoadDebugLevel is true)
                 GenerateDebugLevel();
             else
-                GenerateNewTubes();
+                GenerateStandardLevel();
         }
         private static void GenerateDebugLevel()
         {
@@ -169,10 +170,10 @@ namespace WaterSortGame.Models
 
         public static void AddExtraTube()
         {
-            if (ExtraTubes <= MaximumExtraTubes)
+            if (ExtraTubesAdded <= MaximumExtraTubes)
             {
                 Tubes.Add(new Tube());
-                ExtraTubes++;
+                ExtraTubesAdded++;
             }
         }
         public static void RestartLevel()
@@ -180,7 +181,7 @@ namespace WaterSortGame.Models
             SettingFreshGameState();
             //SavedStartingTubes?.Clear();
             Tubes?.Clear();
-            foreach (var tube in SavedStartingTubes)
+            foreach (var tube in SavedStartingPosition)
             {
                 Tubes.Add((Tube)tube.DeepCopy());
             }
@@ -228,7 +229,7 @@ namespace WaterSortGame.Models
 
         //    StoreStartingTubes();
         //}
-        private static void GenerateNewTubes()
+        private static void GenerateStandardLevel()
         {
             SettingFreshGameState();
             Random rnd = new Random();
@@ -284,14 +285,14 @@ namespace WaterSortGame.Models
         }
         private static void SettingFreshGameState()
         {
-            ExtraTubes = 0; // resets how much extra tubes has been added
+            ExtraTubesAdded = 0; // resets how much extra tubes has been added
         }
         private static void StoreStartingTubes()
         {
-            SavedStartingTubes?.Clear();
+            SavedStartingPosition?.Clear();
             foreach (Tube tube in Tubes)
             {
-                SavedStartingTubes.Add(tube.DeepCopy());
+                SavedStartingPosition.Add(tube.DeepCopy());
             }
         }
     }
