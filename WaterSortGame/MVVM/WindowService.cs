@@ -7,6 +7,7 @@ using System.Windows;
 using WaterSortGame.Views;
 using WaterSortGame.ViewModels;
 using System.Runtime.CompilerServices;
+using WaterSortGame.Models;
 
 namespace WaterSortGame.MVVM
 {
@@ -18,6 +19,7 @@ namespace WaterSortGame.MVVM
             window.DataContext = sender;
             MainWindowVM mainWindowVM = (MainWindowVM)sender;
             MainWindow mainWindow = mainWindowVM.MainWindow;
+            //AppSettings appSettings = mainWindowVM.AppSettings;
 
             window.Top = (mainWindow.Top + 30);
             window.Left = (mainWindow.Left + (mainWindow.Width - mainWindowVM.OptionsWindowWidth) / 2);

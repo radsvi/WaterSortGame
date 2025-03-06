@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WaterSortGame.Properties;
+using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    internal class AppSettings
+    internal class AppSettings : ViewModelBase
     {
         private static bool loadDebugLevel = Settings.Default.LoadDebugLevel;
         public static bool LoadDebugLevel
@@ -85,6 +86,66 @@ namespace WaterSortGame.Models
                     }
                     Settings.Default.MaximumExtraTubes = value;
                     Settings.Default.Save();
+                }
+            }
+        }
+        private bool dontShowHelpScreenAtStart = Settings.Default.DontShowHelpScreenAtStart;
+        public bool DontShowHelpScreenAtStart
+        {
+            get { return dontShowHelpScreenAtStart; }
+            set
+            {
+                if (value != dontShowHelpScreenAtStart)
+                {
+                    dontShowHelpScreenAtStart = value;
+                    Settings.Default.DontShowHelpScreenAtStart = dontShowHelpScreenAtStart;
+                    Settings.Default.Save();
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool developerOptionsVisibleBool = Settings.Default.DeveloperOptionsVisibleBool;
+        public bool DeveloperOptionsVisibleBool
+        {
+            get { return developerOptionsVisibleBool; }
+            set
+            {
+                if (value != developerOptionsVisibleBool)
+                {
+                    developerOptionsVisibleBool = value;
+                    Settings.Default.DeveloperOptionsVisibleBool = developerOptionsVisibleBool;
+                    Settings.Default.Save();
+                    OnPropertyChanged(nameof(DeveloperOptionsVisible));
+                }
+            }
+        }
+        public string DeveloperOptionsVisible
+        {
+            get
+            {
+                if (developerOptionsVisibleBool == true)
+                {
+                    return "Visible";
+                }
+                else
+                {
+                    return "Hidden";
+                }
+            }
+
+        }
+        private bool unselectTubeEvenOnIllegalMove = Settings.Default.UnselectTubeEvenOnIllegalMove;
+        public bool UnselectTubeEvenOnIllegalMove
+        {
+            get { return unselectTubeEvenOnIllegalMove; }
+            set
+            {
+                if (value != unselectTubeEvenOnIllegalMove)
+                {
+                    unselectTubeEvenOnIllegalMove = value;
+                    Settings.Default.UnselectTubeEvenOnIllegalMove = unselectTubeEvenOnIllegalMove;
+                    Settings.Default.Save();
+                    OnPropertyChanged();
                 }
             }
         }

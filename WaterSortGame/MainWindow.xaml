@@ -30,7 +30,7 @@
         <!--#region Resources -->
         <converters:MultiValueConverter x:Key="MultiValueConv"/>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
-        <models:TubesManager x:Key="TubesList"/>
+        <!--<models:TubesManager x:Key="TubesList"/>-->
         <!--<viewmodels:MainWindowVM x:Key="MainWindowVM"/>-->
         <views:LevelCompleteScreen x:Key="LevelCompleteScreen"/>
         <views:NewLevelScreen x:Key="NewLevelScreen"/>
@@ -140,10 +140,10 @@
                         <TextBlock Text="×" FontSize="25" Margin="0,-9,0,0"/>
                     </Button>-->
                 </StackPanel>
-                <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding DeveloperOptionsVisible}">
+                <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding AppSettings.DeveloperOptionsVisible}">
                     <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.LoadLevel}"/>
                     <Button Content="Save level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.SaveLevel}"/>
-                    <!--<Button Content="[temp1]" Command="{Binding PopupWindow}" CommandParameter="GameSaved"/>-->
+                    <Button Content="[temp1]" Command="{Binding TestDraw_Command}"/>
                     <!--<Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
                     <Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->
                     <!--<Button Content="[temp3]" Command="{Binding PopupWindow}" CommandParameter="Help"/>-->
@@ -164,9 +164,6 @@
                         <!--<usercontrols:TubeControl TubeItem="{Binding Tubes[0]}"/>-->
                         <!--<usercontrols:NumericTextBox d:NumTextBoxText="6" />-->
                     </WrapPanel>
-                    
-
-                    
                 </ScrollViewer>
             </Grid>
 

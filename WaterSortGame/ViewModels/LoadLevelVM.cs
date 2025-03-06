@@ -13,9 +13,11 @@ namespace WaterSortGame.ViewModels
 {
     class LoadLevelVM : PopupScreenBase
     {
+        private AppSettings AppSettings;
         public LoadLevelVM(object viewModel) : base(viewModel)
         {
             MainWindowVM = (MainWindowVM)viewModel;
+            AppSettings = MainWindowVM.AppSettings;
             LoadLevelList.CollectionChanged += LoadLevelList_CollectionChanged;
             //MainWindowVM.LoadLevelScreen();
 
@@ -143,7 +145,7 @@ namespace WaterSortGame.ViewModels
             }
             MainWindowVM.ClosePopupWindow();
             MainWindowVM.PropertyChangedEventPaused = true;
-            TubesManager.StartingPosition = MainWindowVM.DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
+            MainWindowVM.TubesManager.StartingPosition = MainWindowVM.DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
             
 
             //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);

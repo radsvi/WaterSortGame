@@ -1,164 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using WaterSortGame.Properties;
+using System.Windows.Media;
 using WaterSortGame.ViewModels;
-using WaterSortGame.Views;
 
 namespace WaterSortGame.Models
 {
-    [Obsolete]
     internal class TubesManager : ViewModelBase
     {
-        //public static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>();
-        private static ObservableCollection<Tube> _tubes = new ObservableCollection<Tube>();
-        public static ObservableCollection<Tube> Tubes
+        private MainWindowVM MainWindowVM;
+        private AppSettings AppSettings;
+        //private MainWindowVM MainWindow;
+        //private readonly int[,] gameState;
+        private ObservableCollection<Tube> tubes = new ObservableCollection<Tube>();
+        public ObservableCollection<Tube> Tubes
         {
-            get { return _tubes; }
+            get { return tubes; }
             set
             {
-                if (value != _tubes)
+                if (value != tubes)
                 {
-                    _tubes = value;
-                    OnGlobalPropertyChanged("NumberOfColorsToGenerate");
+                    tubes = value;
+                    OnPropertyChanged();
                 }
             }
         }
-        private static bool loadDebugLevel = Settings.Default.LoadDebugLevel;
-        public static bool LoadDebugLevel
+
+        public int ExtraTubesAdded { get; set; } = 0;
+        public ObservableCollection<Tube> StartingPosition = new ObservableCollection<Tube>();
+
+        public TubesManager(MainWindowVM mainWindowVM)
         {
-            get { return loadDebugLevel; }
-            set
-            {
-                //if (value != loadDebugLevel)
-                //{
-                    loadDebugLevel = value;
-                    Settings.Default.LoadDebugLevel = loadDebugLevel;
-                    Settings.Default.Save();
-                    //OnPropertyChanged();
-                //}
-            }
-        }
-        static TubesManager()
-        {
+            MainWindowVM = mainWindowVM;
+            AppSettings = MainWindowVM.AppSettings;
+
             if (Tubes.Count == 0)
             {
                 GenerateNewLevel();
             }
         }
-        //public event PropertyChangedEventHandler? PropertyChanged;
-        //protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        //private void OnLiquidMoving()
         //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //    MainWindow.DrawTubes();
         //}
-
-        public static event PropertyChangedEventHandler GlobalPropertyChanged = delegate { };
-        public static void OnGlobalPropertyChanged(string propertyName)
+        public void GenerateNewLevel()
         {
-            GlobalPropertyChanged?.Invoke(
-                typeof(TubesManager),
-                new PropertyChangedEventArgs(propertyName));
-        }
-        //public void TubesManager()
-        //{
-        //    // This should use a weak event handler instead of normal handler
-        //    GlobalPropertyChanged += this.HandleGlobalPropertyChanged;
-        //}
-        //void HandleGlobalPropertyChanged(object sender, PropertyChangedEventArgs e)
-        //{
-        //    switch (e.PropertyName)
-        //    {
-        //        case "NumberOfColorsToGenerate":
-        //            if (length > MinimumLength)
-        //                length = MinimumLength;
-        //            break;
-        //    }
-        //}
-
-        public static int ExtraTubesAdded { get; set; } = 0;
-        private static int numberOfColorsToGenerate = Settings.Default.NumberOfColorsToGenerate;
-        public static int NumberOfColorsToGenerate
-        {
-            get { return numberOfColorsToGenerate; }
-            set
-            {
-                if (numberOfColorsToGenerate != value)
-                {
-                    if (value >= 3 && value <= LiquidColor.ColorKeys.Count)
-                    {
-                        numberOfColorsToGenerate = value;
-                    }
-                    else if (value < 3)
-                    {
-                        numberOfColorsToGenerate = 3;
-                    }
-                    else if (value > LiquidColor.ColorKeys.Count)
-                    {
-                        numberOfColorsToGenerate = LiquidColor.ColorKeys.Count;
-                    }
-                    //OnPropertyChanged();
-                    //OnGlobalPropertyChanged("NumberOfColorsToGenerate");
-                    Settings.Default.NumberOfColorsToGenerate = numberOfColorsToGenerate;
-                    Settings.Default.Save();
-                }
-            }
-        }
-        private static bool randomNumberOfTubes = Settings.Default.RandomNumberOfTubes;
-        public static bool RandomNumberOfTubes
-        {
-            get { return randomNumberOfTubes; }
-            set
-            {
-                randomNumberOfTubes = value;
-                Settings.Default.RandomNumberOfTubes = value;
-                Settings.Default.Save();
-            }
-        }
-
-        private static int maximumExtraTubes = Settings.Default.MaximumExtraTubes;
-        public static int MaximumExtraTubes
-        {
-            get { return maximumExtraTubes; }
-            set
-            {
-                if (maximumExtraTubes != value)
-                {
-                    if (value >= 0 && value <= 20)
-                    {
-                        maximumExtraTubes = value;
-                    }
-                    else if (value < 0)
-                    {
-                        maximumExtraTubes = 0;
-                    }
-                    else if (value > 20)
-                    {
-                        maximumExtraTubes = 20;
-                    }
-                    Settings.Default.MaximumExtraTubes = value;
-                    Settings.Default.Save();
-                }
-            }
-        }
-        public static ObservableCollection<Tube> StartingPosition = new ObservableCollection<Tube>();
-        public static void GenerateNewLevel()
-        {
-            if (LoadDebugLevel is true)
+            if (AppSettings.LoadDebugLevel is true)
                 GenerateDebugLevel();
             else
                 GenerateStandardLevel();
         }
-        private static void GenerateDebugLevel()
+        private void GenerateDebugLevel()
         {
             SettingFreshGameState();
             Tubes?.Clear();
+
             Tubes.Add(new Tube(1, 1, 4, 4));
             Tubes.Add(new Tube(8, 8, 1, 1));
             Tubes.Add(new Tube(4, 4, 8, 8));
@@ -167,16 +66,15 @@ namespace WaterSortGame.Models
 
             StoreStartingTubes();
         }
-
-        public static void AddExtraTube()
+        public void AddExtraTube() // this is for adding extra tube during gameplay
         {
-            if (ExtraTubesAdded <= MaximumExtraTubes)
+            if (ExtraTubesAdded <= AppSettings.MaximumExtraTubes)
             {
                 Tubes.Add(new Tube());
                 ExtraTubesAdded++;
             }
         }
-        public static void RestartLevel()
+        public void RestartLevel()
         {
             SettingFreshGameState();
             //SavedStartingTubes?.Clear();
@@ -186,58 +84,15 @@ namespace WaterSortGame.Models
                 Tubes.Add((Tube)tube.DeepCopy());
             }
         }
-        //public static void LoadLevel()
-        //{
-        //    Tubes?.Clear();
-        //    if (false)
-        //    {
-        //        Tubes.Add(new Tube(8, 1, 3, 0));
-        //        Tubes.Add(new Tube(2, 7, 10, 4));
-        //        Tubes.Add(new Tube(8, 10, 10, 11));
-        //        Tubes.Add(new Tube(2, 2, 1, 4));
-        //        Tubes.Add(new Tube(0, 6, 5, 9));
-        //        Tubes.Add(new Tube(2, 3, 6, 3));
-        //        Tubes.Add(new Tube(3, 7, 4, 9));
-        //        Tubes.Add(new Tube(5, 0, 1, 8));
-        //        Tubes.Add(new Tube(10, 9, 6, 5));
-        //        Tubes.Add(new Tube(4, 6, 9, 3));
-        //        Tubes.Add(new Tube(7, 11, 5, 11));
-        //        Tubes.Add(new Tube(0, 11, 7, 8));
-        //        Tubes.Add(new Tube());
-        //        Tubes.Add(new Tube());
-        //    }
-        //    else
-        //    {
-        //        Tubes.Add(new Tube(0, 0, 0, 0));
-        //        Tubes.Add(new Tube(1, 1, 1, 1));
-        //        Tubes.Add(new Tube(2, 2, 2, 2));
-        //        Tubes.Add(new Tube(3, 3, 3, 3));
-        //        Tubes.Add(new Tube(4, 4, 4, 4));
-        //        Tubes.Add(new Tube(5, 5, 5, 5));
-        //        Tubes.Add(new Tube(6, 6, 6, 6));
-        //        Tubes.Add(new Tube(7, 7, 7, 7));
-        //        Tubes.Add(new Tube(8, 8, 8, 8));
-        //        Tubes.Add(new Tube(9, 9, 9, 9));
-        //        Tubes.Add(new Tube(10, 10, 10, 10));
-        //        Tubes.Add(new Tube(11, 11, 11));
-        //        Tubes.Add(new Tube(11));
-        //        //Tubes.Add(new Tube(9, 11, 10, 11));
-        //        //Tubes.Add(new Tube(9, 10, 11, 10));
-        //        Tubes.Add(new Tube());
-        //        Tubes.Add(new Tube());
-        //    }
-
-        //    StoreStartingTubes();
-        //}
-        private static void GenerateStandardLevel()
+        private void GenerateStandardLevel()
         {
             SettingFreshGameState();
             Random rnd = new Random();
 
             ObservableCollection<LiquidColor> colorsList = new ObservableCollection<LiquidColor>();
-            if (RandomNumberOfTubes)
+            if (AppSettings.RandomNumberOfTubes)
             {
-                NumberOfColorsToGenerate = rnd.Next(3, LiquidColor.ColorKeys.Count);
+                AppSettings.NumberOfColorsToGenerate = rnd.Next(3, LiquidColor.ColorKeys.Count);
             }
 
             List<int> selectedColors = new List<int>();
@@ -246,7 +101,7 @@ namespace WaterSortGame.Models
                 selectedColors.Add(i);
             }
 
-            for (int i = 0; i < LiquidColor.ColorKeys.Count - NumberOfColorsToGenerate; i++) // now remove some random ones
+            for (int i = 0; i < LiquidColor.ColorKeys.Count - AppSettings.NumberOfColorsToGenerate; i++) // now remove some random ones
             {
                 //selectedColors.Remove(selectedColors[NumberOfColorsToGenerate]); // this always keeps the same colors
                 selectedColors.Remove(selectedColors[rnd.Next(0, selectedColors.Count)]);
@@ -261,7 +116,7 @@ namespace WaterSortGame.Models
 
             Tubes?.Clear();
             //var tubes = new ObservableCollection<Tube>();
-            for (int i = 0; i < NumberOfColorsToGenerate; i++)
+            for (int i = 0; i < AppSettings.NumberOfColorsToGenerate; i++)
             {
                 LiquidColor[] layer = new LiquidColor[4];
                 for (int j = 0; j < 4; j++)
@@ -283,11 +138,11 @@ namespace WaterSortGame.Models
 
             StoreStartingTubes();
         }
-        private static void SettingFreshGameState()
+        private void SettingFreshGameState()
         {
             ExtraTubesAdded = 0; // resets how much extra tubes has been added
         }
-        private static void StoreStartingTubes()
+        private void StoreStartingTubes()
         {
             StartingPosition?.Clear();
             foreach (Tube tube in Tubes)
@@ -295,5 +150,6 @@ namespace WaterSortGame.Models
                 StartingPosition.Add(tube.DeepCopy());
             }
         }
+
     }
 }

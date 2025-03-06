@@ -38,25 +38,10 @@ namespace WaterSortGame.ViewModels
     class MainWindowVM : ViewModelBase
     {
         #region Properties
-
         private IWindowService windowService;
-        private bool dontShowHelpScreenAtStart = Settings.Default.DontShowHelpScreenAtStart;
-        public bool DontShowHelpScreenAtStart
-        {
-            get { return dontShowHelpScreenAtStart; }
-            set
-            {
-                if (value != dontShowHelpScreenAtStart)
-                {
-                    dontShowHelpScreenAtStart = value;
-                    Settings.Default.DontShowHelpScreenAtStart = dontShowHelpScreenAtStart;
-                    Settings.Default.Save();
-                    //OnPropertyChanged();
-                }
-            }
-        }
         public MainWindow MainWindow { get; }
         public AppSettings AppSettings { get; }
+        public TubesManager TubesManager { get; }
 
         private ViewModelBase _selectedViewModel;
         public ViewModelBase SelectedViewModel
@@ -187,6 +172,7 @@ namespace WaterSortGame.ViewModels
             MainWindow = mainWindow;
             AppSettings = new AppSettings();
 
+            TubesManager = new TubesManager(this);
             Tubes = TubesManager.Tubes;
             CopyTubes();
 
@@ -197,7 +183,7 @@ namespace WaterSortGame.ViewModels
             Tubes.CollectionChanged += Tubes_CollectionChanged;
             TubesPerLineCalculation();
             PopupWindow = new PopupScreenCommand(this);
-            if (dontShowHelpScreenAtStart == false)
+            if (AppSettings.DontShowHelpScreenAtStart == false)
             {
                 SelectedViewModel = new HelpVM(this);
             }
@@ -247,7 +233,7 @@ namespace WaterSortGame.ViewModels
         {
             PopupWindow.Execute(null);
         }
-        public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesManager.AddExtraTube(), canExecute => TubesManager.ExtraTubesAdded < TubesManager.MaximumExtraTubes);
+        public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesManager.AddExtraTube(), canExecute => TubesManager.ExtraTubesAdded < AppSettings.MaximumExtraTubes);
         private void GenerateNewLevel()
         {
             ClosePopupWindow();
@@ -255,7 +241,7 @@ namespace WaterSortGame.ViewModels
             OnStartingLevel();
         }
         public RelayCommand RestartLevel_Command => new RelayCommand(execute => RestartLevel());
-        internal void RestartLevel()
+        public void RestartLevel()
         {
             ClosePopupWindow();
             TubesManager.RestartLevel();
@@ -267,6 +253,7 @@ namespace WaterSortGame.ViewModels
             DeselectTube();
             GameStates.Clear();
             LastGameState = new ObservableCollection<Tube>();
+            DrawTubes();
         }
         public string NoteForSavedLevel { get; set; }
         private void SaveLevel()
@@ -386,50 +373,6 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        private bool developerOptionsVisibleBool = Settings.Default.DeveloperOptionsVisibleBool;
-        public bool DeveloperOptionsVisibleBool
-        {
-            get { return developerOptionsVisibleBool; }
-            set
-            {
-                if (value != developerOptionsVisibleBool)
-                {
-                    developerOptionsVisibleBool = value;
-                    Settings.Default.DeveloperOptionsVisibleBool = developerOptionsVisibleBool;
-                    Settings.Default.Save();
-                    OnPropertyChanged(nameof(DeveloperOptionsVisible));
-                }
-            }
-        }
-        public string DeveloperOptionsVisible {
-            get
-            {
-                if (developerOptionsVisibleBool == true)
-                {
-                    return "Visible";
-                }
-                else
-                {
-                    return "Hidden";
-                }
-            }
-            
-        }
-        private bool unselectTubeEvenOnIllegalMove = Settings.Default.UnselectTubeEvenOnIllegalMove;
-        public bool UnselectTubeEvenOnIllegalMove
-        {
-            get { return unselectTubeEvenOnIllegalMove; }
-            set
-            {
-                if (value != unselectTubeEvenOnIllegalMove)
-                {
-                    unselectTubeEvenOnIllegalMove = value;
-                    Settings.Default.UnselectTubeEvenOnIllegalMove = unselectTubeEvenOnIllegalMove;
-                    Settings.Default.Save();
-                    //OnPropertyChanged();
-                }
-            }
-        }
         #endregion
         #region Moving Liquids
         public RelayCommand SelectTubeCommand => new RelayCommand(obj => OnClickingTube(obj));
@@ -478,7 +421,7 @@ namespace WaterSortGame.ViewModels
                     SelectLiquid(SelectedTube); // vyber dalsi liquid ze stejne zkumavky
                 }
             } while (success == true && SourceLiquid is not null);
-            if (successAtLeastOnce > 0 || UnselectTubeEvenOnIllegalMove == true)
+            if (successAtLeastOnce > 0 || AppSettings.UnselectTubeEvenOnIllegalMove == true)
             {
                 
                 GenerateTubeDisplay(tube);
@@ -1031,13 +974,15 @@ namespace WaterSortGame.ViewModels
 
             RemoveColorFromSourceTube(targetTube);
         }
+        public RelayCommand TestDraw_Command => new RelayCommand(execute => DrawTubes());
         public void DrawTubes()
         {
+            MainWindow.GridForTubes.Children.Clear(); // deletes classes of type Visual
             foreach (var tube in Tubes)
             {
                 var tubeControl = new TubeControl(this, tube);
 
-
+                // mozna to tu udelat pres ten <ContentControl> nejak
 
                 // ## predelat na MVVM
                 MainWindow.GridForTubes.Children.Add(tubeControl);
