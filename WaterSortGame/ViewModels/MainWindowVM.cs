@@ -41,7 +41,7 @@ namespace WaterSortGame.ViewModels
         private IWindowService windowService;
         public MainWindow MainWindow { get; }
         public AppSettings AppSettings { get; }
-        protected GameState GameState { get; }
+        public GameState GameState { get; set; }
 
         private ViewModelBase _selectedViewModel;
         public ViewModelBase SelectedViewModel
@@ -174,13 +174,12 @@ namespace WaterSortGame.ViewModels
 
             GameState = new GameState(this);
             //Tubes = TubesManager.Tubes;
-            CopyTubes();
 
             PropertyChanged += Tube_PropertyChanged;
             //PropertyChanged += RegenerateTubeDisplay;
             //PropertyChanged += TubeCount_PropertyChanged;
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
-            Tubes.CollectionChanged += Tubes_CollectionChanged;
+            //Tubes.CollectionChanged += Tubes_CollectionChanged;
             TubesPerLineCalculation();
             PopupWindow = new PopupScreenCommand(this);
             if (AppSettings.DontShowHelpScreenAtStart == false)
@@ -251,8 +250,8 @@ namespace WaterSortGame.ViewModels
         {
             LevelComplete = false;
             DeselectTube();
-            GameStates.Clear();
-            LastGameState = new ObservableCollection<Tube>();
+            GameState.SavedGameSteps.Clear();
+            GameState.LastGameStep = null;
             DrawTubes();
         }
         public string NoteForSavedLevel { get; set; }
@@ -339,7 +338,7 @@ namespace WaterSortGame.ViewModels
         {
             tokenSource?.Cancel();
         }
-        public RelayCommand StepBackCommand => new RelayCommand(execute => StepBack(), canExecute => GameStates.Count > 0);
+        public RelayCommand StepBackCommand => new RelayCommand(execute => GameState.StepBack(), canExecute => GameState.SavedGameSteps.Count > 0);
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
         public RelayCommand OpenHelpFromOptionsCommand => new RelayCommand(execute =>
@@ -483,175 +482,21 @@ namespace WaterSortGame.ViewModels
                 SelectedTube = null;
             }
         }
-        private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)// celou tuhle funkci mozna zrusit? respektive mozna nerusit, ale predelat to jen na ty vizualni veci
         {
             if (PropertyChangedEventPaused == true)
             {
                 return;
             }
-            SaveGameState();
-
-            if (CompareAllTubes() && LevelComplete == false)
+            //GameState.SaveGameState();
+            
+            if (GameState.AreColorsSorted() && LevelComplete == false)
             {
                 LevelComplete = true;
                 //windowService?.OpenLevelCompleteWindow(this);
                 //LevelWonMessage();
                 PopupWindow.Execute(PopupParams.LevelComplete);
             }
-        }
-        private void SaveGameState()
-        {
-            //if (GameStates.Count == 0) // tohle by nemelo nikdy nastat, rovnou to kopiruju v constructoru
-            //{
-            //    DeepCopyTubes();
-            //    return;
-            //}
-            if (DidGameStateChange() == true)
-            //if (SolvingSteps[SolvingSteps.Count - 1] != Tubes)
-            {
-                CopyTubes();
-                return;
-            }
-        }
-        private bool DidGameStateChange()
-        {
-            if(GameStates.Count == 0 && LastGameState.Count == 0)
-            {
-                return true;
-            }
-            //var lastStateTubes = GameStates[GameStates.Count - 1];
-
-            if (LastGameState.Count != Tubes.Count) // pokud jen pridavam extra prazdnou zkumavku tak to neukladat!
-            {
-                return false;
-            }
-
-            for (int i = 0; i < LastGameState.Count; i++)
-            {
-                if (LastGameState[i].Layers.Count != Tubes[i].Layers.Count)
-                {
-                    return true;
-                }
-                
-                //var storedTube = lastState[i];
-                //var currentTube = Tubes[i];
-                //// ## jak to budu porovnavat kdyz jsem mezi stepy pridal extra prazdnou Tube?
-                //// ## prvne to udelam bez tohohle checku
-
-                //// ono mozna bude stacit kdyz porovnam pocet layeru a nemusim ani nic dalsiho!
-
-
-                //for (int j = 0; j < storedTube.Layers.Count; j++)
-                //{
-                //    // co kdyz se mi ale zmeni pocet layeru mezi kroky?? prvne porov
-                //}
-            }
-            return false;
-        }
-        private void CopyTubes()
-        {
-            //if (LastGameState.Count != 0) // pridavam to tady, protoze nechci v game states mit i current game state.
-            //{
-            //    //GameStates.Add(LastGameState);
-            //    ObservableCollection<Tube> clone = new ObservableCollection<Tube>();
-            //    foreach (Tube tube in LastGameState)
-            //    {
-            //        clone.Add(tube.DeepCopy());
-            //    }
-            //    GameStates.Add(clone);
-            //}
-
-            if (LastGameState.Count != 0) // pridavam to tady, protoze nechci v game states mit i current game state.
-            {
-                GameStates.Add(LastGameState);
-                LastGameState = new ObservableCollection<Tube>();
-            }
-
-            LastGameState?.Clear();
-            //ObservableCollection<Tube> tubesClone = new ObservableCollection<Tube>();
-            //foreach (Tube tube in Tubes)
-            //{
-            //    LastGameState.Add(tube.DeepCopy());
-            //}
-            LastGameState = DeepCopyTubesCollection(Tubes);
-            foreach (Tube tube in LastGameState)
-            {
-                if (tube.Selected == true)
-                {
-                    tube.Selected = false;
-                }
-            }
-            
-            //GameStates.Add(CurrentGameStateClone);
-        }
-        private bool CompareAllTubes()
-        {
-            if (Tubes.Count == 0) return false; // this is here in case we are calling the function from CollectionChanged event and it is currently count=0
-            foreach (var tube in Tubes)
-            {
-                if (tube.Layers.Count != 4 && tube.Layers.Count != 0) // pokud zkumavka neni plna, nebo uplne prazdna, nemuze to byt level dokoncenej
-                {
-                    return false;
-                }
-                for (int i = 0; i < tube.Layers.Count; i++)
-                {
-                    for (int j = i + 1; j < tube.Layers.Count; j++)
-                    {
-                        if (tube.Layers[i].Id != tube.Layers[j].Id)
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-        //ObservableCollection<Tube> status;
-        private ObservableCollection<ObservableCollection<Tube>> gameStates = new ObservableCollection<ObservableCollection<Tube>>();
-        public ObservableCollection<ObservableCollection<Tube>> GameStates
-        {
-            get { return gameStates; }
-            set
-            {
-                if (value != gameStates)
-                {
-                    gameStates = value;
-                    //OnPropertyChanged();
-                }
-            }
-        }
-        public ObservableCollection<Tube> LastGameState { get; set; } = new ObservableCollection<Tube>();
-        private void StepBack()
-        {
-            if (GameStates.Count == 0)
-            {
-                return;
-            }
-
-            //GameStates.Remove(GameStates[GameStates.Count - 1]); // vymazu posledni, protoze to odpovida current state-u.//zmenil jsem to ze pridavam current state az o iteraci pozdeji
-
-            ObservableCollection<Tube> lastGameStatus = GameStates[GameStates.Count - 1];
-            //Tubes.CollectionChanged -= Tubes_CollectionChanged;
-            //PropertyChanged -= Tube_PropertyChanged;
-            PropertyChangedEventPaused = true;
-            Tubes?.Clear();
-            foreach (Tube tubes in lastGameStatus)
-            {
-                Tubes.Add(tubes);
-            }
-            //Tubes = new ObservableCollection<Tube>(DeepCopyTubesCollection(lastGameStatus));
-            PropertyChangedEventPaused = false;
-            //if (GameStates.Count > 1)
-            //{
-            //LastGameState = new ObservableCollection<Tube>(lastGameStatus);
-
-            LastGameState = DeepCopyTubesCollection(lastGameStatus);
-            //}
-            GameStates.Remove(lastGameStatus);
-
-            //Tubes.CollectionChanged += Tubes_CollectionChanged;
-            //PropertyChanged += Tube_PropertyChanged;
-            
         }
         internal ObservableCollection<Tube> DeepCopyTubesCollection(ObservableCollection<Tube> tubes)
         {
@@ -986,6 +831,9 @@ namespace WaterSortGame.ViewModels
         public void DrawTubes()
         {
             MainWindow.GridForTubes.Children.Clear(); // deletes classes of type Visual
+
+
+
             foreach (var tube in Tubes)
             {
                 var tubeControl = new TubeControl(this, tube);
@@ -1020,7 +868,8 @@ namespace WaterSortGame.ViewModels
             //TubeCount = Tubes.Count;
             //TubeCount = Tubes.Where(tube => tube.Layers.Count > 0).Count();
 
-            TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
+            //TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
+            TubeCount = 6; // stejne to budu menit, tak jsem docasne dal jen fixnuty cislo
         }
         //private void TubeCount_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         //{

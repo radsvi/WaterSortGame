@@ -139,26 +139,26 @@ namespace WaterSortGame.ViewModels
         //private void LoadLevel(bool force = false)
         internal void LoadLevel()
         {
-            if (SelectedLevelForLoading == null)
-            {
-                return;
-            }
-            MainWindowVM.ClosePopupWindow();
-            MainWindowVM.PropertyChangedEventPaused = true;
-            MainWindowVM.GameState.StartingPosition = MainWindowVM.DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
+            //if (SelectedLevelForLoading == null)
+            //{
+            //    return;
+            //}
+            //MainWindowVM.ClosePopupWindow();
+            //MainWindowVM.PropertyChangedEventPaused = true;
+            //MainWindowVM.GameState.StartingPosition = MainWindowVM.DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
             
 
-            //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
+            ////TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
 
-            //TubesManager.Tubes?.Clear();
-            //foreach (Tube tube in TubesManager.SavedStartingTubes)
-            //{ // kdyz bych to udelal takhle, tak se prestane refreshovat TubesPerLineCalculation(); a GenerateNewLevel() taky
-            //    TubesManager.Tubes.Add(tube.DeepCopy());
-            //}
-            //OnStartingLevel();
+            ////TubesManager.Tubes?.Clear();
+            ////foreach (Tube tube in TubesManager.SavedStartingTubes)
+            ////{ // kdyz bych to udelal takhle, tak se prestane refreshovat TubesPerLineCalculation(); a GenerateNewLevel() taky
+            ////    TubesManager.Tubes.Add(tube.DeepCopy());
+            ////}
+            ////OnStartingLevel();
 
-            MainWindowVM.RestartLevel();
-            MainWindowVM.PropertyChangedEventPaused = false;
+            //MainWindowVM.RestartLevel();
+            //MainWindowVM.PropertyChangedEventPaused = false;
         }
         public RelayCommand DeleteSelectedLevelsCommand => new RelayCommand(execute => DeleteSelectedLevels(), canExecute => CanDelete());
         private bool CanDelete()

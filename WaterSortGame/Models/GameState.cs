@@ -63,6 +63,21 @@ namespace WaterSortGame.Models
         public int ExtraTubesAdded { get; }
         private LiquidColorNew[,] startingPosition;
         public LiquidColorNew[,] StartingPosition { get; }
+        private List<LiquidColorNew[,]> savedGameSteps = new List<LiquidColorNew[,]>();
+        public List<LiquidColorNew[,]> SavedGameSteps
+        {
+            get { return savedGameSteps; }
+            private set
+            {
+                if (value != savedGameSteps)
+                {
+                    savedGameSteps = value;
+                    //OnPropertyChanged();
+                }
+            }
+        }
+        public LiquidColorNew[,] LastGameStep { get; set; }
+
 
         public GameState(MainWindowVM mainWindowVM)
         {
@@ -134,7 +149,7 @@ namespace WaterSortGame.Models
 
             }
         }
-        private LiquidColorNew[,] CloneGrid(LiquidColorNew[,] grid)
+        public LiquidColorNew[,] CloneGrid(LiquidColorNew[,] grid)
         {
             return CloneGrid(grid, extraTubesAdded);
         }
@@ -229,6 +244,79 @@ namespace WaterSortGame.Models
         private void StoreStartingGrid()
         {
             startingPosition = CloneGrid(gameGrid);
+        }
+        public void SaveGameState()
+        {
+            if (DidGameStateChange() == true)
+            //if (SolvingSteps[SolvingSteps.Count - 1] != Tubes)
+            {
+                CopyTubes();
+                return;
+            }
+        }
+        private bool DidGameStateChange()
+        {
+            //if (SavedGameSteps.Count == 0 && LastGameStep.Count == 0)
+            if (SavedGameSteps.Count == 0 && LastGameStep == null)
+            {
+                return true;
+            }
+            //var lastStateTubes = GameStates[GameStates.Count - 1];
+
+            if (LastGameStep.Length != gameGrid.Length) // pokud jen pridavam extra prazdnou zkumavku tak to neukladat!
+            {
+                return false;
+            }
+
+            for (int x = 0; x < numberOfTubes; x++)
+            {
+                for (int y = 0; y < numberOfLayers; y++)
+                {
+                    if (LastGameStep[x,y] != gameGrid[x,y])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        private void CopyTubes()
+        {
+            if (LastGameStep == null) // pridavam to tady, protoze nechci v game states mit i current game state.
+            {
+                SavedGameSteps.Add(LastGameStep);
+                LastGameStep = null;
+            }
+
+            LastGameStep = CloneGrid(gameGrid);
+        }
+        public bool AreColorsSorted()
+        {
+            for (int x = 0; x < numberOfTubes; x++)
+            {
+                if (gameGrid[x, 0] == gameGrid[x, 1] && gameGrid[x, 0] == gameGrid[x, 2] && gameGrid[x, 0] == gameGrid[x, 3])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public void StepBack()
+        {
+            if (SavedGameSteps.Count == 0)
+            {
+                return;
+            }
+
+            LiquidColorNew[,] lastGameStatus = SavedGameSteps[SavedGameSteps.Count - 1];
+
+            MainWindowVM.PropertyChangedEventPaused = true;
+            gameGrid = lastGameStatus;
+            MainWindowVM.PropertyChangedEventPaused = false;
+
+            LastGameStep = CloneGrid(lastGameStatus);
+
+            SavedGameSteps.Remove(lastGameStatus);
         }
     }
 }
