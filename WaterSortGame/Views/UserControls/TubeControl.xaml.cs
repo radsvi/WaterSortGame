@@ -24,24 +24,48 @@ namespace WaterSortGame.Views.UserControls
     /// </summary>
     public partial class TubeControl : UserControl
     {
-        internal TubeControl(MainWindowVM mainWindowVM, Tube tubeItem)
+        //internal TubeControl(MainWindowVM mainWindowVM, Tube tubeItem)
+        //{
+        //    InitializeComponent();
+        //    (this.Content as FrameworkElement).DataContext = this;
+
+        //    MainWindowVM = mainWindowVM;
+        //    TubeItem = tubeItem;
+        //}
+        internal TubeControl(MainWindowVM mainWindowVM, int tubeId, LiquidColorNew[] liquidColors)
         {
             InitializeComponent();
             (this.Content as FrameworkElement).DataContext = this;
 
             MainWindowVM = mainWindowVM;
-            TubeItem = tubeItem;
+            TubeId = tubeId;
+            LiquidColors = liquidColors;
         }
-        private MainWindowVM MainWindowVM { get; set; }
-        internal Tube TubeItem
+        private MainWindowVM MainWindowVM { get; }
+        public int TubeId { get; }
+        internal LiquidColorNew[] LiquidColors
         {
-            get { return (Tube)GetValue(TubeItemProperty); }
-            set { SetValue(TubeItemProperty, value); }
+            get { return (LiquidColorNew[])GetValue(LiquidColorsProperty); }
+            set { SetValue(LiquidColorsProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for TubeItem.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TubeItemProperty =
-            DependencyProperty.Register("TubeItem", typeof(Tube), typeof(TubeControl));
+        public static readonly DependencyProperty LiquidColorsProperty =
+            DependencyProperty.Register("LiquidColors", typeof(LiquidColorNew[]), typeof(TubeControl));
+
+
+
+        //public int TubeId
+        //{
+        //    get { return (int)GetValue(TubeIdProperty); }
+        //    set { SetValue(TubeIdProperty, value); }
+        //}
+        //// Using a DependencyProperty as the backing store for TubeId.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty TubeIdProperty =
+        //    DependencyProperty.Register("TubeId", typeof(int), typeof(int));
+
+
+
 
         public RelayCommand SelectTubeCommandInternal => new RelayCommand(execute => MainWindowVM.OnClickingTube(execute));
         

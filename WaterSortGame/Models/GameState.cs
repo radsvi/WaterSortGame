@@ -10,15 +10,15 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    internal class GameState : ViewModelBase
+    internal class GameState// : ViewModelBase
     {
         private MainWindowVM MainWindowVM;
         private AppSettings appSettings;
 
 
 
-        private int numberOfTubes;
-        private readonly int numberOfLayers = 4;
+        public int NumberOfTubes { get; private set; }
+        public int NumberOfLayers { get; } = 4;
         private LiquidColorNew[,] gameGrid;
         public LiquidColorNew this[int tubes, int layers]
         {
@@ -90,8 +90,13 @@ namespace WaterSortGame.Models
             //}
 
             //gameState = new int[Tubes, Layers];
-            
 
+            GenerateNewLevel();
+        }
+        private void InitializeGameGrid(int numberOfTubes)
+        {
+            NumberOfTubes = numberOfTubes;
+            gameGrid = new LiquidColorNew[NumberOfTubes, NumberOfLayers];
         }
         //private void OnLiquidMoving()
         //{
@@ -106,10 +111,11 @@ namespace WaterSortGame.Models
         }
         private void GenerateDebugLevel()
         {
+            InitializeGameGrid(7);
             //Tube.ResetCounter();
             SetFreshGameState();
             //Tubes?.Clear();
-            gameGrid = new LiquidColorNew[numberOfTubes + extraTubesAdded, numberOfLayers];
+            gameGrid = new LiquidColorNew[NumberOfTubes + extraTubesAdded, NumberOfLayers];
 
             AddTube(0, new int[] { 1, 1, 4, 4 });
             AddTube(1, new int[] { 8, 8, 1, 1 });
@@ -121,7 +127,7 @@ namespace WaterSortGame.Models
         }
         private void AddTube(int tubeNumber, int[] layers)
         {
-            for (int i = 0; i < numberOfLayers; i++)
+            for (int i = 0; i < NumberOfLayers; i++)
             {
                 this[tubeNumber, i] = new LiquidColorNew(layers[i]);
             }
@@ -209,12 +215,12 @@ namespace WaterSortGame.Models
             }
 
             //Tubes?.Clear();
-            gameGrid = new LiquidColorNew[appSettings.NumberOfColorsToGenerate + extraTubesAdded, numberOfLayers];
+            InitializeGameGrid(appSettings.NumberOfColorsToGenerate + extraTubesAdded);
             //var tubes = new ObservableCollection<Tube>();
             for (int x = 0; x < appSettings.NumberOfColorsToGenerate; x++)
             {
-                LiquidColorNew[] layer = new LiquidColorNew[numberOfLayers];
-                for (int y = 0; y < numberOfLayers; y++)
+                LiquidColorNew[] layer = new LiquidColorNew[NumberOfLayers];
+                for (int y = 0; y < NumberOfLayers; y++)
                 {
                     int colorNumber = rnd.Next(0, colorsList.Count);
                     //layer[y] = colorsList[colorNumber];
@@ -268,9 +274,9 @@ namespace WaterSortGame.Models
                 return false;
             }
 
-            for (int x = 0; x < numberOfTubes; x++)
+            for (int x = 0; x < NumberOfTubes; x++)
             {
-                for (int y = 0; y < numberOfLayers; y++)
+                for (int y = 0; y < NumberOfLayers; y++)
                 {
                     if (LastGameStep[x,y] != gameGrid[x,y])
                     {
@@ -292,7 +298,7 @@ namespace WaterSortGame.Models
         }
         public bool AreColorsSorted()
         {
-            for (int x = 0; x < numberOfTubes; x++)
+            for (int x = 0; x < NumberOfTubes; x++)
             {
                 if (gameGrid[x, 0] == gameGrid[x, 1] && gameGrid[x, 0] == gameGrid[x, 2] && gameGrid[x, 0] == gameGrid[x, 3])
                 {
