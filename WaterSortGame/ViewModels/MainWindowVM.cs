@@ -418,14 +418,17 @@ namespace WaterSortGame.ViewModels
                 if (success == true)
                 {
                     successAtLeastOnce++;
+                    RemoveColorFromSourceTube(targetTube);
                     SelectLiquid(SelectedTube); // vyber dalsi liquid ze stejne zkumavky
                 }
             } while (success == true && SourceLiquid is not null);
             if (successAtLeastOnce > 0 || AppSettings.UnselectTubeEvenOnIllegalMove == true)
             {
-                
-                GenerateTubeDisplay(tube);
+
+                //RedrawTubeVisual(tube);
+                DrawTubes();
                 //RippleSurfaceAnimation(tube, tube.Layers.Count - 1, successAtLeastOnce);
+                DeselectTube();
             }
         }
         private void SelectLiquid(Tube sourceTube) // selects topmost liquid in a sourceTube
@@ -455,7 +458,6 @@ namespace WaterSortGame.ViewModels
                     return false;
 
             targetTube.Layers.Add(SourceLiquid);
-            //RemoveColorFromSourceTube(targetTube);
             //SourceColor.LayerNumber = targetTube.Layers.Count - 1;
             //SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
             return true;
@@ -463,7 +465,7 @@ namespace WaterSortGame.ViewModels
         private void RemoveColorFromSourceTube(Tube targetTube)
         {
             SelectedTube.Layers.Remove(SourceLiquid);
-            DeselectTube();
+            
             //SourceColor.TubeNumber = targetTube.TubeId;
         }
         private void DeselectTube()
@@ -931,14 +933,14 @@ namespace WaterSortGame.ViewModels
         }
         #endregion
         #region Generating Tube display from code
-        private void GenerateTubeDisplay(Tube targetTube)
-        {
-            Grid container = GetContainer(targetTube) as Grid;
-            RemoveAllLiquid(container);
-            AddLiquid(container, targetTube);
+        //private void RedrawTubeVisual(Tube targetTube) // ## smazat?
+        //{
+        //    Grid container = GetContainer(targetTube) as Grid;
+        //    //RemoveAllLiquid(container);
+        //    AddLiquid(container, targetTube);
+        //    //RemoveColorFromSourceTube(targetTube);
 
-
-        }
+        //}
         private Visual GetContainer(Tube targetTube)
         {
             Button button = targetTube.ButtonElement as Button;
@@ -949,31 +951,32 @@ namespace WaterSortGame.ViewModels
         }
         private void RemoveAllLiquid(Grid container)
         {
-            //container.Children?.Clear();
+            container.Children?.Clear();
         }
-        private void AddLiquid(Grid container, Tube targetTube)
-        {
-            //int i = 0;
+        //private void AddLiquid(Grid container, Tube targetTube) // ## smazat?
+        //{
+        //    //int i = 0;
 
-            int layer = targetTube.Layers.Count - 1;
-            Grid grid = new Grid();
+        //    int layer = targetTube.Layers.Count - 1;
+        //    Grid grid = new Grid();
 
-            grid.Name = "Layer" + layer;
-            grid.VerticalAlignment = VerticalAlignment.Top;
-            grid.Height = 52;
-            grid.Margin = new Thickness(5, 0, 5, 0);
+        //    grid.Name = "Layer" + layer;
+        //    grid.VerticalAlignment = VerticalAlignment.Top;
+        //    grid.Height = 52;
+        //    grid.Margin = new Thickness(5, 0, 5, 0);
 
-            var border = new Border();
-            border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(SourceLiquid.Rgb);
-            
+        //    foreach (var liquid in targetTube.Layers)
+        //    {
+        //        var border = new Border();
+        //        //border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(SourceLiquid.Rgb);
+        //        border.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(liquid.Rgb);
+        //        grid.Children.Add(border);
+        //    }
 
-            grid.Children.Add(border);
-            container.Children.Add(grid);
+        //    container.Children.Add(grid);
 
-            Grid.SetRow(grid, 3 - layer);
-
-            RemoveColorFromSourceTube(targetTube);
-        }
+        //    Grid.SetRow(grid, 3 - layer);
+        //}
         public RelayCommand TestDraw_Command => new RelayCommand(execute => DrawTubes());
         public void DrawTubes()
         {

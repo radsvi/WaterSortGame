@@ -61,6 +61,8 @@ namespace WaterSortGame.Models
             Tubes.Add(new Tube(1, 1, 4, 4));
             Tubes.Add(new Tube(8, 8, 1, 1));
             Tubes.Add(new Tube(4, 4, 8, 8));
+            Tubes.Add(new Tube(3, 3, 3, 7));
+            Tubes.Add(new Tube(7, 7, 7, 3));
             Tubes.Add(new Tube());
             Tubes.Add(new Tube());
 
