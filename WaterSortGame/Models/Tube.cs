@@ -13,6 +13,9 @@ using WaterSortGame.Views;
 
 namespace WaterSortGame.Models
 {
+    /// <summary>
+    /// nejnizsi layer je prvni
+    /// </summary>
     internal class Tube : ViewModelBase
     {
         public int Id { get; set; }
@@ -69,7 +72,6 @@ namespace WaterSortGame.Models
             }
             return clone;
         }
-
         public Tube()
         {
             Id = tubeIdCounter++;

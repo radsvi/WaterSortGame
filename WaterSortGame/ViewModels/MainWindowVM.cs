@@ -41,7 +41,7 @@ namespace WaterSortGame.ViewModels
         private IWindowService windowService;
         public MainWindow MainWindow { get; }
         public AppSettings AppSettings { get; }
-        public TubesManager TubesManager { get; }
+        protected GameState GameState { get; }
 
         private ViewModelBase _selectedViewModel;
         public ViewModelBase SelectedViewModel
@@ -172,8 +172,8 @@ namespace WaterSortGame.ViewModels
             MainWindow = mainWindow;
             AppSettings = new AppSettings();
 
-            TubesManager = new TubesManager(this);
-            Tubes = TubesManager.Tubes;
+            GameState = new GameState(this);
+            //Tubes = TubesManager.Tubes;
             CopyTubes();
 
             PropertyChanged += Tube_PropertyChanged;
@@ -233,18 +233,18 @@ namespace WaterSortGame.ViewModels
         {
             PopupWindow.Execute(null);
         }
-        public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => TubesManager.AddExtraTube(), canExecute => TubesManager.ExtraTubesAdded < AppSettings.MaximumExtraTubes);
+        public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => GameState.AddExtraTube(), canExecute => GameState.ExtraTubesAdded < AppSettings.MaximumExtraTubes);
         private void GenerateNewLevel()
         {
             ClosePopupWindow();
-            TubesManager.GenerateNewLevel();
+            GameState.GenerateNewLevel();
             OnStartingLevel();
         }
         public RelayCommand RestartLevel_Command => new RelayCommand(execute => RestartLevel());
         public void RestartLevel()
         {
             ClosePopupWindow();
-            TubesManager.RestartLevel();
+            GameState.RestartLevel();
             OnStartingLevel();
         }
         private void OnStartingLevel()
@@ -258,20 +258,20 @@ namespace WaterSortGame.ViewModels
         public string NoteForSavedLevel { get; set; }
         private void SaveLevel()
         {
-            ClosePopupWindow();
+            //ClosePopupWindow();
 
-            ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+            //ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
 
-            savedLevelList.Add(new StoredLevel(TubesManager.StartingPosition, NoteForSavedLevel));
+            //savedLevelList.Add(new StoredLevel(GameState.StartingPosition, NoteForSavedLevel));
 
-            Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
-            //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
-            Settings.Default.Save();
-            NoteForSavedLevel = null;
+            //Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
+            ////Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
+            //Settings.Default.Save();
+            //NoteForSavedLevel = null;
 
-            tokenSource = new CancellationTokenSource();
-            var token = tokenSource.Token;
-            PopupWindowNotification(token);
+            //tokenSource = new CancellationTokenSource();
+            //var token = tokenSource.Token;
+            //PopupWindowNotification(token);
         }
         public RelayCommand AddPresetLevels_Command => new RelayCommand(execute => AddPresetLevels());
         private void AddPresetLevels()
