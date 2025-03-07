@@ -12,9 +12,39 @@ namespace WaterSortGame.Models
     internal class TubesManager : ViewModelBase
     {
         private MainWindowVM MainWindowVM;
-        private AppSettings AppSettings;
-        //private MainWindowVM MainWindow;
-        //private readonly int[,] gameState;
+        private AppSettings appSettings;
+
+
+
+        private int NumberOfTubes;
+        private readonly int NumberOfLayers = 4;
+        private readonly int[,] gameState;
+        public int this[int tubes, int layers]
+        {
+            get => gameState[tubes, layers];
+            set
+            {
+                gameState[tubes, layers] = value;
+                //OnLiquidMoving();
+            }
+        }
+
+        //private List<List<LiquidColorNew>> gameState;
+        //public LiquidColorNew this[int tube, int layer]
+        //{
+        //    get
+        //    {
+        //        //return gameStateList.ElementAt(tubes).ElementAt(layers);
+        //        return gameState[tube][layer];
+        //    }
+        //    set
+        //    {
+        //        gameState[tube][layer] = value;
+        //    }
+        //}
+
+
+
         private ObservableCollection<Tube> tubes = new ObservableCollection<Tube>();
         public ObservableCollection<Tube> Tubes
         {
@@ -35,7 +65,7 @@ namespace WaterSortGame.Models
         public TubesManager(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
-            AppSettings = MainWindowVM.AppSettings;
+            appSettings = MainWindowVM.AppSettings;
 
             if (Tubes.Count == 0)
             {
@@ -48,13 +78,14 @@ namespace WaterSortGame.Models
         //}
         public void GenerateNewLevel()
         {
-            if (AppSettings.LoadDebugLevel is true)
+            if (appSettings.LoadDebugLevel is true)
                 GenerateDebugLevel();
             else
                 GenerateStandardLevel();
         }
         private void GenerateDebugLevel()
         {
+            Tube.ResetCounter();
             SettingFreshGameState();
             Tubes?.Clear();
 
@@ -70,7 +101,7 @@ namespace WaterSortGame.Models
         }
         public void AddExtraTube() // this is for adding extra tube during gameplay
         {
-            if (ExtraTubesAdded <= AppSettings.MaximumExtraTubes)
+            if (ExtraTubesAdded <= appSettings.MaximumExtraTubes)
             {
                 Tubes.Add(new Tube());
                 ExtraTubesAdded++;
@@ -88,13 +119,14 @@ namespace WaterSortGame.Models
         }
         private void GenerateStandardLevel()
         {
+            Tube.ResetCounter();
             SettingFreshGameState();
             Random rnd = new Random();
 
             ObservableCollection<LiquidColor> colorsList = new ObservableCollection<LiquidColor>();
-            if (AppSettings.RandomNumberOfTubes)
+            if (appSettings.RandomNumberOfTubes)
             {
-                AppSettings.NumberOfColorsToGenerate = rnd.Next(3, LiquidColor.ColorKeys.Count);
+                appSettings.NumberOfColorsToGenerate = rnd.Next(3, LiquidColor.ColorKeys.Count);
             }
 
             List<int> selectedColors = new List<int>();
@@ -103,7 +135,7 @@ namespace WaterSortGame.Models
                 selectedColors.Add(i);
             }
 
-            for (int i = 0; i < LiquidColor.ColorKeys.Count - AppSettings.NumberOfColorsToGenerate; i++) // now remove some random ones
+            for (int i = 0; i < LiquidColor.ColorKeys.Count - appSettings.NumberOfColorsToGenerate; i++) // now remove some random ones
             {
                 //selectedColors.Remove(selectedColors[NumberOfColorsToGenerate]); // this always keeps the same colors
                 selectedColors.Remove(selectedColors[rnd.Next(0, selectedColors.Count)]);
@@ -118,7 +150,7 @@ namespace WaterSortGame.Models
 
             Tubes?.Clear();
             //var tubes = new ObservableCollection<Tube>();
-            for (int i = 0; i < AppSettings.NumberOfColorsToGenerate; i++)
+            for (int i = 0; i < appSettings.NumberOfColorsToGenerate; i++)
             {
                 LiquidColor[] layer = new LiquidColor[4];
                 for (int j = 0; j < 4; j++)

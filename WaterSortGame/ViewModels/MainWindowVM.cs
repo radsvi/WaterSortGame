@@ -427,7 +427,7 @@ namespace WaterSortGame.ViewModels
 
                 //RedrawTubeVisual(tube);
                 DrawTubes();
-                //RippleSurfaceAnimation(tube, tube.Layers.Count - 1, successAtLeastOnce);
+                RippleSurfaceAnimation(tube, tube.Layers.Count - 1, successAtLeastOnce);
                 DeselectTube();
             }
         }
@@ -448,18 +448,23 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
+        //private Tuple<bool, int, int> AddLiquidToTargetTube(Tube targetTube)
         private bool AddLiquidToTargetTube(Tube targetTube)
         {
+            
             if (targetTube.Layers.Count >= 4)
+                //return new Tuple<bool, int, int>(false, 0, 0);
                 return false;
 
             if (targetTube.Layers.Count != 0)
                 if (targetTube.Layers[targetTube.Layers.Count - 1].Id != SourceLiquid.Id)
+                    //return new Tuple<bool, int, int>(false, 0, 0);
                     return false;
 
             targetTube.Layers.Add(SourceLiquid);
             //SourceColor.LayerNumber = targetTube.Layers.Count - 1;
             //SourceColor.LayerNumber = targetTube.Layers.IndexOf(SourceColor);
+            //return new Tuple<bool, int, int>(true, 0, targetTube.Layers.Count); // int tubeNumber, int liquidLayer
             return true;
         }
         private void RemoveColorFromSourceTube(Tube targetTube)
@@ -977,7 +982,7 @@ namespace WaterSortGame.ViewModels
 
         //    Grid.SetRow(grid, 3 - layer);
         //}
-        public RelayCommand TestDraw_Command => new RelayCommand(execute => DrawTubes());
+        [Obsolete]public RelayCommand TestDraw_Command => new RelayCommand(execute => DrawTubes());
         public void DrawTubes()
         {
             MainWindow.GridForTubes.Children.Clear(); // deletes classes of type Visual

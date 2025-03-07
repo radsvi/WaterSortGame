@@ -15,8 +15,8 @@ namespace WaterSortGame.Models
 {
     internal class Tube : ViewModelBase
     {
-        public int TubeId { get; set; }
-        private static int TubeIdCounter;
+        public int Id { get; set; }
+        private static int tubeIdCounter = 0;
         public Button ButtonElement { get; set; }
         public Grid GridElement { get; set; }
 
@@ -55,6 +55,10 @@ namespace WaterSortGame.Models
                 OnPropertyChanged("Margin");
             }
         }
+        public static void ResetCounter()
+        {
+            tubeIdCounter = 0;
+        }
         public Tube DeepCopy()
         {
             Tube clone = (Tube)MemberwiseClone();
@@ -68,11 +72,11 @@ namespace WaterSortGame.Models
 
         public Tube()
         {
-            TubeId = TubeIdCounter++;
+            Id = tubeIdCounter++;
         }
         public Tube(int? firstLayer = null, int? secondLayer = null, int? thirdLayer = null, int? fourthLayer = null)
         {
-            TubeId = TubeIdCounter++;
+            Id = tubeIdCounter++;
 
             if (firstLayer is not null) Layers.Add(new LiquidColor((int)firstLayer));
             if (secondLayer is not null) Layers.Add(new LiquidColor((int)secondLayer));
@@ -81,7 +85,7 @@ namespace WaterSortGame.Models
         }
         public Tube(LiquidColor? firstLayer = null, LiquidColor? secondLayer = null, LiquidColor? thirdLayer = null, LiquidColor? fourthLayer = null)
         {
-            TubeId = TubeIdCounter++;
+            Id = tubeIdCounter++;
 
             if (firstLayer is not null) Layers.Add(firstLayer);
             if (secondLayer is not null) Layers.Add(secondLayer);

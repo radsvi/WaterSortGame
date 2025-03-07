@@ -10,8 +10,8 @@ namespace WaterSortGame.Models
 {
     internal class AppSettings : ViewModelBase
     {
-        private static bool loadDebugLevel = Settings.Default.LoadDebugLevel;
-        public static bool LoadDebugLevel
+        private bool loadDebugLevel = Settings.Default.LoadDebugLevel;
+        public bool LoadDebugLevel
         {
             get { return loadDebugLevel; }
             set
@@ -25,8 +25,8 @@ namespace WaterSortGame.Models
                 //}
             }
         }
-        private static int numberOfColorsToGenerate = Settings.Default.NumberOfColorsToGenerate;
-        public static int NumberOfColorsToGenerate
+        private int numberOfColorsToGenerate = Settings.Default.NumberOfColorsToGenerate;
+        public int NumberOfColorsToGenerate
         {
             get { return numberOfColorsToGenerate; }
             set
@@ -52,8 +52,8 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        private static bool randomNumberOfTubes = Settings.Default.RandomNumberOfTubes;
-        public static bool RandomNumberOfTubes
+        private bool randomNumberOfTubes = Settings.Default.RandomNumberOfTubes;
+        public bool RandomNumberOfTubes
         {
             get { return randomNumberOfTubes; }
             set
@@ -64,8 +64,8 @@ namespace WaterSortGame.Models
             }
         }
 
-        private static int maximumExtraTubes = Settings.Default.MaximumExtraTubes;
-        public static int MaximumExtraTubes
+        private int maximumExtraTubes = Settings.Default.MaximumExtraTubes;
+        public int MaximumExtraTubes
         {
             get { return maximumExtraTubes; }
             set
