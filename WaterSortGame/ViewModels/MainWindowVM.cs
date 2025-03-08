@@ -488,6 +488,7 @@ namespace WaterSortGame.ViewModels
         {
             if (LastClickedTube is not null)
             {
+                //LowerTubeAnimation(GetTubeReference(SourceTube.TubeId));
                 LowerTubeAnimation(SourceTube);
                 LastClickedTube = null;
             }
@@ -510,43 +511,37 @@ namespace WaterSortGame.ViewModels
             return newTubes;
         }
         #endregion
-        #region Animation
-        private void GetTubeControlReference()
+        #region Draw tubes from code
+        [Obsolete] public RelayCommand TestDraw_Command => new RelayCommand(execute => DrawTubes());
+        public void DrawTubes()
         {
+            ContainerForTubes.Children.Clear(); // deletes classes of type Visual
 
-        }
-        private void RaiseTubeAnimation(TubeReference tubeReference)
-        {
-            if (tubeReference.ButtonElement is null)
+            for (int x = 0; x < GameState.NumberOfTubes; x++)
             {
-                return;
+                LiquidColorNew[] liquidColorsArray = new LiquidColorNew[GameState.NumberOfLayers];
+                for (int y = 0; y < GameState.NumberOfLayers; y++)
+                {
+                    liquidColorsArray[y] = GameState[x, y];
+                }
+                var tubeControl = new TubeControl(this, x, liquidColorsArray);
+
+                // mozna to tu udelat pres ten <ContentControl> nejak
+
+                ContainerForTubes.Children.Add(tubeControl);
             }
-
-            var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
-            tubeReference.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
         }
-        private void LowerTubeAnimation(TubeReference tubeReference)
+        private TubeControl GetTubeReference(int tubeId)
         {
-            if (tubeReference.ButtonElement is null)
-            {
-                return;
-            }
-            var HeightAnimation = new ThicknessAnimation() { From = new Thickness(0, 0, 0, 15), To = new Thickness(0, 15, 0, 0), Duration = TimeSpan.FromSeconds(1) };
-            tubeReference.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
-
+            return ContainerForTubes.Children[tubeId] as TubeControl;
         }
-        private void RippleSurfaceAnimation(Tube tube, int layer, int numberOfLiquids)
+        private Visual GetContainer(Tube targetTube)
         {
-            Grid container = GetContainerForAnimation(tube, layer);
-            //var originalChild = container.Child;
-            //var grid = DrawSurfaceFromSin(container); // ## tohle mozna udelat permanentni. nemusim to generovat vzdy znova.
-            (var brush, var borderElement) = DrawSurface(container);
-            container.Children.Add(borderElement);
-            SurfaceAnimation(brush, container, borderElement, numberOfLiquids);
+            Button button = targetTube.ButtonElement as Button;
+            var descendant = GetDescendantByTypeAndName(button, typeof(Grid), "TubeGrid");
+            Grid container = descendant as Grid;
 
-            // wait and then return:
-            //container.Child = originalChild;
-            // hm, tohle mozna nebude nutny delat takhle. spis proste odstranit jakykoliv subChild -> container.Child.Child
+            return container;
         }
         private (ImageBrush, Border) DrawSurface(Grid container)
         {
@@ -560,7 +555,7 @@ namespace WaterSortGame.ViewModels
             //bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallNonTransparent.png", UriKind.Relative);
             bmpImg.UriSource = new Uri("Images\\JustLine.png", UriKind.Relative);
             //bmpImg.UriSource = new Uri("Images\\NarrowLine.png", UriKind.Relative);
-            
+
             bmpImg.EndInit();
             brush.ImageSource = bmpImg;
             brush.TileMode = TileMode.Tile;
@@ -580,8 +575,8 @@ namespace WaterSortGame.ViewModels
             tileSizeRectangle.Margin = new Thickness(0, 0, 0, 0);
 
 
-            
-            
+
+
 
 
             //grid.Background = brush;
@@ -621,7 +616,7 @@ namespace WaterSortGame.ViewModels
 
         //    //Grid gridElement = ((container as Tube).GridElement as Grid);
 
-            
+
 
 
         //    float lengthMultiplier = 20;
@@ -637,7 +632,7 @@ namespace WaterSortGame.ViewModels
 
         //    Grid grid = new Grid();
         //    grid.MaxWidth = container.ActualWidth;
-            
+
         //    grid.Margin = new Thickness(-200, 0, 0, 0);
 
         //    //for (float x1 = 0; x1 < 20; x1 += 0.1F)
@@ -672,7 +667,7 @@ namespace WaterSortGame.ViewModels
         //        //TextBlock textBlock = new TextBlock { Text = "qwer" };
         //        //grid.Children.Add(textBlock);
         //        grid.Children.Add(newShape);
-                
+
 
         //        //gridElement.Children.Add(newShape);
         //        //container.Child = newShape;
@@ -748,47 +743,6 @@ namespace WaterSortGame.ViewModels
             }
             return foundElement;
         }
-        private void SurfaceAnimation(ImageBrush brush, Grid container, Border borderElement, int numberOfLiquids)
-        {
-            if (brush is null)
-            {
-                return;
-            }
-
-            //var HeightAnimation = new ThicknessAnimation() { From = new Thickness(0, 0, 0, 0), To = new Thickness(-200, 0, 0, 0), Duration = TimeSpan.FromSeconds(1) };
-            //container.
-            //container.BeginAnimation(Button.MarginProperty, HeightAnimation);
-
-            //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
-            //sourceTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
-            if (numberOfLiquids <= 1 ) // ## smazat if a prepocitat to numericky
-            {
-                var viewportAnimation = new RectAnimation() { From = new Rect(0, 200 * numberOfLiquids, 129, 300), To = new Rect(400 * numberOfLiquids, 50, 129, 300), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
-                viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
-                brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
-            }
-            else
-            {
-                //var tileSizeRectangle = borderElement.Child;
-                //tileSizeRectangle.Height = 108;
-
-
-                //var viewportAnimation = new RectAnimation() { From = new Rect(0, 170 * numberOfLiquids, 129, 500), To = new Rect(400 * numberOfLiquids, 230, 129, 500), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
-                //container.Height = 108;
-                var viewportAnimation = new RectAnimation() { From = new Rect(0, 170 * numberOfLiquids, 129, 500), To = new Rect(400, 230, 129, 500), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
-                viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
-                brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
-            }
-            
-        }
-        private void ViewportAnimation_Completed(object? sender, EventArgs e, Grid container, Border borderElement)
-        {
-            //container.Child = null;
-            container.Children.Remove(borderElement);
-            container.Height = 52;
-        }
-        #endregion
-        #region Generating Tube display from code
         //private void RedrawTubeVisual(Tube targetTube) // ## smazat?
         //{
         //    Grid container = GetContainer(targetTube) as Grid;
@@ -797,14 +751,6 @@ namespace WaterSortGame.ViewModels
         //    //RemoveColorFromSourceTube(targetTube);
 
         //}
-        private Visual GetContainer(Tube targetTube)
-        {
-            Button button = targetTube.ButtonElement as Button;
-            var descendant = GetDescendantByTypeAndName(button, typeof(Grid), "TubeGrid");
-            Grid container = descendant as Grid;
-
-            return container;
-        }
         private void RemoveAllLiquid(Grid container)
         {
             container.Children?.Clear();
@@ -833,25 +779,50 @@ namespace WaterSortGame.ViewModels
 
         //    Grid.SetRow(grid, 3 - layer);
         //}
-        [Obsolete]public RelayCommand TestDraw_Command => new RelayCommand(execute => DrawTubes());
-        public void DrawTubes()
+        #endregion
+        #region Animation
+        private void RaiseTubeAnimation(TubeReference tubeReference)
         {
-            ContainerForTubes.Children.Clear(); // deletes classes of type Visual
-
-            for (int x = 0; x < GameState.NumberOfTubes; x++)
+            if (tubeReference.ButtonElement is null)
             {
-                LiquidColorNew[] liquidColorsArray = new LiquidColorNew[GameState.NumberOfLayers];
-                for (int y = 0; y < GameState.NumberOfLayers; y++)
-                {
-                    liquidColorsArray[y] = GameState[x, y];
-                }
-                var tubeControl = new TubeControl(this, x, liquidColorsArray);
-
-                // mozna to tu udelat pres ten <ContentControl> nejak
-
-                // ## predelat na MVVM
-                ContainerForTubes.Children.Add(tubeControl);
+                return;
             }
+
+            var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
+            tubeReference.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
+        }
+        private void LowerTubeAnimation(TubeReference tubeReference)
+        {
+            if (tubeReference.ButtonElement is null)
+            {
+                return;
+            }
+
+            var HeightAnimation = new ThicknessAnimation() { From = new Thickness(0, 0, 0, 15), To = new Thickness(0, 15, 0, 0), Duration = TimeSpan.FromSeconds(0.1) };
+            tubeReference.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
+        }
+        //private void LowerTubeAnimation(TubeControl tubeControl)
+        //{
+        //    if (tubeControl is null)
+        //    {
+        //        return;
+        //    }
+        //    var HeightAnimation = new ThicknessAnimation() { From = new Thickness(0, 0, 0, 15), To = new Thickness(0, 15, 0, 0), Duration = TimeSpan.FromSeconds(1) };
+        //    tubeControl.BeginAnimation(Button.MarginProperty, HeightAnimation);
+
+        //}
+        private void RippleSurfaceAnimation(Tube tube, int layer, int numberOfLiquids)
+        {
+            Grid container = GetContainerForAnimation(tube, layer);
+            //var originalChild = container.Child;
+            //var grid = DrawSurfaceFromSin(container); // ## tohle mozna udelat permanentni. nemusim to generovat vzdy znova.
+            (var brush, var borderElement) = DrawSurface(container);
+            container.Children.Add(borderElement);
+            SurfaceAnimation(brush, container, borderElement, numberOfLiquids);
+
+            // wait and then return:
+            //container.Child = originalChild;
+            // hm, tohle mozna nebude nutny delat takhle. spis proste odstranit jakykoliv subChild -> container.Child.Child
         }
         //public Border TubeDisplay { get; set; }
         //public Grid TubeGrid { get; set; }
@@ -866,6 +837,45 @@ namespace WaterSortGame.ViewModels
         //    GetDescendantByType
 
         //}
+        private void SurfaceAnimation(ImageBrush brush, Grid container, Border borderElement, int numberOfLiquids)
+        {
+            if (brush is null)
+            {
+                return;
+            }
+
+            //var HeightAnimation = new ThicknessAnimation() { From = new Thickness(0, 0, 0, 0), To = new Thickness(-200, 0, 0, 0), Duration = TimeSpan.FromSeconds(1) };
+            //container.
+            //container.BeginAnimation(Button.MarginProperty, HeightAnimation);
+
+            //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
+            //sourceTube.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
+            if (numberOfLiquids <= 1) // ## smazat if a prepocitat to numericky
+            {
+                var viewportAnimation = new RectAnimation() { From = new Rect(0, 200 * numberOfLiquids, 129, 300), To = new Rect(400 * numberOfLiquids, 50, 129, 300), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
+                viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
+                brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
+            }
+            else
+            {
+                //var tileSizeRectangle = borderElement.Child;
+                //tileSizeRectangle.Height = 108;
+
+
+                //var viewportAnimation = new RectAnimation() { From = new Rect(0, 170 * numberOfLiquids, 129, 500), To = new Rect(400 * numberOfLiquids, 230, 129, 500), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
+                //container.Height = 108;
+                var viewportAnimation = new RectAnimation() { From = new Rect(0, 170 * numberOfLiquids, 129, 500), To = new Rect(400, 230, 129, 500), Duration = TimeSpan.FromSeconds(2 * numberOfLiquids) };
+                viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
+                brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
+            }
+
+        }
+        private void ViewportAnimation_Completed(object? sender, EventArgs e, Grid container, Border borderElement)
+        {
+            //container.Child = null;
+            container.Children.Remove(borderElement);
+            container.Height = 52;
+        }
         #endregion
         #region Other Methods
         private void Tubes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
