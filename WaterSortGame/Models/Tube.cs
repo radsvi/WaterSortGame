@@ -16,6 +16,7 @@ namespace WaterSortGame.Models
     /// <summary>
     /// nejnizsi layer je prvni
     /// </summary>
+    [Obsolete]
     internal class Tube : ViewModelBase
     {
         public int Id { get; set; }

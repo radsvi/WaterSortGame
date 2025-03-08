@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 using WaterSortGame.Models;
+using WaterSortGame.Views.UserControls;
 
 namespace WaterSortGame.Converters
 {
@@ -21,13 +22,26 @@ namespace WaterSortGame.Converters
             //    return tube;
             //}
 
+            //if (values.Length > 0)
+            //{
+            //    TubeButton obj = new TubeButton();
+            //    foreach (var item in values)
+            //    {
+            //        obj.Contents.Add(item);
+            //    }
+
+            //    return obj;
+            //}
             if (values.Length > 0)
             {
-                TubeButton obj = new TubeButton();
-                foreach (var item in values)
+                TubeReference obj = new TubeReference
                 {
-                    obj.Contents.Add(item);
-                }
+                    TubeControl = (TubeControl)values[0],
+                    ButtonElement = (Button)values[1],
+                    TubeId = ((TubeControl)values[0]).TubeId,
+                    GridElement = (Grid)values[2]
+                };
+
 
                 return obj;
             }

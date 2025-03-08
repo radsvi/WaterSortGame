@@ -90,10 +90,10 @@ namespace WaterSortGame.ViewModels
 
         //    }
         //}
-        public int? LastClickedTubeNumber { get; set; }
-        public SourceTube SourceTube { get; set; }
-        private Tube targetTube;
-        public Tube TargetTube
+        public TubeReference LastClickedTube { get; set; }
+        public TubeReference SourceTube { get; set; }
+        [Obsolete]private Tube targetTube;
+        [Obsolete]public Tube TargetTube
         {
             get { return targetTube; }
             set
@@ -103,7 +103,8 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        private ObservableCollection<Tube> tubes;
+        [Obsolete] private ObservableCollection<Tube> tubes;
+        [Obsolete]
         public ObservableCollection<Tube> Tubes
         {
             get { return tubes; }
@@ -373,42 +374,44 @@ namespace WaterSortGame.ViewModels
                 return;
             }
 
-            var tubeButton = obj as TubeButton;
-            
-            //var tube = tubeButton?.Contents[0] as Tube;
-            var tubeControl = tubeButton?.Contents[0] as TubeControl;
-            //var tube = tubeControl.LiquidColors as Tube;
-            LiquidColorNew[] tubeLiquids = tubeControl.LiquidColors;
-            var buttonElement = tubeButton?.Contents[1] as Button;
+            TubeReference currentTubeReference = obj as TubeReference;
 
-            
-            if (LastClickedTubeNumber == null)
+            //var tubeButton = obj as TubeButton;
+
+            ////var tube = tubeButton?.Contents[0] as Tube;
+            //var tubeControl = tubeButton?.Contents[0] as TubeControl;
+            ////var tube = tubeControl.LiquidColors as Tube;
+            //LiquidColorNew[] tubeLiquids = tubeControl.LiquidColors;
+            //var buttonElement = tubeButton?.Contents[1] as Button;
+
+
+            if (LastClickedTube == null)
             {
-                SourceTube = new SourceTube { TubeId = tubeControl.TubeId };
-                GetTopmostLiquid(buttonElement, tubeControl.TubeId);
-                RaiseTubeAnimation(buttonElement, tubeControl.TubeId);
+                SourceTube = currentTubeReference;
+                GetTopmostLiquid(SourceTube);
+                RaiseTubeAnimation(SourceTube);
                 return;
             }
-            if (LastClickedTubeNumber == tubeControl.TubeId)
+            if (LastClickedTube == currentTubeReference)
             {
                 DeselectTube();
                 return;
             }
 
-            // if selecting different tube
+            // if selecting different tube:
             bool success = false;
             int successAtLeastOnce = 0;
 
             do
             {
-                success = AddLiquidToTargetTube(tubeControl.TubeId);
+                success = AddLiquidToTargetTube(currentTubeReference);
                 if (success == true)
                 {
                     successAtLeastOnce++;
                     RemoveColorFromSourceTube();
-                    GetTopmostLiquid(buttonElement, tubeControl.TubeId); // picks another liquid from the same tube
+                    GetTopmostLiquid(SourceTube); // picks another liquid from the same tube
                 }
-            } while (success == true && SourceTube.Liquid is not null);
+            } while (success == true && SourceTube.TopMostLiquid is not null);
             if (successAtLeastOnce > 0 || AppSettings.UnselectTubeEvenOnIllegalMove == true)
             {
 
@@ -418,7 +421,7 @@ namespace WaterSortGame.ViewModels
                 DeselectTube();
             }
         }
-        private void GetTopmostLiquid(Button buttonElement, int tubeNumber) // selects topmost liquid in a sourceTube
+        private void GetTopmostLiquid(TubeReference sourceTube) // selects topmost liquid in a sourceTube
         {
             //if (SourceTube == null)
             //{
@@ -426,13 +429,11 @@ namespace WaterSortGame.ViewModels
             //}
             for (int i = GameState.NumberOfLayers - 1; i >= 0; i--)
             {
-                if (GameState[SourceTube.TubeId, i] is not null)
+                if (GameState[sourceTube.TubeId, i] is not null)
                 {
-                    if (LastClickedTubeNumber != tubeNumber)
-                        LastClickedTubeNumber = tubeNumber;
-                    SourceTube.Liquid = GameState[SourceTube.TubeId, i];
-
-                    
+                    if (LastClickedTube != sourceTube)
+                        LastClickedTube = sourceTube;
+                    sourceTube.TopMostLiquid = GameState[sourceTube.TubeId, i];
 
                     return;
                 }
@@ -440,12 +441,12 @@ namespace WaterSortGame.ViewModels
         }
         
         //private Tuple<bool, int, int> AddLiquidToTargetTube(Tube targetTube)
-        private bool AddLiquidToTargetTube(int targetTubeNumber)
+        private bool AddLiquidToTargetTube(TubeReference currentTubeReference)
         {
             int firstEmptyLayer = - 1;
             for (int y = 0; y < GameState.NumberOfLayers; y++)
             {
-                if (GameState[targetTubeNumber, y] == null)
+                if (GameState[currentTubeReference.TubeId, y] == null)
                 {
                     firstEmptyLayer = y;
                     break;
@@ -458,13 +459,13 @@ namespace WaterSortGame.ViewModels
 
             if (firstEmptyLayer > 0)
             {
-                if (SourceTube.Liquid.Name != GameState[targetTubeNumber, firstEmptyLayer - 1].Name)
+                if (SourceTube.TopMostLiquid.Name != GameState[currentTubeReference.TubeId, firstEmptyLayer - 1].Name)
                 {
                     return false; // Pokud ma zkumavka v sobe uz nejaky barvy a nejvrchnejsi barva neshoulasi se SourceLiquid tak vratit false
                 }
             }
 
-            GameState[targetTubeNumber, firstEmptyLayer] = SourceTube.Liquid;
+            GameState[currentTubeReference.TubeId, firstEmptyLayer] = SourceTube.TopMostLiquid;
             return true;
         }
         private void RemoveColorFromSourceTube()
@@ -474,18 +475,18 @@ namespace WaterSortGame.ViewModels
                 if (GameState[SourceTube.TubeId, y] is not null)
                 {
                     GameState[SourceTube.TubeId, y] = null;
-                    SourceTube.Liquid = null;
+                    SourceTube.TopMostLiquid = null;
                     return;
                 }
             }
         }
         private void DeselectTube()
         {
-            if (LastClickedTubeNumber is not null)
+            if (LastClickedTube is not null)
             {
                 //LowerTubeAnimation(buttonElement, SelectedTubeNumber);
 
-                LastClickedTubeNumber = null;
+                LastClickedTube = null;
             }
         }
         internal ObservableCollection<Tube> DeepCopyTubesCollection(ObservableCollection<Tube> tubes)
@@ -499,15 +500,15 @@ namespace WaterSortGame.ViewModels
         }
         #endregion
         #region Animation
-        private void RaiseTubeAnimation(Button buttonElement, int tubeNumber)
+        private void RaiseTubeAnimation(TubeReference tubeReference)
         {
-            if (buttonElement is null)
+            if (tubeReference.ButtonElement is null)
             {
                 return;
             }
 
             var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
-            buttonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
+            tubeReference.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
         }
         private void LowerTubeAnimation(Button buttonElement, int? tubeNumber)
         {
