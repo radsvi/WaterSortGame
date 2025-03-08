@@ -42,6 +42,7 @@ namespace WaterSortGame.ViewModels
         public MainWindow MainWindow { get; }
         public AppSettings AppSettings { get; }
         public GameState GameState { get; set; }
+        private WrapPanel ContainerForTubes;
 
         private ViewModelBase _selectedViewModel;
         public ViewModelBase SelectedViewModel
@@ -159,7 +160,7 @@ namespace WaterSortGame.ViewModels
         }
         #endregion
         #region Constructor
-        public MainWindowVM(MainWindow mainWindow)
+        public MainWindowVM(MainWindow mainWindow, WrapPanel containerForTubes)
         {
             this.windowService = new WindowService();
             MainWindow = mainWindow;
@@ -191,6 +192,8 @@ namespace WaterSortGame.ViewModels
                 new PopupScreenActions(PopupParams.GameSaved, new GameSavedNotificationVM(this), null, () => CloseNotification()),
                 new PopupScreenActions(PopupParams.SaveLevel, new SaveLevelVM(this), null, () => SaveLevel()),
             };
+
+            ContainerForTubes = containerForTubes;
 
             DrawTubes();
         }
@@ -418,6 +421,7 @@ namespace WaterSortGame.ViewModels
                 DrawTubes();
                 //RippleSurfaceAnimation(tubeLiquids, tubeLiquids.Length - 1, successAtLeastOnce);
                 DeselectTube();
+                
                 IsLevelCompleted();
             }
         }
@@ -484,8 +488,7 @@ namespace WaterSortGame.ViewModels
         {
             if (LastClickedTube is not null)
             {
-                //LowerTubeAnimation(buttonElement, SelectedTubeNumber);
-
+                LowerTubeAnimation(SourceTube);
                 LastClickedTube = null;
             }
         }
@@ -508,6 +511,10 @@ namespace WaterSortGame.ViewModels
         }
         #endregion
         #region Animation
+        private void GetTubeControlReference()
+        {
+
+        }
         private void RaiseTubeAnimation(TubeReference tubeReference)
         {
             if (tubeReference.ButtonElement is null)
@@ -518,14 +525,14 @@ namespace WaterSortGame.ViewModels
             var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
             tubeReference.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
         }
-        private void LowerTubeAnimation(Button buttonElement, int? tubeNumber)
+        private void LowerTubeAnimation(TubeReference tubeReference)
         {
-            if (buttonElement is null)
+            if (tubeReference.ButtonElement is null)
             {
                 return;
             }
-            var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 15, 0, 0), Duration = TimeSpan.FromSeconds(0.1) };
-            buttonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
+            var HeightAnimation = new ThicknessAnimation() { From = new Thickness(0, 0, 0, 15), To = new Thickness(0, 15, 0, 0), Duration = TimeSpan.FromSeconds(1) };
+            tubeReference.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
 
         }
         private void RippleSurfaceAnimation(Tube tube, int layer, int numberOfLiquids)
@@ -829,7 +836,7 @@ namespace WaterSortGame.ViewModels
         [Obsolete]public RelayCommand TestDraw_Command => new RelayCommand(execute => DrawTubes());
         public void DrawTubes()
         {
-            MainWindow.GridForTubes.Children.Clear(); // deletes classes of type Visual
+            ContainerForTubes.Children.Clear(); // deletes classes of type Visual
 
             for (int x = 0; x < GameState.NumberOfTubes; x++)
             {
@@ -843,7 +850,7 @@ namespace WaterSortGame.ViewModels
                 // mozna to tu udelat pres ten <ContentControl> nejak
 
                 // ## predelat na MVVM
-                MainWindow.GridForTubes.Children.Add(tubeControl);
+                ContainerForTubes.Children.Add(tubeControl);
             }
         }
         //public Border TubeDisplay { get; set; }
