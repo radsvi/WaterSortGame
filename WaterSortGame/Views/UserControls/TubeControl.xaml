@@ -22,7 +22,7 @@
                         <Grid Margin="{TemplateBinding Margin}" Width="80">
                             <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
                             CornerRadius="0,0,5,5" Background="LightBlue"/>
-                            <Border Margin="10" Height="242" CornerRadius="0,0,29,29" Background="LightBlue" VerticalAlignment="Top">
+                            <Border Margin="10" Height="245" CornerRadius="0,0,29,29" Background="LightBlue" VerticalAlignment="Top">
                                 <Grid Margin="0,25,0,0" Height="208" Name="TubeGrid">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="52"/>
