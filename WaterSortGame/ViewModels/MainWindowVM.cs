@@ -366,8 +366,8 @@ namespace WaterSortGame.ViewModels
 
         #endregion
         #region Moving Liquids
-        public RelayCommand SelectTubeCommand => new RelayCommand(obj => OnClickingTube(obj));
-        internal void OnClickingTube(object obj)
+        public RelayCommand SelectTubeCommand => new RelayCommand(obj => OnTubeButtonClick(obj));
+        internal void OnTubeButtonClick(object obj)
         {
             if (LevelComplete == true)
             {
@@ -389,7 +389,6 @@ namespace WaterSortGame.ViewModels
             {
                 SourceTube = currentTubeReference;
                 GetTopmostLiquid(SourceTube);
-                RaiseTubeAnimation(SourceTube);
                 return;
             }
             if (LastClickedTube == currentTubeReference)
@@ -419,6 +418,7 @@ namespace WaterSortGame.ViewModels
                 DrawTubes();
                 //RippleSurfaceAnimation(tubeLiquids, tubeLiquids.Length - 1, successAtLeastOnce);
                 DeselectTube();
+                IsLevelCompleted();
             }
         }
         private void GetTopmostLiquid(TubeReference sourceTube) // selects topmost liquid in a sourceTube
@@ -434,7 +434,7 @@ namespace WaterSortGame.ViewModels
                     if (LastClickedTube != sourceTube)
                         LastClickedTube = sourceTube;
                     sourceTube.TopMostLiquid = GameState[sourceTube.TubeId, i];
-
+                    RaiseTubeAnimation(sourceTube);
                     return;
                 }
             }
@@ -487,6 +487,14 @@ namespace WaterSortGame.ViewModels
                 //LowerTubeAnimation(buttonElement, SelectedTubeNumber);
 
                 LastClickedTube = null;
+            }
+        }
+        private void IsLevelCompleted()
+        {
+            if (GameState.IsLevelCompleted() && LevelComplete == false)
+            {
+                LevelComplete = true;
+                PopupWindow.Execute(PopupParams.LevelComplete);
             }
         }
         internal ObservableCollection<Tube> DeepCopyTubesCollection(ObservableCollection<Tube> tubes)

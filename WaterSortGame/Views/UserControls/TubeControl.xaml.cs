@@ -67,7 +67,7 @@ namespace WaterSortGame.Views.UserControls
 
 
 
-        public RelayCommand SelectTubeCommandInternal => new RelayCommand(execute => MainWindowVM.OnClickingTube(execute));
+        public RelayCommand SelectTubeCommandInternal => new RelayCommand(execute => MainWindowVM.OnTubeButtonClick(execute));
         
     }
 }

@@ -116,18 +116,22 @@ namespace WaterSortGame.Models
             SetFreshGameState();
             //Tubes?.Clear();
             gameGrid = new LiquidColorNew[NumberOfTubes + extraTubesAdded, NumberOfLayers];
+            int i = 0;
+            AddTube(i++, new int[] { 1, 1, 4, 4 });
+            AddTube(i++, new int[] { 8, 8, 1, 1 });
+            AddTube(i++, new int[] { 4, 4, 8, 8 });
+            AddTube(i++, new int[] { 3, 3, 3, 7 });
+            AddTube(i++, new int[] { 7, 7, 7, 3 });
 
-            AddTube(0, new int[] { 1, 1, 4, 4 });
-            AddTube(1, new int[] { 8, 8, 1, 1 });
-            AddTube(2, new int[] { 4, 4, 8, 8 });
-            AddTube(3, new int[] { 3, 3, 3, 7 });
-            AddTube(4, new int[] { 7, 7, 7, 3 });
+            //AddTube(i++, new int[] { 7, 7, 7, 7 });
+            //AddTube(i++, new int[] { 5, 5, 5 });
+            //AddTube(i++, new int[] { 5 });
 
             StoreStartingGrid();
         }
         private void AddTube(int tubeNumber, int[] layers)
         {
-            for (int i = 0; i < NumberOfLayers; i++)
+            for (int i = 0; i < layers.Length; i++)
             {
                 this[tubeNumber, i] = new LiquidColorNew(layers[i]);
             }
@@ -296,16 +300,40 @@ namespace WaterSortGame.Models
 
             LastGameStep = CloneGrid(gameGrid);
         }
-        public bool AreColorsSorted()
+        public bool IsLevelCompleted()
         {
             for (int x = 0; x < NumberOfTubes; x++)
             {
-                if (gameGrid[x, 0] == gameGrid[x, 1] && gameGrid[x, 0] == gameGrid[x, 2] && gameGrid[x, 0] == gameGrid[x, 3])
+                //if (gameGrid[x, 0] is null || gameGrid[x, 1] is null || gameGrid[x, 2] is null || gameGrid[x, 3] is null)
+                //{ // tohle tu je abych nikdy neporovnaval hodnoty GameGridu kdyz je moznost ze budou null:
+                //    continue;
+                //}
+                
+                // tohle tu je abych nikdy neporovnaval hodnoty GameGridu kdyz je moznost ze budou null:
+                if (gameGrid[x, 0] is not null &&
+                    gameGrid[x, 1] is not null &&
+                    gameGrid[x, 2] is not null &&
+                    gameGrid[x, 3] is not null)
                 {
-                    return true;
+                    if (!(gameGrid[x, 0].Name == gameGrid[x, 1].Name &&
+                        gameGrid[x, 0].Name == gameGrid[x, 2].Name &&
+                        gameGrid[x, 0].Name == gameGrid[x, 3].Name))
+                    {
+                        return false;
+                    }
+                }
+                else
+                { // v pripade ze aspon jeden objekt je null, otestovat jestli jsou vsechny null
+                    if (!(gameGrid[x, 0] is null &&
+                    gameGrid[x, 1] is null &&
+                    gameGrid[x, 2] is null &&
+                    gameGrid[x, 3] is null))
+                    {
+                        return false;
+                    }
                 }
             }
-            return false;
+            return true;
         }
         public void StepBack()
         {
