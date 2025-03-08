@@ -43,26 +43,31 @@ namespace WaterSortGame.Models
             new LiquidColorNew(LiquidColorNames.Olive, new SolidColorBrush(Color.FromRgb(128,153,23))),
             new LiquidColorNew(LiquidColorNames.Red, new SolidColorBrush(Color.FromRgb(188,36,94))),
         };
-        public LiquidColorNew() { }
+        //public LiquidColorNew() { }
         public LiquidColorNew(int colorId)
         {
-            Name = (LiquidColorNames)colorId;
-            Brush = GetColor((LiquidColorNames)colorId);
+            var obj = GetColor((LiquidColorNames)colorId);
+            Name = obj.Name;
+            Brush = obj.Brush;
         }
         public LiquidColorNew(LiquidColorNames colorName)
         {
-            Name = (LiquidColorNames)colorName;
-            Brush = GetColor((LiquidColorNames)colorName);
+            var obj = GetColor((LiquidColorNames)colorName);
+            Name = obj.Name;
+            Brush = obj.Brush;
         }
         private LiquidColorNew(LiquidColorNames name, SolidColorBrush brush)
         {
             Name = name;
             Brush = brush;
         }
-        private SolidColorBrush GetColor(LiquidColorNames Name)
+        //private SolidColorBrush GetColor(LiquidColorNames Name)
+        //{
+        //    return ColorKeys.Where(key => key.Name == Name).ToList()[0].Brush;
+        //}
+        private LiquidColorNew GetColor(LiquidColorNames Name)
         {
-            return ColorKeys.Where(key => key.Name == Name).ToList()[0].Brush;
-
+            return ColorKeys.Where(key => key.Name == Name).ToList()[0];
         }
     }
 }
