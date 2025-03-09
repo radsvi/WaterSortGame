@@ -22,7 +22,7 @@ namespace WaterSortGame.MVVM
             //AppSettings appSettings = mainWindowVM.AppSettings;
 
             window.Top = (mainWindow.Top + 30);
-            window.Left = (mainWindow.Left + (mainWindow.Width - mainWindowVM.OptionsWindowWidth) / 2);
+            window.Left = (mainWindow.Left + (mainWindow.Width - mainWindowVM.AppSettings.OptionsWindowWidth) / 2);
 
             window.ShowDialog();
         }

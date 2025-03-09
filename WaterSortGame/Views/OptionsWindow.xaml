@@ -10,8 +10,8 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type local:OptionsWindow}}"
         Title="OptionsWindow"
-        Height="{Binding OptionsWindowHeight, Mode=TwoWay}" d:Height="400"
-        Width="{Binding OptionsWindowWidth, Mode=TwoWay}" d:Width="600"
+        Height="{Binding AppSettings.OptionsWindowHeight, Mode=TwoWay}" d:Height="400"
+        Width="{Binding AppSettings.OptionsWindowWidth, Mode=TwoWay}" d:Width="600"
         >
     <Window.Resources>
         <!--<models:TubesManager x:Key="TubesManager"/>-->

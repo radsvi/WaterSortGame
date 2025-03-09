@@ -347,32 +347,6 @@ namespace WaterSortGame.ViewModels
             SelectedViewModel = new HelpVM(this);
         });
         #endregion
-        #region OptionsWindow
-
-        private int optionsWindowHeight = Settings.Default.OptionsWindowHeight;
-        public int OptionsWindowHeight
-        {
-            get { return optionsWindowHeight; }
-            set
-            {
-                optionsWindowHeight = value;
-                Settings.Default.OptionsWindowHeight = value;
-                Settings.Default.Save();
-            }
-        }
-        private int optionsWindowWidth = Settings.Default.OptionsWindowWidth;
-        public int OptionsWindowWidth
-        {
-            get { return optionsWindowWidth; }
-            set
-            {
-                optionsWindowWidth = value;
-                Settings.Default.OptionsWindowWidth = value;
-                Settings.Default.Save();
-            }
-        }
-
-        #endregion
         #region Moving Liquids
         public RelayCommand SelectTubeCommand => new RelayCommand(obj => OnTubeButtonClick(obj));
         internal void OnTubeButtonClick(object obj)
