@@ -530,18 +530,41 @@ namespace WaterSortGame.ViewModels
         /// </summary>
         /// <param name="container"></param>
         /// <returns></returns>
-        private (ImageBrush, Border) CreateImageBackground(int numberOfLiquids)
+        private (ImageBrush, Border, Grid) CreateImageBackground(int numberOfLiquids)
         {
+            Grid gridElement = new Grid();
+            
+            
+            
+            Border borderRoundedCorner = new Border();
+            gridElement.Children.Add(borderRoundedCorner);
+            borderRoundedCorner.CornerRadius = new CornerRadius(0, 0, 36, 36);
+            borderRoundedCorner.Background = new SolidColorBrush(Colors.LightBlue);
+
+            Binding binding = new Binding();
+            binding.Source = borderRoundedCorner;
+
+
+            //BindingOperations.SetBinding(column, GridViewColumn.WidthProperty, binding);
+            //BindingOperations.SetBinding("referal elementu v kterym definuju binding", "nazev/typ property kterou chci bindovat", bindingPromenna);
+            VisualBrush visualBrush = new VisualBrush();
+            BindingOperations.SetBinding(visualBrush, VisualBrush.VisualProperty, binding);
+
+            gridElement.OpacityMask = visualBrush;
+
+
+
+
             Border borderElement = new Border();
             borderElement.VerticalAlignment = VerticalAlignment.Top;
-            borderElement.CornerRadius = new CornerRadius(0, 0, 25, 25);
+            //borderElement.CornerRadius = new CornerRadius(0, 0, 25, 25);
             borderElement.Margin = new Thickness(0, -1, 0, 0);
             ImageBrush brush = new ImageBrush();
             BitmapImage bmpImg = new BitmapImage();
 
             bmpImg.BeginInit();
-            bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallest.png", UriKind.Relative);
-            //bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallNonTransparent.png", UriKind.Relative);
+            //bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallest.png", UriKind.Relative);
+            bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallNonTransparent.png", UriKind.Relative);
             //bmpImg.UriSource = new Uri("Images\\JustLine.png", UriKind.Relative);
             //bmpImg.UriSource = new Uri("Images\\NarrowLine.png", UriKind.Relative);
             bmpImg.EndInit();
@@ -573,8 +596,9 @@ namespace WaterSortGame.ViewModels
             //borderElement.Background = new SolidColorBrush(Colors.Red);
             //container.Child = borderElement;
             //container.Children.Add(borderElement);
+            gridElement.Children.Add(borderElement);
 
-            return (brush, borderElement);
+            return (brush, borderElement, gridElement);
         }
         //private void DrawSurfaceFromSin(Tube tube)
         //{
@@ -812,7 +836,6 @@ namespace WaterSortGame.ViewModels
         }
         private void RippleSurfaceAnimation(TubeReference currentTubeReference, int numberOfLiquids)
         {
-
             //Grid container = GetContainerForAnimation(lastClickedTube.ButtonElement, GetFirstEmptyLayer(lastClickedTube));
             //Grid container = GetTubeReference(ContainerForTubes[tubeId]);
             //TubeControl container = ContainerForTubes.Children[tubeId] as TubeControl;
@@ -826,21 +849,21 @@ namespace WaterSortGame.ViewModels
 
             //var originalChild = container.Child;
             //var grid = DrawSurfaceFromSin(container); // ## tohle mozna udelat permanentni. nemusim to generovat vzdy znova.
-            (var brush, var borderElement) = CreateImageBackground(numberOfLiquids);
-            container.Children.Add(borderElement);
+            (var brush, var borderElement, var gridElement) = CreateImageBackground(numberOfLiquids);
+            container.Children.Add(gridElement);
             //container.Background = new SolidColorBrush(Colors.Green);
-            //ContainerForTubes.Children.Add(borderElement);
+            //ContainerForTubes.Children.Add(gridElement);
 
 
             //Grid.SetRow(borderElement, 3 - layer);
             //Grid.SetRow(borderElement, 3 - GetFirstEmptyLayer(currentTubeReference) + 1); // ## v tenhle moment uz je Liquid presunutej. Mel bych to sem posilat z nejake drivejsi kalkulace a ne to detekovat znova.
-            Grid.SetRow(borderElement, 3 - currentTubeReference.TargetEmptyRow); // ## v tenhle moment uz je Liquid presunutej. Mel bych to sem posilat z nejake drivejsi kalkulace a ne to detekovat znova.
+            Grid.SetRow(gridElement, 3 - currentTubeReference.TargetEmptyRow); // ## v tenhle moment uz je Liquid presunutej. Mel bych to sem posilat z nejake drivejsi kalkulace a ne to detekovat znova.
             //Grid.SetColumnSpan(borderElement, GetFirstEmptyLayer(currentTubeReference));
-            Grid.SetRowSpan(borderElement, 4);
+            Grid.SetRowSpan(gridElement, 4);
             //Canvas.SetZIndex(borderElement, 3);
             //Grid.SetZIndex(borderElement, 4);
             
-            StartAnimatingSurface(brush, container, borderElement, numberOfLiquids);
+            StartAnimatingSurface(brush, container, gridElement, numberOfLiquids);
 
             // wait and then return:
             //container.Child = originalChild;
@@ -859,7 +882,7 @@ namespace WaterSortGame.ViewModels
         //    GetDescendantByType
 
         //}
-        private void StartAnimatingSurface(ImageBrush brush, Grid container, Border borderElement, int numberOfLiquids)
+        private void StartAnimatingSurface(ImageBrush brush, Grid container, Grid gridElement, int numberOfLiquids)
         {
             if (brush is null)
             {
@@ -897,15 +920,15 @@ namespace WaterSortGame.ViewModels
             //    To = new   Rect(400 * numberOfLiquids   , yPosFrom - (80 * numberOfLiquids) , 129, ySize),
             //    Duration = TimeSpan.FromSeconds(2 * numberOfLiquids)
             //};
-            viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, borderElement));
+            viewportAnimation.Completed += new EventHandler((sender, e) => ViewportAnimation_Completed(sender, e, container, gridElement));
             brush.BeginAnimation(ImageBrush.ViewportProperty, viewportAnimation);
 
 
         }
-        private void ViewportAnimation_Completed(object? sender, EventArgs e, Grid container, Border borderElement)
+        private void ViewportAnimation_Completed(object? sender, EventArgs e, Grid container, Grid gridElement)
         {
             //container.Child = null;
-            container.Children.Remove(borderElement);
+            container.Children.Remove(gridElement);
             //container.Height = 52;
         }
         #endregion
