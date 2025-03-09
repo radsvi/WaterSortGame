@@ -530,7 +530,7 @@ namespace WaterSortGame.ViewModels
         /// </summary>
         /// <param name="container"></param>
         /// <returns></returns>
-        private (ImageBrush, Border, Grid) CreateImageBackground(int numberOfLiquids)
+        private (ImageBrush, Grid) CreateImageBackground(int numberOfLiquids)
         {
             Grid gridElement = new Grid();
             
@@ -539,7 +539,8 @@ namespace WaterSortGame.ViewModels
             Border borderRoundedCorner = new Border();
             gridElement.Children.Add(borderRoundedCorner);
             borderRoundedCorner.CornerRadius = new CornerRadius(0, 0, 36, 36);
-            borderRoundedCorner.Background = new SolidColorBrush(Colors.LightBlue);
+            //borderRoundedCorner.Background = new SolidColorBrush(Colors.LightBlue);
+            borderRoundedCorner.Background = new SolidColorBrush(Colors.Transparent); // semka poslat barvu kterou presouvam
 
             Binding binding = new Binding();
             binding.Source = borderRoundedCorner;
@@ -555,16 +556,16 @@ namespace WaterSortGame.ViewModels
 
 
 
-            Border borderElement = new Border();
-            borderElement.VerticalAlignment = VerticalAlignment.Top;
+            
+            
             //borderElement.CornerRadius = new CornerRadius(0, 0, 25, 25);
-            borderElement.Margin = new Thickness(0, -1, 0, 0);
+            
             ImageBrush brush = new ImageBrush();
             BitmapImage bmpImg = new BitmapImage();
 
             bmpImg.BeginInit();
-            //bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallest.png", UriKind.Relative);
-            bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallNonTransparent.png", UriKind.Relative);
+            bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallest.png", UriKind.Relative);
+            //bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallNonTransparent.png", UriKind.Relative);
             //bmpImg.UriSource = new Uri("Images\\JustLine.png", UriKind.Relative);
             //bmpImg.UriSource = new Uri("Images\\NarrowLine.png", UriKind.Relative);
             bmpImg.EndInit();
@@ -575,6 +576,8 @@ namespace WaterSortGame.ViewModels
             //brush.Viewport = new Rect(0, 200, 129, 52);
 
             Rectangle tileSizeRectangle = new Rectangle();
+            tileSizeRectangle.VerticalAlignment = VerticalAlignment.Top;
+            tileSizeRectangle.Margin = new Thickness(0, -1, 0, 0);
             tileSizeRectangle.Width = 50;
             //tileSizeRectangle.Width = 20;
             tileSizeRectangle.Height = 52 * numberOfLiquids;
@@ -592,13 +595,13 @@ namespace WaterSortGame.ViewModels
             //grid.Children.Add(brush);
             //grid.Children.Add(tileSizeRectangle);
             //borderElement.Opacity = 1;
-            borderElement.Child = tileSizeRectangle;
+            
             //borderElement.Background = new SolidColorBrush(Colors.Red);
             //container.Child = borderElement;
             //container.Children.Add(borderElement);
-            gridElement.Children.Add(borderElement);
+            gridElement.Children.Add(tileSizeRectangle);
 
-            return (brush, borderElement, gridElement);
+            return (brush, gridElement);
         }
         //private void DrawSurfaceFromSin(Tube tube)
         //{
@@ -849,7 +852,7 @@ namespace WaterSortGame.ViewModels
 
             //var originalChild = container.Child;
             //var grid = DrawSurfaceFromSin(container); // ## tohle mozna udelat permanentni. nemusim to generovat vzdy znova.
-            (var brush, var borderElement, var gridElement) = CreateImageBackground(numberOfLiquids);
+            (var brush, var gridElement) = CreateImageBackground(numberOfLiquids);
             container.Children.Add(gridElement);
             //container.Background = new SolidColorBrush(Colors.Green);
             //ContainerForTubes.Children.Add(gridElement);
