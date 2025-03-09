@@ -121,8 +121,10 @@ namespace WaterSortGame.Models
             AddTube(i++, new int[] { 1, 1, 4, 4 });
             AddTube(i++, new int[] { 8, 8, 1, 1 });
             AddTube(i++, new int[] { 4, 4, 8, 8 });
-            AddTube(i++, new int[] { 3, 3, 3, 7 });
-            AddTube(i++, new int[] { 7, 7, 7, 3 });
+            AddTube(i++, new int[] { 3, 3, 3 });
+            AddTube(i++, new int[] { 7, 7, 7 });
+            AddTube(i++, new int[] { 3 });
+            AddTube(i++, new int[] { 7 });
 
             //AddTube(i++, new int[] { 7, 7, 7, 7 });
             //AddTube(i++, new int[] { 5, 5, 5 });
