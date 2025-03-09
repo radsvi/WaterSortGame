@@ -449,6 +449,11 @@ namespace WaterSortGame.ViewModels
                 }
             }
 
+            //LastClickedTube.LastColorMoved = SourceTube.TopMostLiquid; // saving this to use in CreateImageBackground(). Musim dat Clone protoze jinak se to deselectne
+            //var cloneBrush = new LiquidColorNew(SourceTube.TopMostLiquid.Name);
+            //var qwer = SourceTube.TopMostLiquid.Brush.Clone(cloneBrush);
+            //var asdf = SourceTube.TopMostLiquid.Brush.Clone(cloneBrush);
+            currentTubeReference.LastColorMoved = SourceTube.TopMostLiquid.Clone(); // saving this to use in CreateImageBackground(). Musim dat Clone protoze jinak se to deselectne
             GameState[currentTubeReference.TubeId, firstEmptyLayer] = SourceTube.TopMostLiquid;
             currentTubeReference.TargetEmptyRow = firstEmptyLayer;
             return true;
@@ -530,7 +535,7 @@ namespace WaterSortGame.ViewModels
         /// </summary>
         /// <param name="container"></param>
         /// <returns></returns>
-        private (ImageBrush, Grid) CreateImageBackground(int numberOfLiquids)
+        private (ImageBrush, Grid) CreateImageBackground(TubeReference currentTubeReference, int numberOfLiquids)
         {
             Grid gridElement = new Grid();
             
@@ -538,10 +543,14 @@ namespace WaterSortGame.ViewModels
             
             Border borderRoundedCorner = new Border();
             gridElement.Children.Add(borderRoundedCorner);
-            borderRoundedCorner.CornerRadius = new CornerRadius(0, 0, 36, 36);
+            borderRoundedCorner.CornerRadius = new CornerRadius(0, 0, 16, 16);
             //borderRoundedCorner.Background = new SolidColorBrush(Colors.LightBlue);
-            borderRoundedCorner.Background = new SolidColorBrush(Colors.Transparent); // semka poslat barvu kterou presouvam
-
+            borderRoundedCorner.Background = currentTubeReference.LastColorMoved.Brush; // sem poslat barvu kterou presouvam
+            borderRoundedCorner.Margin = new Thickness(5);
+            //borderRoundedCorner.Width = 20;
+            //SourceTube.TopMostLiquid.Brush;
+            //currentTubeReference.TopMostLiquid.Brush;
+            //GameState[currentTubeReference.TubeId, SourceTube.TopMostLiquid]
             Binding binding = new Binding();
             binding.Source = borderRoundedCorner;
 
@@ -588,7 +597,7 @@ namespace WaterSortGame.ViewModels
 
             //tileSizeRectangle.Fill = Brushes.Pink;
             //tileSizeRectangle.Margin = new Thickness(15, 24, 15, 0);
-            tileSizeRectangle.Margin = new Thickness(0, 0, 0, 0);
+            //tileSizeRectangle.Margin = new Thickness(0, 0, 0, 0);
 
 
             //grid.Background = brush;
@@ -852,7 +861,7 @@ namespace WaterSortGame.ViewModels
 
             //var originalChild = container.Child;
             //var grid = DrawSurfaceFromSin(container); // ## tohle mozna udelat permanentni. nemusim to generovat vzdy znova.
-            (var brush, var gridElement) = CreateImageBackground(numberOfLiquids);
+            (var brush, var gridElement) = CreateImageBackground(currentTubeReference, numberOfLiquids);
             container.Children.Add(gridElement);
             //container.Background = new SolidColorBrush(Colors.Green);
             //ContainerForTubes.Children.Add(gridElement);
@@ -914,8 +923,8 @@ namespace WaterSortGame.ViewModels
             var viewportAnimation = new RectAnimation()
             {
                 From = new Rect(0, yPosFrom + 52 * numberOfLiquids, xSize, ySize),
-                To = new Rect(200 * numberOfLiquids, yPosFrom, xSize, ySize),
-                Duration = TimeSpan.FromSeconds(1 * numberOfLiquids)
+                To = new Rect(180 * numberOfLiquids, yPosFrom, xSize, ySize),
+                Duration = TimeSpan.FromSeconds(0.8 * numberOfLiquids)
             };
             //var viewportAnimation = new RectAnimation()
             //{

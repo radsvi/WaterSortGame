@@ -43,7 +43,7 @@ namespace WaterSortGame.Models
             new LiquidColorNew(LiquidColorNames.Olive, new SolidColorBrush(Color.FromRgb(128,153,23))),
             new LiquidColorNew(LiquidColorNames.Red, new SolidColorBrush(Color.FromRgb(188,36,94))),
         };
-        //public LiquidColorNew() { }
+        private LiquidColorNew() { }
         public LiquidColorNew(int colorId)
         {
             var obj = GetColor((LiquidColorNames)colorId);
@@ -68,6 +68,10 @@ namespace WaterSortGame.Models
         private LiquidColorNew GetColor(LiquidColorNames Name)
         {
             return ColorKeys.Where(key => key.Name == Name).ToList()[0];
+        }
+        public LiquidColorNew Clone()
+        {
+            return new LiquidColorNew { Name = this.Name, Brush = Brush.Clone() };
         }
     }
 }
