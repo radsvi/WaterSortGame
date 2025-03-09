@@ -257,20 +257,20 @@ namespace WaterSortGame.ViewModels
         public string NoteForSavedLevel { get; set; }
         private void SaveLevel()
         {
-            //ClosePopupWindow();
+            ClosePopupWindow();
 
-            //ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+            ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
 
-            //savedLevelList.Add(new StoredLevel(GameState.StartingPosition, NoteForSavedLevel));
+            savedLevelList.Add(new StoredLevel(GameState.StartingPosition, NoteForSavedLevel));
 
-            //Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
-            ////Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
-            //Settings.Default.Save();
-            //NoteForSavedLevel = null;
+            Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
+            //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
+            Settings.Default.Save();
+            NoteForSavedLevel = null;
 
-            //tokenSource = new CancellationTokenSource();
-            //var token = tokenSource.Token;
-            //PopupWindowNotification(token);
+            tokenSource = new CancellationTokenSource();
+            var token = tokenSource.Token;
+            PopupWindowNotification(token);
         }
         public RelayCommand AddPresetLevels_Command => new RelayCommand(execute => AddPresetLevels());
         private void AddPresetLevels()

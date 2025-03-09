@@ -14,7 +14,7 @@ namespace WaterSortGame.Models
         public int NumberOfColors { get; set; }
         public DateTime Date { get; set; }
         public string Note { get; set; }
-        public ObservableCollection<Tube> GameState { get; set; }
+        public LiquidColorNew[,] GameGrid { get; set; }
         private bool markedForDeletion;
         public bool MarkedForDeletion
         {
@@ -41,24 +41,24 @@ namespace WaterSortGame.Models
         }
 
         [JsonConstructor]
-        public StoredLevel(ObservableCollection<Tube> tubes, string noteForSavedLevel)
+        public StoredLevel(LiquidColorNew[,] gameGrid, string noteForSavedLevel)
         {
-            this.GameState = tubes;
-            this.Date = DateTime.Now;
-            this.Note = noteForSavedLevel;
-
-            if(tubes is null)
+            if (gameGrid is null)
             {
                 return;
             }
-            List<int?> colorIds = new List<int?>();
-            foreach (var tube in tubes)
+            this.GameGrid = gameGrid;
+            this.Date = DateTime.Now;
+            this.Note = noteForSavedLevel;
+
+            List<LiquidColorNames?> colorIds = new List<LiquidColorNames?>();
+            for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
-                foreach (var layer in tube.Layers)
+                for (int y = 0; y < gameGrid.GetLength(1); y++)
                 {
-                    if (colorIds.Contains(layer.Id) == false)
+                    if (colorIds.Contains(gameGrid[x,y].Name) == false)
                     {
-                        colorIds.Add(layer.Id);
+                        colorIds.Add(gameGrid[x, y].Name);
                         this.NumberOfColors++;
                     }
                 }
