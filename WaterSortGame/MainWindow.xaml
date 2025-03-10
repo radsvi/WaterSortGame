@@ -152,7 +152,7 @@
                     <Button Command="{Binding StepBackCommand}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Step back ("/>
-                            <TextBlock Text="{Binding GameStates.Count}" d:Text="0"/>
+                            <TextBlock Text="{Binding GameState.SavedGameStates.Count}" d:Text="0"/>
                             <TextBlock Text=")"/>
                         </StackPanel>
                     </Button>

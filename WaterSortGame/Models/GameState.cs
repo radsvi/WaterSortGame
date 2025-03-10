@@ -66,8 +66,8 @@ namespace WaterSortGame.Models
         public int ExtraTubesAdded { get; private set; }
         private LiquidColorNew[,] startingPosition;
         public LiquidColorNew[,] StartingPosition { get; set; }
-        private List<LiquidColorNew[,]> savedGameSteps = new List<LiquidColorNew[,]>();
-        public List<LiquidColorNew[,]> SavedGameSteps
+        private ObservableCollection<LiquidColorNew[,]> savedGameSteps = new ObservableCollection<LiquidColorNew[,]>();
+        public ObservableCollection<LiquidColorNew[,]> SavedGameStates
         {
             get { return savedGameSteps; }
             private set
@@ -79,7 +79,7 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        public LiquidColorNew[,] LastGameStep { get; set; }
+        public LiquidColorNew[,] LastGameState { get; set; }
 
 
         public GameState(MainWindowVM mainWindowVM)
@@ -174,13 +174,6 @@ namespace WaterSortGame.Models
         public void RestartLevel()
         {
             SetFreshGameState();
-            //SavedStartingTubes?.Clear();
-            //Tubes?.Clear();
-            //foreach (var tube in StartingPosition)
-            //{
-            //    Tubes.Add((Tube)tube.DeepCopy());
-            //}
-
             gameGrid = CloneGrid(StartingPosition);
         }
         private void GenerateStandardLevel()
@@ -258,20 +251,23 @@ namespace WaterSortGame.Models
             if (DidGameStateChange() == true)
             //if (SolvingSteps[SolvingSteps.Count - 1] != Tubes)
             {
-                CopyTubes();
+                if (LastGameState != null) // pridavam to tady, protoze nechci v game states mit i current game state.
+                {
+                    SavedGameStates.Add(LastGameState);
+                    LastGameState = null;
+                }
+
+                LastGameState = CloneGrid(gameGrid);
                 return;
             }
         }
         private bool DidGameStateChange()
         {
-            //if (SavedGameSteps.Count == 0 && LastGameStep.Count == 0)
-            if (SavedGameSteps.Count == 0 && LastGameStep == null)
+            if (SavedGameStates.Count == 0 && LastGameState == null)
             {
                 return true;
             }
-            //var lastStateTubes = GameStates[GameStates.Count - 1];
-
-            if (LastGameStep.Length != gameGrid.Length) // pokud jen pridavam extra prazdnou zkumavku tak to neukladat!
+            if (LastGameState.Length != gameGrid.Length) // pokud jen pridavam extra prazdnou zkumavku tak to neukladat!
             {
                 return false;
             }
@@ -280,23 +276,21 @@ namespace WaterSortGame.Models
             {
                 for (int y = 0; y < gameGrid.GetLength(1); y++)
                 {
-                    if (LastGameStep[x,y] != gameGrid[x,y])
+                    if (LastGameState[x, y] is null && gameGrid[x, y] is null)
+                    {
+                        continue;
+                    }
+                    if (LastGameState[x, y] is null && gameGrid[x, y] is not null || LastGameState[x, y] is not null && gameGrid[x, y] is null)
+                    {
+                        return true;
+                    }
+                    if (LastGameState[x,y].Name != gameGrid[x,y].Name)
                     {
                         return true;
                     }
                 }
             }
             return false;
-        }
-        private void CopyTubes()
-        {
-            if (LastGameStep == null) // pridavam to tady, protoze nechci v game states mit i current game state.
-            {
-                SavedGameSteps.Add(LastGameStep);
-                LastGameStep = null;
-            }
-
-            LastGameStep = CloneGrid(gameGrid);
         }
         public bool IsLevelCompleted()
         {
@@ -335,20 +329,21 @@ namespace WaterSortGame.Models
         }
         public void StepBack()
         {
-            if (SavedGameSteps.Count == 0)
+            if (SavedGameStates.Count == 0)
             {
                 return;
             }
 
-            LiquidColorNew[,] lastGameStatus = SavedGameSteps[SavedGameSteps.Count - 1];
+            LiquidColorNew[,] lastGameStatus = SavedGameStates[SavedGameStates.Count - 1];
 
             MainWindowVM.PropertyChangedEventPaused = true;
             gameGrid = lastGameStatus;
             MainWindowVM.PropertyChangedEventPaused = false;
 
-            LastGameStep = CloneGrid(lastGameStatus);
+            LastGameState = CloneGrid(lastGameStatus);
 
-            SavedGameSteps.Remove(lastGameStatus);
+            SavedGameStates.Remove(lastGameStatus);
+            MainWindowVM.DrawTubes();
         }
     }
 }

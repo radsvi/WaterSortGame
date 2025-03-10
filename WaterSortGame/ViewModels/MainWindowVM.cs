@@ -196,6 +196,7 @@ namespace WaterSortGame.ViewModels
             ContainerForTubes = containerForTubes;
 
             DrawTubes();
+            GameState.SaveGameState();
         }
         #endregion
         #region Navigation
@@ -250,8 +251,8 @@ namespace WaterSortGame.ViewModels
         {
             LevelComplete = false;
             DeselectTube();
-            GameState.SavedGameSteps.Clear();
-            GameState.LastGameStep = null;
+            GameState.SavedGameStates.Clear();
+            GameState.LastGameState = null;
             DrawTubes();
         }
         public string NoteForSavedLevel { get; set; }
@@ -338,7 +339,7 @@ namespace WaterSortGame.ViewModels
         {
             tokenSource?.Cancel();
         }
-        public RelayCommand StepBackCommand => new RelayCommand(execute => GameState.StepBack(), canExecute => GameState.SavedGameSteps.Count > 0);
+        public RelayCommand StepBackCommand => new RelayCommand(execute => GameState.StepBack(), canExecute => GameState.SavedGameStates.Count > 0);
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
         public RelayCommand OpenHelpFromOptionsCommand => new RelayCommand(execute =>
@@ -391,6 +392,7 @@ namespace WaterSortGame.ViewModels
                 DeselectTube();
                 
                 IsLevelCompleted();
+                GameState.SaveGameState();
             }
             if (successAtLeastOnce == 0 && AppSettings.UnselectTubeEvenOnIllegalMove == true)
             {
