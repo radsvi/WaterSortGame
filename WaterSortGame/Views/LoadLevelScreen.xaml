@@ -10,7 +10,7 @@
         <!--<Style x:Key="myHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="Visibility" Value="Collapsed" />
         </Style>-->
-        
+
         <Style TargetType="Button" x:Key="DeleteButton">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="LightGray" />
@@ -44,7 +44,6 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        
     </UserControl.Resources>
     <Grid Style="{StaticResource PopupScreenOuter}">
         <Border Style="{StaticResource PopupScreen}" Width="580" Height="{Binding LoadLevelScreenHeight}" d:Height="280">
@@ -105,7 +104,7 @@
                                     <GridViewColumn Header="Preview" Width="222">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ItemsControl ItemsSource="{Binding GameState}" d:ItemsSource="{d:SampleData ItemCount=3}" >
+                                                <ItemsControl ItemsSource="{Binding GameGridDisplayList}" d:ItemsSource="{d:SampleData ItemCount=3}" >
                                                     <ItemsControl.ItemsPanel>
                                                         <ItemsPanelTemplate>
                                                             <WrapPanel IsItemsHost="True" />
@@ -114,10 +113,10 @@
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Margin="0,0,5,0">
-                                                                <Border Background="{Binding Layers[3].Rgb}" Width="10" Height="10"/>
-                                                                <Border Background="{Binding Layers[2].Rgb}" Width="10" Height="10"/>
-                                                                <Border Background="{Binding Layers[1].Rgb}" Width="10" Height="10"/>
-                                                                <Border Background="{Binding Layers[0].Rgb}" Width="10" Height="10"/>
+                                                                <Border Background="{Binding Layers[3].Brush}" Width="10" Height="10"/>
+                                                                <Border Background="{Binding Layers[2].Brush}" Width="10" Height="10"/>
+                                                                <Border Background="{Binding Layers[1].Brush}" Width="10" Height="10"/>
+                                                                <Border Background="{Binding Layers[0].Brush}" Width="10" Height="10"/>
                                                             </StackPanel>
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>

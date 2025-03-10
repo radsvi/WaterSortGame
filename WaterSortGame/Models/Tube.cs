@@ -100,4 +100,61 @@ namespace WaterSortGame.Models
         //    Debug.WriteLine("asdf");
         //}
     }
+
+    internal class TubeNew : ViewModelBase
+    {
+        public int Id { get; set; }
+        private static int tubeIdCounter = 0;
+
+        private List<LiquidColorNew> layers = new List<LiquidColorNew>();
+        public List<LiquidColorNew> Layers
+        {
+            get { return layers; }
+            set
+            {
+                if (layers != value)
+                {
+                    layers = value;
+                    //OnPropertyChanged();
+                }
+            }
+        }
+
+        //public TubeNew DeepCopy()
+        //{
+        //    TubeNew clone = (TubeNew)MemberwiseClone();
+        //    clone.Layers = new List<LiquidColorNew>();
+        //    for (int i = 0; i < this.Layers.Count; i++)
+        //    {
+        //        clone.Layers.Add(new LiquidColorNew((int)this.Layers[i].Id));
+        //    }
+        //    return clone;
+        //}
+        public TubeNew()
+        {
+            Id = tubeIdCounter++;
+        }
+        public TubeNew(int? firstLayer = null, int? secondLayer = null, int? thirdLayer = null, int? fourthLayer = null)
+        {
+            Id = tubeIdCounter++;
+
+            if (firstLayer is not null) Layers.Add(new LiquidColorNew((int)firstLayer));
+            if (secondLayer is not null) Layers.Add(new LiquidColorNew((int)secondLayer));
+            if (thirdLayer is not null) Layers.Add(new LiquidColorNew((int)thirdLayer));
+            if (fourthLayer is not null) Layers.Add(new LiquidColorNew((int)fourthLayer));
+        }
+        public TubeNew(LiquidColorNew? firstLayer = null, LiquidColorNew? secondLayer = null, LiquidColorNew? thirdLayer = null, LiquidColorNew? fourthLayer = null)
+        {
+            Id = tubeIdCounter++;
+
+            if (firstLayer is not null) Layers.Add(firstLayer);
+            if (secondLayer is not null) Layers.Add(secondLayer);
+            if (thirdLayer is not null) Layers.Add(thirdLayer);
+            if (fourthLayer is not null) Layers.Add(fourthLayer);
+        }
+        //private void Tube_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        //{
+        //    Debug.WriteLine("asdf");
+        //}
+    }
 }

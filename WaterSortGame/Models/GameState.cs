@@ -62,7 +62,7 @@ namespace WaterSortGame.Models
         private int extraTubesAdded = 0;
         public int ExtraTubesAdded { get; private set; }
         private LiquidColorNew[,] startingPosition;
-        public LiquidColorNew[,] StartingPosition { get; }
+        public LiquidColorNew[,] StartingPosition { get; set; }
         private List<LiquidColorNew[,]> savedGameSteps = new List<LiquidColorNew[,]>();
         public List<LiquidColorNew[,]> SavedGameSteps
         {
@@ -167,25 +167,20 @@ namespace WaterSortGame.Models
         {
             return CloneGrid(grid, ExtraTubesAdded);
         }
-        private LiquidColorNew[,] CloneGrid(LiquidColorNew[,] grid, int numberOfTubes)
+        public LiquidColorNew[,] CloneGrid(LiquidColorNew[,] gameGrid, int numberOfTubes)
         {
-            LiquidColorNew[,] clonedGrid = new LiquidColorNew[grid.GetLength(0) + numberOfTubes, grid.GetLength(1)];
-            for (int x = 0; x < grid.GetLength(0); x++)
+            LiquidColorNew[,] gridClone = new LiquidColorNew[gameGrid.GetLength(0) + numberOfTubes, gameGrid.GetLength(1)];
+            for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
-                for (int y = 0; y < grid.GetLength(1); y++)
+                for (int y = 0; y < gameGrid.GetLength(1); y++)
                 {
-                    clonedGrid[x, y] = grid[x, y];
-                    //if (grid[x, y] is not null)
-                    //{
-                    //    clonedGrid[x, y] = grid[x, y];
-                    //}
-                    //else
-                    //{
-                    //    clonedGrid[x, y] = null;
-                    //}
+                    if (gameGrid[x, y] is not null)
+                    {
+                        gridClone[x, y] = gameGrid[x, y].Clone();
+                    }
                 }
             }
-            return clonedGrid;
+            return gridClone;
         }
         public void RestartLevel()
         {
@@ -197,7 +192,7 @@ namespace WaterSortGame.Models
             //    Tubes.Add((Tube)tube.DeepCopy());
             //}
 
-            gameGrid = CloneGrid(startingPosition);
+            gameGrid = CloneGrid(StartingPosition);
         }
         private void GenerateStandardLevel()
         {
@@ -267,7 +262,7 @@ namespace WaterSortGame.Models
         }
         private void StoreStartingGrid()
         {
-            startingPosition = CloneGrid(gameGrid);
+            StartingPosition = CloneGrid(gameGrid);
         }
         public void SaveGameState()
         {

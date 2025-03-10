@@ -15,6 +15,7 @@ namespace WaterSortGame.Models
         public DateTime Date { get; set; }
         public string Note { get; set; }
         public LiquidColorNew[,] GameGrid { get; set; }
+        public List<TubeNew> GameGridDisplayList { get; set; }
         private bool markedForDeletion;
         public bool MarkedForDeletion
         {
@@ -56,6 +57,10 @@ namespace WaterSortGame.Models
             {
                 for (int y = 0; y < gameGrid.GetLength(1); y++)
                 {
+                    if (gameGrid[x, y] is null)
+                    {
+                        continue;
+                    }
                     if (colorIds.Contains(gameGrid[x,y].Name) == false)
                     {
                         colorIds.Add(gameGrid[x, y].Name);

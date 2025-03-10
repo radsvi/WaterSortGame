@@ -118,8 +118,10 @@ namespace WaterSortGame.ViewModels
 
             LoadLevelList?.Clear();
             var deserializedList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+
             foreach (var item in deserializedList)
             {
+                item.GameGridDisplayList = ArrayToTubeList(item.GameGrid);
                 LoadLevelList.Add(item);
             }
 
@@ -139,28 +141,53 @@ namespace WaterSortGame.ViewModels
         //private void LoadLevel(bool force = false)
         internal void LoadLevel()
         {
-            //if (SelectedLevelForLoading == null)
-            //{
-            //    return;
+            if (SelectedLevelForLoading == null)
+            {
+                return;
+            }
+            MainWindowVM.ClosePopupWindow();
+            MainWindowVM.PropertyChangedEventPaused = true;
+            //MainWindowVM.GameState.StartingPosition = MainWindowVM.GameState.CloneGrid(SelectedLevelForLoading.GameGrid);
+            MainWindowVM.GameState.StartingPosition = CloneGrid(SelectedLevelForLoading.GameGrid);
+
+
+            //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
+
+            //TubesManager.Tubes?.Clear();
+            //foreach (Tube tube in TubesManager.SavedStartingTubes)
+            //{ // kdyz bych to udelal takhle, tak se prestane refreshovat TubesPerLineCalculation(); a GenerateNewLevel() taky
+            //    TubesManager.Tubes.Add(tube.DeepCopy());
             //}
-            //MainWindowVM.ClosePopupWindow();
-            //MainWindowVM.PropertyChangedEventPaused = true;
-            //MainWindowVM.GameState.StartingPosition = MainWindowVM.DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
-            
+            //OnStartingLevel();
 
-            ////TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
-
-            ////TubesManager.Tubes?.Clear();
-            ////foreach (Tube tube in TubesManager.SavedStartingTubes)
-            ////{ // kdyz bych to udelal takhle, tak se prestane refreshovat TubesPerLineCalculation(); a GenerateNewLevel() taky
-            ////    TubesManager.Tubes.Add(tube.DeepCopy());
-            ////}
-            ////OnStartingLevel();
-
-            //MainWindowVM.RestartLevel();
-            //MainWindowVM.PropertyChangedEventPaused = false;
+            MainWindowVM.RestartLevel();
+            MainWindowVM.PropertyChangedEventPaused = false;
         }
-        public RelayCommand DeleteSelectedLevelsCommand => new RelayCommand(execute => DeleteSelectedLevels(), canExecute => CanDelete());
+        private LiquidColorNew[,] CloneGrid(LiquidColorNew[,] gameGrid)
+        {
+            LiquidColorNew[,] gridClone = new LiquidColorNew[gameGrid.GetLength(0), gameGrid.GetLength(1)];
+            for (int x = 0; x < gameGrid.GetLength(0); x++)
+            {
+                for (int y = 0; y < gameGrid.GetLength(1); y++)
+                {
+                    if (gameGrid[x, y] is not null)
+                    {
+                        gridClone[x, y] = gameGrid[x, y].Clone();
+                    }
+                }
+            }
+            return gridClone;
+        }
+        //private ObservableCollection<Tube> DeepCopyTubesCollection(ObservableCollection<Tube> tubes)
+        //{
+        //    ObservableCollection<Tube> newTubes = new ObservableCollection<Tube>();
+        //    foreach (Tube tube in tubes)
+        //    {
+        //        newTubes.Add(tube.DeepCopy());
+        //    }
+        //    return newTubes;
+        //}
+        public RelayCommand DeleteSelectedLevelsCommand => new RelayCommand(execute => DeleteSelectedSaves(), canExecute => CanDelete());
         private bool CanDelete()
         {
             foreach (var savedLevel in LoadLevelList)
@@ -172,7 +199,7 @@ namespace WaterSortGame.ViewModels
             }
             return false;
         }
-        private void DeleteSelectedLevels()
+        private void DeleteSelectedSaves()
         {
             var levelsToRemove = LoadLevelList.Where(item => item.MarkedForDeletion == true).ToList();
             foreach (var levelToRemove in levelsToRemove)
@@ -189,6 +216,33 @@ namespace WaterSortGame.ViewModels
         {
             var savedGame = obj as StoredLevel;
             savedGame.MarkedForDeletion = !savedGame.MarkedForDeletion;
+        }
+        //private List<List<LiquidColorNew>> ArrayToList2D(LiquidColorNew[,] array)
+        //{
+        //    List<List<LiquidColorNew>> list = new List<List<LiquidColorNew>>();
+
+        //    for (int x = 0; x < array.GetLength(0); x++)
+        //    {
+        //        var row = new List<LiquidColorNew>();
+        //        for (int y = 0; y < array.GetLength(1); y++)
+        //        {
+        //            row.Add(array[x, y]);
+        //        }
+        //        list.Add(row);
+        //    }
+        //    return list;
+        //}
+        private List<TubeNew> ArrayToTubeList(LiquidColorNew[,] array)
+        {
+            List<TubeNew> list = new List<TubeNew>();
+
+            for (int x = 0; x < array.GetLength(0); x++)
+            {
+                var row = new TubeNew(array[x, 0], array[x, 1], array[x, 2], array[x, 3]);
+
+                list.Add(row);
+            }
+            return list;
         }
     }
 }
