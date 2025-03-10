@@ -345,5 +345,22 @@ namespace WaterSortGame.Models
             SavedGameStates.Remove(lastGameStatus);
             MainWindowVM.DrawTubes();
         }
+        private int CountColors()
+        {
+            int numberOfColors = 0;
+            List<LiquidColorNew> liquidColors = new List<LiquidColorNew>();
+            for (int x = 0; x < gameGrid.GetLength(0); x++)
+            {
+                for (int y = 0; y < gameGrid.GetLength(1); y++)
+                {
+                    if (liquidColors.Contains(gameGrid[x, y]) == false)
+                    {
+                        liquidColors.Add(gameGrid[x, y]);
+                        numberOfColors++;
+                    }
+                }
+            }
+            return numberOfColors;
+        }
     }
 }
