@@ -16,6 +16,7 @@ namespace WaterSortGame.Models
         private AppSettings appSettings;
 
 
+
         //public int NumberOfTubes { get; private set; }
         public int NumberOfLayers { get; } = 4;
         private LiquidColorNew[,] gameGrid;
@@ -267,10 +268,10 @@ namespace WaterSortGame.Models
             {
                 return true;
             }
-            if (LastGameState.Length != gameGrid.Length) // pokud jen pridavam extra prazdnou zkumavku tak to neukladat!
-            {
-                return false;
-            }
+            //if (LastGameState.Length != gameGrid.Length) // pokud jen pridavam extra prazdnou zkumavku tak to neukladat!
+            //{
+            //    return false;
+            //}
 
             for (int x = 0; x < gameGrid.GetLength(0); x++)
             {

@@ -195,8 +195,7 @@ namespace WaterSortGame.ViewModels
 
             ContainerForTubes = containerForTubes;
 
-            DrawTubes();
-            GameState.SaveGameState();
+            OnStartingLevel();
         }
         #endregion
         #region Navigation
@@ -253,6 +252,7 @@ namespace WaterSortGame.ViewModels
             DeselectTube();
             GameState.SavedGameStates.Clear();
             GameState.LastGameState = null;
+            GameState.SaveGameState();
             DrawTubes();
         }
         public string NoteForSavedLevel { get; set; }
