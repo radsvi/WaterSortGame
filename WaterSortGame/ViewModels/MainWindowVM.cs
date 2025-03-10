@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Reflection.Metadata;
+using System.Resources;
 using System.Runtime.InteropServices.Marshalling;
 using System.Security.Cryptography;
 using System.Text;
@@ -363,7 +364,8 @@ namespace WaterSortGame.ViewModels
                     if (LastClickedTube != sourceTube)
                         LastClickedTube = sourceTube;
                     sourceTube.TopMostLiquid = GameState[sourceTube.TubeId, i];
-                    RaiseTubeAnimation(sourceTube);
+                    //RaiseTubeAnimation(sourceTube);
+                    MoveAndTiltTube(sourceTube);
                     return;
                 }
             }
@@ -639,6 +641,41 @@ namespace WaterSortGame.ViewModels
         private void ViewportAnimation_Completed(object? sender, EventArgs e, Grid container, Grid gridElement)
         {
             container.Children.Remove(gridElement);
+        }
+        private void MoveAndTiltTube(TubeReference tubeReference)
+        {
+            if (tubeReference.ButtonElement is null)
+            {
+                return;
+            }
+
+            //var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
+            //tubeReference.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
+
+            Storyboard storyboard = new Storyboard();
+            storyboard.Duration = new Duration(TimeSpan.FromSeconds(10.0));
+
+            DoubleAnimation rotateAnimation = new DoubleAnimation()
+            {
+                From = 0,
+                To = 90,
+                Duration = TimeSpan.FromSeconds(3)
+            };
+            //Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
+            Storyboard.SetTarget(rotateAnimation, tubeReference.ButtonElement);
+            Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
+
+            storyboard.Children.Add(rotateAnimation);
+            //MainWindow.Resources.Add("Storyboard", storyboard); // ## predelat -> MVVM
+            MainWindow.Resources.Add("Storyboard", storyboard); // ## predelat -> MVVM
+
+            //((Storyboard)MainWindow.Resources["Storyboard"]).Begin();
+
+            //Storyboard sb = (storyboard as Storyboard);
+            //sb.Begin();
+            storyboard.Begin();
+
+            //tubeReference.ButtonElement.BeginAnimation(Button.RenderTransformProperty, rotateAnimation);
         }
         #endregion
         #region Other Methods
