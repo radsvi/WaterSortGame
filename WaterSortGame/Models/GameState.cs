@@ -145,12 +145,15 @@ namespace WaterSortGame.Models
         /// <summary>
         /// Adding extra (empty) tube during gameplay
         /// </summary>
+        public bool CanAddExtraTube()
+        {
+            return CountColors() + appSettings.MaximumExtraTubes + 2 - gameGrid.GetLength(0) > 0;
+        }
         public void AddExtraTube()
         {
-            if (ExtraTubesAdded <= appSettings.MaximumExtraTubes)
+            if (CanAddExtraTube())
             {
                 gameGrid = CloneGrid(gameGrid, gameGrid.GetLength(0) + 1);
-                ExtraTubesAdded++;
             }
         }
         public LiquidColorNew[,] CloneGrid(LiquidColorNew[,] grid)
@@ -241,7 +244,7 @@ namespace WaterSortGame.Models
         }
         private void SetFreshGameState()
         {
-            ExtraTubesAdded = 0; // resets how much extra tubes has been added
+            //ExtraTubesAdded = 0; // resets how much extra tubes has been added
         }
         private void StoreStartingGrid()
         {
@@ -349,19 +352,25 @@ namespace WaterSortGame.Models
         private int CountColors()
         {
             int numberOfColors = 0;
-            List<LiquidColorNew> liquidColors = new List<LiquidColorNew>();
+            List<LiquidColorNames?> liquidColors = new List<LiquidColorNames?>();
             for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
                 for (int y = 0; y < gameGrid.GetLength(1); y++)
                 {
-                    if (liquidColors.Contains(gameGrid[x, y]) == false)
+                    if (gameGrid[x, y] is null)
                     {
-                        liquidColors.Add(gameGrid[x, y]);
+                        continue;
+                    }
+                    if (liquidColors.Contains(gameGrid[x, y].Name) == false)
+                    {
+                        liquidColors.Add(gameGrid[x, y].Name);
                         numberOfColors++;
                     }
                 }
             }
             return numberOfColors;
         }
+
+
     }
 }

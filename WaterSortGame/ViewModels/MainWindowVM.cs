@@ -227,7 +227,7 @@ namespace WaterSortGame.ViewModels
         {
             PopupWindow.Execute(null);
         }
-        public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => AddExtraTube(), canExecute => GameState.ExtraTubesAdded < AppSettings.MaximumExtraTubes);
+        public RelayCommand AddExtraTubeCommand => new RelayCommand(execute => AddExtraTube(), canExecute => GameState.CanAddExtraTube());
         private void AddExtraTube()
         {
             GameState.AddExtraTube();
