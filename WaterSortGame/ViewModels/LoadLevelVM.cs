@@ -22,7 +22,7 @@ namespace WaterSortGame.ViewModels
             //MainWindowVM.LoadLevelScreen();
 
             //MainWindowVM.LoadLevelList = LoadLevelList;
-            MainWindowVM.LoadLevelVM = this;
+            //MainWindowVM.LoadLevelVM = this;
         }
 
         private StoredLevel selectedLevelForLoading;
@@ -243,6 +243,49 @@ namespace WaterSortGame.ViewModels
                 list.Add(row);
             }
             return list;
+        }
+        public void AddPresetLevels()
+        {
+            //windowService?.CloseWindow(); // close options menu
+
+            //ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+
+            //savedLevelList.Insert(0, new StoredLevel(new ObservableCollection<Tube> {
+            //    { new Tube(8, 1, 3, 0) },
+            //    { new Tube(2, 7, 10, 4) },
+            //    { new Tube(8, 10, 10, 11) },
+            //    { new Tube(2, 2, 1, 4) },
+            //    { new Tube(0, 6, 5, 9) },
+            //    { new Tube(2, 3, 6, 3) },
+            //    { new Tube(3, 7, 4, 9) },
+            //    { new Tube(5, 0, 1, 8) },
+            //    { new Tube(10, 9, 6, 5) },
+            //    { new Tube(4, 6, 9, 3) },
+            //    { new Tube(7, 11, 5, 11) },
+            //    { new Tube(0, 11, 7, 8) },
+            //    { new Tube() },
+            //    { new Tube() },
+            //}, "Never solved this level without adding extra tubes."));
+
+            //savedLevelList.Insert(0, new StoredLevel(new ObservableCollection<Tube> {
+            //    { new Tube(0, 0, 0, 0) },
+            //    { new Tube(1, 1, 1, 1) },
+            //    { new Tube(2, 2, 2, 2) },
+            //    { new Tube(3, 3, 3, 3) },
+            //    { new Tube(4, 4, 4, 4) },
+            //    { new Tube(5, 5, 5, 5) },
+            //    { new Tube(6, 6, 6, 6) },
+            //    { new Tube(7, 7, 7, 7) },
+            //    { new Tube(8, 8, 8, 8) },
+            //    { new Tube(9, 9, 9, 9) },
+            //    { new Tube(10, 10, 10, 10) },
+            //    { new Tube(11) },
+            //    { new Tube(11, 11, 11) },
+            //    { new Tube() },
+            //}, "One step before finish."));
+
+            //Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
+            //Settings.Default.Save();
         }
     }
 }
