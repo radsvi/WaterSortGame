@@ -16,8 +16,7 @@ namespace WaterSortGame.Models
         private AppSettings appSettings;
 
 
-
-        public int NumberOfTubes { get; private set; }
+        //public int NumberOfTubes { get; private set; }
         public int NumberOfLayers { get; } = 4;
         private LiquidColorNew[,] gameGrid;
         public LiquidColorNew this[int tubes, int layers]
@@ -28,6 +27,10 @@ namespace WaterSortGame.Models
                 gameGrid[tubes, layers] = value;
                 //OnLiquidMoving();
             }
+        }
+        public int GetLength(int dimension)
+        {
+            return gameGrid.GetLength(dimension);
         }
 
         //private List<List<LiquidColorNew>> gameState;
@@ -93,12 +96,11 @@ namespace WaterSortGame.Models
 
             GenerateNewLevel();
         }
-        private void InitializeGameGrid(int numberOfTubes)
-        {
-            NumberOfTubes = numberOfTubes;
-            //gameGrid = new LiquidColorNew[(NumberOfTubes + ExtraTubesAdded + 2), NumberOfLayers];
-            gameGrid = new LiquidColorNew[NumberOfTubes, NumberOfLayers];
-        }
+        //private void SetGameGrid(int numberOfTubes)
+        //{
+        //    //gameGrid = new LiquidColorNew[(NumberOfTubes + ExtraTubesAdded + 2), NumberOfLayers];
+        //    gameGrid = new LiquidColorNew[numberOfTubes, NumberOfLayers];
+        //}
         //private void OnLiquidMoving()
         //{
         //    MainWindow.DrawTubes();
@@ -112,7 +114,7 @@ namespace WaterSortGame.Models
         }
         private void GenerateDebugLevel()
         {
-            InitializeGameGrid(7);
+            gameGrid = new LiquidColorNew[7, NumberOfLayers];
             //Tube.ResetCounter();
             SetFreshGameState();
             //Tubes?.Clear();
@@ -139,37 +141,24 @@ namespace WaterSortGame.Models
                 this[tubeNumber, i] = new LiquidColorNew(layers[i]);
             }
         }
-        public void AddExtraTube() // this is for adding extra (empty) tube during gameplay
+        /// <summary>
+        /// Adding extra (empty) tube during gameplay
+        /// </summary>
+        public void AddExtraTube()
         {
             if (ExtraTubesAdded <= appSettings.MaximumExtraTubes)
             {
-                var temp = gameGrid;
-                var length = temp.Length;
+                gameGrid = CloneGrid(gameGrid, gameGrid.GetLength(0) + 1);
                 ExtraTubesAdded++;
-                NumberOfTubes++;
-                //Array.Resize<LiquidColorNew>(ref gameGrid, 20);
-                //gameGrid = CloneGrid(gameGrid);
-                //LiquidColorNew[,] clonedGrid = new LiquidColorNew[gameGrid.GetLength(0) + 1, gameGrid.GetLength(1)];
-                //for (int x = 0; x < gameGrid.GetLength(0); x++)
-                //{
-                //    for (int y = 0; y < gameGrid.GetLength(1); y++)
-                //    {
-                //        clonedGrid[x, y] = this[x, y];
-                //    }
-                //}
-                //gameGrid = clonedGrid;
-                gameGrid = CloneGrid(gameGrid);
-
-
             }
         }
         public LiquidColorNew[,] CloneGrid(LiquidColorNew[,] grid)
         {
-            return CloneGrid(grid, ExtraTubesAdded);
+            return CloneGrid(grid, grid.GetLength(0));
         }
         public LiquidColorNew[,] CloneGrid(LiquidColorNew[,] gameGrid, int numberOfTubes)
         {
-            LiquidColorNew[,] gridClone = new LiquidColorNew[gameGrid.GetLength(0) + numberOfTubes, gameGrid.GetLength(1)];
+            LiquidColorNew[,] gridClone = new LiquidColorNew[numberOfTubes, gameGrid.GetLength(1)];
             for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
                 for (int y = 0; y < gameGrid.GetLength(1); y++)
@@ -196,7 +185,7 @@ namespace WaterSortGame.Models
         }
         private void GenerateStandardLevel()
         {
-            InitializeGameGrid(appSettings.NumberOfColorsToGenerate + 2);
+            gameGrid = new LiquidColorNew[appSettings.NumberOfColorsToGenerate + 2, NumberOfLayers];
             //Tube.ResetCounter();
             SetFreshGameState();
             Random rnd = new Random();
@@ -287,9 +276,9 @@ namespace WaterSortGame.Models
                 return false;
             }
 
-            for (int x = 0; x < NumberOfTubes; x++)
+            for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
-                for (int y = 0; y < NumberOfLayers; y++)
+                for (int y = 0; y < gameGrid.GetLength(1); y++)
                 {
                     if (LastGameStep[x,y] != gameGrid[x,y])
                     {
@@ -311,7 +300,7 @@ namespace WaterSortGame.Models
         }
         public bool IsLevelCompleted()
         {
-            for (int x = 0; x < NumberOfTubes; x++)
+            for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
                 //if (gameGrid[x, 0] is null || gameGrid[x, 1] is null || gameGrid[x, 2] is null || gameGrid[x, 3] is null)
                 //{ // tohle tu je abych nikdy neporovnaval hodnoty GameGridu kdyz je moznost ze budou null:

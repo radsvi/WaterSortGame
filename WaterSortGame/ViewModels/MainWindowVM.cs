@@ -478,7 +478,8 @@ namespace WaterSortGame.ViewModels
         {
             ContainerForTubes.Children.Clear(); // deletes classes of type Visual
 
-            for (int x = 0; x < GameState.NumberOfTubes; x++)
+            //for (int x = 0; x < GameState.NumberOfTubes; x++)
+            for (int x = 0; x < GameState.GetLength(0); x++)
             {
                 LiquidColorNew[] liquidColorsArray = new LiquidColorNew[GameState.NumberOfLayers];
                 for (int y = 0; y < GameState.NumberOfLayers; y++)
