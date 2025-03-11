@@ -12,7 +12,7 @@
         x:Name="window"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="700" MinHeight="400" d:MinHeight="150" d:Height="400"
+        Height="700" MinHeight="400" d:MinHeight="150" d:Height="200"
         Width="720" MinWidth="700"
         d:DataContext="{d:DesignInstance Type={x:Type local:MainWindow}}"
         Background="Transparent"
@@ -65,55 +65,8 @@
         <Style TargetType="Button" x:Key="TestButton">
             <Setter Property="Width" Value="180" />
             <Setter Property="Height" Value="200" />
-            
+
         </Style>
-        <!--<Style TargetType="Button" x:Key="TubeButton">
-            <Setter Property="Background" Value="Transparent" />
-
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Grid Margin="{TemplateBinding Margin}">
-                            <Border Margin="8,10,8,10" MinWidth="60" Width="64" Height="10" VerticalAlignment="Top"
-                                CornerRadius="0,0,5,5" Background="LightBlue"/>
-                            <Border Margin="10" Height="242" CornerRadius="0,0,29,29" Background="LightBlue">
-                                <Grid Margin="0,25,0,0" Height="208" Name="TubeGrid">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="52"/>
-                                        <RowDefinition Height="52"/>
-                                        <RowDefinition Height="52"/>
-                                        <RowDefinition Height="52"/>
-                                    </Grid.RowDefinitions>
-                                    
-                                    
-                                    <Grid Name="Layer3" Margin="5,0" Grid.Row="0">
-                                        <Border d:Background="#145DEF" Background="{Binding Path=Layers[3].Rgb}" />
-                                    </Grid>
-                                    <Grid Name="Layer2" Margin="5,-1" Grid.Row="1">
-                                        <Border d:Background="#3F4482" Background="{Binding Path=Layers[2].Rgb}" />
-                                    </Grid>
-                                    <Grid Name="Layer1"  Margin="5,-1"  Grid.Row="2">
-                                        <Border d:Background="#88AAFF" Background="{Binding Path=Layers[1].Rgb}" />
-                                    </Grid>
-
-                                    <Grid Name="Layer0" Background="White" Margin="5,-1" Grid.Row="3">
-                                        <Grid.OpacityMask>
-                                            <VisualBrush Visual="{Binding ElementName=Border1}" />
-                                        </Grid.OpacityMask>
-                                        <Border x:Name="Border1" CornerRadius="0,0,24,24" d:Background="#F27914" Background="{Binding Path=Layers[0].Rgb}" />
-                                    </Grid>
-                                </Grid>
-                            </Border>
-                            
-                            
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-
-
-        </Style>-->
     </Window.Resources>
 
     <!--<Grid DataContext="{Binding Source={StaticResource MainWindowVM}}" Margin="5">-->
@@ -144,7 +97,6 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,5,0,0">
                     <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Center" x:Name="GridForTubes">
                         <!--<usercontrols:TubeControl TubeItem="{Binding Tubes[0]}"/>-->
-                        <!--<usercontrols:NumericTextBox d:NumTextBoxText="6" />-->
                     </WrapPanel>
                 </ScrollViewer>
 

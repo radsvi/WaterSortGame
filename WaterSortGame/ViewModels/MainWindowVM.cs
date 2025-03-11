@@ -365,8 +365,8 @@ namespace WaterSortGame.ViewModels
                     if (LastClickedTube != sourceTube)
                         LastClickedTube = sourceTube;
                     sourceTube.TopMostLiquid = GameState[sourceTube.TubeId, i];
-                    RaiseTubeAnimation(sourceTube);
-                    //MoveAndTiltTube(sourceTube);
+                    //RaiseTubeAnimation(sourceTube);
+                    MoveAndTiltTube(sourceTube);
                     return;
                 }
             }
@@ -690,7 +690,7 @@ namespace WaterSortGame.ViewModels
 
 
 
-            RotateTransform rotateTransfer = new RotateTransform();
+            RotateTransform rotateTransform = new RotateTransform();
             DoubleAnimation doubleAnimation = new DoubleAnimation()
             {
                 From = 0,
@@ -699,8 +699,8 @@ namespace WaterSortGame.ViewModels
             };
             //doubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
             //tubeReference.ButtonElement.RenderTransformOrigin = new Point(x, y);
-            tubeReference.ButtonElement.RenderTransform = rotateTransfer;
-            rotateTransfer.BeginAnimation(RotateTransform.AngleProperty, doubleAnimation);
+            tubeReference.ButtonElement.RenderTransform = rotateTransform;
+            rotateTransform.BeginAnimation(RotateTransform.AngleProperty, doubleAnimation);
 
         }
         #endregion
