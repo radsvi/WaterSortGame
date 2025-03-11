@@ -13,14 +13,16 @@ namespace WaterSortGame.ViewModels
 {
     class LoadLevelVM : PopupScreenBase
     {
+        private AppSettings AppSettings;
         public LoadLevelVM(object viewModel) : base(viewModel)
         {
             MainWindowVM = (MainWindowVM)viewModel;
+            AppSettings = MainWindowVM.AppSettings;
             LoadLevelList.CollectionChanged += LoadLevelList_CollectionChanged;
             //MainWindowVM.LoadLevelScreen();
 
             //MainWindowVM.LoadLevelList = LoadLevelList;
-            MainWindowVM.LoadLevelVM = this;
+            //MainWindowVM.LoadLevelVM = this;
         }
 
         private StoredLevel selectedLevelForLoading;
@@ -116,8 +118,10 @@ namespace WaterSortGame.ViewModels
 
             LoadLevelList?.Clear();
             var deserializedList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+
             foreach (var item in deserializedList)
             {
+                item.GameGridDisplayList = ArrayToTubeList(item.GameGrid);
                 LoadLevelList.Add(item);
             }
 
@@ -143,8 +147,9 @@ namespace WaterSortGame.ViewModels
             }
             MainWindowVM.ClosePopupWindow();
             MainWindowVM.PropertyChangedEventPaused = true;
-            TubesManager.SavedStartingTubes = MainWindowVM.DeepCopyTubesCollection(SelectedLevelForLoading.GameState);
-            
+            //MainWindowVM.GameState.StartingPosition = MainWindowVM.GameState.CloneGrid(SelectedLevelForLoading.GameGrid);
+            MainWindowVM.GameState.StartingPosition = CloneGrid(SelectedLevelForLoading.GameGrid);
+
 
             //TubesManager.Tubes = DeepCopyTubesCollection(TubesManager.SavedStartingTubes);
 
@@ -158,7 +163,31 @@ namespace WaterSortGame.ViewModels
             MainWindowVM.RestartLevel();
             MainWindowVM.PropertyChangedEventPaused = false;
         }
-        public RelayCommand DeleteSelectedLevelsCommand => new RelayCommand(execute => DeleteSelectedLevels(), canExecute => CanDelete());
+        private LiquidColorNew[,] CloneGrid(LiquidColorNew[,] gameGrid)
+        {
+            LiquidColorNew[,] gridClone = new LiquidColorNew[gameGrid.GetLength(0), gameGrid.GetLength(1)];
+            for (int x = 0; x < gameGrid.GetLength(0); x++)
+            {
+                for (int y = 0; y < gameGrid.GetLength(1); y++)
+                {
+                    if (gameGrid[x, y] is not null)
+                    {
+                        gridClone[x, y] = gameGrid[x, y].Clone();
+                    }
+                }
+            }
+            return gridClone;
+        }
+        //private ObservableCollection<Tube> DeepCopyTubesCollection(ObservableCollection<Tube> tubes)
+        //{
+        //    ObservableCollection<Tube> newTubes = new ObservableCollection<Tube>();
+        //    foreach (Tube tube in tubes)
+        //    {
+        //        newTubes.Add(tube.DeepCopy());
+        //    }
+        //    return newTubes;
+        //}
+        public RelayCommand DeleteSelectedLevelsCommand => new RelayCommand(execute => DeleteSelectedSaves(), canExecute => CanDelete());
         private bool CanDelete()
         {
             foreach (var savedLevel in LoadLevelList)
@@ -170,7 +199,7 @@ namespace WaterSortGame.ViewModels
             }
             return false;
         }
-        private void DeleteSelectedLevels()
+        private void DeleteSelectedSaves()
         {
             var levelsToRemove = LoadLevelList.Where(item => item.MarkedForDeletion == true).ToList();
             foreach (var levelToRemove in levelsToRemove)
@@ -187,6 +216,76 @@ namespace WaterSortGame.ViewModels
         {
             var savedGame = obj as StoredLevel;
             savedGame.MarkedForDeletion = !savedGame.MarkedForDeletion;
+        }
+        //private List<List<LiquidColorNew>> ArrayToList2D(LiquidColorNew[,] array)
+        //{
+        //    List<List<LiquidColorNew>> list = new List<List<LiquidColorNew>>();
+
+        //    for (int x = 0; x < array.GetLength(0); x++)
+        //    {
+        //        var row = new List<LiquidColorNew>();
+        //        for (int y = 0; y < array.GetLength(1); y++)
+        //        {
+        //            row.Add(array[x, y]);
+        //        }
+        //        list.Add(row);
+        //    }
+        //    return list;
+        //}
+        private List<TubeNew> ArrayToTubeList(LiquidColorNew[,] array)
+        {
+            List<TubeNew> list = new List<TubeNew>();
+
+            for (int x = 0; x < array.GetLength(0); x++)
+            {
+                var row = new TubeNew(array[x, 0], array[x, 1], array[x, 2], array[x, 3]);
+
+                list.Add(row);
+            }
+            return list;
+        }
+        public void AddPresetLevels()
+        {
+            //windowService?.CloseWindow(); // close options menu
+
+            //ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+
+            //savedLevelList.Insert(0, new StoredLevel(new ObservableCollection<Tube> {
+            //    { new Tube(8, 1, 3, 0) },
+            //    { new Tube(2, 7, 10, 4) },
+            //    { new Tube(8, 10, 10, 11) },
+            //    { new Tube(2, 2, 1, 4) },
+            //    { new Tube(0, 6, 5, 9) },
+            //    { new Tube(2, 3, 6, 3) },
+            //    { new Tube(3, 7, 4, 9) },
+            //    { new Tube(5, 0, 1, 8) },
+            //    { new Tube(10, 9, 6, 5) },
+            //    { new Tube(4, 6, 9, 3) },
+            //    { new Tube(7, 11, 5, 11) },
+            //    { new Tube(0, 11, 7, 8) },
+            //    { new Tube() },
+            //    { new Tube() },
+            //}, "Never solved this level without adding extra tubes."));
+
+            //savedLevelList.Insert(0, new StoredLevel(new ObservableCollection<Tube> {
+            //    { new Tube(0, 0, 0, 0) },
+            //    { new Tube(1, 1, 1, 1) },
+            //    { new Tube(2, 2, 2, 2) },
+            //    { new Tube(3, 3, 3, 3) },
+            //    { new Tube(4, 4, 4, 4) },
+            //    { new Tube(5, 5, 5, 5) },
+            //    { new Tube(6, 6, 6, 6) },
+            //    { new Tube(7, 7, 7, 7) },
+            //    { new Tube(8, 8, 8, 8) },
+            //    { new Tube(9, 9, 9, 9) },
+            //    { new Tube(10, 10, 10, 10) },
+            //    { new Tube(11) },
+            //    { new Tube(11, 11, 11) },
+            //    { new Tube() },
+            //}, "One step before finish."));
+
+            //Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
+            //Settings.Default.Save();
         }
     }
 }

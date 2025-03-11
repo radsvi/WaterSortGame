@@ -7,10 +7,11 @@ using System.Windows.Controls;
 
 namespace WaterSortGame.Models
 {
-    class TubeButton
+    internal class TubeVisual : Grid
     {
-        public List<object> Contents { get; set; } = new List<object>();
-        //public Tube Tube { get; set; }
-        //public Button ButtonElement { get; set; }
+        public TubeVisual()
+        {
+            
+        }
     }
 }

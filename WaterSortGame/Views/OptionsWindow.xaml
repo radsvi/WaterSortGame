@@ -10,11 +10,11 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type local:OptionsWindow}}"
         Title="OptionsWindow"
-        Height="{Binding OptionsWindowHeight, Mode=TwoWay}" d:Height="400"
-        Width="{Binding OptionsWindowWidth, Mode=TwoWay}" d:Width="600"
+        Height="{Binding AppSettings.OptionsWindowHeight, Mode=TwoWay}" d:Height="400"
+        Width="{Binding AppSettings.OptionsWindowWidth, Mode=TwoWay}" d:Width="600"
         >
     <Window.Resources>
-        <models:TubesManager x:Key="TubesManager"/>
+        <!--<models:TubesManager x:Key="TubesManager"/>-->
         <converters:BoolNegateConverter x:Key="StatusToEnabled"/>
     </Window.Resources>
     <Window.InputBindings>
@@ -23,48 +23,48 @@
     <Grid Margin="10">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
-                <GroupBox Header="Vials" DataContext="{Binding Source={StaticResource TubesManager}}">
+                <GroupBox Header="Vials">
                     <StackPanel>
                         <DockPanel>
                             <Label Content="Limit extra vial to maximum of"/>
                             <TextBox
-                                 Text="{Binding MaximumExtraTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 Text="{Binding AppSettings.MaximumExtraTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                  VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />
                         </DockPanel>
                         <DockPanel>
                             <Label Content="Recommended to leave at just 1. Raising it any higher make the game too easy."/>
                         </DockPanel>
                         <DockPanel>
-                            <CheckBox x:Name="RandomColors" IsChecked="{Binding RandomNumberOfTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Random number of colors"/>
+                            <CheckBox x:Name="RandomColors" IsChecked="{Binding AppSettings.RandomNumberOfTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Random number of colors"/>
                         </DockPanel>
                         <DockPanel IsEnabled="{Binding ElementName=RandomColors,Path=IsChecked,Converter={StaticResource StatusToEnabled}}"
                                    ToolTip="This number (3~12) coresponds to the latest number of colors generated.">
                             <Label Content="Number of colors to generate"/>
                             <TextBox
-                                 Text="{Binding NumberOfColorsToGenerate, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
+                                 Text="{Binding AppSettings.NumberOfColorsToGenerate, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"
                                  VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="Auto" Height="24" VerticalContentAlignment="Center" />
                         </DockPanel>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Header="Help">
                     <StackPanel>
-                        <CheckBox IsChecked="{Binding DontShowHelpScreenAtStart}" Content="Don't show help at startup"/>
+                        <CheckBox IsChecked="{Binding AppSettings.DontShowHelpScreenAtStart}" Content="Don't show help at startup"/>
                         <Button Content="Open Help window" Command="{Binding OpenHelpFromOptionsCommand}" Padding="20 1" HorizontalAlignment="Left" Margin="0,10,0,0"/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Header="Dev options">
                     <StackPanel>
                         <DockPanel>
-                            <CheckBox IsChecked="{Binding DeveloperOptionsVisibleBool, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Enable dev options"/>
+                            <CheckBox IsChecked="{Binding AppSettings.DeveloperOptionsVisibleBool, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Enable dev options"/>
                         </DockPanel>
                         <DockPanel>
-                            <CheckBox IsChecked="{Binding UnselectTubeEvenOnIllegalMove, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Unselect tube even when using illegal move"/>
+                            <CheckBox IsChecked="{Binding AppSettings.UnselectTubeEvenOnIllegalMove, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Unselect tube even when using illegal move"/>
                         </DockPanel>
                         <DockPanel>
                             <Button Content="Add couple presets to saved levels - for testing" Command="{Binding AddPresetLevels_Command}" Padding="20 1" HorizontalAlignment="Left" Margin="0,10,0,0"/>
                         </DockPanel>
                         <DockPanel>
-                            <CheckBox DataContext="{Binding Source={StaticResource TubesManager}}" IsChecked="{Binding LoadDebugLevel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Auto generate debug level on startup"/>
+                            <CheckBox IsChecked="{Binding AppSettings.LoadDebugLevel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Generate preset debug level instead of random one"/>
                         </DockPanel>
                     </StackPanel>
                 </GroupBox>
