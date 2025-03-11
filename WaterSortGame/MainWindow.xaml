@@ -95,9 +95,9 @@
                 </StackPanel>
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,5,0,0">
-                    <Canvas VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="MainCanvas">
+                    <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Center" x:Name="GridForTubes">
                         <!--<usercontrols:TubeControl TubeItem="{Binding Tubes[0]}"/>-->
-                    </Canvas>
+                    </WrapPanel>
                 </ScrollViewer>
 
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding AppSettings.DeveloperOptionsVisible}">
