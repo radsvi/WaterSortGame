@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Reflection.Metadata;
 using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Security.Cryptography;
 using System.Text;
@@ -55,7 +56,7 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
-        private WrapPanel ContainerForTubes;
+        private Canvas MainCanvas;
 
         private ViewModelBase _selectedViewModel;
         public ViewModelBase SelectedViewModel
@@ -160,7 +161,7 @@ namespace WaterSortGame.ViewModels
         public ObservableCollection<PopupScreenActions> PopupActions { get; set; }
         #endregion
         #region Constructor
-        public MainWindowVM(MainWindow mainWindow, WrapPanel containerForTubes)
+        public MainWindowVM(MainWindow mainWindow, Canvas mainCanvas)
         {
             this.windowService = new WindowService();
             MainWindow = mainWindow;
@@ -193,7 +194,7 @@ namespace WaterSortGame.ViewModels
                 new PopupScreenActions(PopupParams.SaveLevel, new SaveLevelVM(this), null, () => SaveLevel()),
             };
 
-            ContainerForTubes = containerForTubes;
+            MainCanvas = mainCanvas;
 
             OnStartingLevel();
         }
@@ -436,7 +437,7 @@ namespace WaterSortGame.ViewModels
         [Obsolete] public RelayCommand TestDraw_Command => new RelayCommand(execute => DrawTubes());
         public void DrawTubes()
         {
-            ContainerForTubes.Children.Clear(); // deletes classes of type Visual
+            MainCanvas.Children.Clear(); // deletes classes of type Visual
 
             //for (int x = 0; x < GameState.NumberOfTubes; x++)
             for (int x = 0; x < GameState.GetLength(0); x++)
@@ -450,7 +451,10 @@ namespace WaterSortGame.ViewModels
 
                 // mozna to tu udelat pres ten <ContentControl> nejak
 
-                ContainerForTubes.Children.Add(tubeControl);
+                Canvas.SetLeft(tubeControl, 80 * x);
+                //Canvas.SetTop(tubeControl, 80 * x);
+
+                MainCanvas.Children.Add(tubeControl);
             }
         }
         /// <summary>
@@ -603,7 +607,7 @@ namespace WaterSortGame.ViewModels
         }
         private void RippleSurfaceAnimation(TubeReference currentTubeReference, int numberOfLiquids)
         {
-            TubeControl tubeControl = ContainerForTubes.Children[currentTubeReference.TubeId] as TubeControl;
+            TubeControl tubeControl = MainCanvas.Children[currentTubeReference.TubeId] as TubeControl;
             
             // Getting reference to the main grid that contains individual liquids in a tube.
             Grid container = (GetDescendantByTypeAndName(tubeControl, typeof(Grid), "TubeGrid")) as Grid;
