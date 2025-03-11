@@ -181,8 +181,9 @@ namespace WaterSortGame.ViewModels
                 SelectedViewModel = new HelpVM(this);
             }
 
-            
-            //loadLevelVM.LoadLevelList.CollectionChanged += loadLevelVM.LoadLevelList_CollectionChanged;
+
+            //var loadLevelVM = new LoadLevelVM(this);
+            LoadLevelVM = new LoadLevelVM(this);
             PopupActions = new ObservableCollection<PopupScreenActions>
             {
                 new PopupScreenActions(PopupParams.NewLevel, new NewLevelVM(this), null, () => GenerateNewLevel()),
@@ -190,6 +191,7 @@ namespace WaterSortGame.ViewModels
                 new PopupScreenActions(PopupParams.LevelComplete, new LevelCompleteVM(this), null, () => GenerateNewLevel()),
                 new PopupScreenActions(PopupParams.Help, new HelpVM(this), null, () => ClosePopupWindow()),
                 new PopupScreenActions(PopupParams.LoadLevel, LoadLevelVM, () => LoadLevelVM.LoadLevelScreen(), () => LoadLevelVM.LoadLevel()),
+                //new PopupScreenActions(PopupParams.LoadLevel, loadLevelVM, () => loadLevelVM.LoadLevelScreen(), () => loadLevelVM.LoadLevel()),
                 new PopupScreenActions(PopupParams.GameSaved, new GameSavedNotificationVM(this), null, () => CloseNotification()),
                 new PopupScreenActions(PopupParams.SaveLevel, new SaveLevelVM(this), null, () => SaveLevel()),
             };
