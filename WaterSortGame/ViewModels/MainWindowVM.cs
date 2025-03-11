@@ -181,8 +181,7 @@ namespace WaterSortGame.ViewModels
                 SelectedViewModel = new HelpVM(this);
             }
 
-            
-            //loadLevelVM.LoadLevelList.CollectionChanged += loadLevelVM.LoadLevelList_CollectionChanged;
+            LoadLevelVM = new LoadLevelVM(this);
             PopupActions = new ObservableCollection<PopupScreenActions>
             {
                 new PopupScreenActions(PopupParams.NewLevel, new NewLevelVM(this), null, () => GenerateNewLevel()),
