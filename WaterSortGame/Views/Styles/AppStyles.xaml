@@ -135,7 +135,7 @@
 
     <!--// Level Complete Window //-->
     <Style TargetType="Grid" x:Key="PopupScreenOuter">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="#CC000000" />
     </Style>
     <Style TargetType="Border" x:Key="PopupScreen">
         <Setter Property="Background" Value="White" />

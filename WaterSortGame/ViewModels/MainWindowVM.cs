@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -55,7 +56,7 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
-        private WrapPanel ContainerForTubes;
+        private UniformGrid ContainerForTubes;
 
         private ViewModelBase _selectedViewModel;
         public ViewModelBase SelectedViewModel
@@ -160,7 +161,7 @@ namespace WaterSortGame.ViewModels
         public ObservableCollection<PopupScreenActions> PopupActions { get; set; }
         #endregion
         #region Constructor
-        public MainWindowVM(MainWindow mainWindow, WrapPanel containerForTubes)
+        public MainWindowVM(MainWindow mainWindow, UniformGrid containerForTubes)
         {
             this.windowService = new WindowService();
             MainWindow = mainWindow;
@@ -173,7 +174,7 @@ namespace WaterSortGame.ViewModels
             //PropertyChanged += TubeCount_PropertyChanged;
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
             //Tubes.CollectionChanged += Tubes_CollectionChanged;
-            TubesPerLineCalculation();
+            
             PopupWindow = new PopupScreenCommand(this);
             if (AppSettings.DontShowHelpScreenAtStart == false)
             {
@@ -436,6 +437,8 @@ namespace WaterSortGame.ViewModels
         [Obsolete] public RelayCommand TestDraw_Command => new RelayCommand(execute => DrawTubes());
         public void DrawTubes()
         {
+            TubeCount = (int)Math.Ceiling((decimal)GameState.GetLength(0) / 2);
+
             ContainerForTubes.Children.Clear(); // deletes classes of type Visual
 
             //for (int x = 0; x < GameState.NumberOfTubes; x++)
@@ -705,18 +708,17 @@ namespace WaterSortGame.ViewModels
         }
         #endregion
         #region Other Methods
-        private void Tubes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            TubesPerLineCalculation();
-        }
-        private void TubesPerLineCalculation()
-        {
-            //TubeCount = Tubes.Count;
-            //TubeCount = Tubes.Where(tube => tube.Layers.Count > 0).Count();
+        //private void Tubes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        //{
+        //    TubesPerLineCalculation();
+        //}
+        //private void TubesPerLineCalculation()
+        //{
+        //    //TubeCount = Tubes.Count;
+        //    //TubeCount = Tubes.Where(tube => tube.Layers.Count > 0).Count();
 
-            //TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
-            TubeCount = 6; // stejne to budu menit, tak jsem docasne dal jen fixnuty cislo
-        }
+        //    TubeCount = (int)Math.Ceiling((decimal)GameState.GetLength(0) / 2);
+        //}
         //private void TubeCount_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         //{
         //    //TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
