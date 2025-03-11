@@ -39,7 +39,7 @@ namespace WaterSortGame.ViewModels
     class MainWindowVM : ViewModelBase
     {
         #region Properties
-        private IWindowService windowService;
+        public IWindowService WindowService { get; }
         public MainWindow MainWindow { get; }
         public AppSettings AppSettings { get; }
         public GameState GameState { get; set; }
@@ -163,7 +163,7 @@ namespace WaterSortGame.ViewModels
         #region Constructor
         public MainWindowVM(MainWindow mainWindow, UniformGrid containerForTubes)
         {
-            this.windowService = new WindowService();
+            this.WindowService = new WindowService();
             MainWindow = mainWindow;
             AppSettings = new AppSettings();
 
@@ -204,7 +204,7 @@ namespace WaterSortGame.ViewModels
         {
             if (SelectedViewModel == null)
             {
-                windowService?.CloseWindow();
+                WindowService?.CloseWindow();
             }
             else
             {
@@ -269,13 +269,13 @@ namespace WaterSortGame.ViewModels
             Settings.Default.Save();
             NoteForSavedLevel = null;
 
-            tokenSource = new CancellationTokenSource();
-            var token = tokenSource.Token;
+            TokenSource = new CancellationTokenSource();
+            var token = TokenSource.Token;
             PopupWindowNotification(token);
         }
         public RelayCommand AddPresetLevels_Command => new RelayCommand(execute => LoadLevelVM.AddPresetLevels());
-        CancellationTokenSource tokenSource = null;
-        private async void PopupWindowNotification(CancellationToken token)
+        public CancellationTokenSource TokenSource { get; set; } = null;
+        public async void PopupWindowNotification(CancellationToken token)
         {
             PopupWindow.Execute(PopupParams.GameSaved);
             //Thread.Sleep(500);
@@ -294,14 +294,14 @@ namespace WaterSortGame.ViewModels
         }
         private void CloseNotification()
         {
-            tokenSource?.Cancel();
+            TokenSource?.Cancel();
         }
         public RelayCommand StepBackCommand => new RelayCommand(execute => GameState.StepBack(), canExecute => GameState.SavedGameStates.Count > 0);
-        public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => windowService?.OpenOptionsWindow(this));
+        public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => WindowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
         public RelayCommand OpenHelpFromOptionsCommand => new RelayCommand(execute =>
         {
-            windowService?.CloseWindow();
+            WindowService?.CloseWindow();
             SelectedViewModel = new HelpVM(this);
         });
         #endregion

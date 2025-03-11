@@ -244,48 +244,123 @@ namespace WaterSortGame.ViewModels
             }
             return list;
         }
+        //private LiquidColorNew[] AddTube(int tubeNumber, int[] layers)
+        //{
+        //    var returnArray = new LiquidColorNew[layers.Length];
+        //    for (int i = 0; i < layers.Length; i++)
+        //    {
+        //        returnArray[i] = new LiquidColorNew(layers[i]);
+        //    }
+
+        //    return returnArray;
+        //}
+        private LiquidColorNew?[,] ConvertToColorBrush(int?[,] intArray)
+        {
+            var returnArray = new LiquidColorNew?[intArray.GetLength(0), intArray.GetLength(1)];
+            for (int x = 0; x < intArray.GetLength(0); x++)
+            {
+                for (int y = 0; y < intArray.GetLength(1); y++)
+                {
+                    if (intArray[x, y] is not null)
+                    {
+                        returnArray[x, y] = new LiquidColorNew((int)intArray[x, y]);
+                    }
+                    else
+                    {
+                        returnArray[x, y] = null;
+                    }
+                }
+            }
+            return returnArray;
+        }
         public void AddPresetLevels()
         {
-            //windowService?.CloseWindow(); // close options menu
+            MainWindowVM.WindowService?.CloseWindow(); // close options menu
 
-            //ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+            ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
 
-            //savedLevelList.Insert(0, new StoredLevel(new ObservableCollection<Tube> {
-            //    { new Tube(8, 1, 3, 0) },
-            //    { new Tube(2, 7, 10, 4) },
-            //    { new Tube(8, 10, 10, 11) },
-            //    { new Tube(2, 2, 1, 4) },
-            //    { new Tube(0, 6, 5, 9) },
-            //    { new Tube(2, 3, 6, 3) },
-            //    { new Tube(3, 7, 4, 9) },
-            //    { new Tube(5, 0, 1, 8) },
-            //    { new Tube(10, 9, 6, 5) },
-            //    { new Tube(4, 6, 9, 3) },
-            //    { new Tube(7, 11, 5, 11) },
-            //    { new Tube(0, 11, 7, 8) },
-            //    { new Tube() },
-            //    { new Tube() },
-            //}, "Never solved this level without adding extra tubes."));
+            var additionalLevels = new List<StoredLevel>();
+            var firstLevel = new int?[,]
+            {
+                {8, 1, 3, 0},
+                {2, 7, 10, 4},
+                {8, 10, 10, 11},
+                {2, 2, 1, 4},
+                {0, 6, 5, 9},
+                {2, 3, 6, 3},
+                {3, 7, 4, 9},
+                {5, 0, 1, 8},
+                {10, 9, 6, 5},
+                {4, 6, 9, 3},
+                {7, 11, 5, 11},
+                {0, 11, 7, 8},
+                {null, null, null,null },
+                {null, null, null,null }
+            };
+            additionalLevels.Insert(0, new StoredLevel(ConvertToColorBrush(firstLevel), "Never solved this level without adding extra tubes."));
 
-            //savedLevelList.Insert(0, new StoredLevel(new ObservableCollection<Tube> {
-            //    { new Tube(0, 0, 0, 0) },
-            //    { new Tube(1, 1, 1, 1) },
-            //    { new Tube(2, 2, 2, 2) },
-            //    { new Tube(3, 3, 3, 3) },
-            //    { new Tube(4, 4, 4, 4) },
-            //    { new Tube(5, 5, 5, 5) },
-            //    { new Tube(6, 6, 6, 6) },
-            //    { new Tube(7, 7, 7, 7) },
-            //    { new Tube(8, 8, 8, 8) },
-            //    { new Tube(9, 9, 9, 9) },
-            //    { new Tube(10, 10, 10, 10) },
-            //    { new Tube(11) },
-            //    { new Tube(11, 11, 11) },
-            //    { new Tube() },
-            //}, "One step before finish."));
+            //{ new Tube(8, 1, 3, 0) },
+            //{ new Tube(2, 7, 10, 4) },
+            //{ new Tube(8, 10, 10, 11) },
+            //{ new Tube(2, 2, 1, 4) },
+            //{ new Tube(0, 6, 5, 9) },
+            //{ new Tube(2, 3, 6, 3) },
+            //{ new Tube(3, 7, 4, 9) },
+            //{ new Tube(5, 0, 1, 8) },
+            //{ new Tube(10, 9, 6, 5) },
+            //{ new Tube(4, 6, 9, 3) },
+            //{ new Tube(7, 11, 5, 11) },
+            //{ new Tube(0, 11, 7, 8) },
+            //{ new Tube() },
+            //{ new Tube() },
+            //var secondLevel = new StoredLevel(new int?[,] { 
+            //    { 0, 0, 0, 0 },
+            //    { 1, 1, 1, 1 },
+            //    { 2, 2, 2, 2 },
+            //    { 3, 3, 3, 3 },
+            //    { 4, 4, 4, 4 },
+            //    { 5, 5, 5, 5 },
+            //    { 6, 6, 6, 6 },
+            //    { 7, 7, 7, 7 },
+            //    { 8, 8, 8, 8 },
+            //    { 9, 9, 9, 9 },
+            //    { 10, 10, 10, 10 },
+            //    { 11, null, null, null },
+            //    { 11, 11, 11, null },
+            //    { null, null, null, null },
+            //}, "One step before finish.");
 
-            //Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
-            //Settings.Default.Save();
+            var secondLevel = new int?[,]
+            {
+                { 0, 0, 0, 0 },
+                { 1, 1, 1, 1 },
+                { 2, 2, 2, 2 },
+                { 3, 3, 3, 3 },
+                { 4, 4, 4, 4 },
+                { 5, 5, 5, 5 },
+                { 6, 6, 6, 6 },
+                { 7, 7, 7, 7 },
+                { 8, 8, 8, 8 },
+                { 9, 9, 9, 9 },
+                { 10, 10, 10, 10 },
+                { 11, null, null, null },
+                { 11, 11, 11, null },
+                { null, null, null, null },
+            };
+            additionalLevels.Insert(0, new StoredLevel(ConvertToColorBrush(secondLevel), "Never solved this level without adding extra tubes."));
+
+
+            Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
+            //Settings.Default.SavedLevels = JsonConvert.SerializeObject(new ObservableCollection<StoredLevel>() { new StoredLevel(TubesManager.SavedStartingTubes) });
+            Settings.Default.Save();
+            MainWindowVM.NoteForSavedLevel = null;
+
+            //MainWindowVM.TokenSource = new CancellationTokenSource();
+            //var token = MainWindowVM.TokenSource.Token;
+            //MainWindowVM.PopupWindowNotification(token);
+
+            Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
+            Settings.Default.Save();
         }
     }
 }

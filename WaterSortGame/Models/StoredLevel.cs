@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Xml.Linq;
 using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
@@ -69,5 +71,50 @@ namespace WaterSortGame.Models
                 }
             }
         }
+        //public StoredLevel(int?[,] gameGridInt, string noteForSavedLevel)
+        //{
+        //    if (gameGridInt is null)
+        //    {
+        //        return;
+        //    }
+        //    this.GameGrid = new LiquidColorNew[gameGridInt.GetLength(0), gameGridInt.GetLength(1)];
+        //    this.Date = DateTime.Now;
+        //    this.Note = noteForSavedLevel;
+
+        //    List<LiquidColorNames?> colorIds = new List<LiquidColorNames?>();
+        //    for (int x = 0; x < gameGridInt.GetLength(0); x++)
+        //    {
+        //        for (int y = 0; y < gameGridInt.GetLength(1); y++)
+        //        {
+        //            if (gameGridInt[x, y] is null)
+        //            {
+        //                continue;
+        //            }
+        //            this.GameGrid[x, y] = new LiquidColorNew((int)gameGridInt[x, y]);
+        //            if (colorIds.Contains(this.GameGrid[x, y].Name) == false)
+        //            {
+        //                colorIds.Add(this.GameGrid[x, y].Name);
+        //                this.NumberOfColors++;
+        //            }
+        //        }
+        //    }
+        //}
+        //public StoredLevel(int?[,] gameGridInt, string noteForSavedLevel) : this(gameGrid, noteForSavedLevel)
+        //{
+        //    var gameGrid = new LiquidColorNew[gameGridInt.GetLength(0), gameGridInt.GetLength(1)];
+        //    for (int x = 0; x < gameGridInt.GetLength(0); x++)
+        //    {
+        //        for (int y = 0; y < gameGridInt.GetLength(1); y++)
+        //        {
+        //            if (gameGridInt[x, y] is null)
+        //            {
+        //                continue;
+        //            }
+        //            GameGrid[x, y] = new LiquidColorNew((int)gameGridInt[x, y]);
+        //        }
+        //    }
+
+
+        //}
     }
 }
