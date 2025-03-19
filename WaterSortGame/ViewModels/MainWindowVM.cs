@@ -189,6 +189,7 @@ namespace WaterSortGame.ViewModels
                 new PopupScreenActions(PopupParams.LevelComplete, new LevelCompleteVM(this), null, () => GenerateNewLevel()),
                 new PopupScreenActions(PopupParams.Help, new HelpVM(this), null, () => ClosePopupWindow()),
                 new PopupScreenActions(PopupParams.LoadLevel, LoadLevelVM, () => LoadLevelVM.LoadLevelScreen(), () => LoadLevelVM.LoadLevel()),
+                //new PopupScreenActions(PopupParams.LoadLevel, loadLevelVM, () => loadLevelVM.LoadLevelScreen(), () => loadLevelVM.LoadLevel()),
                 new PopupScreenActions(PopupParams.GameSaved, new GameSavedNotificationVM(this), null, () => CloseNotification()),
                 new PopupScreenActions(PopupParams.SaveLevel, new SaveLevelVM(this), null, () => SaveLevel()),
             };
@@ -365,7 +366,7 @@ namespace WaterSortGame.ViewModels
                     if (LastClickedTube != sourceTube)
                         LastClickedTube = sourceTube;
                     sourceTube.TopMostLiquid = GameState[sourceTube.TubeId, i];
-                    VisuallySelectTube(sourceTube, VerticalAnimation.Raise);
+                    VerticallyMoveTube(sourceTube, VerticalAnimation.Raise);
                     //MoveAndTiltTube(sourceTube);
                     return;
                 }
@@ -418,7 +419,7 @@ namespace WaterSortGame.ViewModels
             if (LastClickedTube is not null)
             {
                 //LowerTubeAnimation(GetTubeReference(SourceTube.TubeId));
-                VisuallySelectTube(SourceTube, VerticalAnimation.Lower);
+                VerticallyMoveTube(SourceTube, VerticalAnimation.Lower);
                 LastClickedTube = null;
             }
         }
@@ -495,35 +496,35 @@ namespace WaterSortGame.ViewModels
             }
             return foundElement;
         }
-        public static Visual GetDescendantByType(Visual element, Type type)
-        {
-            if (element == null)
-            {
-                return null;
-            }
-            if (element.GetType() == type)
-            {
-                return element;
-            }
-            Visual foundElement = null;
-            if (element is FrameworkElement)
-            {
-                (element as FrameworkElement).ApplyTemplate();
-            }
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
-            {
-                Visual visual = VisualTreeHelper.GetChild(element, i) as Visual;
-                foundElement = GetDescendantByType(visual, type);
-                if (foundElement != null)
-                {
-                    break;
-                }
-            }
-            return foundElement;
-        }
+        //public static Visual GetDescendantByType(Visual element, Type type)
+        //{
+        //    if (element == null)
+        //    {
+        //        return null;
+        //    }
+        //    if (element.GetType() == type)
+        //    {
+        //        return element;
+        //    }
+        //    Visual foundElement = null;
+        //    if (element is FrameworkElement)
+        //    {
+        //        (element as FrameworkElement).ApplyTemplate();
+        //    }
+        //    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
+        //    {
+        //        Visual visual = VisualTreeHelper.GetChild(element, i) as Visual;
+        //        foundElement = GetDescendantByType(visual, type);
+        //        if (foundElement != null)
+        //        {
+        //            break;
+        //        }
+        //    }
+        //    return foundElement;
+        //}
         #endregion
         #region Animation
-        private void VisuallySelectTube(TubeReference tubeReference, VerticalAnimation tubeAnimation)
+        private void VerticallyMoveTube(TubeReference tubeReference, VerticalAnimation tubeAnimation)
         {
             if (tubeReference.ButtonElement is null)
             {
