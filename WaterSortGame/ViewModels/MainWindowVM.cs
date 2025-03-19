@@ -365,8 +365,8 @@ namespace WaterSortGame.ViewModels
                     if (LastClickedTube != sourceTube)
                         LastClickedTube = sourceTube;
                     sourceTube.TopMostLiquid = GameState[sourceTube.TubeId, i];
-                    //RaiseTubeAnimation(sourceTube);
-                    MoveAndTiltTube(sourceTube);
+                    VisuallySelectTube(sourceTube, VerticalAnimation.Raise);
+                    //MoveAndTiltTube(sourceTube);
                     return;
                 }
             }
@@ -418,7 +418,7 @@ namespace WaterSortGame.ViewModels
             if (LastClickedTube is not null)
             {
                 //LowerTubeAnimation(GetTubeReference(SourceTube.TubeId));
-                LowerTubeAnimation(SourceTube);
+                VisuallySelectTube(SourceTube, VerticalAnimation.Lower);
                 LastClickedTube = null;
             }
         }
@@ -523,24 +523,22 @@ namespace WaterSortGame.ViewModels
         }
         #endregion
         #region Animation
-        private void RaiseTubeAnimation(TubeReference tubeReference)
+        private void VisuallySelectTube(TubeReference tubeReference, VerticalAnimation tubeAnimation)
         {
             if (tubeReference.ButtonElement is null)
             {
                 return;
             }
-
-            var HeightAnimation = new ThicknessAnimation() { To = new Thickness(0, 0, 0, 15), Duration = TimeSpan.FromSeconds(0.1) };
-            tubeReference.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
-        }
-        private void LowerTubeAnimation(TubeReference tubeReference)
-        {
-            if (tubeReference.ButtonElement is null)
+            var HeightAnimation = new ThicknessAnimation() { Duration = TimeSpan.FromSeconds(0.1) };
+            if (tubeAnimation == VerticalAnimation.Raise)
             {
-                return;
+                HeightAnimation.To = new Thickness(0, 0, 0, 15);
             }
-
-            var HeightAnimation = new ThicknessAnimation() { From = new Thickness(0, 0, 0, 15), To = new Thickness(0, 15, 0, 0), Duration = TimeSpan.FromSeconds(0.1) };
+            else
+            {
+                HeightAnimation.From = new Thickness(0, 0, 0, 15);
+                HeightAnimation.To = new Thickness(0, 15, 0, 0);
+            }
             tubeReference.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
         }
         private int GetFirstEmptyLayer(TubeReference lastClickedTube)
