@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WaterSortGame.ViewModels
 {
-    class ViewModelBase : INotifyPropertyChanged
+    abstract class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
