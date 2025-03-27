@@ -25,19 +25,25 @@ namespace WaterSortGame.Models
         public void Start(LiquidColorNew[,] gameState)
         {
             var movableLiquids = GetMovableLiquids(gameState);
-            //foreach (var liquid in movableLiquids)
-            //    Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{gameState[liquid.X, liquid.Y].Name}}} {{{liquid.SingleColor}}}");
+            
+            foreach (var liquid in movableLiquids)
+                Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{gameState[liquid.X, liquid.Y].Name}}} {{{liquid.SingleColor}}}");
+            
             var emptySpots = GetEmptySpots(gameState, movableLiquids);
             var validMoves = GetValidMoves(gameState, movableLiquids, emptySpots);
 
+            Debug.WriteLine("validMoves:");
+            foreach (var move in validMoves)
+                Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
+
             PickPreferentialMoves(gameState, validMoves);
+
             if (validMoves.Count == 0)
             {
                 MessageBox.Show("No valid move");
                 return;
             }
-            //foreach (var move in validMoves)
-            //    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
+
 
             MakeAMove(gameState, validMoves[0], (SolvingSteps.Count > 0) ? SolvingSteps.Last() : null);
         }
@@ -127,7 +133,12 @@ namespace WaterSortGame.Models
                     {
                         var move = new ValidMove(liquid, emptySpot, gameState);
                         //if (IsThisRepeatingMove(move)) continue;
-                        if (IsThisRepeatingMove(gameState)) continue;
+
+                        var upcomingState = CloneGrid(gameState);
+                        upcomingState[move.Target.X, move.Target.Y] = upcomingState[move.Source.X, move.Source.Y];
+                        upcomingState[move.Source.X, move.Source.Y] = null;
+
+                        if (IsThisRepeatingMove(upcomingState)) continue;
                         validMoves.Add(move);
                     }
                 }
@@ -208,9 +219,21 @@ namespace WaterSortGame.Models
             if (SolvingSteps.Count <= 1) return false;
 
             //var previousState = SolvingSteps.Last().PreviousStep.Grid;
-            var previousState = SolvingSteps.Last().Grid;
-            if (AreStatesSame(gameState, previousState)) return true;
-
+            var previousState = SolvingSteps.Last();
+            bool first = true;
+            do {
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    previousState = previousState.PreviousStep;
+                    if (previousState is null) continue;
+                }
+                if (AreStatesSame(gameState, previousState.Grid)) return true;
+            } while (previousState is not null);
+            
             return false;
         }
         private bool AreStatesSame(LiquidColorNew[,] first, LiquidColorNew[,] second)
@@ -248,16 +271,18 @@ namespace WaterSortGame.Models
             Debug.WriteLine("=====================================================");
             Debug.WriteLine(header);
             Debug.WriteLine("-----------------------------------------------------");
-            for (int y = 0; y < grid.GetLength(1); y++)
+            //for (int y = 0; y < grid.GetLength(1); y++)
+            for (int y = grid.GetLength(1) - 1; y >= 0; y--)
             {
-                for (int x = 0; x < grid.GetLength(0); x++) 
+                for (int x = grid.GetLength(0) - 1; x >= 0; x--) 
                 {
                     if (grid[x, y] == null)
                     {
-                        Debug.Write($"____\t");
+                        Debug.Write($"____          \t");
                     } else
                     {
-                        Debug.Write($"{grid[x, y].Name}\t");
+                        string indent = new String(' ', 14 - (grid[x, y].Name.ToString().Length)); ;
+                        Debug.Write($"{grid[x, y].Name}{indent}\t");
                     }
                 }
                 Debug.WriteLine("");
