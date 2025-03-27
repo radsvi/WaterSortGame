@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
@@ -31,7 +33,12 @@ namespace WaterSortGame.Models
             //foreach (var move in validMoves)
             //    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
 
-            PickPreferentialMove();
+            PickPreferentialMoves(gameState, validMoves);
+            if (validMoves.Count == 0)
+            {
+                MessageBox.Show("No valid move");
+                return;
+            }
             MakeAMove(gameState, validMoves[0], (SolvingSteps.Count > 0) ? SolvingSteps.Last() : null);
         }
         /// <summary>
@@ -121,9 +128,36 @@ namespace WaterSortGame.Models
 
             return validMoves;
         }
-        private void PickPreferentialMove()
+        /// <summary>
+        /// If we already have a tube with 3 colors and there is a possibility to add 4th one, pick that choice
+        /// </summary>
+        //private List<ValidMove> PickPreferentialMoves(LiquidColorNew[,] gameState, List<ValidMove> validMoves)
+        private void PickPreferentialMoves(LiquidColorNew[,] gameState, List<ValidMove> validMoves)
         {
+            //var preferentialMoves = new List<ValidMove>();
+            
+            List<int> tubeNumbers = new List<int>();
+            for (int x = 0; x < gameState.GetLength(0); x++)
+            {
+                if (gameState[x, 0] == null || gameState[x, 1] == null || gameState[x, 2] == null) continue;
 
+                if (gameState[x, 0].Name == gameState[x, 1].Name && gameState[x, 0].Name == gameState[x, 2].Name)
+                {
+                    tubeNumbers.Add(x);
+                }
+            }
+            if (tubeNumbers.Count == 0) return;
+
+            for (int i = validMoves.Count() - 1; i >= 0; i--)
+            {
+                if (tubeNumbers.Contains(validMoves[i].Source.X))
+                {
+                    validMoves.Remove(validMoves[i]);
+                }
+            }
+
+
+            //return preferentialMoves;
         }
         private void MakeAMove(LiquidColorNew[,] gameState, ValidMove move, SolutionSteps previousStepReferer = null)
         {
