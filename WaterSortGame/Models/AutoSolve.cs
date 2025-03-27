@@ -31,7 +31,7 @@ namespace WaterSortGame.Models
             //foreach (var move in validMoves)
             //    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
 
-            PickPreferentialMove();
+            PickPreferentialMove(validMoves);
             MakeAMove(gameState, validMoves[0], (SolvingSteps.Count > 0) ? SolvingSteps.Last() : null);
         }
         /// <summary>
@@ -121,8 +121,12 @@ namespace WaterSortGame.Models
 
             return validMoves;
         }
-        private void PickPreferentialMove()
+        /// <summary>
+        /// If we already have a tube with 3 colors and there is a possibility to add 4th one, pick that choice
+        /// </summary>
+        private void PickPreferentialMove(List<ValidMove> validMoves)
         {
+
 
         }
         private void MakeAMove(LiquidColorNew[,] gameState, ValidMove move, SolutionSteps previousStepReferer = null)
