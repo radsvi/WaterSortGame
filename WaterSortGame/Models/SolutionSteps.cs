@@ -10,10 +10,12 @@ namespace WaterSortGame.Models
     {
         public SolutionSteps? PreviousStep { get; set; }
         public LiquidColorNew[,] Grid { get; set; }
-        public SolutionSteps(LiquidColorNew[,] grid, SolutionSteps? previousStep = null)
+        public ValidMove Move { get; set; }
+        public SolutionSteps(LiquidColorNew[,] grid, ValidMove move, SolutionSteps? previousStep = null)
         {
             Grid = GameState.CloneGrid(grid, true);
             PreviousStep = previousStep;
+            Move = move;
         }
     }
 }

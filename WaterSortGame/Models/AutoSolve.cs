@@ -20,7 +20,7 @@ namespace WaterSortGame.Models
             //StartingPosition = startingPosition;
             SolvingSteps = new List<SolutionSteps>();
         }
-        public void Start(LiquidColorNew[,] gameState, LiquidColorNew[,] previousStep)
+        public void Start(LiquidColorNew[,] gameState)
         {
             var movableLiquids = GetMovableLiquids(gameState);
             //foreach (var liquid in movableLiquids)
@@ -31,7 +31,8 @@ namespace WaterSortGame.Models
             //foreach (var move in validMoves)
             //    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
 
-            MakeAMove(gameState, validMoves[0]);
+            PickPreferentialMove();
+            MakeAMove(gameState, validMoves[0], (SolvingSteps.Count > 0) ? SolvingSteps.Last() : null);
         }
         /// <summary>
         /// Picks topmost liquid from each tube, but excludes tubes that are already solved
@@ -103,29 +104,56 @@ namespace WaterSortGame.Models
 
                     if (emptySpot.Y == 0)
                     {
-                        validMoves.Add(new ValidMove(liquid, emptySpot));
+                        var move = new ValidMove(liquid, emptySpot, gameState);
+                        if (IsThisRepeatingMove(move)) continue;
+                        validMoves.Add(move);
                         continue;
                     }
 
                     if (gameState[liquid.X, liquid.Y].Name == gameState[emptySpot.X, emptySpot.Y - 1].Name)
-                        validMoves.Add(new ValidMove(liquid, emptySpot));
+                    {
+                        var move = new ValidMove(liquid, emptySpot, gameState);
+                        if (IsThisRepeatingMove(move)) continue;
+                        validMoves.Add(move);
+                    }
                 }
             }
 
             return validMoves;
         }
-        private void MakeAMove(LiquidColorNew[,] gameState, ValidMove move)
+        private void PickPreferentialMove()
+        {
+
+        }
+        private void MakeAMove(LiquidColorNew[,] gameState, ValidMove move, SolutionSteps previousStepReferer = null)
         {
             var previousStep = MainWindowVM.GameState.CloneGrid(gameState);
             gameState[move.Target.X, move.Target.Y] = gameState[move.Source.X, move.Source.Y];
             gameState[move.Source.X, move.Source.Y] = null;
-            var currentStep = new SolutionSteps(gameState, previousStep);
+            var currentStep = new SolutionSteps(gameState, move, previousStepReferer);
 
             SolvingSteps.Add(currentStep);
 
             MainWindowVM.GameState.SetGameState(gameState);
 
             MainWindowVM.DrawTubes();
+        }
+        //private bool IsThisRepeatingMove(LiquidColorNew[,] gameState, SolutionSteps previousStepReferer)
+        //{
+        //    if (gameState == previousStepReferer.PreviousStep.Grid)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        private bool IsThisRepeatingMove(ValidMove move)
+        {
+            if (SolvingSteps.Count <= 1) return false;
+
+            var lastMove = SolvingSteps.Last().PreviousStep.Move;
+            if (lastMove == move) return true;
+
+            return false;
         }
         //private void xxx(LiquidColorNew[,] gameState)
         //{
