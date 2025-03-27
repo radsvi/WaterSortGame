@@ -350,15 +350,19 @@ namespace WaterSortGame.ViewModels
             {
                 DrawTubes();
                 RippleSurfaceAnimation(currentTubeReference, successAtLeastOnce);
-                DeselectTube();
-                
-                IsLevelCompleted();
-                GameState.SaveGameState();
+                OnChangingGameState();
             }
             if (successAtLeastOnce == 0 && AppSettings.UnselectTubeEvenOnIllegalMove == true)
             {
                 DeselectTube();
             }
+        }
+        public void OnChangingGameState()
+        {
+            DeselectTube();
+
+            IsLevelCompleted();
+            GameState.SaveGameState();
         }
         private void GetTopmostLiquid(TubeReference sourceTube) // selects topmost liquid in a sourceTube
         {

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
@@ -15,7 +16,6 @@ namespace WaterSortGame.Models
         MainWindowVM MainWindowVM;
         //LiquidColorNew[,] StartingPosition;
         List<SolutionSteps> SolvingSteps;
-
         public AutoSolve(MainWindowVM mainWindowVM, LiquidColorNew[,] startingPosition)
         {
             MainWindowVM = mainWindowVM;
@@ -30,15 +30,15 @@ namespace WaterSortGame.Models
             var emptySpots = GetEmptySpots(gameState, movableLiquids);
             var validMoves = GetValidMoves(gameState, movableLiquids, emptySpots);
 
-            //foreach (var move in validMoves)
-            //    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
-
             PickPreferentialMoves(gameState, validMoves);
             if (validMoves.Count == 0)
             {
                 MessageBox.Show("No valid move");
                 return;
             }
+            //foreach (var move in validMoves)
+            //    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
+
             MakeAMove(gameState, validMoves[0], (SolvingSteps.Count > 0) ? SolvingSteps.Last() : null);
         }
         /// <summary>
@@ -73,7 +73,7 @@ namespace WaterSortGame.Models
         {
             if (y == 0) return false;
 
-            for (int internalY = 0; internalY < y - 1; internalY++)
+            for (int internalY = 0; internalY < y; internalY++)
             {
                 if (gameState[x, internalY].Name != gameState[x, internalY + 1].Name) return false;
             }
@@ -112,7 +112,13 @@ namespace WaterSortGame.Models
                     if (emptySpot.Y == 0)
                     {
                         var move = new ValidMove(liquid, emptySpot, gameState);
-                        if (IsThisRepeatingMove(move)) continue;
+                        //if (IsThisRepeatingMove(move)) continue;
+                        
+                        var upcomingState = CloneGrid(gameState);
+                        upcomingState[move.Target.X, move.Target.Y] = upcomingState[move.Source.X, move.Source.Y];
+                        upcomingState[move.Source.X, move.Source.Y] = null;
+
+                        if (IsThisRepeatingMove(upcomingState)) continue;
                         validMoves.Add(move);
                         continue;
                     }
@@ -120,7 +126,8 @@ namespace WaterSortGame.Models
                     if (gameState[liquid.X, liquid.Y].Name == gameState[emptySpot.X, emptySpot.Y - 1].Name)
                     {
                         var move = new ValidMove(liquid, emptySpot, gameState);
-                        if (IsThisRepeatingMove(move)) continue;
+                        //if (IsThisRepeatingMove(move)) continue;
+                        if (IsThisRepeatingMove(gameState)) continue;
                         validMoves.Add(move);
                     }
                 }
@@ -139,9 +146,9 @@ namespace WaterSortGame.Models
             List<int> tubeNumbers = new List<int>();
             for (int x = 0; x < gameState.GetLength(0); x++)
             {
-                if (gameState[x, 0] == null || gameState[x, 1] == null || gameState[x, 2] == null) continue;
+                if (gameState[x, 0] == null || gameState[x, 1] == null || gameState[x, 2] == null || gameState[x, 3] == null) continue;
 
-                if (gameState[x, 0].Name == gameState[x, 1].Name && gameState[x, 0].Name == gameState[x, 2].Name)
+                if (gameState[x, 0].Name == gameState[x, 1].Name && gameState[x, 0].Name == gameState[x, 2].Name && gameState[x, 0].Name == gameState[x, 3].Name)
                 {
                     tubeNumbers.Add(x);
                 }
@@ -161,16 +168,23 @@ namespace WaterSortGame.Models
         }
         private void MakeAMove(LiquidColorNew[,] gameState, ValidMove move, SolutionSteps previousStepReferer = null)
         {
-            var previousStep = MainWindowVM.GameState.CloneGrid(gameState);
+            var currentState = MainWindowVM.GameState.CloneGrid(gameState);
+
             gameState[move.Target.X, move.Target.Y] = gameState[move.Source.X, move.Source.Y];
             gameState[move.Source.X, move.Source.Y] = null;
-            var currentStep = new SolutionSteps(gameState, move, previousStepReferer);
 
-            SolvingSteps.Add(currentStep);
+            var upcomingStep = new SolutionSteps(currentState, move, previousStepReferer);
+            SolvingSteps.Add(upcomingStep);
+
 
             MainWindowVM.GameState.SetGameState(gameState);
 
             MainWindowVM.DrawTubes();
+            MainWindowVM.OnChangingGameState();
+        }
+        private LiquidColorNew[,] CloneGrid(LiquidColorNew[,] gameState)
+        {
+            return MainWindowVM.GameState.CloneGrid(gameState);
         }
         //private bool IsThisRepeatingMove(LiquidColorNew[,] gameState, SolutionSteps previousStepReferer)
         //{
@@ -180,15 +194,76 @@ namespace WaterSortGame.Models
         //    }
         //    return false;
         //}
-        private bool IsThisRepeatingMove(ValidMove move)
+        //private bool IsThisRepeatingMove(ValidMove move)
+        //{
+        //    if (SolvingSteps.Count <= 1) return false;
+
+        //    var lastMove = SolvingSteps.Last().PreviousStep.Move;
+        //    if (lastMove == move) return true;
+
+        //    return false;
+        //}
+        private bool IsThisRepeatingMove(LiquidColorNew[,] gameState)
         {
             if (SolvingSteps.Count <= 1) return false;
 
-            var lastMove = SolvingSteps.Last().PreviousStep.Move;
-            if (lastMove == move) return true;
+            //var previousState = SolvingSteps.Last().PreviousStep.Grid;
+            var previousState = SolvingSteps.Last().Grid;
+            if (AreStatesSame(gameState, previousState)) return true;
 
             return false;
         }
+        private bool AreStatesSame(LiquidColorNew[,] first, LiquidColorNew[,] second)
+        {
+            //DebugGrid(first, "currentGamestate");
+            //DebugGrid(second, "previousStep");
+
+
+
+            for (int x = 0; x < first.GetLength(0); x++)
+            {
+                for (int y = 0; y < first.GetLength(1); y++)
+                {
+                    if (first[x, y] == null || second[x, y] == null)
+                    {
+                        if (first[x, y] == second[x, y])
+                            continue;
+
+                        return false;
+                    }
+
+                    if (first[x, y].Name == second[x, y].Name)
+                    {
+                        continue;
+                    }
+                    return false;
+
+                    //if (first[x, y] == second[x, y]) return true;
+                }
+            }
+            return true;
+        }
+        private void DebugGrid(LiquidColorNew[,] grid, string header)
+        {
+            Debug.WriteLine("=====================================================");
+            Debug.WriteLine(header);
+            Debug.WriteLine("-----------------------------------------------------");
+            for (int y = 0; y < grid.GetLength(1); y++)
+            {
+                for (int x = 0; x < grid.GetLength(0); x++) 
+                {
+                    if (grid[x, y] == null)
+                    {
+                        Debug.Write($"____\t");
+                    } else
+                    {
+                        Debug.Write($"{grid[x, y].Name}\t");
+                    }
+                }
+                Debug.WriteLine("");
+            }
+        }
+
         //private void xxx(LiquidColorNew[,] gameState)
         //{
         //    for (int x = 0; x < gameState.GetLength(0); x++)
