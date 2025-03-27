@@ -42,6 +42,7 @@ namespace WaterSortGame.ViewModels
         public IWindowService WindowService { get; }
         public MainWindow MainWindow { get; }
         public AppSettings AppSettings { get; }
+        public AutoSolve AutoSolve { get; set; }
         public GameState GameState { get; set; }
         private LoadLevelVM loadLevelVM;
         public LoadLevelVM LoadLevelVM
@@ -195,6 +196,8 @@ namespace WaterSortGame.ViewModels
             };
 
             ContainerForTubes = containerForTubes;
+
+            AutoSolve = new AutoSolve(this, GameState.StartingPosition);
 
             OnStartingLevel();
         }
@@ -722,11 +725,7 @@ namespace WaterSortGame.ViewModels
         //    //TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
         //    TubeCount = Tubes.Count;
         //}
-        public RelayCommand AutoSolveCommand => new RelayCommand(execute => AutoSolve());
-        private void AutoSolve()
-        {
-            var autoSolve = new AutoSolve(GameState.StartingPosition);
-        }
+        public RelayCommand AutoSolveCommand => new RelayCommand(execute => AutoSolve.Start(GameState.gameGrid));
         #endregion
     }
 }

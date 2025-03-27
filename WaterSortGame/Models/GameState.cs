@@ -19,7 +19,7 @@ namespace WaterSortGame.Models
 
         //public int NumberOfTubes { get; private set; }
         public int NumberOfLayers { get; } = 4;
-        private LiquidColorNew[,] gameGrid;
+        public LiquidColorNew[,] gameGrid;
         public LiquidColorNew this[int tubes, int layers]
         {
             get => gameGrid[tubes, layers];
@@ -82,7 +82,7 @@ namespace WaterSortGame.Models
         }
         public LiquidColorNew[,] LastGameState { get; set; }
 
-
+        public GameState() { }
         public GameState(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
@@ -132,9 +132,9 @@ namespace WaterSortGame.Models
             AddTube(i++, new int[] { 1, 1, 4, 4 });
             AddTube(i++, new int[] { 8, 8, 1, 1 });
             AddTube(i++, new int[] { 4, 4, 8, 8 });
-            AddTube(i++, new int[] { 3, 3, 3,3 });
+            AddTube(i++, new int[] { 3, 3, 3 });
             AddTube(i++, new int[] { 7, 7, 7 });
-            AddTube(i++, new int[] { 3, 3 });
+            AddTube(i++, new int[] { 3 });
             AddTube(i++, new int[] { 7 });
             
 
@@ -165,6 +165,10 @@ namespace WaterSortGame.Models
                 gameGrid = CloneGrid(gameGrid, gameGrid.GetLength(0) + 1);
             }
         }
+        public static LiquidColorNew[,] CloneGrid(LiquidColorNew[,] grid, bool staticClass)
+        {
+            return new GameState().CloneGrid(grid, grid.GetLength(0));
+        }
         public LiquidColorNew[,] CloneGrid(LiquidColorNew[,] grid)
         {
             return CloneGrid(grid, grid.GetLength(0));
@@ -183,6 +187,10 @@ namespace WaterSortGame.Models
                 }
             }
             return gridClone;
+        }
+        public void SetGameState(LiquidColorNew[,] newGameState)
+        {
+            gameGrid = CloneGrid(newGameState);
         }
         public void RestartLevel()
         {

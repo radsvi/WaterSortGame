@@ -4,18 +4,23 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
     internal class AutoSolve
     {
+        MainWindowVM MainWindowVM;
         //LiquidColorNew[,] StartingPosition;
-        public AutoSolve(LiquidColorNew[,] startingPosition)
+        List<SolutionSteps> SolvingSteps;
+
+        public AutoSolve(MainWindowVM mainWindowVM, LiquidColorNew[,] startingPosition)
         {
+            MainWindowVM = mainWindowVM;
             //StartingPosition = startingPosition;
-            StartSolving(startingPosition);
+            SolvingSteps = new List<SolutionSteps>();
         }
-        private void StartSolving(LiquidColorNew[,] gameState)
+        public void Start(LiquidColorNew[,] gameState, LiquidColorNew[,] previousStep)
         {
             var movableLiquids = GetMovableLiquids(gameState);
             //foreach (var liquid in movableLiquids)
@@ -23,9 +28,10 @@ namespace WaterSortGame.Models
             var emptySpots = GetEmptySpots(gameState, movableLiquids);
             var validMoves = GetValidMoves(gameState, movableLiquids, emptySpots);
 
-            foreach (var move in validMoves)
-                Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
+            //foreach (var move in validMoves)
+            //    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
 
+            MakeAMove(gameState, validMoves[0]);
         }
         /// <summary>
         /// Picks topmost liquid from each tube, but excludes tubes that are already solved
@@ -108,7 +114,20 @@ namespace WaterSortGame.Models
 
             return validMoves;
         }
-        //private void GetMovebleLiquids(LiquidColorNew[,] gameState)
+        private void MakeAMove(LiquidColorNew[,] gameState, ValidMove move)
+        {
+            var previousStep = MainWindowVM.GameState.CloneGrid(gameState);
+            gameState[move.Target.X, move.Target.Y] = gameState[move.Source.X, move.Source.Y];
+            gameState[move.Source.X, move.Source.Y] = null;
+            var currentStep = new SolutionSteps(gameState, previousStep);
+
+            SolvingSteps.Add(currentStep);
+
+            MainWindowVM.GameState.SetGameState(gameState);
+
+            MainWindowVM.DrawTubes();
+        }
+        //private void xxx(LiquidColorNew[,] gameState)
         //{
         //    for (int x = 0; x < gameState.GetLength(0); x++)
         //    {
