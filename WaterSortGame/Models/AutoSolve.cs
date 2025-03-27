@@ -25,19 +25,25 @@ namespace WaterSortGame.Models
         public void Start(LiquidColorNew[,] gameState)
         {
             var movableLiquids = GetMovableLiquids(gameState);
-            //foreach (var liquid in movableLiquids)
-            //    Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{gameState[liquid.X, liquid.Y].Name}}} {{{liquid.SingleColor}}}");
+            
+            foreach (var liquid in movableLiquids)
+                Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{gameState[liquid.X, liquid.Y].Name}}} {{{liquid.SingleColor}}}");
+            
             var emptySpots = GetEmptySpots(gameState, movableLiquids);
             var validMoves = GetValidMoves(gameState, movableLiquids, emptySpots);
 
+            Debug.WriteLine("validMoves:");
+            foreach (var move in validMoves)
+                Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
+
             PickPreferentialMoves(gameState, validMoves);
+
             if (validMoves.Count == 0)
             {
                 MessageBox.Show("No valid move");
                 return;
             }
-            //foreach (var move in validMoves)
-            //    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
+
 
             MakeAMove(gameState, validMoves[0], (SolvingSteps.Count > 0) ? SolvingSteps.Last() : null);
         }
@@ -208,9 +214,21 @@ namespace WaterSortGame.Models
             if (SolvingSteps.Count <= 1) return false;
 
             //var previousState = SolvingSteps.Last().PreviousStep.Grid;
-            var previousState = SolvingSteps.Last().Grid;
-            if (AreStatesSame(gameState, previousState)) return true;
-
+            var previousState = SolvingSteps.Last();
+            bool first = true;
+            do {
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    previousState = previousState.PreviousStep;
+                    if (previousState is null) continue;
+                }
+                if (AreStatesSame(gameState, previousState.Grid)) return true;
+            } while (previousState is not null);
+            
             return false;
         }
         private bool AreStatesSame(LiquidColorNew[,] first, LiquidColorNew[,] second)
