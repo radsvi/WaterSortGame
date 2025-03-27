@@ -104,6 +104,7 @@
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding AppSettings.DeveloperOptionsVisible}">
                     <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.LoadLevel}"/>
                     <Button Content="Save level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.SaveLevel}"/>
+                    <Button Content="Auto Solve" Command="{Binding AutoSolveCommand}"/>
                     <!--<Button Content="[temp1]" Command="{Binding TestDraw_Command}"/>-->
                     <!--<Button Content="[temp1]" Command="{Binding LevelCompleteWindowCommand}"/>
                     <Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->
