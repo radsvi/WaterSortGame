@@ -25,7 +25,8 @@ namespace WaterSortGame.Models
         public void Start(LiquidColorNew[,] gameState)
         {
             var movableLiquids = GetMovableLiquids(gameState);
-            
+
+            Debug.WriteLine("movableLiquids:");
             foreach (var liquid in movableLiquids)
                 Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{gameState[liquid.X, liquid.Y].Name}}} {{{liquid.SingleColor}}}");
             
@@ -36,6 +37,8 @@ namespace WaterSortGame.Models
             foreach (var move in validMoves)
                 Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
 
+            //RemoveUnoptimalMoves(validMoves, emptySpots);
+            RemoveUnoptimalMoves(validMoves);
             PickPreferentialMoves(gameState, validMoves);
 
             if (validMoves.Count == 0)
@@ -79,6 +82,8 @@ namespace WaterSortGame.Models
         {
             if (y == 0) return false;
 
+            if (y == 1) return true;
+
             for (int internalY = 0; internalY < y; internalY++)
             {
                 if (gameState[x, internalY].Name != gameState[x, internalY + 1].Name) return false;
@@ -115,30 +120,20 @@ namespace WaterSortGame.Models
                     if (liquid.SingleColor == true && emptySpot.Y == 0) // skip moving already sorted tubes to empty spot, even when they are not full yet.
                         continue;
 
-                    if (emptySpot.Y == 0)
+                    if (emptySpot.Y == 0) // if target is empty tube
                     {
                         var move = new ValidMove(liquid, emptySpot, gameState);
-                        //if (IsThisRepeatingMove(move)) continue;
-                        
-                        var upcomingState = CloneGrid(gameState);
-                        upcomingState[move.Target.X, move.Target.Y] = upcomingState[move.Source.X, move.Source.Y];
-                        upcomingState[move.Source.X, move.Source.Y] = null;
 
-                        if (IsThisRepeatingMove(upcomingState)) continue;
+                        if (IsThisRepeatingMove(gameState, move)) continue;
                         validMoves.Add(move);
                         continue;
                     }
 
-                    if (gameState[liquid.X, liquid.Y].Name == gameState[emptySpot.X, emptySpot.Y - 1].Name)
+                    if (gameState[liquid.X, liquid.Y].Name == gameState[emptySpot.X, emptySpot.Y - 1].Name) // if target is the same color
                     {
-                        var move = new ValidMove(liquid, emptySpot, gameState);
-                        //if (IsThisRepeatingMove(move)) continue;
+                        var move = new ValidMove(liquid, emptySpot, gameState, true);
 
-                        var upcomingState = CloneGrid(gameState);
-                        upcomingState[move.Target.X, move.Target.Y] = upcomingState[move.Source.X, move.Source.Y];
-                        upcomingState[move.Source.X, move.Source.Y] = null;
-
-                        if (IsThisRepeatingMove(upcomingState)) continue;
+                        if (IsThisRepeatingMove(gameState, move)) continue;
                         validMoves.Add(move);
                     }
                 }
@@ -150,6 +145,33 @@ namespace WaterSortGame.Models
         /// If we already have a tube with 3 colors and there is a possibility to add 4th one, pick that choice
         /// </summary>
         //private List<ValidMove> PickPreferentialMoves(LiquidColorNew[,] gameState, List<ValidMove> validMoves)
+
+
+        /// <summary>
+        /// If there are multiple moves for the same color, and in one of them the target is singleColor tube, always choose that one.
+        /// </summary>
+        //private void RemoveUnoptimalMoves(List<ValidMove> validMoves, List<PositionPointer> emptySpots)
+        private void RemoveUnoptimalMoves(List<ValidMove> validMoves)
+        {
+            //var singleColorTargets = emptySpots.Exists((move) => move.SingleColor == true);
+            //var colorsWithSingleColorTargets = validMoves.Exists((move) => move.IsTargetSingleColor == true);
+
+            var colorsWithSingleColorTargets = validMoves.Where((move) => move.IsTargetSingleColor == true).ToList();
+            //List<ValidMove> colorsWithSingleColorTargets = validMoves.Where((move) => move.IsTargetSingleColor == true) as List<ValidMove>;
+            //if (colorsWithSingleColorTargets.Count() == 0) return;
+            if (colorsWithSingleColorTargets is null) return;
+
+            for (int i = validMoves.Count() - 1; i >= 0; i--)
+            {
+                var move = validMoves[i];
+                // if for current liquid color is already a move that targets SingleColor tube eliminate all other possible moves
+                if (colorsWithSingleColorTargets.Exists((liquid) => liquid.Liquid == move.Liquid)
+                    && move.IsTargetSingleColor == false)
+                {
+                    validMoves.Remove(move);
+                }
+            }
+        }
         private void PickPreferentialMoves(LiquidColorNew[,] gameState, List<ValidMove> validMoves)
         {
             //var preferentialMoves = new List<ValidMove>();
@@ -214,9 +236,13 @@ namespace WaterSortGame.Models
 
         //    return false;
         //}
-        private bool IsThisRepeatingMove(LiquidColorNew[,] gameState)
+        private bool IsThisRepeatingMove(LiquidColorNew[,] gameState, ValidMove move)
         {
             if (SolvingSteps.Count <= 1) return false;
+
+            var upcomingState = CloneGrid(gameState);
+            upcomingState[move.Target.X, move.Target.Y] = upcomingState[move.Source.X, move.Source.Y];
+            upcomingState[move.Source.X, move.Source.Y] = null;
 
             //var previousState = SolvingSteps.Last().PreviousStep.Grid;
             var previousState = SolvingSteps.Last();
@@ -231,12 +257,12 @@ namespace WaterSortGame.Models
                     previousState = previousState.PreviousStep;
                     if (previousState is null) continue;
                 }
-                if (AreStatesSame(gameState, previousState.Grid)) return true;
+                if (AreStatesIdentical(upcomingState, previousState.Grid)) return true;
             } while (previousState is not null);
             
             return false;
         }
-        private bool AreStatesSame(LiquidColorNew[,] first, LiquidColorNew[,] second)
+        private bool AreStatesIdentical(LiquidColorNew[,] first, LiquidColorNew[,] second)
         {
             //DebugGrid(first, "currentGamestate");
             //DebugGrid(second, "previousStep");

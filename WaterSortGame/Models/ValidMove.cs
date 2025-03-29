@@ -9,16 +9,18 @@ namespace WaterSortGame.Models
 {
     internal class ValidMove
     {
-        public ValidMove(PositionPointer source, PositionPointer target, LiquidColorNew[,] gameState)
+        public ValidMove(PositionPointer source, PositionPointer target, LiquidColorNew[,] gameState, bool isTargetSingleColor = false)
         {
             Source = source;
             Target = target;
 
             Liquid = gameState[source.X, source.Y];
-        }
 
+            IsTargetSingleColor = isTargetSingleColor;
+        }
         public PositionPointer Source { get; set; }
         public PositionPointer Target { get; set; }
+        public bool IsTargetSingleColor { get; set; }
         public LiquidColorNew Liquid { get; set; }
 
         //public static bool operator ==(ValidMove first, ValidMove second)

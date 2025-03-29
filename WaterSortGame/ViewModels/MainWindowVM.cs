@@ -257,6 +257,7 @@ namespace WaterSortGame.ViewModels
             GameState.SavedGameStates.Clear();
             GameState.LastGameState = null;
             GameState.SaveGameState();
+            AutoSolve = new AutoSolve(this, GameState.StartingPosition); // guarantees that we remove stuff like previous moves in autosolving
             DrawTubes();
         }
         public string NoteForSavedLevel { get; set; }
