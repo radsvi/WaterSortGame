@@ -22,6 +22,7 @@ namespace WaterSortGame.Models
         public PositionPointer Target { get; set; }
         public bool IsTargetSingleColor { get; set; }
         public LiquidColorNew Liquid { get; set; }
+        public int Weight { get; set; } // higher weight means better move
 
         //public static bool operator ==(ValidMove first, ValidMove second)
         private static bool OperatorOverload(ValidMove first, ValidMove second)

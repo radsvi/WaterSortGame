@@ -29,7 +29,7 @@ namespace WaterSortGame.Models
     {
         public LiquidColorNames Name { get; set; }
         public SolidColorBrush Brush { get; set; }
-        public static List<LiquidColorNew> ColorKeys { get; set; } = new List<LiquidColorNew>() {
+        public static List<LiquidColorNew> ColorKeys { get; } = new List<LiquidColorNew>() {
             new LiquidColorNew(LiquidColorNames.Blue, new SolidColorBrush(Color.FromRgb(20,93,239))),
             new LiquidColorNew(LiquidColorNames.GrayBlue, new SolidColorBrush(Color.FromRgb(63,68,130))),
             new LiquidColorNew(LiquidColorNames.LightBlue, new SolidColorBrush(Color.FromRgb(136,170,255))),
@@ -43,6 +43,15 @@ namespace WaterSortGame.Models
             new LiquidColorNew(LiquidColorNames.Olive, new SolidColorBrush(Color.FromRgb(128,153,23))),
             new LiquidColorNew(LiquidColorNames.Red, new SolidColorBrush(Color.FromRgb(188,36,94))),
         };
+        //public static List<LiquidColorNew> CloneColorKeys()
+        //{
+        //    List<LiquidColorNew> result = new List<LiquidColorNew>();
+        //    foreach(var item in ColorKeys)
+        //    {
+        //        result.Add(item.Clone());
+        //    }
+        //    return result;
+        //}
         private LiquidColorNew() { }
         public LiquidColorNew(int colorId)
         {

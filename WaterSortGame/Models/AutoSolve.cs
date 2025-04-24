@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
@@ -37,6 +39,8 @@ namespace WaterSortGame.Models
             foreach (var move in validMoves)
                 Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
 
+            var mostFrequentColors = PickMostFrequentColor(movableLiquids);
+
             //RemoveUnoptimalMoves(validMoves, emptySpots);
             RemoveUnoptimalMoves(validMoves);
             PickPreferentialMoves(gameState, validMoves);
@@ -63,7 +67,7 @@ namespace WaterSortGame.Models
                 {
                     if (gameState[x, y] == null) continue;
 
-                    var currentItem = new PositionPointer(x, y);
+                    var currentItem = new PositionPointer(gameState, x, y);
                     if (AreAllLayersIdentical(gameState, x, y) == true)
                     {
                         if (y == gameState.GetLength(1) - 1)
@@ -71,12 +75,56 @@ namespace WaterSortGame.Models
 
                         currentItem.SingleColor = true;
                     }
-                    
+
                     pointer.Add(currentItem);
                     break;
                 }
             }
             return pointer;
+        }
+        /// <summary>
+        /// Used to later pick moves that are able to move most colors at once
+        /// </summary>
+        private List<KeyValuePair<LiquidColorNames, int>> PickMostFrequentColor(List<PositionPointer> movableLiquids)
+        {
+            
+
+            //Tuple<LiquidColorNames, int>[] colorCount = new Tuple<LiquidColorNames, int>[LiquidColorNew.ColorKeys.Count()];
+            //for (int i = 0; i < LiquidColorNew.ColorKeys.Count; i++)
+            //    colorCount[i] = new Tuple<LiquidColorNames, int>(LiquidColorNew.ColorKeys[i].Name, 0);
+
+            Dictionary<LiquidColorNames, int> colorCount = new Dictionary<LiquidColorNames, int>();
+            foreach (var colorItem in LiquidColorNew.ColorKeys)
+            {
+                //colorCount.Add(new KeyValuePair<LiquidColorNames, int>(colorItem.Name, 0));
+                colorCount.Add(colorItem.Name, 0);
+            }
+
+
+            foreach (var liquid in movableLiquids)
+            {
+                colorCount[(LiquidColorNames)liquid.ColorName]++;
+            }
+            //var colorCountSorted = (Dictionary<LiquidColorNames, int>)from entry in colorCount orderby entry.Value ascending select entry;
+            //var colorCountSorted = from entry in colorCount orderby entry.Value ascending select entry;
+            //var colorCountSorted = colorCount.OrderBy(x => x.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+            var mostFrequentColors = colorCount.OrderByDescending(x => x.Value).ToList();
+
+            
+
+
+            //Tuple<LiquidColorNames, int>[] colorCountSortedTuple = new Tuple<LiquidColorNames, int>[LiquidColorNew.ColorKeys.Count()];
+
+
+            //foreach (var liquid in movableLiquids)
+            //{
+            //    if (!mostFrequentColors.Exists(x => x.ColorName == liquid.ColorName))
+            //    {
+            //        mostFrequentColors.Add(liquid);
+            //    }
+            //}
+
+            return mostFrequentColors;
         }
         private bool AreAllLayersIdentical(LiquidColorNew[,] gameState, int x, int y)
         {
@@ -100,7 +148,7 @@ namespace WaterSortGame.Models
                 {
                     if (gameState[x, y] == null)
                     {
-                        emptySpots.Add(new PositionPointer(x, y));
+                        emptySpots.Add(new PositionPointer(gameState, x, y));
                         break;
                     }
                 }
@@ -325,5 +373,7 @@ namespace WaterSortGame.Models
         //        }
         //    }
         //}
+
+
     }
 }
