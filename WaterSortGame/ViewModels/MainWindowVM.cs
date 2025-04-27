@@ -42,7 +42,7 @@ namespace WaterSortGame.ViewModels
         public IWindowService WindowService { get; }
         public MainWindow MainWindow { get; }
         public AppSettings AppSettings { get; }
-        public AutoSolveOLD AutoSolve { get; set; }
+        public AutoSolve AutoSolve { get; set; }
         public GameState GameState { get; set; }
         private LoadLevelVM loadLevelVM;
         public LoadLevelVM LoadLevelVM
@@ -146,15 +146,15 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        private bool levelComplete;
-        public bool LevelComplete
+        private bool uiDisabled;
+        public bool UIDisabled // also used to mean that level is completed
         {
-            get { return levelComplete; }
+            get { return uiDisabled; }
             set
             {
-                if (value != levelComplete)
+                if (value != uiDisabled)
                 {
-                    levelComplete = value;
+                    uiDisabled = value;
                 }
             }
         }
@@ -197,7 +197,7 @@ namespace WaterSortGame.ViewModels
 
             ContainerForTubes = containerForTubes;
 
-            AutoSolve = new AutoSolveOLD(this, GameState.StartingPosition);
+            AutoSolve = new AutoSolve(this);
 
             OnStartingLevel();
         }
@@ -252,12 +252,12 @@ namespace WaterSortGame.ViewModels
         }
         private void OnStartingLevel()
         {
-            LevelComplete = false;
+            UIDisabled = false;
             DeselectTube();
             GameState.SavedGameStates.Clear();
             GameState.LastGameState = null;
             GameState.SaveGameState();
-            AutoSolve = new AutoSolveOLD(this, GameState.StartingPosition); // guarantees that we remove stuff like previous moves in autosolving
+            AutoSolve = new AutoSolve(this); // guarantees that we remove stuff like previous moves in autosolving
             DrawTubes();
         }
         public string NoteForSavedLevel { get; set; }
@@ -314,7 +314,7 @@ namespace WaterSortGame.ViewModels
         public RelayCommand SelectTubeCommand => new RelayCommand(obj => OnTubeButtonClick(obj));
         internal void OnTubeButtonClick(object obj)
         {
-            if (LevelComplete == true)
+            if (UIDisabled == true)
             {
                 return;
             }
@@ -433,9 +433,9 @@ namespace WaterSortGame.ViewModels
         }
         private void IsLevelCompleted()
         {
-            if (GameState.IsLevelCompleted() && LevelComplete == false)
+            if (GameState.IsLevelCompleted())
             {
-                LevelComplete = true;
+                UIDisabled = true;
                 PopupWindow.Execute(PopupParams.LevelComplete);
             }
         }
@@ -730,7 +730,7 @@ namespace WaterSortGame.ViewModels
         //    //TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
         //    TubeCount = Tubes.Count;
         //}
-        public RelayCommand AutoSolveCommand => new RelayCommand(execute => AutoSolve.Start(GameState.gameGrid));
+        public RelayCommand AutoSolveCommand => new RelayCommand(execute => AutoSolve.CalculateNextStep(GameState.gameGrid));
         #endregion
     }
 }

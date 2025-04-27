@@ -13,7 +13,7 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    internal class AutoSolveOLD
+    [Obsolete]internal class AutoSolveOLD
     {
         MainWindowVM MainWindowVM;
         //LiquidColorNew[,] StartingPosition;

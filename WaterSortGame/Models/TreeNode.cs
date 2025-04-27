@@ -39,6 +39,7 @@ namespace WaterSortGame.Models
         public void AddChild(TreeNode<T> childNode)
         {
             FirstChild = childNode;
+            childNode.Parent = this;
         }
         //private void GenerateNextGameState(LiquidColorNew[,] gameState, SolutionStep move, SolutionStepsOld previousStepReferer = null)
         //{

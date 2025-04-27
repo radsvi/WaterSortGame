@@ -22,10 +22,10 @@ namespace WaterSortGame.Models
         {
             GameState = gameState;
         }
-        public PositionPointer Source { get; set; }
-        public PositionPointer Target { get; set; }
-        public bool IsTargetSingleColor { get; set; }
-        public LiquidColorNew Liquid { get; set; }
+        public PositionPointer Source { get; private set; }
+        public PositionPointer Target { get; private set; }
+        public bool IsTargetSingleColor { get; private set; }
+        public LiquidColorNew Liquid { get; private set; }
         public int Priority { get; set; } = 0; // higher weight means better move
         public LiquidColorNew[,] GameState { get; set; }
 
