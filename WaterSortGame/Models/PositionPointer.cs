@@ -17,6 +17,7 @@ namespace WaterSortGame.Models
         public int X { get; set; }
         public int Y { get; set; }
         public LiquidColorNames? ColorName { get; set; }
-        public bool? SingleColor { get; set; } // true if all liquids in one tube are the same color
+        public bool? AllIdenticalLiquids { get; set; } // true if all liquids in one tube are the same color
+        public int NumberOfRepeatingLiquids { get; set; } = 1;
     }
 }

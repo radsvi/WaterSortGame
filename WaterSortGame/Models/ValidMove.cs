@@ -28,6 +28,8 @@ namespace WaterSortGame.Models
         public LiquidColorNew Liquid { get; private set; }
         public int Priority { get; set; } = 0; // higher weight means better move
         public LiquidColorNew[,] GameState { get; set; }
+        public int SolutionValue { get; set; }
+        //public int MaxSolutionValue { get; set; }
 
         //public static bool operator ==(ValidMove first, ValidMove second)
         private static bool OperatorOverload(ValidMove first, ValidMove second)

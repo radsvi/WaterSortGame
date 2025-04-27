@@ -41,7 +41,7 @@ namespace WaterSortGame.Models
 
             Debug.WriteLine("movableLiquids:");
             foreach (var liquid in movableLiquids)
-                Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{gameState[liquid.X, liquid.Y].Name}}} {{{liquid.SingleColor}}}");
+                Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{gameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}}");
             
             var emptySpots = GetEmptySpots(gameState, movableLiquids);
             var validMoves = GetValidMoves(gameState, movableLiquids, emptySpots);
@@ -111,7 +111,7 @@ namespace WaterSortGame.Models
                         if (y == gameState.GetLength(1) - 1)
                             break;
 
-                        currentItem.SingleColor = true;
+                        currentItem.AllIdenticalLiquids = true;
                     }
 
                     pointer.Add(currentItem);
@@ -203,7 +203,7 @@ namespace WaterSortGame.Models
                     if (liquid.X == emptySpot.X)
                         continue;
 
-                    if (liquid.SingleColor == true && emptySpot.Y == 0) // skip moving already sorted tubes to empty spot, even when they are not full yet.
+                    if (liquid.AllIdenticalLiquids == true && emptySpot.Y == 0) // skip moving already sorted tubes to empty spot, even when they are not full yet.
                         continue;
 
                     if (emptySpot.Y == 0) // if target is empty tube

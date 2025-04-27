@@ -46,7 +46,7 @@ namespace WaterSortGame.Models
 
                 Debug.WriteLine("movableLiquids:");
                 foreach (var liquid in movableLiquids)
-                    Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{lastStep.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.SingleColor}}}");
+                    Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{lastStep.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
 
                 var emptySpots = GetEmptySpots(lastStep.Data.GameState, movableLiquids);
                 var validMoves = GetValidMoves(lastStep.Data.GameState, movableLiquids, emptySpots);
@@ -102,6 +102,9 @@ namespace WaterSortGame.Models
                     currentNode = currentNode.NextSibling;
                 }
                 highestPriorityNode.Data.GameState = CloneGrid(highestPriorityNode.Parent.Data.GameState);
+                highestPriorityNode.Data.SolutionValue = GetSolutionValue(highestPriorityNode.Parent.Data.GameState);
+                //if (highestPriorityNode.Data.MaxSolutionValue < highestPriorityNode.Data.SolutionValue)
+                //    highestPriorityNode.Data.MaxSolutionValue = highestPriorityNode.Data.SolutionValue;
 
                 MakeAMove(highestPriorityNode, lastStep.Data.GameState);
                 lastStep = highestPriorityNode;
@@ -127,6 +130,41 @@ namespace WaterSortGame.Models
             MainWindowVM.OnChangingGameState();
         }
         /// <summary>
+        /// Determines how close we are to a solution. Higher value means closer to a solution
+        /// </summary>
+        private int GetSolutionValue(LiquidColorNew[,] gameState)
+        {
+            int solutionValue = 0;
+            
+            for (int x = 0; x < gameState.GetLength(0); x++)
+            {
+                LiquidColorNames? lastColor = null;
+                for (int y = 0; y < gameState.GetLength(1); y++)
+                {
+                    if (gameState[x, y] is null)
+                    {
+                        continue;
+                    }
+                    
+                    if (lastColor is null)
+                    {
+                        lastColor = gameState[x, y].Name;
+                        continue;
+                    }
+
+                    if (lastColor == gameState[x, y].Name)
+                    {
+                        solutionValue++;
+                    }
+                    else
+                    {
+                        lastColor = gameState[x, y].Name;
+                    }
+                }
+            }
+            return solutionValue;
+        }
+        /// <summary>
         /// Picks topmost liquid from each tube, but excludes tubes that are already solved
         /// </summary>
         private List<PositionPointer> GetMovableLiquids(LiquidColorNew[,] gameState)
@@ -140,15 +178,13 @@ namespace WaterSortGame.Models
                     if (gameState[x, y] == null) continue;
 
                     var currentItem = new PositionPointer(gameState, x, y);
-                    if (AreAllLayersIdentical(gameState, x, y) == true)
-                    {
-                        if (y == gameState.GetLength(1) - 1)
-                            break;
-
-                        currentItem.SingleColor = true;
-                    }
-
+                    (bool allIdenticalLiquids, int numberOfRepeatingLiquids) = AreAllLayersIdentical(gameState, x, y);
+                    currentItem.NumberOfRepeatingLiquids = numberOfRepeatingLiquids;
                     pointer.Add(currentItem);
+                    if (allIdenticalLiquids == true)
+                    {
+                        currentItem.AllIdenticalLiquids = true;
+                    }
                     break;
                 }
             }
@@ -180,7 +216,7 @@ namespace WaterSortGame.Models
                     if (liquid.X == emptySpot.X)
                         continue;
 
-                    if (liquid.SingleColor == true && emptySpot.Y == 0) // skip moving already sorted tubes to empty spot, even when they are not full yet.
+                    if (liquid.AllIdenticalLiquids == true && emptySpot.Y == 0) // skip moving already sorted tubes to empty spot, even when they are not full yet.
                         continue;
 
                     if (emptySpot.Y == 0) // if target is empty tube
@@ -290,18 +326,23 @@ namespace WaterSortGame.Models
         {
             return MainWindowVM.GameState.CloneGrid(gameState);
         }
-        private bool AreAllLayersIdentical(LiquidColorNew[,] gameState, int x, int y)
+        private (bool, int) AreAllLayersIdentical(LiquidColorNew[,] gameState, int x, int y)
         {
-            if (y == 0) return false;
+            if (y == 0) return (false, 0);
 
-            if (y == 1) return true;
+            if (y == 1) return (true, 1);
 
-            for (int internalY = 0; internalY < y; internalY++)
+            int numberOfRepeatingLiquids = 0;
+            for (int internalY = y; internalY > 0; internalY--)
             {
-                if (gameState[x, internalY].Name != gameState[x, internalY + 1].Name) return false;
+                numberOfRepeatingLiquids++;
+                if (gameState[x, internalY].Name != gameState[x, internalY - 1].Name)
+                {
+                    return (false, numberOfRepeatingLiquids);
+                }
             }
 
-            return true;
+            return (true, numberOfRepeatingLiquids);
         }
         private List<KeyValuePair<LiquidColorNames, int>> PickMostFrequentColor(List<PositionPointer> movableLiquids)
         {
