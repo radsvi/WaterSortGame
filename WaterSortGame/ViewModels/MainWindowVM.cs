@@ -42,7 +42,7 @@ namespace WaterSortGame.ViewModels
         public IWindowService WindowService { get; }
         public MainWindow MainWindow { get; }
         public AppSettings AppSettings { get; }
-        public AutoSolve AutoSolve { get; set; }
+        public AutoSolveOLD AutoSolve { get; set; }
         public GameState GameState { get; set; }
         private LoadLevelVM loadLevelVM;
         public LoadLevelVM LoadLevelVM
@@ -197,7 +197,7 @@ namespace WaterSortGame.ViewModels
 
             ContainerForTubes = containerForTubes;
 
-            AutoSolve = new AutoSolve(this, GameState.StartingPosition);
+            AutoSolve = new AutoSolveOLD(this, GameState.StartingPosition);
 
             OnStartingLevel();
         }
@@ -257,7 +257,7 @@ namespace WaterSortGame.ViewModels
             GameState.SavedGameStates.Clear();
             GameState.LastGameState = null;
             GameState.SaveGameState();
-            AutoSolve = new AutoSolve(this, GameState.StartingPosition); // guarantees that we remove stuff like previous moves in autosolving
+            AutoSolve = new AutoSolveOLD(this, GameState.StartingPosition); // guarantees that we remove stuff like previous moves in autosolving
             DrawTubes();
         }
         public string NoteForSavedLevel { get; set; }

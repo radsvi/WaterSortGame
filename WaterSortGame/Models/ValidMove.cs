@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WaterSortGame.Models
 {
-    internal class ValidMove
+    internal class ValidMove // prejmenovat na SolvingStep
     {
         public ValidMove(PositionPointer source, PositionPointer target, LiquidColorNew[,] gameState, bool isTargetSingleColor = false)
         {
@@ -18,11 +18,16 @@ namespace WaterSortGame.Models
 
             IsTargetSingleColor = isTargetSingleColor;
         }
+        public ValidMove(LiquidColorNew[,] gameState)
+        {
+            GameState = gameState;
+        }
         public PositionPointer Source { get; set; }
         public PositionPointer Target { get; set; }
         public bool IsTargetSingleColor { get; set; }
         public LiquidColorNew Liquid { get; set; }
-        public int Weight { get; set; } // higher weight means better move
+        public int Priority { get; set; } = 0; // higher weight means better move
+        public LiquidColorNew[,] GameState { get; set; }
 
         //public static bool operator ==(ValidMove first, ValidMove second)
         private static bool OperatorOverload(ValidMove first, ValidMove second)

@@ -13,19 +13,30 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    internal class AutoSolve
+    internal class AutoSolveOLD
     {
         MainWindowVM MainWindowVM;
         //LiquidColorNew[,] StartingPosition;
-        List<SolutionSteps> SolvingSteps;
-        public AutoSolve(MainWindowVM mainWindowVM, LiquidColorNew[,] startingPosition)
+        //[Obsolete]List<SolutionStepsOLD> SolvingStepsOLD;
+        TreeNode<ValidMove> SolvingSteps;
+        TreeNode<ValidMove> CurrentNode;
+        public AutoSolveOLD(MainWindowVM mainWindowVM, LiquidColorNew[,] startingPosition)
         {
             MainWindowVM = mainWindowVM;
             //StartingPosition = startingPosition;
-            SolvingSteps = new List<SolutionSteps>();
+            //SolvingStepsOLD = new List<SolutionStepsOLD>();
+
+            SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
+            CurrentNode = SolvingSteps;
         }
         public void Start(LiquidColorNew[,] gameState)
         {
+            //// pokud je to uplny zacatek tak vytvorim TreeNode
+            //if (SolvingSteps == null)
+            //{
+            //    SolvingSteps = new TreeNode<ValidMove>(new ValidMove(gameState));
+            //}
+            
             var movableLiquids = GetMovableLiquids(gameState);
 
             Debug.WriteLine("movableLiquids:");
@@ -52,7 +63,34 @@ namespace WaterSortGame.Models
             //foreach (var move in validMoves)
             //    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{gameState[move.Source.X, move.Source.Y].Name}}}");
 
-            MakeAMove(gameState, validMoves[0], (SolvingSteps.Count > 0) ? SolvingSteps.Last() : null);
+
+            // Pro kazdy validMove vytvorim sibling ve strome:
+            TreeNode<ValidMove> nextNode;
+            for (int i = 0; i < validMoves.Count; i++)
+            {
+                nextNode = new TreeNode<ValidMove>(validMoves[i]);
+                if (i == 0)
+                {
+                    SolvingSteps.AddChild(nextNode);
+                }
+                else
+                {
+                    SolvingSteps.AddSibling(nextNode);
+                }
+            }
+            // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
+            TreeNode<ValidMove> highestPriorityNode = CurrentNode;
+            while (CurrentNode.NextSibling != null)
+            {
+                CurrentNode = CurrentNode.NextSibling;
+                if (highestPriorityNode.Data.Priority < CurrentNode.Data.Priority)
+                {
+                    highestPriorityNode = CurrentNode;
+                }
+            }
+
+            //var nextMove = validMoves.MaxBy(x => x.Priority); // tohle budu muset zmenit. je to jen docasne dokud nemam implementovany vraceni zpatky ve stromu
+            MakeAMove(gameState, highestPriorityNode);
         }
         /// <summary>
         /// Picks topmost liquid from each tube, but excludes tubes that are already solved
@@ -247,15 +285,16 @@ namespace WaterSortGame.Models
 
             //return preferentialMoves;
         }
-        private void MakeAMove(LiquidColorNew[,] gameState, ValidMove move, SolutionSteps previousStepReferer = null)
+        private void MakeAMove(LiquidColorNew[,] gameState, TreeNode<ValidMove> highestPriorityNode)
         {
             var currentState = MainWindowVM.GameState.CloneGrid(gameState);
 
-            gameState[move.Target.X, move.Target.Y] = gameState[move.Source.X, move.Source.Y];
-            gameState[move.Source.X, move.Source.Y] = null;
+            gameState[highestPriorityNode.Data.Target.X, highestPriorityNode.Data.Target.Y] =
+                gameState[highestPriorityNode.Data.Source.X, highestPriorityNode.Data.Source.Y];
+            gameState[highestPriorityNode.Data.Source.X, highestPriorityNode.Data.Source.Y] = null;
 
-            var upcomingStep = new SolutionSteps(currentState, move, previousStepReferer);
-            SolvingSteps.Add(upcomingStep);
+            var upcomingStep = new SolutionStepsOLD(currentState, highestPriorityNode.Data);
+            //SolvingStepsOLD.Add(upcomingStep);
 
 
             MainWindowVM.GameState.SetGameState(gameState);
@@ -286,14 +325,16 @@ namespace WaterSortGame.Models
         //}
         private bool IsThisRepeatingMove(LiquidColorNew[,] gameState, ValidMove move)
         {
-            if (SolvingSteps.Count <= 1) return false;
+            //if (SolvingStepsOLD.Count <= 1) return false;
+            if (SolvingSteps.Parent == null) return false;
 
             var upcomingState = CloneGrid(gameState);
             upcomingState[move.Target.X, move.Target.Y] = upcomingState[move.Source.X, move.Source.Y];
             upcomingState[move.Source.X, move.Source.Y] = null;
 
             //var previousState = SolvingSteps.Last().PreviousStep.Grid;
-            var previousState = SolvingSteps.Last();
+            //var previousState = SolvingStepsOLD.Last();
+            var previousState = SolvingSteps.Parent;
             bool first = true;
             do {
                 if (first)
@@ -302,10 +343,10 @@ namespace WaterSortGame.Models
                 }
                 else
                 {
-                    previousState = previousState.PreviousStep;
+                    previousState = previousState.Parent;
                     if (previousState is null) continue;
                 }
-                if (AreStatesIdentical(upcomingState, previousState.Grid)) return true;
+                if (AreStatesIdentical(upcomingState, previousState.Data.GameState)) return true;
             } while (previousState is not null);
             
             return false;
