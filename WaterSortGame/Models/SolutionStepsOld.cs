@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace WaterSortGame.Models
 {
-    internal class SolutionSteps
+    [Obsolete]
+    internal class SolutionStepsOld
     {
-        public SolutionSteps? PreviousStep { get; set; }
+        public SolutionStepsOld? PreviousStep { get; set; }
         public LiquidColorNew[,] Grid { get; set; }
-        public ValidMove Move { get; set; }
-        public SolutionSteps(LiquidColorNew[,] grid, ValidMove move, SolutionSteps? previousStep = null)
+        public SolutionStep Move { get; set; }
+        public SolutionStepsOld(LiquidColorNew[,] grid, SolutionStep move, SolutionStepsOld? previousStep = null)
         {
             Grid = GameState.CloneGrid(grid, true);
             PreviousStep = previousStep;

@@ -7,25 +7,24 @@ using System.Threading.Tasks;
 
 namespace WaterSortGame.Models
 {
-    internal class ValidMove
+    internal class SolutionStep
     {
-        public ValidMove(PositionPointer source, PositionPointer target, LiquidColorNew[,] gameState, bool isTargetSingleColor = false)
+        public SolutionStep(PositionPointer source, PositionPointer target, LiquidColorNew[,] gameState, bool isTargetSingleColor = false)
         {
             Source = source;
             Target = target;
-
             Liquid = gameState[source.X, source.Y];
-
             IsTargetSingleColor = isTargetSingleColor;
         }
         public PositionPointer Source { get; set; }
         public PositionPointer Target { get; set; }
         public bool IsTargetSingleColor { get; set; }
         public LiquidColorNew Liquid { get; set; }
-        public int Weight { get; set; } // higher weight means better move
+        public int Priority { get; set; } // higher means more optimal
+        public LiquidColorNew[,] Grid { get; set; }
 
         //public static bool operator ==(ValidMove first, ValidMove second)
-        private static bool OperatorOverload(ValidMove first, ValidMove second)
+        private static bool OperatorOverload(SolutionStep first, SolutionStep second)
         {
             //Debug.WriteLine($"first.Source.X [{first.Source.X}] == second.Source.X [{second.Source.X}] && first.Source.Y [{first.Source.Y}] == second.Source.Y [{second.Source.Y}]");
             //Debug.WriteLine($"&& first.Target.X [{first.Target.X}] == second.Target.X[{second.Target.X}] && first.Target.Y [{first.Target.Y}] == second.Target.Y [{second.Target.Y}]");
@@ -42,11 +41,11 @@ namespace WaterSortGame.Models
             }
             return false;
         }
-        public static bool operator ==(ValidMove first, ValidMove second)
+        public static bool operator ==(SolutionStep first, SolutionStep second)
         {
             return OperatorOverload(first, second);
         }
-        public static bool operator !=(ValidMove first, ValidMove second)
+        public static bool operator !=(SolutionStep first, SolutionStep second)
         {
             return !OperatorOverload(first, second);
         }
