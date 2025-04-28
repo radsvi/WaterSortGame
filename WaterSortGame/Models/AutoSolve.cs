@@ -53,7 +53,7 @@ namespace WaterSortGame.Models
 
                 Debug.WriteLine("validMoves:");
                 foreach (var move in validMoves)
-                    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{lastStep.Data.GameState[move.Source.X, move.Source.Y].Name}}}");
+                    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{lastStep.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
 
                 var mostFrequentColors = PickMostFrequentColor(movableLiquids);
 
@@ -91,6 +91,7 @@ namespace WaterSortGame.Models
                     Debug.WriteLine("musim se vratit na parent"); // ## dodelat
                     break;
                 }
+
                 TreeNode<ValidMove> highestPriorityNode = currentNode;
                 currentNode = currentNode.NextSibling;
                 while (currentNode != null)
@@ -113,10 +114,18 @@ namespace WaterSortGame.Models
         }
         private void MakeAMove(TreeNode<ValidMove> Node, LiquidColorNew[,] previousGameState)
         {
-            LiquidColorNew[,] newGameState = CloneGrid(previousGameState);
+            Debug.WriteLine($"# [{Node.Data.Source.X},{Node.Data.Source.Y}] => [{Node.Data.Target.X},{Node.Data.Target.Y}] {{{Node.Data.GameState[Node.Data.Source.X, Node.Data.Source.Y].Name}}} {{HowMany {Node.Data.Source.NumberOfRepeatingLiquids}}}");
 
-            newGameState[Node.Data.Target.X, Node.Data.Target.Y] = newGameState[Node.Data.Source.X, Node.Data.Source.Y];
-            newGameState[Node.Data.Source.X, Node.Data.Source.Y] = null;
+            LiquidColorNew[,] newGameState = CloneGrid(previousGameState);
+            var numberOfRepeatingLiquids = Node.Data.Source.NumberOfRepeatingLiquids;
+            int i = 0;
+            while (i < numberOfRepeatingLiquids && (Node.Data.Target.Y + i < newGameState.GetLength(1))) // pocet stejnych barev na sobe source && uroven barvy v targetu
+            {
+                newGameState[Node.Data.Target.X, Node.Data.Target.Y + i] = newGameState[Node.Data.Source.X, Node.Data.Source.Y - i];
+                newGameState[Node.Data.Source.X, Node.Data.Source.Y - i] = null;
+                i++;
+            }
+            
             Node.Data.GameState = newGameState;
             Node.Visited = true;
 
@@ -213,7 +222,7 @@ namespace WaterSortGame.Models
             {
                 foreach (var emptySpot in emptySpots)
                 {
-                    if (liquid.X == emptySpot.X)
+                    if (liquid.X == emptySpot.X) // if source and target is the same tube
                         continue;
 
                     if (liquid.AllIdenticalLiquids == true && emptySpot.Y == 0) // skip moving already sorted tubes to empty spot, even when they are not full yet.
@@ -328,7 +337,7 @@ namespace WaterSortGame.Models
         }
         private (bool, int) AreAllLayersIdentical(LiquidColorNew[,] gameState, int x, int y)
         {
-            if (y == 0) return (false, 0);
+            if (y == 0) return (false, 1);
 
             if (y == 1) return (true, 1);
 
