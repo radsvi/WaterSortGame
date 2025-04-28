@@ -25,7 +25,7 @@ namespace WaterSortGame.Models
             SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             FirstStep.Data.GameState = startingPosition;
-            TreeNode<ValidMove> lastStep = FirstStep;
+            TreeNode<ValidMove> previousStep = FirstStep;
             //var gameState = startingPosition;
             while (true) // ## dodelat aby skoncilo kdyz nejsou zadny mozny nody s Visited == false
             {
@@ -42,18 +42,18 @@ namespace WaterSortGame.Models
                 //}
                 
                 
-                var movableLiquids = GetMovableLiquids(lastStep.Data.GameState);
+                var movableLiquids = GetMovableLiquids(previousStep.Data.GameState);
 
                 Debug.WriteLine("movableLiquids:");
                 foreach (var liquid in movableLiquids)
-                    Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{lastStep.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
+                    Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{previousStep.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
 
-                var emptySpots = GetEmptySpots(lastStep.Data.GameState, movableLiquids);
-                var validMoves = GetValidMoves(lastStep.Data.GameState, movableLiquids, emptySpots);
+                var emptySpots = GetEmptySpots(previousStep.Data.GameState, movableLiquids);
+                var validMoves = GetValidMoves(previousStep.Data.GameState, movableLiquids, emptySpots);
 
                 Debug.WriteLine("validMoves:");
                 foreach (var move in validMoves)
-                    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{lastStep.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
+                    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{previousStep.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
 
                 var mostFrequentColors = PickMostFrequentColor(movableLiquids);
 
@@ -61,7 +61,7 @@ namespace WaterSortGame.Models
                 RemoveEqualColorMoves(validMoves); // ## oddelat movy ktery jen prehazujou treba z 2 modrych na 1 modrou.
                 RemoveUselessMoves(validMoves);
 
-                PickPreferentialMoves(lastStep.Data.GameState, validMoves);
+                PickPreferentialMoves(previousStep.Data.GameState, validMoves);
                 if (validMoves.Count == 0)
                 {
                     MessageBox.Show("No valid move");
@@ -70,7 +70,7 @@ namespace WaterSortGame.Models
 
                 // Pro kazdy validMove vytvorim sibling ve strome:
                 TreeNode<ValidMove> nextNode;
-                TreeNode<ValidMove> previousNode = lastStep;
+                TreeNode<ValidMove> previousNode = previousStep;
                 for (int i = 0; i < validMoves.Count; i++)
                 {
                     nextNode = new TreeNode<ValidMove>(validMoves[i]);
@@ -86,7 +86,7 @@ namespace WaterSortGame.Models
                 }
 
                 // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
-                TreeNode<ValidMove> currentNode = lastStep.FirstChild;
+                TreeNode<ValidMove> currentNode = previousStep.FirstChild;
                 if (currentNode == null)
                 {
                     Debug.WriteLine("musim se vratit na parent"); // ## dodelat
@@ -95,8 +95,8 @@ namespace WaterSortGame.Models
                 var highestPriorityNode = PickHighestPriority(currentNode);
 
 
-                MakeAMove(highestPriorityNode, lastStep.Data.GameState);
-                lastStep = highestPriorityNode;
+                MakeAMove(highestPriorityNode, previousStep.Data.GameState);
+                previousStep = highestPriorityNode;
                 await WaitForContinueButton();
             }
         }
@@ -105,7 +105,7 @@ namespace WaterSortGame.Models
         {
             
             TreeNode<ValidMove> highestPriorityNode = currentNode;
-            currentNode = currentNode.NextSibling;
+            //currentNode = currentNode.NextSibling;
             while (currentNode != null)
             {
                 if (highestPriorityNode.Data.Priority < currentNode.Data.Priority)
