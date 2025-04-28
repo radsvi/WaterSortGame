@@ -35,6 +35,7 @@ namespace WaterSortGame.Models
         public void AddSibling(TreeNode<T> siblingNode)
         {
             NextSibling = siblingNode;
+            NextSibling.Parent = this.Parent;
         }
         public void AddChild(TreeNode<T> childNode)
         {

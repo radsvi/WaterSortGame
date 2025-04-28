@@ -11,9 +11,9 @@ namespace WaterSortGame.Models
     {
         public ValidMove(PositionPointer source, PositionPointer target, LiquidColorNew[,] gameState, bool isTargetSingleColor = false)
         {
-            Source = source;
+            GameState = gameState;
             Target = target;
-
+            Source = source;
             Liquid = gameState[source.X, source.Y];
 
             IsTargetSingleColor = isTargetSingleColor;
@@ -73,11 +73,19 @@ namespace WaterSortGame.Models
         }
         private void CalculatePriority()
         {
+            float newPriority = 0;
             // Singular colors have slightly higher priority than stacked colors so that they are picked first when there is a choise between the two.
-            if (GameState is not null)
+            newPriority += (GameState.GetLength(1) - Source.NumberOfRepeatingLiquids) / 10f;
+
+            // if target is not empty tube (but rather the same color), give it higher priority, but only if all stacked liquids fit
+            if (Target is not null)
             {
-                Priority = (GameState.GetLength(1) - Source.NumberOfRepeatingLiquids) / 10;
+                if (Target.Y > 0 && Source.NumberOfRepeatingLiquids < (GameState.GetLength(1) - Target.Y))
+                {
+                    newPriority++;
+                }
             }
+            Priority = newPriority;
         }
     }
 
