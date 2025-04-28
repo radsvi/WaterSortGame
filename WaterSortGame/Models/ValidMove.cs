@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
@@ -11,7 +13,7 @@ namespace WaterSortGame.Models
     {
         public ValidMove(PositionPointer source, PositionPointer target, LiquidColorNew[,] gameState, bool isTargetSingleColor = false)
         {
-            GameState = gameState;
+            GameState = Models.GameState.CloneGridStatic(gameState);
             Target = target;
             Source = source;
             Liquid = gameState[source.X, source.Y];

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Linq;
 using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
@@ -56,48 +57,58 @@ namespace WaterSortGame.Models
                 foreach (var move in validMoves)
                     Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{node.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
 
-                var mostFrequentColors = PickMostFrequentColor(movableLiquids);
+                var mostFrequentColors = PickMostFrequentColor(movableLiquids); // ## tohle jsem jeste nezacal nikde pouzivat!
 
                 //RemoveUnoptimalMoves(validMoves, emptySpots);
-                RemoveEqualColorMoves(validMoves); // ## oddelat movy ktery jen prehazujou treba z 2 modrych na 1 modrou.
+                RemoveEqualColorMoves(validMoves); // ## oddelat movey ktery jen prehazujou treba z 2 modrych na 1 modrou. -> RemoveUselessMoves()
                 RemoveUselessMoves(validMoves);
+                //RemoveRepeatingMoves(validMoves, node);
 
                 PickPreferentialMoves(node.Data.GameState, validMoves);
                 if (validMoves.Count == 0)
                 {
-                    MessageBox.Show("No valid move");
+                    MessageBox.Show("No valid moves");
                     return;
                 }
 
                 // Pro kazdy validMove vytvorim sibling ve strome:
-                //TreeNode<ValidMove> nextNode;
-                //TreeNode<ValidMove> previousNode = node;
-                for (int i = 0; i < validMoves.Count; i++)
-                {
-                    var nextNode = new TreeNode<ValidMove>(validMoves[i]);
-                    if (i == 0)
-                    {
-                        node.AddChild(nextNode);
-                    }
-                    else
-                    {
-                        node.AddSibling(nextNode);
-                    }
-                    node = nextNode;
-                }
+                CreatePossibleNextStates(node, validMoves);
+                
 
                 // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
-                TreeNode<ValidMove> firstChild = node.Parent.FirstChild;
-                if (firstChild == null)
-                {
-                    Debug.WriteLine("musim se vratit na parent"); // ## dodelat
-                    break;
-                }
-                var highestPriorityNode = PickHighestPriority(firstChild);
+                var highestPriorityNode = PickHighestPriority(node.FirstChild);
 
-                MakeAMove(highestPriorityNode, node.Data.GameState);
+                MakeAMove(highestPriorityNode);
                 node = highestPriorityNode;
                 await WaitForContinueButton();
+            }
+        }
+
+        private void CreatePossibleNextStates(TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
+        {
+            var node = parentNode;
+            for (int i = 0; i < validMoves.Count; i++)
+            {
+                var nextNode = new TreeNode<ValidMove>(validMoves[i]);
+                if (i == 0)
+                {
+                    node.AddChild(nextNode);
+                }
+                else
+                {
+                    node.AddSibling(nextNode);
+                }
+                node = nextNode;
+
+                // Changing GameState:
+                int j = 0;
+                while (j < node.Data.Source.NumberOfRepeatingLiquids
+                    && node.Data.Target.Y + j < node.Data.GameState.GetLength(1)) // pocet stejnych barev na sobe source && uroven barvy v targetu
+                {
+                    node.Data.GameState[node.Data.Target.X, node.Data.Target.Y + j] = node.Data.GameState[node.Data.Source.X, node.Data.Source.Y - j];
+                    node.Data.GameState[node.Data.Source.X, node.Data.Source.Y - j] = null;
+                    j++;
+                }
             }
         }
         private TreeNode<ValidMove> PickHighestPriority(TreeNode<ValidMove>? currentNode)
@@ -120,29 +131,18 @@ namespace WaterSortGame.Models
 
             return highestPriorityNode;
         }
-
-        private void MakeAMove(TreeNode<ValidMove> Node, LiquidColorNew[,] previousGameState)
+        private void MakeAMove(TreeNode<ValidMove> node)
         {
-            Debug.WriteLine($"# [{Node.Data.Source.X},{Node.Data.Source.Y}] => [{Node.Data.Target.X},{Node.Data.Target.Y}] {{{Node.Data.GameState[Node.Data.Source.X, Node.Data.Source.Y].Name}}} {{HowMany {Node.Data.Source.NumberOfRepeatingLiquids}}}");
-
-            //LiquidColorNew[,] newGameState = CloneGrid(previousGameState); // #### tady to zrusit, pridavam to uz driv. a dal uz pouzivat jen "Node.Data.GameState"
-            var numberOfRepeatingLiquids = Node.Data.Source.NumberOfRepeatingLiquids;
-            int i = 0;
-            while (i < numberOfRepeatingLiquids && (Node.Data.Target.Y + i < Node.Data.GameState.GetLength(1))) // pocet stejnych barev na sobe source && uroven barvy v targetu
-            {
-                Node.Data.GameState[Node.Data.Target.X, Node.Data.Target.Y + i] = Node.Data.GameState[Node.Data.Source.X, Node.Data.Source.Y - i];
-                Node.Data.GameState[Node.Data.Source.X, Node.Data.Source.Y - i] = null;
-                i++;
-            }
+            Debug.WriteLine($"# [{node.Data.Source.X},{node.Data.Source.Y}] => [{node.Data.Target.X},{node.Data.Target.Y}] {{{node.Data.Source.ColorName}}} {{HowMany {node.Data.Source.NumberOfRepeatingLiquids}}}");
             
             //Node.Data.GameState = newGameState;
-            Node.Visited = true;
+            node.Visited = true;
 
             //var upcomingStep = new SolutionStepsOLD(newGameState, Node.Data);
             //SolvingStepsOLD.Add(upcomingStep);
 
-            previousGameState = Node.Data.GameState; // tohle je gamestate kterej uchovavam jen uvnitr autosolvu
-            MainWindowVM.GameState.SetGameState(Node.Data.GameState);
+            //previousGameState = node.Data.GameState; // tohle je gamestate kterej uchovavam jen uvnitr autosolvu
+            MainWindowVM.GameState.SetGameState(node.Data.GameState);
 
             MainWindowVM.DrawTubes();
             MainWindowVM.OnChangingGameState();
@@ -241,7 +241,7 @@ namespace WaterSortGame.Models
                     {
                         var move = new ValidMove(liquid, emptySpot, gameState);
 
-                        if (IsThisRepeatingMove(gameState, move)) continue;
+                        //if (IsThisRepeatingMove(gameState, move)) continue;
                         validMoves.Add(move);
                         continue;
                     }
@@ -250,7 +250,7 @@ namespace WaterSortGame.Models
                     {
                         var move = new ValidMove(liquid, emptySpot, gameState, true);
 
-                        if (IsThisRepeatingMove(gameState, move)) continue;
+                        //if (IsThisRepeatingMove(gameState, move)) continue;
                         validMoves.Add(move);
                     }
                 }
@@ -258,17 +258,8 @@ namespace WaterSortGame.Models
 
             return validMoves;
         }
-        private bool IsThisRepeatingMove(LiquidColorNew[,] gameState, ValidMove move)
+        private void RemoveRepeatingMoves(List<ValidMove> validMoves, TreeNode<ValidMove> parentNode)
         {
-            //if (SolvingSteps.Parent == null) return false;
-
-            //var upcomingState = CloneGrid(gameState);
-            //upcomingState[move.Target.X, move.Target.Y] = upcomingState[move.Source.X, move.Source.Y];
-            //upcomingState[move.Source.X, move.Source.Y] = null;
-
-            ////var previousState = SolvingSteps.Last().PreviousStep.Grid;
-            ////var previousState = SolvingStepsOLD.Last();
-            //var previousState = SolvingSteps.Parent;
             //bool first = true;
             //do
             //{
@@ -278,13 +269,28 @@ namespace WaterSortGame.Models
             //    }
             //    else
             //    {
-            //        previousState = previousState.Parent;
-            //        if (previousState is null) continue;
+            //        parentOfParentNode = parentOfParentNode.Parent;
+            //        if (parentOfParentNode is null) continue;
             //    }
-            //    if (AreStatesIdentical(upcomingState, previousState.Data.GameState)) return true;
-            //} while (previousState is not null);
+            //    if (AreStatesIdentical(upcomingState, parentOfParentNode.Data.GameState)) return true;
+            //} while (parentOfParentNode is not null);
 
-            return false;
+
+            for (int i = validMoves.Count() - 1; i >= 0; i--)
+            {
+                //if (parent == null) return;
+
+                //var upcomingState = CloneGrid(parentNode.Data.GameState);
+                //upcomingState[parentNode.Data.Target.X, parentNode.Data.Target.Y] = upcomingState[parentNode.Data.Source.X, parentNode.Data.Source.Y];
+                //upcomingState[parentNode.Data.Source.X, parentNode.Data.Source.Y] = null;
+
+                var parentOfParentNode = parentNode.Parent;
+                if (parentOfParentNode is null) return; // pokud nema parent znamena ze je prvni a tim padem se ani nemuze opakovat
+                if (AreStatesIdentical(validMoves[i].GameState, parentOfParentNode.Data.GameState))
+                {
+                    validMoves.Remove(validMoves[i]);
+                }
+            }
         }
         private bool AreStatesIdentical(LiquidColorNew[,] first, LiquidColorNew[,] second)
         {
@@ -345,7 +351,7 @@ namespace WaterSortGame.Models
         }
         private (bool, int) AreAllLayersIdentical(LiquidColorNew[,] gameState, int x, int y)
         {
-            if (y == 0 || y == 1) return (true, 1);
+            if (y == 0) return (true, 1); // jen jedna tekutina, takze dycky musi byt "vsechny"(jedna) stejny
 
             //if (y == 1) return (true, 1);
 

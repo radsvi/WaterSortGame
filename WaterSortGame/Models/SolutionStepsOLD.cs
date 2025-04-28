@@ -13,7 +13,7 @@ namespace WaterSortGame.Models
         public ValidMove Move { get; set; }
         public SolutionStepsOLD(LiquidColorNew[,] grid, ValidMove move, SolutionStepsOLD? previousStep = null)
         {
-            Grid = GameState.CloneGrid(grid, true);
+            Grid = GameState.CloneGridStatic(grid);
             Move = move;
             PreviousStep = previousStep;
         }

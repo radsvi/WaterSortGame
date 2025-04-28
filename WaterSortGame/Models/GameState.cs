@@ -115,7 +115,7 @@ namespace WaterSortGame.Models
         }
         private void GenerateDebugLevel()
         {
-            gameGrid = new LiquidColorNew[7, NumberOfLayers];
+            gameGrid = new LiquidColorNew[5, NumberOfLayers];
             //Tube.ResetCounter();
             SetFreshGameState();
             //Tubes?.Clear();
@@ -149,11 +149,6 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 3,3,3,3 });
             //AddTube(i++, new int[] { 4, 4, 4, 4, });
 
-            //AddTube(i++, new int[] { });
-            //AddTube(i++, new int[] { 1, 1, 1, 1 });
-            //AddTube(i++, new int[] { 2, 3, 3 });
-            //AddTube(i++, new int[] { 2, 2, 2 });
-            //AddTube(i++, new int[] { 3, 3 });
 
             //AddTube(i++, new int[] { 1,2,2,3 });
             //AddTube(i++, new int[] { 4,3,2,1 });
@@ -162,23 +157,24 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] {  });
             //AddTube(i++, new int[] {  });
 
-            AddTube(i++, new int[] { 1, 1, 1, 1 });
-            AddTube(i++, new int[] { 2, 3, 3, 3 });
+            //AddTube(i++, new int[] { 1, 1, 1, 1 });
+            //AddTube(i++, new int[] { 2, 3, 3, 3 });
+            //AddTube(i++, new int[] { });
+            //AddTube(i++, new int[] { 2, 3 });
+            //AddTube(i++, new int[] { 4,4,4,4 });
+            //AddTube(i++, new int[] { 5,5,});
+            //AddTube(i++, new int[] { 6,6,6,6});
+
             AddTube(i++, new int[] { });
-            AddTube(i++, new int[] { 2, 3 });
-            AddTube(i++, new int[] { 4,4,4,4 });
-            AddTube(i++, new int[] { 5,5,});
-            AddTube(i++, new int[] { 6,6,6,6});
+            AddTube(i++, new int[] { 1, 1, 1, 1 });
+            AddTube(i++, new int[] { 2, 3, 3 });
+            AddTube(i++, new int[] { 2, 2, 2 });
+            AddTube(i++, new int[] { 3, 3 });
 
-            //AddTube(i++, new int[] { 5 });
-            //AddTube(i++, new int[] { 5  });
-            //AddTube(i++, new int[] { 6, 5,5 });
-            //AddTube(i++, new int[] { 7,7,7,7 });
-            //AddTube(i++, new int[] { 6,6,6 });
-
-            //AddTube(i++, new int[] { 7, 7, 7, 7 });
-            //AddTube(i++, new int[] { 5, 5, 5 });
-            //AddTube(i++, new int[] { 5 });
+            //AddTube(i++, new int[] { });
+            //AddTube(i++, new int[] { 1, 1, 2, 2 });
+            //AddTube(i++, new int[] { 2, 2, 1, 1 });
+            //AddTube(i++, new int[] {  });
 
             StoreStartingGrid();
         }
@@ -203,7 +199,7 @@ namespace WaterSortGame.Models
                 gameGrid = CloneGrid(gameGrid, gameGrid.GetLength(0) + 1);
             }
         }
-        public static LiquidColorNew[,] CloneGrid(LiquidColorNew[,] grid, bool staticClass)
+        public static LiquidColorNew[,] CloneGridStatic(LiquidColorNew[,] grid)
         {
             return new GameState().CloneGrid(grid, grid.GetLength(0));
         }
