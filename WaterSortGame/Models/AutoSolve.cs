@@ -12,8 +12,8 @@ namespace WaterSortGame.Models
     internal class AutoSolve
     {
         MainWindowVM MainWindowVM;
-        TreeNode<ValidMove> SolvingSteps;
-        TreeNode<ValidMove> FirstStep;
+        //TreeNode<ValidMove> SolvingSteps;
+        //TreeNode<ValidMove> FirstStep;
         public bool ResumeRequest { get; set; }
         public AutoSolve(MainWindowVM mainWindowVM)
         {
@@ -22,16 +22,18 @@ namespace WaterSortGame.Models
         }
         public async void Start(LiquidColorNew[,] startingPosition)
         {
-            SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
-            FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
-            FirstStep.Data.GameState = startingPosition;
-            TreeNode<ValidMove> previousStep = FirstStep;
+            //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
+            //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
+            var node = new TreeNode<ValidMove>(new ValidMove(startingPosition));
+
+            //FirstStep.Data.GameState = startingPosition;
+            //TreeNode<ValidMove> previousStep = FirstStep;
             //var gameState = startingPosition;
+            
             while (true) // ## dodelat aby skoncilo kdyz nejsou zadny mozny nody s Visited == false
             {
                 
-                
-                
+
                 //if () // tady bude podminka kdyz se vracim o uroven vys na parent
                 //{
 
@@ -40,20 +42,19 @@ namespace WaterSortGame.Models
                 //    await WaitForContinueButton();
                 //    continue;
                 //}
-                
-                
-                var movableLiquids = GetMovableLiquids(previousStep.Data.GameState);
+
+                var movableLiquids = GetMovableLiquids(node.Data.GameState);
 
                 Debug.WriteLine("movableLiquids:");
                 foreach (var liquid in movableLiquids)
-                    Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{previousStep.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
+                    Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{node.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
 
-                var emptySpots = GetEmptySpots(previousStep.Data.GameState, movableLiquids);
-                var validMoves = GetValidMoves(previousStep.Data.GameState, movableLiquids, emptySpots);
+                var emptySpots = GetEmptySpots(node.Data.GameState, movableLiquids);
+                var validMoves = GetValidMoves(node.Data.GameState, movableLiquids, emptySpots);
 
                 Debug.WriteLine("validMoves:");
                 foreach (var move in validMoves)
-                    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{previousStep.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
+                    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{node.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
 
                 var mostFrequentColors = PickMostFrequentColor(movableLiquids);
 
@@ -61,7 +62,7 @@ namespace WaterSortGame.Models
                 RemoveEqualColorMoves(validMoves); // ## oddelat movy ktery jen prehazujou treba z 2 modrych na 1 modrou.
                 RemoveUselessMoves(validMoves);
 
-                PickPreferentialMoves(previousStep.Data.GameState, validMoves);
+                PickPreferentialMoves(node.Data.GameState, validMoves);
                 if (validMoves.Count == 0)
                 {
                     MessageBox.Show("No valid move");
@@ -69,38 +70,36 @@ namespace WaterSortGame.Models
                 }
 
                 // Pro kazdy validMove vytvorim sibling ve strome:
-                TreeNode<ValidMove> nextNode;
-                TreeNode<ValidMove> previousNode = previousStep;
+                //TreeNode<ValidMove> nextNode;
+                //TreeNode<ValidMove> previousNode = node;
                 for (int i = 0; i < validMoves.Count; i++)
                 {
-                    nextNode = new TreeNode<ValidMove>(validMoves[i]);
+                    var nextNode = new TreeNode<ValidMove>(validMoves[i]);
                     if (i == 0)
                     {
-                        previousNode.AddChild(nextNode);
+                        node.AddChild(nextNode);
                     }
                     else
                     {
-                        previousNode.AddSibling(nextNode);
+                        node.AddSibling(nextNode);
                     }
-                    previousNode = nextNode;
+                    node = nextNode;
                 }
 
                 // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
-                TreeNode<ValidMove> currentNode = previousStep.FirstChild;
-                if (currentNode == null)
+                TreeNode<ValidMove> firstChild = node.Parent.FirstChild;
+                if (firstChild == null)
                 {
                     Debug.WriteLine("musim se vratit na parent"); // ## dodelat
                     break;
                 }
-                var highestPriorityNode = PickHighestPriority(currentNode);
+                var highestPriorityNode = PickHighestPriority(firstChild);
 
-
-                MakeAMove(highestPriorityNode, previousStep.Data.GameState);
-                previousStep = highestPriorityNode;
+                MakeAMove(highestPriorityNode, node.Data.GameState);
+                node = highestPriorityNode;
                 await WaitForContinueButton();
             }
         }
-
         private TreeNode<ValidMove> PickHighestPriority(TreeNode<ValidMove>? currentNode)
         {
             
@@ -261,30 +260,29 @@ namespace WaterSortGame.Models
         }
         private bool IsThisRepeatingMove(LiquidColorNew[,] gameState, ValidMove move)
         {
-            //if (SolvingStepsOLD.Count <= 1) return false;
-            if (SolvingSteps.Parent == null) return false;
+            //if (SolvingSteps.Parent == null) return false;
 
-            var upcomingState = CloneGrid(gameState);
-            upcomingState[move.Target.X, move.Target.Y] = upcomingState[move.Source.X, move.Source.Y];
-            upcomingState[move.Source.X, move.Source.Y] = null;
+            //var upcomingState = CloneGrid(gameState);
+            //upcomingState[move.Target.X, move.Target.Y] = upcomingState[move.Source.X, move.Source.Y];
+            //upcomingState[move.Source.X, move.Source.Y] = null;
 
-            //var previousState = SolvingSteps.Last().PreviousStep.Grid;
-            //var previousState = SolvingStepsOLD.Last();
-            var previousState = SolvingSteps.Parent;
-            bool first = true;
-            do
-            {
-                if (first)
-                {
-                    first = false;
-                }
-                else
-                {
-                    previousState = previousState.Parent;
-                    if (previousState is null) continue;
-                }
-                if (AreStatesIdentical(upcomingState, previousState.Data.GameState)) return true;
-            } while (previousState is not null);
+            ////var previousState = SolvingSteps.Last().PreviousStep.Grid;
+            ////var previousState = SolvingStepsOLD.Last();
+            //var previousState = SolvingSteps.Parent;
+            //bool first = true;
+            //do
+            //{
+            //    if (first)
+            //    {
+            //        first = false;
+            //    }
+            //    else
+            //    {
+            //        previousState = previousState.Parent;
+            //        if (previousState is null) continue;
+            //    }
+            //    if (AreStatesIdentical(upcomingState, previousState.Data.GameState)) return true;
+            //} while (previousState is not null);
 
             return false;
         }
