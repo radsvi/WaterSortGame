@@ -15,7 +15,7 @@ namespace WaterSortGame.Models
         {
             GameState = Models.GameState.CloneGridStatic(gameState);
             Target = target;
-            Source = source;
+            Source = source; // mam to v tomhle poradi kvuli eventum
             Liquid = gameState[source.X, source.Y];
 
             IsTargetSingleColor = isTargetSingleColor;
@@ -82,7 +82,7 @@ namespace WaterSortGame.Models
             // if target is not empty tube (but rather the same color), give it higher priority, but only if all stacked liquids fit
             if (Target is not null)
             {
-                if (Target.Y > 0 && Source.NumberOfRepeatingLiquids < (GameState.GetLength(1) - Target.Y))
+                if (Target.Y > 0 && Source.NumberOfRepeatingLiquids <= (GameState.GetLength(1) - Target.Y))
                 {
                     newPriority++;
                 }

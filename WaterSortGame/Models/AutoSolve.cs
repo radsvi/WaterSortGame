@@ -124,8 +124,8 @@ namespace WaterSortGame.Models
                 }
                 currentNode = currentNode.NextSibling;
             }
-            highestPriorityNode.Data.GameState = CloneGrid(highestPriorityNode.Parent.Data.GameState);
-            highestPriorityNode.Data.SolutionValue = GetSolutionValue(highestPriorityNode.Parent.Data.GameState);
+            //highestPriorityNode.Data.GameState = CloneGrid(highestPriorityNode.Parent.Data.GameState);
+            highestPriorityNode.Data.SolutionValue = GetSolutionValue(highestPriorityNode.Data.GameState);
             //if (highestPriorityNode.Data.MaxSolutionValue < highestPriorityNode.Data.SolutionValue)
             //    highestPriorityNode.Data.MaxSolutionValue = highestPriorityNode.Data.SolutionValue;
 
