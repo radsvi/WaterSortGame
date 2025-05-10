@@ -36,69 +36,67 @@ namespace WaterSortGame.Models
             {
                 await WaitForContinueButton();
 
+                TreeNode<ValidMove> highestPriorityNode;
                 if (treeNode.Visited == true)
                 {
-                    treeNode = treeNode.Parent;
-                    TreeNode<ValidMove> currentNode = treeNode;
+                    treeNode = treeNode.Parent.FirstChild;
 
-                    while (currentNode.NextSibling is not null)
+                    highestPriorityNode = PickHighestPriorityNonVisitedNode(treeNode);
+
+                    if (highestPriorityNode.Visited is true)
                     {
-
-
-                        currentNode = currentNode.NextSibling;
+                        treeNode = highestPriorityNode.Parent;
+                        Notification.Show("All visited siblings, returning to parent");
+                        continue;
                     }
-
                 }
                 else
                 {
+                    var movableLiquids = GetMovableLiquids(treeNode.Data.GameState);
 
-                }
+                    Debug.WriteLine("movableLiquids:");
+                    foreach (var liquid in movableLiquids)
+                        Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{treeNode.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
 
-                var movableLiquids = GetMovableLiquids(treeNode.Data.GameState);
+                    var emptySpots = GetEmptySpots(treeNode.Data.GameState, movableLiquids);
+                    var validMoves = GetValidMoves(treeNode.Data.GameState, movableLiquids, emptySpots);
 
-                Debug.WriteLine("movableLiquids:");
-                foreach (var liquid in movableLiquids)
-                    Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{treeNode.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
+                    Debug.WriteLine("validMoves:");
+                    foreach (var move in validMoves)
+                        Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{treeNode.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
 
-                var emptySpots = GetEmptySpots(treeNode.Data.GameState, movableLiquids);
-                var validMoves = GetValidMoves(treeNode.Data.GameState, movableLiquids, emptySpots);
+                    var mostFrequentColors = PickMostFrequentColor(movableLiquids); // ## tohle jsem jeste nezacal nikde pouzivat!
 
-                Debug.WriteLine("validMoves:");
-                foreach (var move in validMoves)
-                    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{treeNode.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
+                    //RemoveUnoptimalMoves(validMoves, emptySpots);
+                    RemoveEqualColorMoves(validMoves); // ## oddelat kroky ktery jen prehazujou treba z 2 modrych na 1 modrou. -> RemoveUselessMoves()
+                    RemoveUselessMoves(validMoves);
+                    //RemoveRepeatingMoves(validMoves, node);
 
-                var mostFrequentColors = PickMostFrequentColor(movableLiquids); // ## tohle jsem jeste nezacal nikde pouzivat!
+                    RemoveSolvedTubesFromMoves(treeNode.Data.GameState, validMoves);
 
-                //RemoveUnoptimalMoves(validMoves, emptySpots);
-                RemoveEqualColorMoves(validMoves); // ## oddelat kroky ktery jen prehazujou treba z 2 modrych na 1 modrou. -> RemoveUselessMoves()
-                RemoveUselessMoves(validMoves);
-                //RemoveRepeatingMoves(validMoves, node);
-
-                RemoveSolvedTubesFromMoves(treeNode.Data.GameState, validMoves);
-                if (validMoves.Count == 0)
-                {
-                    if (MainWindowVM.GameState.IsLevelCompleted() == false)
+                    if (validMoves.Count == 0)
                     {
-                        //MessageBox.Show("No valid moves");
-                        //Notification.Show("No valid moves");
-                        treeNode.Visited = true;
-                        
-                        Notification.Show("Returning to previous branch");
-                        continue;
+                        if (MainWindowVM.GameState.IsLevelCompleted() is false)
+                        {
+                            treeNode.Visited = true;
+
+                            Notification.Show("Returning to previous branch");
+                            continue;
+                        }
+
+                        return;
                     }
 
-                    return;
+                    // Pro kazdy validMove vytvorim sibling ve strome:
+                    CreatePossibleNextStates(treeNode, validMoves);
+
+                    // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
+                    highestPriorityNode = PickHighestPriorityNonVisitedNode(treeNode.FirstChild);
                 }
 
-                // Pro kazdy validMove vytvorim sibling ve strome:
-                CreatePossibleNextStates(treeNode, validMoves);
-
-                // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
-                var highestPriorityNode = PickHighestPriority(treeNode.FirstChild);
 
                 MakeAMove(highestPriorityNode);
                 treeNode = highestPriorityNode;
-                
             }
         }
 
@@ -129,14 +127,16 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        private TreeNode<ValidMove> PickHighestPriority(TreeNode<ValidMove>? currentNode)
+        /// <summary>
+        /// Checks siblings of provided node
+        /// </summary>
+        private TreeNode<ValidMove> PickHighestPriorityNonVisitedNode(TreeNode<ValidMove>? currentNode)
         {
-            
             TreeNode<ValidMove> highestPriorityNode = currentNode;
             //currentNode = currentNode.NextSibling;
             while (currentNode != null)
             {
-                if (highestPriorityNode.Data.Priority < currentNode.Data.Priority)
+                if (highestPriorityNode.Data.Priority < currentNode.Data.Priority && currentNode.Visited is false)
                 {
                     highestPriorityNode = currentNode;
                 }
@@ -154,7 +154,6 @@ namespace WaterSortGame.Models
             Debug.WriteLine($"# [{node.Data.Source.X},{node.Data.Source.Y}] => [{node.Data.Target.X},{node.Data.Target.Y}] {{{node.Data.Source.ColorName}}} {{HowMany {node.Data.Source.NumberOfRepeatingLiquids}}}");
             
             //Node.Data.GameState = newGameState;
-            node.Visited = true;
 
             //var upcomingStep = new SolutionStepsOLD(newGameState, Node.Data);
             //SolvingStepsOLD.Add(upcomingStep);

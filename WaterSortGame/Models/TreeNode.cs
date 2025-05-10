@@ -8,14 +8,17 @@ namespace WaterSortGame.Models
 {
     internal class TreeNode<T> where T : ValidMove // temporary limitation. change later..
     {
+        static int stepCounter = 0;
         public T Data { get; private set; }
         public TreeNode<T>? Parent { get; private set; }
         public TreeNode<T>? FirstChild { get; private set; }
         public TreeNode<T>? NextSibling { get; private set; }
         public bool Visited { get; set; }
+        public int StepNumber { get; set; }
         public TreeNode(T data)
         {
             this.Data = data;
+            StepNumber = stepCounter++;
         }
         //public TreeNode(T data, TreeNode<T>? sender = null, TreeNode<T>? child = null, TreeNode<T>? sibling = null)
         //{
