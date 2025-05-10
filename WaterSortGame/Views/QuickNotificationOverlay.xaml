@@ -4,30 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WaterSortGame.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="250" d:DesignWidth="600">
     <Grid Style="{StaticResource QuickNotificationPopupScreenOuter}">
         <Button Style="{StaticResource ClickBackgroundButton}" Command="{Binding CancelScreenCommand}">
             <Border Style="{StaticResource PopupScreen}">
-                <Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="1">
-                            <TextBlock Text="Do you want to start a new level?" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
-                            <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
-                        Style="{StaticResource NavigationButtonsPrimary}">
-                                <Button Content="OK" Command="{Binding ConfirmCommand}" Width="150"/>
-                                <Button Content="Cancel" Command="{Binding CancelScreenCommand}" Width="150"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Grid>
-
-                    <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding CancelScreenCommand}"/>
-                </Grid>
+                <StackPanel>
+                    <TextBlock Text="{Binding Path=NotificationText, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                </StackPanel>
             </Border>
         </Button>
     </Grid>

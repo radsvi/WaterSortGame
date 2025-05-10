@@ -24,5 +24,17 @@ namespace WaterSortGame.Views
         {
             InitializeComponent();
         }
+
+
+        public string NotificationText
+        {
+            get { return (string)GetValue(NotificationTextProperty); }
+            set { SetValue(NotificationTextProperty, value); }
+        }
+
+        public static DependencyProperty NotificationTextProperty =
+            DependencyProperty.Register("NotificationText", typeof(string), typeof(QuickNotificationOverlay));
+
+
     }
 }

@@ -158,6 +158,33 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
+
+        private bool quickNotificationVisibility;
+        public bool QuickNotificationVisibility
+        {
+            get { return quickNotificationVisibility; }
+            set
+            {
+                if (value != quickNotificationVisibility)
+                {
+                    quickNotificationVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string quickNotificationText;
+        public string QuickNotificationText
+        {
+            get { return quickNotificationText; }
+            set
+            {
+                if (value != quickNotificationText)
+                {
+                    quickNotificationText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public bool PropertyChangedEventPaused { get; set; } = false;
         public ObservableCollection<PopupScreenActions> PopupActions { get; set; }
         #endregion
@@ -175,7 +202,8 @@ namespace WaterSortGame.ViewModels
             //PropertyChanged += TubeCount_PropertyChanged;
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
             //Tubes.CollectionChanged += Tubes_CollectionChanged;
-            
+            QuickNotificationText = "text co jsem zadal v constructoru";
+
             PopupWindow = new PopupScreenCommand(this);
             if (AppSettings.DontShowHelpScreenAtStart == false)
             {
