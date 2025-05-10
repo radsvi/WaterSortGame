@@ -487,9 +487,9 @@ namespace WaterSortGame.Models
         }
         public void CalculateNextStep(LiquidColorNew[,] gameState)
         {
-            if (MainWindowVM.UIDisabled == false) // disable UI once starting the Auto Solve process
+            if (MainWindowVM.UIEnabled == true) // disable UI once starting the Auto Solve process
             {
-                MainWindowVM.UIDisabled = true;
+                MainWindowVM.UIEnabled = false;
                 Start(gameState);
                 return;
             }

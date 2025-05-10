@@ -146,15 +146,15 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        private bool uiDisabled;
-        public bool UIDisabled // also used to mean that level is completed
+        private bool uiEnabled;
+        public bool UIEnabled // also used to mean that level is completed
         {
-            get { return uiDisabled; }
+            get { return uiEnabled; }
             set
             {
-                if (value != uiDisabled)
+                if (value != uiEnabled)
                 {
-                    uiDisabled = value;
+                    uiEnabled = value;
                 }
             }
         }
@@ -252,7 +252,7 @@ namespace WaterSortGame.ViewModels
         }
         private void OnStartingLevel()
         {
-            UIDisabled = false;
+            UIEnabled = true;
             DeselectTube();
             GameState.SavedGameStates.Clear();
             GameState.LastGameState = null;
@@ -301,7 +301,7 @@ namespace WaterSortGame.ViewModels
         {
             TokenSource?.Cancel();
         }
-        public RelayCommand StepBackCommand => new RelayCommand(execute => GameState.StepBack(), canExecute => GameState.SavedGameStates.Count > 0);
+        public RelayCommand StepBackCommand => new RelayCommand(execute => GameState.StepBack(), canExecute => GameState.SavedGameStates.Count > 0 && UIEnabled == true);
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => WindowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
         public RelayCommand OpenHelpFromOptionsCommand => new RelayCommand(execute =>
@@ -314,7 +314,7 @@ namespace WaterSortGame.ViewModels
         public RelayCommand SelectTubeCommand => new RelayCommand(obj => OnTubeButtonClick(obj));
         internal void OnTubeButtonClick(object obj)
         {
-            if (UIDisabled == true)
+            if (UIEnabled == false)
             {
                 return;
             }
@@ -435,7 +435,7 @@ namespace WaterSortGame.ViewModels
         {
             if (GameState.IsLevelCompleted())
             {
-                UIDisabled = true;
+                UIEnabled = false;
                 PopupWindow.Execute(PopupParams.LevelComplete);
             }
         }
