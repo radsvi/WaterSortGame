@@ -26,7 +26,7 @@ namespace WaterSortGame.Models
         {
             //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
-            var node = new TreeNode<ValidMove>(new ValidMove(startingPosition));
+            var treeNode = new TreeNode<ValidMove>(new ValidMove(startingPosition));
 
             //FirstStep.Data.GameState = startingPosition;
             //TreeNode<ValidMove> previousStep = FirstStep;
@@ -34,58 +34,71 @@ namespace WaterSortGame.Models
             
             while (true) // ## dodelat aby skoncilo kdyz nejsou zadny mozny nody s Visited == false
             {
-                
+                await WaitForContinueButton();
 
-                //if () // tady bude podminka kdyz se vracim o uroven vys na parent
-                //{
+                if (treeNode.Visited == true)
+                {
+                    treeNode = treeNode.Parent;
+                    TreeNode<ValidMove> currentNode = treeNode;
+
+                    while (currentNode.NextSibling is not null)
+                    {
 
 
+                        currentNode = currentNode.NextSibling;
+                    }
 
-                //    await WaitForContinueButton();
-                //    continue;
-                //}
+                }
+                else
+                {
 
-                var movableLiquids = GetMovableLiquids(node.Data.GameState);
+                }
+
+                var movableLiquids = GetMovableLiquids(treeNode.Data.GameState);
 
                 Debug.WriteLine("movableLiquids:");
                 foreach (var liquid in movableLiquids)
-                    Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{node.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
+                    Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{treeNode.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
 
-                var emptySpots = GetEmptySpots(node.Data.GameState, movableLiquids);
-                var validMoves = GetValidMoves(node.Data.GameState, movableLiquids, emptySpots);
+                var emptySpots = GetEmptySpots(treeNode.Data.GameState, movableLiquids);
+                var validMoves = GetValidMoves(treeNode.Data.GameState, movableLiquids, emptySpots);
 
                 Debug.WriteLine("validMoves:");
                 foreach (var move in validMoves)
-                    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{node.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
+                    Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{treeNode.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
 
                 var mostFrequentColors = PickMostFrequentColor(movableLiquids); // ## tohle jsem jeste nezacal nikde pouzivat!
 
                 //RemoveUnoptimalMoves(validMoves, emptySpots);
-                RemoveEqualColorMoves(validMoves); // ## oddelat movey ktery jen prehazujou treba z 2 modrych na 1 modrou. -> RemoveUselessMoves()
+                RemoveEqualColorMoves(validMoves); // ## oddelat kroky ktery jen prehazujou treba z 2 modrych na 1 modrou. -> RemoveUselessMoves()
                 RemoveUselessMoves(validMoves);
                 //RemoveRepeatingMoves(validMoves, node);
 
-                PickPreferentialMoves(node.Data.GameState, validMoves);
+                RemoveSolvedTubesFromMoves(treeNode.Data.GameState, validMoves);
                 if (validMoves.Count == 0)
                 {
                     if (MainWindowVM.GameState.IsLevelCompleted() == false)
                     {
                         //MessageBox.Show("No valid moves");
-                        Notification.Show("No valid moves");
+                        //Notification.Show("No valid moves");
+                        treeNode.Visited = true;
+                        
+                        Notification.Show("Returning to previous branch");
+                        continue;
                     }
+
                     return;
                 }
 
                 // Pro kazdy validMove vytvorim sibling ve strome:
-                CreatePossibleNextStates(node, validMoves);
-                
+                CreatePossibleNextStates(treeNode, validMoves);
 
                 // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
-                var highestPriorityNode = PickHighestPriority(node.FirstChild);
+                var highestPriorityNode = PickHighestPriority(treeNode.FirstChild);
 
                 MakeAMove(highestPriorityNode);
-                node = highestPriorityNode;
-                await WaitForContinueButton();
+                treeNode = highestPriorityNode;
+                
             }
         }
 
@@ -453,7 +466,12 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        private void PickPreferentialMoves(LiquidColorNew[,] gameState, List<ValidMove> validMoves)
+        /// <summary>
+        /// Removes moves that has, as as source, tubes that are already solved.
+        /// </summary>
+        /// <param name="gameState"></param>
+        /// <param name="validMoves"></param>
+        private void RemoveSolvedTubesFromMoves(LiquidColorNew[,] gameState, List<ValidMove> validMoves)
         {
             //var preferentialMoves = new List<ValidMove>();
 
@@ -492,6 +510,7 @@ namespace WaterSortGame.Models
         }
         public void CalculateNextStep(LiquidColorNew[,] gameState)
         {
+            ResumeRequest = true; // provede se i pri prvnim spusteni, protoze je pauza na zacatku
             if (MainWindowVM.UIEnabled == true) // disable UI once starting the Auto Solve process
             {
                 MainWindowVM.UIEnabled = false;
@@ -500,7 +519,7 @@ namespace WaterSortGame.Models
             }
             
             //Vertices[1].CalculateGValue(Vertices.First());
-            ResumeRequest = true;
+            
         }
         #endregion
     }
