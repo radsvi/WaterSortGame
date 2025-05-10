@@ -226,4 +226,10 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <!--// Quick Notification popup window //-->
+    <Style TargetType="Grid" x:Key="QuickNotificationPopupScreenOuter" BasedOn="{StaticResource PopupScreenOuter}">
+        <!--<Setter Property="Width" Value="380" />-->
+        <!--<Setter Property="Height" Value="80" />-->
+    </Style>
 </ResourceDictionary>
