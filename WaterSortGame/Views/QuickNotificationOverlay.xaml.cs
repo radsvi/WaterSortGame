@@ -26,6 +26,7 @@ namespace WaterSortGame.Views
         }
 
 
+
         public string NotificationText
         {
             get { return (string)GetValue(NotificationTextProperty); }

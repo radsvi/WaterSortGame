@@ -13,13 +13,14 @@ namespace WaterSortGame.Models
     internal class AutoSolve
     {
         MainWindowVM MainWindowVM;
+        Notification Notification;
         //TreeNode<ValidMove> SolvingSteps;
         //TreeNode<ValidMove> FirstStep;
         public bool ResumeRequest { get; set; }
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
-
+            Notification = mainWindowVM.Notification;
         }
         public async void Start(LiquidColorNew[,] startingPosition)
         {
@@ -67,7 +68,11 @@ namespace WaterSortGame.Models
                 PickPreferentialMoves(node.Data.GameState, validMoves);
                 if (validMoves.Count == 0)
                 {
-                    MessageBox.Show("No valid moves");
+                    if (MainWindowVM.GameState.IsLevelCompleted() == false)
+                    {
+                        //MessageBox.Show("No valid moves");
+                        Notification.Show("No valid moves");
+                    }
                     return;
                 }
 

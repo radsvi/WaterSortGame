@@ -115,7 +115,7 @@ namespace WaterSortGame.Models
         }
         private void GenerateDebugLevel()
         {
-            gameGrid = new LiquidColorNew[5, NumberOfLayers];
+            gameGrid = new LiquidColorNew[7, NumberOfLayers];
             //Tube.ResetCounter();
             SetFreshGameState();
             //Tubes?.Clear();
@@ -165,11 +165,18 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 5,5,});
             //AddTube(i++, new int[] { 6,6,6,6});
 
-            AddTube(i++, new int[] { });
-            AddTube(i++, new int[] { 1, 1, 1, 1 });
-            AddTube(i++, new int[] { 2, 3, 3 });
-            AddTube(i++, new int[] { 2, 2, 2 });
-            AddTube(i++, new int[] { 3, 3 });
+            //AddTube(i++, new int[] { });
+            //AddTube(i++, new int[] { 1, 1, 1, 1 });
+            //AddTube(i++, new int[] { 2, 3, 3 });
+            //AddTube(i++, new int[] { 2, 2, 2 });
+            //AddTube(i++, new int[] { 3, 3 });
+
+            AddTube(i++, new int[] { 1,2,3,2 });
+            AddTube(i++, new int[] { 1,1,2,4 });
+            AddTube(i++, new int[] { 5,2,3,4 });
+            AddTube(i++, new int[] { 4,1,3,5 });
+            AddTube(i++, new int[] { 5,3,5,4 });
+
 
             //AddTube(i++, new int[] { });
             //AddTube(i++, new int[] { 1, 1, 2, 2 });

@@ -42,6 +42,7 @@ namespace WaterSortGame.ViewModels
         public IWindowService WindowService { get; }
         public MainWindow MainWindow { get; }
         public AppSettings AppSettings { get; }
+        public Notification Notification { get; }
         public AutoSolve AutoSolve { get; set; }
         public GameState GameState { get; set; }
         private LoadLevelVM loadLevelVM;
@@ -159,19 +160,28 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        private bool quickNotificationVisibility;
-        public bool QuickNotificationVisibility
+        private bool quickNotificationVisibilityBool = false;
+        public bool QuickNotificationVisibilityBool
         {
-            get { return quickNotificationVisibility; }
+            get { return quickNotificationVisibilityBool; }
             set
             {
-                if (value != quickNotificationVisibility)
+                if (value != quickNotificationVisibilityBool)
                 {
-                    quickNotificationVisibility = value;
+                    quickNotificationVisibilityBool = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(QuickNotificationVisibility));
                 }
             }
         }
+        public string QuickNotificationVisibility
+        {
+            get {
+                if (quickNotificationVisibilityBool) return "Visible";
+                else return "Hidden";
+            }
+        }
+
         private string quickNotificationText;
         public string QuickNotificationText
         {
@@ -194,6 +204,7 @@ namespace WaterSortGame.ViewModels
             this.WindowService = new WindowService();
             MainWindow = mainWindow;
             AppSettings = new AppSettings();
+            Notification = new Notification(this);
 
             GameState = new GameState(this);
             //Tubes = TubesManager.Tubes;
@@ -202,7 +213,6 @@ namespace WaterSortGame.ViewModels
             //PropertyChanged += TubeCount_PropertyChanged;
             //TubesManager.GlobalPropertyChanged += TubeCount_PropertyChanged;
             //Tubes.CollectionChanged += Tubes_CollectionChanged;
-            QuickNotificationText = "text co jsem zadal v constructoru";
 
             PopupWindow = new PopupScreenCommand(this);
             if (AppSettings.DontShowHelpScreenAtStart == false)
@@ -337,6 +347,12 @@ namespace WaterSortGame.ViewModels
             WindowService?.CloseWindow();
             SelectedViewModel = new HelpVM(this);
         });
+        public RelayCommand CloseQuickNotificationCommand => new RelayCommand(execute => Notification.CloseNotification());
+        //public RelayCommand DisplayQuickNotificationCommand => new RelayCommand(execute => DisplayQuickNotification("asdf"));
+        private void DisplayQuickNotification(string displayText)
+        {
+            Notification.Show(displayText);
+        }
         #endregion
         #region Moving Liquids
         public RelayCommand SelectTubeCommand => new RelayCommand(obj => OnTubeButtonClick(obj));

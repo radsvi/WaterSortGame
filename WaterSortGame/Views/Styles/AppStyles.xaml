@@ -228,8 +228,13 @@
     </Style>
 
     <!--// Quick Notification popup window //-->
-    <Style TargetType="Grid" x:Key="QuickNotificationPopupScreenOuter" BasedOn="{StaticResource PopupScreenOuter}">
+    <Style TargetType="Grid" x:Key="QuickNotificationPopupScreen">
         <!--<Setter Property="Width" Value="380" />-->
-        <!--<Setter Property="Height" Value="80" />-->
+
+        
+    </Style>
+    <Style TargetType="Button" x:Key="ClickBackgroundButtonQuickNotification" BasedOn="{StaticResource ClickBackgroundButton}">
+        <Setter Property="Background" Value="LightGreen" />
+        <Setter Property="FontSize" Value="13" />
     </Style>
 </ResourceDictionary>

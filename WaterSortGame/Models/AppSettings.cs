@@ -10,6 +10,7 @@ namespace WaterSortGame.Models
 {
     internal class AppSettings : ViewModelBase
     {
+        const int maximumExtraTubesUpperLimit = 20;
         private bool loadDebugLevel = Settings.Default.LoadDebugLevel;
         public bool LoadDebugLevel
         {
@@ -72,7 +73,7 @@ namespace WaterSortGame.Models
             {
                 if (maximumExtraTubes != value)
                 {
-                    if (value >= 0 && value <= 20)
+                    if (value >= 0 && value <= maximumExtraTubesUpperLimit)
                     {
                         maximumExtraTubes = value;
                     }
@@ -80,9 +81,9 @@ namespace WaterSortGame.Models
                     {
                         maximumExtraTubes = 0;
                     }
-                    else if (value > 20)
+                    else if (value > maximumExtraTubesUpperLimit)
                     {
-                        maximumExtraTubes = 20;
+                        maximumExtraTubes = maximumExtraTubesUpperLimit;
                     }
                     Settings.Default.MaximumExtraTubes = value;
                     Settings.Default.Save();
