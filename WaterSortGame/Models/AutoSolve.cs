@@ -36,16 +36,16 @@ namespace WaterSortGame.Models
             {
                 await WaitForContinueButton();
 
-                TreeNode<ValidMove> highestPriorityNode;
+                TreeNode<ValidMove> highestPriority_TreeNode;
                 if (treeNode.Visited == true)
                 {
                     treeNode = treeNode.Parent.FirstChild;
 
-                    highestPriorityNode = PickHighestPriorityNonVisitedNode(treeNode);
+                    highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
 
-                    if (highestPriorityNode.Visited is true)
+                    if (highestPriority_TreeNode.Visited is true)
                     {
-                        treeNode = highestPriorityNode.Parent;
+                        treeNode = highestPriority_TreeNode.Parent;
                         Notification.Show("All visited siblings, returning to parent");
                         continue;
                     }
@@ -91,12 +91,12 @@ namespace WaterSortGame.Models
                     CreatePossibleNextStates(treeNode, validMoves);
 
                     // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
-                    highestPriorityNode = PickHighestPriorityNonVisitedNode(treeNode.FirstChild);
+                    highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode.FirstChild);
                 }
 
 
-                MakeAMove(highestPriorityNode);
-                treeNode = highestPriorityNode;
+                MakeAMove(highestPriority_TreeNode);
+                treeNode = highestPriority_TreeNode;
             }
         }
 
@@ -132,22 +132,18 @@ namespace WaterSortGame.Models
         /// </summary>
         private TreeNode<ValidMove> PickHighestPriorityNonVisitedNode(TreeNode<ValidMove>? currentNode)
         {
-            TreeNode<ValidMove> highestPriorityNode = currentNode;
-            //currentNode = currentNode.NextSibling;
+            TreeNode<ValidMove> highestPriority_TreeNode = new NullTreeNode<ValidMove>(currentNode);
             while (currentNode != null)
             {
-                if (highestPriorityNode.Data.Priority < currentNode.Data.Priority && currentNode.Visited is false)
+                if (highestPriority_TreeNode.Data.Priority < currentNode.Data.Priority && currentNode.Visited is false)
                 {
-                    highestPriorityNode = currentNode;
+                    highestPriority_TreeNode = currentNode;
                 }
                 currentNode = currentNode.NextSibling;
             }
-            //highestPriorityNode.Data.GameState = CloneGrid(highestPriorityNode.Parent.Data.GameState);
-            highestPriorityNode.Data.SolutionValue = GetSolutionValue(highestPriorityNode.Data.GameState);
-            //if (highestPriorityNode.Data.MaxSolutionValue < highestPriorityNode.Data.SolutionValue)
-            //    highestPriorityNode.Data.MaxSolutionValue = highestPriorityNode.Data.SolutionValue;
+            highestPriority_TreeNode.Data.SolutionValue = GetSolutionValue(highestPriority_TreeNode.Data.GameState);
 
-            return highestPriorityNode;
+            return highestPriority_TreeNode;
         }
         private void MakeAMove(TreeNode<ValidMove> node)
         {
