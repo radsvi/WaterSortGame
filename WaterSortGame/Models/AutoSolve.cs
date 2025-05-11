@@ -34,21 +34,22 @@ namespace WaterSortGame.Models
             
             while (true) // ## dodelat aby skoncilo kdyz nejsou zadny mozny nody s Visited == false
             {
-                await WaitForContinueButton();
+                await WaitForButtonPress();
 
-                TreeNode<ValidMove> highestPriority_TreeNode;
+                TreeNode<ValidMove> highestPriority_TreeNode = null;
                 if (treeNode.Visited == true)
                 {
                     treeNode = treeNode.Parent;
                     MakeAMove(treeNode);
                     Notification.Show("Returning to previous move");
-                    treeNode = treeNode.FirstChild;
-                    await WaitForContinueButton();
+                    //treeNode = treeNode.FirstChild;
+                    await WaitForButtonPress();
 
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
 
                     if (highestPriority_TreeNode.StepNumber == -1) // this means that the NullTreeNode has been chosen
                     {
+                        //treeNode.Visited = true;
                         treeNode = highestPriority_TreeNode.Parent;
                         Notification.Show("All siblings visited, returning to parent");
                         continue;
@@ -104,9 +105,17 @@ namespace WaterSortGame.Models
                     // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode.FirstChild);
 
-                    MakeAMove(highestPriority_TreeNode);
+
                     treeNode = highestPriority_TreeNode;
+                    MakeAMove(treeNode);
                 }
+            }
+        }
+        private void SortTreeNodeSiblings(TreeNode<ValidMove> node) // merge sort
+        {
+            while (true)
+            {
+
             }
         }
 
@@ -140,8 +149,9 @@ namespace WaterSortGame.Models
         /// <summary>
         /// Checks siblings of provided node
         /// </summary>
-        private TreeNode<ValidMove> PickHighestPriorityNonVisitedNode(TreeNode<ValidMove>? currentNode)
+        private TreeNode<ValidMove> PickHighestPriorityNonVisitedNode(TreeNode<ValidMove> node)
         {
+            var currentNode = node;
             TreeNode<ValidMove> highestPriority_TreeNode = new NullTreeNode<ValidMove>(currentNode);
             while (currentNode != null)
             {
@@ -153,10 +163,23 @@ namespace WaterSortGame.Models
                 currentNode = currentNode.NextSibling;
             }
             if (highestPriority_TreeNode.StepNumber != -1)
+            {
+                if (node.Parent is not null) 
+                    node.Parent.Visited = true;
                 highestPriority_TreeNode.Data.SolutionValue = GetStepValue(highestPriority_TreeNode.Data.GameState);
+            }
 
             return highestPriority_TreeNode;
         }
+        //private TreeNode<ValidMove> PickHighestPriorityNonVisitedNode_Recursive(TreeNode<ValidMove> node)
+        //{
+        //    if (node.NextSibling is null)
+        //    {
+        //        return node.Parent;
+        //    }
+
+
+        //}
         private void MakeAMove(TreeNode<ValidMove> node)
         {
             Debug.WriteLine($"# [{node.Data.Source.X},{node.Data.Source.Y}] => [{node.Data.Target.X},{node.Data.Target.Y}] {{{node.Data.Source.ColorName}}} {{HowMany {node.Data.Source.NumberOfRepeatingLiquids}}}");
@@ -507,7 +530,7 @@ namespace WaterSortGame.Models
         }
 
         #region Controls
-        private async Task WaitForContinueButton()
+        private async Task WaitForButtonPress()
         {
             while (ResumeRequest is false)
             {

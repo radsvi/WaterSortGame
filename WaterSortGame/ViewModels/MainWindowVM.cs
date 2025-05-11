@@ -353,6 +353,30 @@ namespace WaterSortGame.ViewModels
         {
             Notification.Show(displayText);
         }
+        //public RelayCommand TestMethodCommand => new RelayCommand(execute => TestMethod());
+        //private void TestMethod()
+        //{
+        //    TreeNode<ValidMove> node = new TreeNode<ValidMove>(new ValidMove(null));
+        //    var startintNode = node;
+        //    TreeNode<ValidMove> nextNode;
+
+        //    nextNode = new TreeNode<ValidMove>(new ValidMove(null));
+        //    node.AddSibling(nextNode);
+        //    node = nextNode;
+
+        //    nextNode = new TreeNode<ValidMove>(new ValidMove(null));
+        //    node.AddSibling(nextNode);
+        //    node = nextNode;
+
+        //    nextNode = new TreeNode<ValidMove>(new ValidMove(null));
+        //    node.AddSibling(nextNode);
+        //    node = nextNode;
+
+
+        //    int number = TreeNode<ValidMove>.CountSiblings(startintNode);
+        //    Notification.Show("Count: " + number);
+        //}
+
         #endregion
         #region Moving Liquids
         public RelayCommand SelectTubeCommand => new RelayCommand(obj => OnTubeButtonClick(obj));

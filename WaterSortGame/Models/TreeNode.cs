@@ -35,6 +35,11 @@ namespace WaterSortGame.Models
             FirstChild = childNode;
             childNode.Parent = this;
         }
+        public static int CountSiblings(TreeNode<T> node)
+        {
+            if (node.NextSibling is null) return 0;
+            return 1 + CountSiblings(node.NextSibling);
+        }
 
         //public TreeNode(T data, TreeNode<T>? sender = null, TreeNode<T>? child = null, TreeNode<T>? sibling = null)
         //{

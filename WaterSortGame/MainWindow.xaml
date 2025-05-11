@@ -105,10 +105,11 @@
                     <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.LoadLevel}"/>
                     <Button Content="Save level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.SaveLevel}"/>
                     <Button Content="Auto Solve" Command="{Binding AutoSolveCommand}"/>
-                    <!--<Button Content="[temp1]" Command="{Binding DisplayQuickNotificationCommand}"/>-->
+                    
                     <!--<Button Content="[temp2]" Command="{Binding CloseQuickNotificationCommand}"/>-->
                     <!--<Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->
                     <!--<Button Content="[temp3]" Command="{Binding PopupWindow}" CommandParameter="Help"/>-->
+                    <!--<Button Content="[testMethod]" Command="{Binding TestMethodCommand}"/>-->
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                     <Button Command="{Binding StepBackCommand}">
@@ -123,7 +124,7 @@
             </Grid>
 
             <!--<Grid Width="400" Height="170" Visibility="{Binding QuickNotificationVisibility}" d:Visibility="Hidden">-->
-            <Grid Visibility="{Binding QuickNotificationVisibility}" VerticalAlignment="Top" Margin="10,40,10,10">
+            <Grid Visibility="{Binding QuickNotificationVisibility}" d:Visibility="Hidden" VerticalAlignment="Top" Margin="10,40,10,10">
                 <!--<views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>-->
                 <!--<views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>-->
                 <!--<views:QuickNotificationOverlay NotificationText="qwer"/>-->
