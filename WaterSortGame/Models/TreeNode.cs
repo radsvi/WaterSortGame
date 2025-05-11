@@ -69,10 +69,11 @@ namespace WaterSortGame.Models
         //    MainWindowVM.OnChangingGameState();
         //}
     }
-     internal class NullTreeNode<T> : TreeNode<T> where T : ValidMove
+     internal class NullTreeNode<T> : TreeNode<T> where T : ValidMove, new()
     {
         public NullTreeNode(TreeNode<T> parent) : base()
         {
+            Data = new T();
             Parent = parent;
         }
     }

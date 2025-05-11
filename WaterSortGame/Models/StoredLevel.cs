@@ -54,7 +54,7 @@ namespace WaterSortGame.Models
             this.Date = DateTime.Now;
             this.Note = noteForSavedLevel;
 
-            List<LiquidColorNames?> colorIds = new List<LiquidColorNames?>();
+            List<LiquidColorName?> colorIds = new List<LiquidColorName?>();
             for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
                 for (int y = 0; y < gameGrid.GetLength(1); y++)

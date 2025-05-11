@@ -115,7 +115,7 @@ namespace WaterSortGame.Models
         }
         private void GenerateDebugLevel()
         {
-            gameGrid = new LiquidColorNew[7, NumberOfLayers];
+            gameGrid = new LiquidColorNew[14, NumberOfLayers];
             //Tube.ResetCounter();
             SetFreshGameState();
             //Tubes?.Clear();
@@ -171,11 +171,25 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 2, 2, 2 });
             //AddTube(i++, new int[] { 3, 3 });
 
-            AddTube(i++, new int[] { 1,2,3,2 });
-            AddTube(i++, new int[] { 1,1,2,4 });
-            AddTube(i++, new int[] { 5,2,3,4 });
-            AddTube(i++, new int[] { 4,1,3,5 });
-            AddTube(i++, new int[] { 5,3,5,4 });
+            //AddTube(i++, new int[] { 1,2,3,2 });
+            //AddTube(i++, new int[] { 1,1,2,4 });
+            //AddTube(i++, new int[] { 5,2,3,4 });
+            //AddTube(i++, new int[] { 4,1,3,5 });
+            //AddTube(i++, new int[] { 5,3,5,4 });
+
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Purple, LiquidColorName.LightBlue});
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.LightBlue });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Orange});
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Purple, LiquidColorName.GrayBlue, LiquidColorName.Yellow});
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.LightBlue, LiquidColorName.Yellow, LiquidColorName.GrayBlue});
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightGreen, LiquidColorName.Blue, LiquidColorName.Olive, LiquidColorName.LightGreen});
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.LightGreen, LiquidColorName.Olive, LiquidColorName.Pink});
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightBlue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red});
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Gray, LiquidColorName.Gray, LiquidColorName.Green});
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Olive, LiquidColorName.LightGreen});
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red});
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.Orange, LiquidColorName.Purple, LiquidColorName.Orange});
+
 
 
             //AddTube(i++, new int[] { });
@@ -190,6 +204,13 @@ namespace WaterSortGame.Models
             for (int i = 0; i < layers.Length; i++)
             {
                 this[tubeNumber, i] = new LiquidColorNew(layers[i]);
+            }
+        }
+        private void AddTube(int tubeNumber, LiquidColorName[] liquids)
+        {
+            for (int i = 0; i < liquids.Length; i++)
+            {
+                this[tubeNumber, i] = new LiquidColorNew((int)liquids[i]);
             }
         }
         /// <summary>
@@ -410,7 +431,7 @@ namespace WaterSortGame.Models
         private int CountColors()
         {
             int numberOfColors = 0;
-            List<LiquidColorNames?> liquidColors = new List<LiquidColorNames?>();
+            List<LiquidColorName?> liquidColors = new List<LiquidColorName?>();
             for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
                 for (int y = 0; y < gameGrid.GetLength(1); y++)

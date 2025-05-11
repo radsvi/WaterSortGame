@@ -39,14 +39,25 @@ namespace WaterSortGame.Models
                 TreeNode<ValidMove> highestPriority_TreeNode;
                 if (treeNode.Visited == true)
                 {
-                    treeNode = treeNode.Parent.FirstChild;
+                    treeNode = treeNode.Parent;
+                    MakeAMove(treeNode);
+                    Notification.Show("Returning to previous move");
+                    treeNode = treeNode.FirstChild;
+                    await WaitForContinueButton();
 
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
 
-                    if (highestPriority_TreeNode.Visited is true)
+                    if (highestPriority_TreeNode.StepNumber == -1) // this means that the NullTreeNode has been chosen
                     {
                         treeNode = highestPriority_TreeNode.Parent;
-                        Notification.Show("All visited siblings, returning to parent");
+                        Notification.Show("All siblings visited, returning to parent");
+                        continue;
+                    }
+                    else
+                    {
+                        treeNode = highestPriority_TreeNode;
+                        Notification.Show("Continuing with next child");
+                        MakeAMove(treeNode);
                         continue;
                     }
                 }
@@ -80,7 +91,7 @@ namespace WaterSortGame.Models
                         {
                             treeNode.Visited = true;
 
-                            Notification.Show("Returning to previous branch");
+                            Notification.Show("Reached a dead end");
                             continue;
                         }
 
@@ -88,19 +99,18 @@ namespace WaterSortGame.Models
                     }
 
                     // Pro kazdy validMove vytvorim sibling ve strome:
-                    CreatePossibleNextStates(treeNode, validMoves);
+                    CreateAllPossibleNextStates(treeNode, validMoves);
 
                     // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode.FirstChild);
+
+                    MakeAMove(highestPriority_TreeNode);
+                    treeNode = highestPriority_TreeNode;
                 }
-
-
-                MakeAMove(highestPriority_TreeNode);
-                treeNode = highestPriority_TreeNode;
             }
         }
 
-        private void CreatePossibleNextStates(TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
+        private void CreateAllPossibleNextStates(TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
         {
             var node = parentNode;
             for (int i = 0; i < validMoves.Count; i++)
@@ -139,9 +149,11 @@ namespace WaterSortGame.Models
                 {
                     highestPriority_TreeNode = currentNode;
                 }
+
                 currentNode = currentNode.NextSibling;
             }
-            highestPriority_TreeNode.Data.SolutionValue = GetSolutionValue(highestPriority_TreeNode.Data.GameState);
+            if (highestPriority_TreeNode.StepNumber != -1)
+                highestPriority_TreeNode.Data.SolutionValue = GetStepValue(highestPriority_TreeNode.Data.GameState);
 
             return highestPriority_TreeNode;
         }
@@ -163,13 +175,13 @@ namespace WaterSortGame.Models
         /// <summary>
         /// Determines how close we are to a solution. Higher value means closer to a solution
         /// </summary>
-        private int GetSolutionValue(LiquidColorNew[,] gameState)
+        private int GetStepValue(LiquidColorNew[,] gameState)
         {
             int solutionValue = 0;
             
             for (int x = 0; x < gameState.GetLength(0); x++)
             {
-                LiquidColorNames? lastColor = null;
+                LiquidColorName? lastColor = null;
                 for (int y = 0; y < gameState.GetLength(1); y++)
                 {
                     if (gameState[x, y] is null)
@@ -380,7 +392,7 @@ namespace WaterSortGame.Models
 
             return (true, numberOfRepeatingLiquids);
         }
-        private List<KeyValuePair<LiquidColorNames, int>> PickMostFrequentColor(List<PositionPointer> movableLiquids)
+        private List<KeyValuePair<LiquidColorName, int>> PickMostFrequentColor(List<PositionPointer> movableLiquids)
         {
 
 
@@ -388,7 +400,7 @@ namespace WaterSortGame.Models
             //for (int i = 0; i < LiquidColorNew.ColorKeys.Count; i++)
             //    colorCount[i] = new Tuple<LiquidColorNames, int>(LiquidColorNew.ColorKeys[i].Name, 0);
 
-            Dictionary<LiquidColorNames, int> colorCount = new Dictionary<LiquidColorNames, int>();
+            Dictionary<LiquidColorName, int> colorCount = new Dictionary<LiquidColorName, int>();
             foreach (var colorItem in LiquidColorNew.ColorKeys)
             {
                 //colorCount.Add(new KeyValuePair<LiquidColorNames, int>(colorItem.Name, 0));
@@ -398,7 +410,7 @@ namespace WaterSortGame.Models
 
             foreach (var liquid in movableLiquids)
             {
-                colorCount[(LiquidColorNames)liquid.ColorName]++;
+                colorCount[(LiquidColorName)liquid.ColorName]++;
             }
             //var colorCountSorted = (Dictionary<LiquidColorNames, int>)from entry in colorCount orderby entry.Value ascending select entry;
             //var colorCountSorted = from entry in colorCount orderby entry.Value ascending select entry;

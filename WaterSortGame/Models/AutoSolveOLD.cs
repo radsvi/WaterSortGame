@@ -123,7 +123,7 @@ namespace WaterSortGame.Models
         /// <summary>
         /// Used to later pick moves that are able to move most colors at once
         /// </summary>
-        private List<KeyValuePair<LiquidColorNames, int>> PickMostFrequentColor(List<PositionPointer> movableLiquids)
+        private List<KeyValuePair<LiquidColorName, int>> PickMostFrequentColor(List<PositionPointer> movableLiquids)
         {
             
 
@@ -131,7 +131,7 @@ namespace WaterSortGame.Models
             //for (int i = 0; i < LiquidColorNew.ColorKeys.Count; i++)
             //    colorCount[i] = new Tuple<LiquidColorNames, int>(LiquidColorNew.ColorKeys[i].Name, 0);
 
-            Dictionary<LiquidColorNames, int> colorCount = new Dictionary<LiquidColorNames, int>();
+            Dictionary<LiquidColorName, int> colorCount = new Dictionary<LiquidColorName, int>();
             foreach (var colorItem in LiquidColorNew.ColorKeys)
             {
                 //colorCount.Add(new KeyValuePair<LiquidColorNames, int>(colorItem.Name, 0));
@@ -141,7 +141,7 @@ namespace WaterSortGame.Models
 
             foreach (var liquid in movableLiquids)
             {
-                colorCount[(LiquidColorNames)liquid.ColorName]++;
+                colorCount[(LiquidColorName)liquid.ColorName]++;
             }
             //var colorCountSorted = (Dictionary<LiquidColorNames, int>)from entry in colorCount orderby entry.Value ascending select entry;
             //var colorCountSorted = from entry in colorCount orderby entry.Value ascending select entry;

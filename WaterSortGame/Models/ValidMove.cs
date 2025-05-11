@@ -21,6 +21,7 @@ namespace WaterSortGame.Models
             IsTargetSingleColor = isTargetSingleColor;
             //CalculatePriority();
         }
+        public ValidMove() {}
         public ValidMove(LiquidColorNew[,] gameState)
         {
             GameState = gameState;

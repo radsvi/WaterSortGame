@@ -10,7 +10,7 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    internal enum LiquidColorNames
+    internal enum LiquidColorName
     {
         Blue,
         GrayBlue,
@@ -27,21 +27,21 @@ namespace WaterSortGame.Models
     }
     internal class LiquidColorNew
     {
-        public LiquidColorNames Name { get; set; }
+        public LiquidColorName Name { get; set; }
         public SolidColorBrush Brush { get; set; }
         public static List<LiquidColorNew> ColorKeys { get; } = new List<LiquidColorNew>() {
-            new LiquidColorNew(LiquidColorNames.Blue, new SolidColorBrush(Color.FromRgb(20,93,239))),
-            new LiquidColorNew(LiquidColorNames.GrayBlue, new SolidColorBrush(Color.FromRgb(63,68,130))),
-            new LiquidColorNew(LiquidColorNames.LightBlue, new SolidColorBrush(Color.FromRgb(136,170,255))),
-            new LiquidColorNew(LiquidColorNames.Orange, new SolidColorBrush(Color.FromRgb(242,121,20))),
-            new LiquidColorNew(LiquidColorNames.Gray, new SolidColorBrush(Color.FromRgb(108,116,144))),
-            new LiquidColorNew(LiquidColorNames.Purple, new SolidColorBrush(Color.FromRgb(191,60,191))),
-            new LiquidColorNew(LiquidColorNames.Yellow, new SolidColorBrush(Color.FromRgb(244,201,22))),
-            new LiquidColorNew(LiquidColorNames.Pink, new SolidColorBrush(Color.FromRgb(255,148,209))),
-            new LiquidColorNew(LiquidColorNames.Green, new SolidColorBrush(Color.FromRgb(0,129,96))),
-            new LiquidColorNew(LiquidColorNames.LightGreen, new SolidColorBrush(Color.FromRgb(179,214,102))),
-            new LiquidColorNew(LiquidColorNames.Olive, new SolidColorBrush(Color.FromRgb(128,153,23))),
-            new LiquidColorNew(LiquidColorNames.Red, new SolidColorBrush(Color.FromRgb(188,36,94))),
+            new LiquidColorNew(LiquidColorName.Blue, new SolidColorBrush(Color.FromRgb(20,93,239))),
+            new LiquidColorNew(LiquidColorName.GrayBlue, new SolidColorBrush(Color.FromRgb(63,68,130))),
+            new LiquidColorNew(LiquidColorName.LightBlue, new SolidColorBrush(Color.FromRgb(136,170,255))),
+            new LiquidColorNew(LiquidColorName.Orange, new SolidColorBrush(Color.FromRgb(242,121,20))),
+            new LiquidColorNew(LiquidColorName.Gray, new SolidColorBrush(Color.FromRgb(108,116,144))),
+            new LiquidColorNew(LiquidColorName.Purple, new SolidColorBrush(Color.FromRgb(191,60,191))),
+            new LiquidColorNew(LiquidColorName.Yellow, new SolidColorBrush(Color.FromRgb(244,201,22))),
+            new LiquidColorNew(LiquidColorName.Pink, new SolidColorBrush(Color.FromRgb(255,148,209))),
+            new LiquidColorNew(LiquidColorName.Green, new SolidColorBrush(Color.FromRgb(0,129,96))),
+            new LiquidColorNew(LiquidColorName.LightGreen, new SolidColorBrush(Color.FromRgb(179,214,102))),
+            new LiquidColorNew(LiquidColorName.Olive, new SolidColorBrush(Color.FromRgb(128,153,23))),
+            new LiquidColorNew(LiquidColorName.Red, new SolidColorBrush(Color.FromRgb(188,36,94))),
         };
         //public static List<LiquidColorNew> CloneColorKeys()
         //{
@@ -55,17 +55,17 @@ namespace WaterSortGame.Models
         private LiquidColorNew() { }
         public LiquidColorNew(int colorId)
         {
-            var obj = GetColor((LiquidColorNames)colorId);
+            var obj = GetColor((LiquidColorName)colorId);
             Name = obj.Name;
             Brush = obj.Brush;
         }
-        public LiquidColorNew(LiquidColorNames colorName)
+        public LiquidColorNew(LiquidColorName colorName)
         {
-            var obj = GetColor((LiquidColorNames)colorName);
+            var obj = GetColor((LiquidColorName)colorName);
             Name = obj.Name;
             Brush = obj.Brush;
         }
-        private LiquidColorNew(LiquidColorNames name, SolidColorBrush brush)
+        private LiquidColorNew(LiquidColorName name, SolidColorBrush brush)
         {
             Name = name;
             Brush = brush;
@@ -74,7 +74,7 @@ namespace WaterSortGame.Models
         //{
         //    return ColorKeys.Where(key => key.Name == Name).ToList()[0].Brush;
         //}
-        private LiquidColorNew GetColor(LiquidColorNames Name)
+        private LiquidColorNew GetColor(LiquidColorName Name)
         {
             return ColorKeys.Where(key => key.Name == Name).ToList()[0];
         }
