@@ -121,96 +121,83 @@ namespace WaterSortGame.Models
             //Tubes?.Clear();
             
             int i = 0;
-            //Action tubesDelegate = ManuallyDeclareTubes;
-            Action tubesDelegate = () => {
+            gameGrid = new LiquidColorNew[20, NumberOfLayers];
 
-                //AddTube(i++, new int[] { 1, 1, 4, 4 });
-                //AddTube(i++, new int[] { 8, 8, 1, 1 });
-                //AddTube(i++, new int[] { 4, 4, 8, 8 });
-                //AddTube(i++, new int[] { 3, 3, 3 });
-                //AddTube(i++, new int[] { 7, 7, 7 });
-                //AddTube(i++, new int[] { 3 });
-                //AddTube(i++, new int[] { 7 });
+            //AddTube(i++, new int[] { 1, 1, 4, 4 });
+            //AddTube(i++, new int[] { 8, 8, 1, 1 });
+            //AddTube(i++, new int[] { 4, 4, 8, 8 });
+            //AddTube(i++, new int[] { 3, 3, 3 });
+            //AddTube(i++, new int[] { 7, 7, 7 });
+            //AddTube(i++, new int[] { 3 });
+            //AddTube(i++, new int[] { 7 });
 
-                //AddTube(i++, new int[] { 1, 1, 4, 4 });
-                //AddTube(i++, new int[] { 8, 8, 1, 1 });
-                //AddTube(i++, new int[] { 4, 4, 8, 8 });
-                //AddTube(i++, new int[] { 3, 3, 3 });
-                //AddTube(i++, new int[] { 7, 7, 7 });
-                //AddTube(i++, new int[] { 3 });
-                //AddTube(i++, new int[] { 7 });
+            //AddTube(i++, new int[] { 1, 1, 4, 4 });
+            //AddTube(i++, new int[] { 8, 8, 1, 1 });
+            //AddTube(i++, new int[] { 4, 4, 8, 8 });
+            //AddTube(i++, new int[] { 3, 3, 3 });
+            //AddTube(i++, new int[] { 7, 7, 7 });
+            //AddTube(i++, new int[] { 3 });
+            //AddTube(i++, new int[] { 7 });
 
-                //AddTube(i++, new int[] { 1, 1, 1, 2 });
-                //AddTube(i++, new int[] {  });
-                //AddTube(i++, new int[] { 2, 2, 2 });
-                //AddTube(i++, new int[] { 1 });
-                //AddTube(i++, new int[] { 4, 4, 4, 4, });
+            //AddTube(i++, new int[] { 1, 1, 1, 2 });
+            //AddTube(i++, new int[] {  });
+            //AddTube(i++, new int[] { 2, 2, 2 });
+            //AddTube(i++, new int[] { 1 });
+            //AddTube(i++, new int[] { 4, 4, 4, 4, });
 
-                //AddTube(i++, new int[] { });
-                //AddTube(i++, new int[] { 1 });
-                //AddTube(i++, new int[] { 1,1,1 });
-                //AddTube(i++, new int[] { 3,3,3,3 });
-                //AddTube(i++, new int[] { 4, 4, 4, 4, });
-
-
-                //AddTube(i++, new int[] { 1,2,2,3 });
-                //AddTube(i++, new int[] { 4,3,2,1 });
-                //AddTube(i++, new int[] { 1,3,1,4 });
-                //AddTube(i++, new int[] { 2,3,4,4 });
-                //AddTube(i++, new int[] {  });
-                //AddTube(i++, new int[] {  });
-
-                //AddTube(i++, new int[] { 1, 1, 1, 1 });
-                //AddTube(i++, new int[] { 2, 3, 3, 3 });
-                //AddTube(i++, new int[] { });
-                //AddTube(i++, new int[] { 2, 3 });
-                //AddTube(i++, new int[] { 4,4,4,4 });
-                //AddTube(i++, new int[] { 5,5,});
-                //AddTube(i++, new int[] { 6,6,6,6});
-
-                //AddTube(i++, new int[] { });
-                //AddTube(i++, new int[] { 1, 1, 1, 1 });
-                //AddTube(i++, new int[] { 2, 3, 3 });
-                //AddTube(i++, new int[] { 2, 2, 2 });
-                //AddTube(i++, new int[] { 3, 3 });
-
-                //AddTube(i++, new int[] { 1,2,3,2 });
-                //AddTube(i++, new int[] { 1,1,2,4 });
-                //AddTube(i++, new int[] { 5,2,3,4 });
-                //AddTube(i++, new int[] { 4,1,3,5 });
-                //AddTube(i++, new int[] { 5,3,5,4 });
-
-                //tubesDelegate = delegate (object param)
-                //{
-
-                //};
-                //tubesDelegate();
-                //tubesDelegate = ManuallyDeclareTubes;
-
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Purple, LiquidColorName.LightBlue });
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.LightBlue });
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Orange });
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Purple, LiquidColorName.GrayBlue, LiquidColorName.Yellow });
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.LightBlue, LiquidColorName.Yellow, LiquidColorName.GrayBlue });
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.LightGreen, LiquidColorName.Blue, LiquidColorName.Olive, LiquidColorName.LightGreen });
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.LightGreen, LiquidColorName.Olive, LiquidColorName.Pink });
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.LightBlue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Gray, LiquidColorName.Gray, LiquidColorName.Green });
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Olive, LiquidColorName.LightGreen });
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
-                AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.Orange, LiquidColorName.Purple, LiquidColorName.Orange });
-
-                //AddTube(i++, new int[] { });
-                //AddTube(i++, new int[] { 1, 1, 2, 2 });
-                //AddTube(i++, new int[] { 2, 2, 1, 1 });
-                //AddTube(i++, new int[] {  });
-            };
-
-            //gameGrid = new LiquidColorNew[i + 2, NumberOfLayers];
-            gameGrid = new LiquidColorNew[14, NumberOfLayers];
-            tubesDelegate();
+            //AddTube(i++, new int[] { });
+            //AddTube(i++, new int[] { 1 });
+            //AddTube(i++, new int[] { 1,1,1 });
+            //AddTube(i++, new int[] { 3,3,3,3 });
+            //AddTube(i++, new int[] { 4, 4, 4, 4, });
 
 
+            //AddTube(i++, new int[] { 1,2,2,3 });
+            //AddTube(i++, new int[] { 4,3,2,1 });
+            //AddTube(i++, new int[] { 1,3,1,4 });
+            //AddTube(i++, new int[] { 2,3,4,4 });
+            //AddTube(i++, new int[] {  });
+            //AddTube(i++, new int[] {  });
+
+            //AddTube(i++, new int[] { 1, 1, 1, 1 });
+            //AddTube(i++, new int[] { 2, 3, 3, 3 });
+            //AddTube(i++, new int[] { });
+            //AddTube(i++, new int[] { 2, 3 });
+            //AddTube(i++, new int[] { 4,4,4,4 });
+            //AddTube(i++, new int[] { 5,5,});
+            //AddTube(i++, new int[] { 6,6,6,6});
+
+            //AddTube(i++, new int[] { });
+            //AddTube(i++, new int[] { 1, 1, 1, 1 });
+            //AddTube(i++, new int[] { 2, 3, 3 });
+            //AddTube(i++, new int[] { 2, 2, 2 });
+            //AddTube(i++, new int[] { 3, 3 });
+
+            //AddTube(i++, new int[] { 1,2,3,2 });
+            //AddTube(i++, new int[] { 1,1,2,4 });
+            //AddTube(i++, new int[] { 5,2,3,4 });
+            //AddTube(i++, new int[] { 4,1,3,5 });
+            //AddTube(i++, new int[] { 5,3,5,4 });
+
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Purple, LiquidColorName.LightBlue });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.LightBlue });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Orange });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Purple, LiquidColorName.GrayBlue, LiquidColorName.Yellow });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.LightBlue, LiquidColorName.Yellow, LiquidColorName.GrayBlue });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightGreen, LiquidColorName.Blue, LiquidColorName.Olive, LiquidColorName.LightGreen });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.LightGreen, LiquidColorName.Olive, LiquidColorName.Pink });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightBlue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Gray, LiquidColorName.Gray, LiquidColorName.Green });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Olive, LiquidColorName.LightGreen });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.Orange, LiquidColorName.Purple, LiquidColorName.Orange });
+
+            //AddTube(i++, new int[] { });
+            //AddTube(i++, new int[] { 1, 1, 2, 2 });
+            //AddTube(i++, new int[] { 2, 2, 1, 1 });
+            //AddTube(i++, new int[] {  });
+
+            gameGrid = CloneGrid(gameGrid, i + 2);
             StoreStartingGrid();
         }
         private void AddTube(int tubeNumber, int[] layers)
