@@ -109,7 +109,7 @@
                     <!--<Button Content="[temp2]" Command="{Binding CloseQuickNotificationCommand}"/>-->
                     <!--<Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->
                     <!--<Button Content="[temp3]" Command="{Binding PopupWindow}" CommandParameter="Help"/>-->
-                    <!--<Button Content="[testMethod]" Command="{Binding TestMethodCommand}"/>-->
+                    <Button Content="[testMethod]" Command="{Binding TestMethodCommand}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                     <Button Command="{Binding StepBackCommand}">

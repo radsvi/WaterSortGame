@@ -115,60 +115,7 @@ namespace WaterSortGame.Models
         {
             
         }
-        static TreeNode<ValidMove> GetLastNode(TreeNode<ValidMove> currentNode)
-        {
-            while (currentNode != null && currentNode.NextSibling != null)
-                currentNode = currentNode.NextSibling;
-            return currentNode;
-        }
-
-        //static TreeNode<ValidMove> Partition(TreeNode<ValidMove> head, TreeNode<ValidMove> tail)
-        //{
-
-        //    // Select the first TreeNode<ValidMove> as the pivot TreeNode<ValidMove>
-        //    TreeNode<ValidMove> pivot = head;
-
-        //    // 'pre' and 'curr' are used to shift all
-        //    // smaller TreeNode<ValidMove>s' data to the left side of the pivot TreeNode<ValidMove>
-        //    TreeNode<ValidMove> pre = head;
-        //    TreeNode<ValidMove> curr = head;
-
-        //    // Traverse the list until you reach the TreeNode<ValidMove> after the tail
-        //    while (curr != tail.NextSibling)
-        //    {
-
-        //        // If current TreeNode<ValidMove>'s data is less than the pivot's data
-        //        if (curr.Data.Priority < pivot.Data.Priority)
-        //        {
-
-        //            // Swap the data between 'curr' and 'pre->Next'
-        //            var currentSibling = curr;
-        //            var nextSibling = curr.NextSibling;
-
-
-
-
-
-        //            int temp = curr.Data;
-        //            curr.Data = pre.NextSibling.Data;
-        //            pre.NextSibling.Data = temp;
-
-        //            // Move 'pre' to the next TreeNode<ValidMove>
-        //            pre = pre.NextSibling;
-        //        }
-
-        //        // Move 'curr' to the next TreeNode<ValidMove>
-        //        curr = curr.NextSibling;
-        //    }
-
-        //    // Swap the pivot's data with 'pre' data
-        //    int currData = pivot.Data;
-        //    pivot.Data = pre.Data;
-        //    pre.Data = currData;
-
-        //    // Return 'pre' as the new pivot
-        //    return pre;
-        //}
+        
 
         private void CreateAllPossibleNextStates(TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
         {
