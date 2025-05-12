@@ -37,7 +37,7 @@ namespace WaterSortGame.Models
                 await WaitForButtonPress();
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
-                if (treeNode.Visited == true)
+                if (treeNode.Data.Visited == true)
                 {
                     treeNode = treeNode.Parent;
                     MakeAMove(treeNode);
@@ -47,7 +47,7 @@ namespace WaterSortGame.Models
 
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
 
-                    if (highestPriority_TreeNode.StepNumber == -1) // this means that the NullTreeNode has been chosen
+                    if (highestPriority_TreeNode.Data.StepNumber == -1) // this means that the NullTreeNode has been chosen
                     {
                         //treeNode.Visited = true;
                         treeNode = highestPriority_TreeNode.Parent;
@@ -90,7 +90,7 @@ namespace WaterSortGame.Models
                     {
                         if (MainWindowVM.GameState.IsLevelCompleted() is false)
                         {
-                            treeNode.Visited = true;
+                            treeNode.Data.Visited = true;
 
                             Notification.Show("Reached a dead end");
                             continue;
@@ -111,13 +111,64 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        private void SortTreeNodeSiblings(TreeNode<ValidMove> node) // merge sort
+        private void SortTreeNodeSiblings(TreeNode<ValidMove> node)
         {
-            while (true)
-            {
-
-            }
+            
         }
+        static TreeNode<ValidMove> GetLastNode(TreeNode<ValidMove> currentNode)
+        {
+            while (currentNode != null && currentNode.NextSibling != null)
+                currentNode = currentNode.NextSibling;
+            return currentNode;
+        }
+
+        //static TreeNode<ValidMove> Partition(TreeNode<ValidMove> head, TreeNode<ValidMove> tail)
+        //{
+
+        //    // Select the first TreeNode<ValidMove> as the pivot TreeNode<ValidMove>
+        //    TreeNode<ValidMove> pivot = head;
+
+        //    // 'pre' and 'curr' are used to shift all
+        //    // smaller TreeNode<ValidMove>s' data to the left side of the pivot TreeNode<ValidMove>
+        //    TreeNode<ValidMove> pre = head;
+        //    TreeNode<ValidMove> curr = head;
+
+        //    // Traverse the list until you reach the TreeNode<ValidMove> after the tail
+        //    while (curr != tail.NextSibling)
+        //    {
+
+        //        // If current TreeNode<ValidMove>'s data is less than the pivot's data
+        //        if (curr.Data.Priority < pivot.Data.Priority)
+        //        {
+
+        //            // Swap the data between 'curr' and 'pre->Next'
+        //            var currentSibling = curr;
+        //            var nextSibling = curr.NextSibling;
+
+
+
+
+
+        //            int temp = curr.Data;
+        //            curr.Data = pre.NextSibling.Data;
+        //            pre.NextSibling.Data = temp;
+
+        //            // Move 'pre' to the next TreeNode<ValidMove>
+        //            pre = pre.NextSibling;
+        //        }
+
+        //        // Move 'curr' to the next TreeNode<ValidMove>
+        //        curr = curr.NextSibling;
+        //    }
+
+        //    // Swap the pivot's data with 'pre' data
+        //    int currData = pivot.Data;
+        //    pivot.Data = pre.Data;
+        //    pre.Data = currData;
+
+        //    // Return 'pre' as the new pivot
+        //    return pre;
+        //}
 
         private void CreateAllPossibleNextStates(TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
         {
@@ -152,20 +203,20 @@ namespace WaterSortGame.Models
         private TreeNode<ValidMove> PickHighestPriorityNonVisitedNode(TreeNode<ValidMove> node)
         {
             var currentNode = node;
-            TreeNode<ValidMove> highestPriority_TreeNode = new NullTreeNode<ValidMove>(currentNode);
+            TreeNode<ValidMove> highestPriority_TreeNode = new NullTreeNode(currentNode);
             while (currentNode != null)
             {
-                if (highestPriority_TreeNode.Data.Priority < currentNode.Data.Priority && currentNode.Visited is false)
+                if (highestPriority_TreeNode.Data.Priority < currentNode.Data.Priority && currentNode.Data.Visited is false)
                 {
                     highestPriority_TreeNode = currentNode;
                 }
 
                 currentNode = currentNode.NextSibling;
             }
-            if (highestPriority_TreeNode.StepNumber != -1)
+            if (highestPriority_TreeNode.Data.StepNumber != -1)
             {
                 if (node.Parent is not null) 
-                    node.Parent.Visited = true;
+                    node.Parent.Data.Visited = true;
                 highestPriority_TreeNode.Data.SolutionValue = GetStepValue(highestPriority_TreeNode.Data.GameState);
             }
 

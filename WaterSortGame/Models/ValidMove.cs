@@ -22,9 +22,14 @@ namespace WaterSortGame.Models
             //CalculatePriority();
         }
         public ValidMove() {}
+        private protected ValidMove(bool nullMove)
+        {
+            StepNumber = -1;
+        }
         public ValidMove(LiquidColorNew[,] gameState)
         {
             GameState = gameState;
+            StepNumber = stepCounter++;
         }
         //public PositionPointer Source { get; private set; }
         private PositionPointer source;
@@ -40,6 +45,9 @@ namespace WaterSortGame.Models
                 }
             }
         }
+        private static protected int stepCounter = 0;
+        public int StepNumber { get; set; }
+        public bool Visited { get; set; }
         public PositionPointer Target { get; private set; }
         public bool IsTargetSingleColor { get; private set; }
         public LiquidColorNew Liquid { get; private set; }
@@ -91,5 +99,8 @@ namespace WaterSortGame.Models
             Priority = newPriority;
         }
     }
-
+    internal class NullValidMove : ValidMove
+    {
+        public NullValidMove() : base(true) {}
+    }
 }

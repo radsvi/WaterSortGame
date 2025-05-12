@@ -6,24 +6,20 @@ using System.Threading.Tasks;
 
 namespace WaterSortGame.Models
 {
-    internal class TreeNode<T> where T : ValidMove // temporary limitation. change later..
+    internal class TreeNode<T> where T : ValidMove, new() // temporary limitation. change later..
     {
-        private static protected int stepCounter = 0;
+        
         public T Data { get; private protected set; }
         public TreeNode<T>? Parent { get; private protected set; }
         public TreeNode<T>? FirstChild { get; private protected set; }
         public TreeNode<T>? NextSibling { get; private protected set; }
-        public bool Visited { get; set; }
-        public int StepNumber { get; set; }
         private protected TreeNode()
         {
-            Data = null;
-            StepNumber = -1;
+            Data = new T();
         }
         public TreeNode(T data)
         {
             Data = data;
-            StepNumber = stepCounter++;
         }
         public void AddSibling(TreeNode<T> siblingNode)
         {
@@ -74,11 +70,11 @@ namespace WaterSortGame.Models
         //    MainWindowVM.OnChangingGameState();
         //}
     }
-     internal class NullTreeNode<T> : TreeNode<T> where T : ValidMove, new()
+    internal class NullTreeNode : TreeNode<ValidMove>
     {
-        public NullTreeNode(TreeNode<T> parent) : base()
+        public NullTreeNode(TreeNode<ValidMove> parent) : base()
         {
-            Data = new T();
+            Data = new NullValidMove();
             Parent = parent;
         }
     }
