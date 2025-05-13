@@ -11,8 +11,8 @@ namespace WaterSortGame.Models
     internal class TreeNode<T> where T : ValidMove, new() // temporary limitation. change later..
     {
 
-        //public T Data { get; private protected set; }
-        public T Data { get; set; }
+        public T Data { get; private protected set; }
+        //public T Data { get; set; }
         public TreeNode<T>? Parent { get; private protected set; }
         public TreeNode<T>? FirstChild { get; private protected set; }
         public TreeNode<T>? NextSibling { get; private protected set; }
@@ -109,19 +109,12 @@ namespace WaterSortGame.Models
                 {
                     jNode.SwapData(iNode.NextSibling);
 
-                    //var temp = jNode.Data;
-                    //jNode.Data = iNode.NextSibling.Data;
-                    //iNode.NextSibling.Data = temp;
-
-                    DebugPrintAllSiblings(head);
+                    //DebugPrintAllSiblings(head);
                     iNode = iNode.NextSibling;
                 }
                 jNode = jNode.NextSibling;
             }
             iNode.SwapData(pivot);
-            //var temp2 = iNode.Data;
-            //iNode.Data = pivot.Data;
-            //pivot.Data = temp2;
 
             return iNode;
         }
@@ -142,28 +135,22 @@ namespace WaterSortGame.Models
             QuickSortHelper(head, tail);
             return head;
         }
-        private static void DebugPrint(TreeNode<ValidMove> first, TreeNode<ValidMove> second)
-        {
-            Debug.Write($"[{first.Data.StepNumber}: {first.Data.Priority}], ");
-            Debug.Write($"[{second.Data.StepNumber}: {second.Data.Priority}]\n");
-        }
-        private static void DebugPrintAllSiblings(TreeNode<ValidMove> firstNode)
-        {
-            var currentNode = firstNode;
-            while (currentNode is not null)
-            {
-                //Debug.Write($"[{currentNode.Data.StepNumber}: {currentNode.Data.Priority}], ");
-                Debug.Write($"[{currentNode.Data.Priority}], ");
-
-                currentNode = currentNode.NextSibling;
-            }
-            Debug.WriteLine("");
-        }
-        //public static void SwapData(TreeNode<ValidMove> first, TreeNode<ValidMove> second)
+        //private static void DebugPrint(TreeNode<ValidMove> first, TreeNode<ValidMove> second)
         //{
-        //    ValidMove temp = first.Data;
-        //    first.Data = second.Data;
-        //    second.Data = temp;
+        //    Debug.Write($"[{first.Data.StepNumber}: {first.Data.Priority}], ");
+        //    Debug.Write($"[{second.Data.StepNumber}: {second.Data.Priority}]\n");
+        //}
+        //private static void DebugPrintAllSiblings(TreeNode<ValidMove> firstNode)
+        //{
+        //    var currentNode = firstNode;
+        //    while (currentNode is not null)
+        //    {
+        //        //Debug.Write($"[{currentNode.Data.StepNumber}: {currentNode.Data.Priority}], ");
+        //        Debug.Write($"[{currentNode.Data.Priority}], ");
+
+        //        currentNode = currentNode.NextSibling;
+        //    }
+        //    Debug.WriteLine("");
         //}
     }
 }

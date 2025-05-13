@@ -36,7 +36,7 @@ namespace WaterSortGame.Models
         public PositionPointer Source
         {
             get { return source; }
-            private set
+            private protected set
             {
                 if (value != source)
                 {
@@ -48,9 +48,9 @@ namespace WaterSortGame.Models
         private static protected int stepCounter = 0;
         public int StepNumber { get; set; }
         public bool Visited { get; set; }
-        public PositionPointer Target { get; private set; }
+        public PositionPointer Target { get; private protected set; }
         public bool IsTargetSingleColor { get; private set; }
-        public LiquidColorNew Liquid { get; private set; }
+        public LiquidColorNew Liquid { get; private protected set; }
         public float Priority { get; set; } = 0; // higher weight means better move
         public LiquidColorNew[,] GameState { get; set; }
         public int SolutionValue { get; set; }
@@ -101,6 +101,11 @@ namespace WaterSortGame.Models
     }
     internal class NullValidMove : ValidMove
     {
-        public NullValidMove() : base(true) {}
+        public NullValidMove() : base(true) {
+            GameState = new LiquidColorNew[0,0];
+            Target = new NullPositionPointer();
+            Source = new NullPositionPointer();
+            Liquid = new NullLiquidColorNew();
+        }
     }
 }

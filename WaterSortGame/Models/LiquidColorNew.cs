@@ -24,6 +24,7 @@ namespace WaterSortGame.Models
         LightGreen,
         Olive,
         Red,
+        Blank
     }
     internal class LiquidColorNew
     {
@@ -52,7 +53,7 @@ namespace WaterSortGame.Models
         //    }
         //    return result;
         //}
-        private LiquidColorNew() { }
+        private protected LiquidColorNew() { }
         public LiquidColorNew(int colorId)
         {
             var obj = GetColor((LiquidColorName)colorId);
@@ -122,5 +123,13 @@ namespace WaterSortGame.Models
         //{
         //    return !OperatorOverload(first, second);
         //}
+    }
+    internal class NullLiquidColorNew : LiquidColorNew
+    {
+        public NullLiquidColorNew() : base()
+        {
+            Name = LiquidColorName.Blank;
+            Brush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
+        }
     }
 }

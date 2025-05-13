@@ -111,12 +111,6 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        private void SortTreeNodeSiblings(TreeNode<ValidMove> node)
-        {
-            
-        }
-        
-
         private void CreateAllPossibleNextStates(TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
         {
             var node = parentNode;
@@ -149,35 +143,29 @@ namespace WaterSortGame.Models
         /// </summary>
         private TreeNode<ValidMove> PickHighestPriorityNonVisitedNode(TreeNode<ValidMove> node)
         {
-            var currentNode = node;
-            TreeNode<ValidMove> highestPriority_TreeNode = new NullTreeNode(currentNode);
+            TreeNode<ValidMove> currentNode = node;
+            TreeNode<ValidMove> resultNode = new NullTreeNode(node);
             while (currentNode != null)
             {
-                if (highestPriority_TreeNode.Data.Priority < currentNode.Data.Priority && currentNode.Data.Visited is false)
+                if (currentNode.Data.Visited is false)
                 {
-                    highestPriority_TreeNode = currentNode;
+                    resultNode = currentNode;
+                    break; // i have got it sorted by priority, so first non-visited is fine
                 }
 
                 currentNode = currentNode.NextSibling;
             }
-            if (highestPriority_TreeNode.Data.StepNumber != -1)
+            if (resultNode.Data.StepNumber != -1)
             {
-                if (node.Parent is not null) 
+                if (node.Parent is not null)
+                {
                     node.Parent.Data.Visited = true;
-                highestPriority_TreeNode.Data.SolutionValue = GetStepValue(highestPriority_TreeNode.Data.GameState);
+                }
+                resultNode.Data.SolutionValue = GetStepValue(resultNode.Data.GameState);
             }
 
-            return highestPriority_TreeNode;
+            return resultNode;
         }
-        //private TreeNode<ValidMove> PickHighestPriorityNonVisitedNode_Recursive(TreeNode<ValidMove> node)
-        //{
-        //    if (node.NextSibling is null)
-        //    {
-        //        return node.Parent;
-        //    }
-
-
-        //}
         private void MakeAMove(TreeNode<ValidMove> node)
         {
             Debug.WriteLine($"# [{node.Data.Source.X},{node.Data.Source.Y}] => [{node.Data.Target.X},{node.Data.Target.Y}] {{{node.Data.Source.ColorName}}} {{HowMany {node.Data.Source.NumberOfRepeatingLiquids}}}");
