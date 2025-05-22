@@ -357,67 +357,13 @@ namespace WaterSortGame.ViewModels
         public RelayCommand TestMethodCommand => new RelayCommand(execute => TestMethod());
         private void TestMethod()
         {
-            //TreeNode<ValidMove> node = new TreeNode<ValidMove>(new ValidMove(null));
-            //var startintNode = node;
-            //TreeNode<ValidMove> nextNode;
+            GameStateToHash(GameState.gameGrid);
+        }
+        private void GameStateToHash(LiquidColorNew[,] gameState) // ## zmenit na private
+        {
+            HashCode hashCode = new HashCode();
+            hashCode.ToHashCode();
 
-            //nextNode = new TreeNode<ValidMove>(new ValidMove(null));
-            //node.AddSibling(nextNode);
-            //node = nextNode;
-
-            //nextNode = new TreeNode<ValidMove>(new ValidMove(null));
-            //node.AddSibling(nextNode);
-            //node = nextNode;
-
-            //nextNode = new TreeNode<ValidMove>(new ValidMove(null));
-            //node.AddSibling(nextNode);
-            //node = nextNode;
-
-
-            //int number = TreeNode<ValidMove>.CountSiblings(startintNode);
-            //Notification.Show("Count: " + number);
-
-            TreeNode<ValidMove> node = new TreeNode<ValidMove>(new ValidMove(null));
-            var startingNode = node;
-            TreeNode<ValidMove> nextNode;
-
-            node.Data.Priority = 100;
-
-            nextNode = new TreeNode<ValidMove>(new ValidMove(null));
-            node.AddSibling(nextNode);
-            node = nextNode;
-
-            node.Data.Priority = 1;
-
-            nextNode = new TreeNode<ValidMove>(new ValidMove(null));
-            node.AddSibling(nextNode);
-            node = nextNode;
-
-            node.Data.Priority = 5;
-
-            nextNode = new TreeNode<ValidMove>(new ValidMove(null));
-            node.AddSibling(nextNode);
-            node = nextNode;
-
-            node.Data.Priority = 3;
-
-            //int number = TreeNodeHelper.CountSiblings(startingNode) + 1; // siblings, plus the original node
-            //Notification.Show("Total Nodes: " + number);
-
-            //Notification.Show("StepNumber of last node: " + TreeNodeHelper.GetTailNode(startingNode).Data.StepNumber, 10000);
-
-            TreeNodeHelper.QuickSort(startingNode);
-
-            node = startingNode;
-            string displayText = string.Empty;
-            while (node is not null)
-            {
-                //displayText += $"[{node.Data.StepNumber}: {node.Data.Priority}], ";
-                displayText += $"[{node.Data.Priority}], ";
-
-                node = node.NextSibling;
-            }
-            Notification.Show("Priorities list: " + displayText, 10000);
         }
 
         #endregion
