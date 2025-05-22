@@ -26,7 +26,7 @@ namespace WaterSortGame.Models
         {
             //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
-            var treeNode = new TreeNode<HashCode, ValidMove>(new ValidMove(startingPosition)); // ## tohle zkontrolovat
+            var treeNode = new TreeNode<ValidMove>(new ValidMove(startingPosition));
 
             //FirstStep.Data.GameState = startingPosition;
             //TreeNode<ValidMove> previousStep = FirstStep;
@@ -36,7 +36,7 @@ namespace WaterSortGame.Models
             {
                 await WaitForButtonPress();
 
-                TreeNode<HashCode, ValidMove> highestPriority_TreeNode = null;
+                TreeNode<ValidMove> highestPriority_TreeNode = null;
                 if (treeNode.Data.Visited == true)
                 {
                     treeNode = treeNode.Parent;
@@ -80,7 +80,7 @@ namespace WaterSortGame.Models
                     var mostFrequentColors = PickMostFrequentColor(movableLiquids); // ## tohle jsem jeste nezacal nikde pouzivat!
 
                     //RemoveUnoptimalMoves(validMoves, emptySpots);
-                    RemoveEqualColorMoves(validMoves);
+                    RemoveEqualColorMoves(validMoves); // ## oddelat kroky ktery jen prehazujou treba z 2 modrych na 1 modrou. -> RemoveUselessMoves()
                     RemoveUselessMoves(validMoves);
                     //RemoveRepeatingMoves(validMoves, node);
 
@@ -102,8 +102,6 @@ namespace WaterSortGame.Models
                     // Pro kazdy validMove vytvorim sibling ve strome:
                     CreateAllPossibleNextStates(treeNode, validMoves);
 
-                    //TreeNodeHelper.QuickSort(treeNode); // ## docasne vypnuty protoze chci otestovat to opakovani
-
                     // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode.FirstChild);
 
@@ -113,12 +111,12 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        private void CreateAllPossibleNextStates(TreeNode<HashCode, ValidMove> parentNode, List<ValidMove> validMoves)
+        private void CreateAllPossibleNextStates(TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
         {
             var node = parentNode;
             for (int i = 0; i < validMoves.Count; i++)
             {
-                var nextNode = new TreeNode<HashCode, ValidMove>(validMoves[i]);
+                var nextNode = new TreeNode<ValidMove>(validMoves[i]);
                 if (i == 0)
                 {
                     node.AddChild(nextNode);
@@ -143,10 +141,10 @@ namespace WaterSortGame.Models
         /// <summary>
         /// Checks siblings of provided node
         /// </summary>
-        private TreeNode<HashCode, ValidMove> PickHighestPriorityNonVisitedNode(TreeNode<HashCode, ValidMove> node)
+        private TreeNode<ValidMove> PickHighestPriorityNonVisitedNode(TreeNode<ValidMove> node)
         {
-            TreeNode<HashCode, ValidMove> currentNode = node;
-            TreeNode<HashCode, ValidMove> resultNode = new NullTreeNode(node);
+            TreeNode<ValidMove> currentNode = node;
+            TreeNode<ValidMove> resultNode = new NullTreeNode(node);
             while (currentNode != null)
             {
                 if (currentNode.Data.Visited is false)
@@ -168,7 +166,7 @@ namespace WaterSortGame.Models
 
             return resultNode;
         }
-        private void MakeAMove(TreeNode<HashCode, ValidMove> node)
+        private void MakeAMove(TreeNode<ValidMove> node)
         {
             Debug.WriteLine($"# [{node.Data.Source.X},{node.Data.Source.Y}] => [{node.Data.Target.X},{node.Data.Target.Y}] {{{node.Data.Source.ColorName}}} {{HowMany {node.Data.Source.NumberOfRepeatingLiquids}}}");
             
@@ -294,7 +292,7 @@ namespace WaterSortGame.Models
 
             return validMoves;
         }
-        private void RemoveRepeatingMoves(List<ValidMove> validMoves, TreeNode<HashCode, ValidMove> parentNode)
+        private void RemoveRepeatingMoves(List<ValidMove> validMoves, TreeNode<ValidMove> parentNode)
         {
             //bool first = true;
             //do
@@ -447,6 +445,7 @@ namespace WaterSortGame.Models
         /// <summary>
         /// If there are multiple moves for the same color, and in one of them the target is singleColor tube, always choose that one.
         /// </summary>
+        //private void RemoveUnoptimalMoves(List<ValidMove> validMoves, List<PositionPointer> emptySpots)
         private void RemoveEqualColorMoves(List<ValidMove> validMoves)
         {
             //var singleColorTargets = emptySpots.Exists((move) => move.SingleColor == true);
@@ -469,7 +468,7 @@ namespace WaterSortGame.Models
             }
         }
         /// <summary>
-        /// Removes moves that don't actually change anything. For example 3 blue and 1 empty into another 3 blue and 1 empty.
+        /// Removes moves that doesnt actually solve anything. For example 3 blue and 1 empty into another 3 blue and 1 empty.
         /// </summary>
         /// <param name="validMoves"></param>
         private void RemoveUselessMoves(List<ValidMove> validMoves)
@@ -515,7 +514,6 @@ namespace WaterSortGame.Models
 
             //return preferentialMoves;
         }
-        
 
         #region Controls
         private async Task WaitForButtonPress()

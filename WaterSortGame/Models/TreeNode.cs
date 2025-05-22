@@ -8,35 +8,35 @@ using System.Xml.Linq;
 
 namespace WaterSortGame.Models
 {
-    internal class TreeNode<TKey, TValue> : Dictionary<TKey, TValue> where TValue : ValidMove, new() // temporary limitation. change later..
+    internal class TreeNode<T> where T : ValidMove, new() // temporary limitation. change later..
     {
 
-        public TValue Data { get; private protected set; }
+        public T Data { get; private protected set; }
         //public T Data { get; set; }
-        public TreeNode<TKey, TValue>? Parent { get; private protected set; }
-        public TreeNode<TKey, TValue>? FirstChild { get; private protected set; }
-        public TreeNode<TKey, TValue>? NextSibling { get; private protected set; }
+        public TreeNode<T>? Parent { get; private protected set; }
+        public TreeNode<T>? FirstChild { get; private protected set; }
+        public TreeNode<T>? NextSibling { get; private protected set; }
         private protected TreeNode()
         {
-            Data = new TValue();
+            Data = new T();
         }
-        public TreeNode(TValue data)
+        public TreeNode(T data)
         {
             Data = data;
         }
-        public void AddSibling(TreeNode<TKey, TValue> siblingNode)
+        public void AddSibling(TreeNode<T> siblingNode)
         {
             NextSibling = siblingNode;
             NextSibling.Parent = this.Parent;
         }
-        public void AddChild(TreeNode<TKey, TValue> childNode)
+        public void AddChild(TreeNode<T> childNode)
         {
             FirstChild = childNode;
             childNode.Parent = this;
         }
-        public void SwapData(TreeNode<TKey, TValue> otherNode)
+        public void SwapData(TreeNode<T> otherNode)
         {
-            TValue temp = Data;
+            T temp = Data;
             Data = otherNode.Data;
             otherNode.Data = temp;
         }
@@ -75,9 +75,9 @@ namespace WaterSortGame.Models
         //    MainWindowVM.OnChangingGameState();
         //}
     }
-    internal class NullTreeNode : TreeNode<HashCode, ValidMove>
+    internal class NullTreeNode : TreeNode<ValidMove>
     {
-        public NullTreeNode(TreeNode<HashCode, ValidMove> parent) : base()
+        public NullTreeNode(TreeNode<ValidMove> parent) : base()
         {
             Data = new NullValidMove();
             Parent = parent;
@@ -90,17 +90,18 @@ namespace WaterSortGame.Models
         //    if (node.NextSibling is null) return 0;
         //    return 1 + CountSiblings(node.NextSibling);
         //}
-        private static TreeNode<HashCode, ValidMove> GetTailNode(TreeNode<HashCode, ValidMove> currentNode)
+        private static TreeNode<ValidMove> GetTailNode(TreeNode<ValidMove> currentNode)
         {
             while (currentNode != null && currentNode.NextSibling != null)
                 currentNode = currentNode.NextSibling;
             return currentNode;
         }
-        private static TreeNode<HashCode, ValidMove> Partition(TreeNode<HashCode, ValidMove> head, TreeNode<HashCode, ValidMove> tail)
+        private static TreeNode<ValidMove> Partition(TreeNode<ValidMove> head, TreeNode<ValidMove> tail)
         {
-            TreeNode<HashCode, ValidMove> pivot = head;
-            TreeNode<HashCode, ValidMove> iNode = head;
-            TreeNode<HashCode, ValidMove> jNode = head;
+            //100,1,5,3
+            TreeNode<ValidMove> pivot = head;
+            TreeNode<ValidMove> iNode = head;
+            TreeNode<ValidMove> jNode = head;
             
             while (jNode != null)
             {
@@ -117,20 +118,20 @@ namespace WaterSortGame.Models
 
             return iNode;
         }
-        private static void QuickSortHelper(TreeNode<HashCode, ValidMove> head, TreeNode<HashCode, ValidMove> tail)
+        private static void QuickSortHelper(TreeNode<ValidMove> head, TreeNode<ValidMove> tail)
         {
             if (head == null || head == tail)
             {
                 return;
             }
             //DebugPrint(head, tail);
-            TreeNode<HashCode, ValidMove> pivot = Partition(head, tail);
+            TreeNode<ValidMove> pivot = Partition(head, tail);
             QuickSortHelper(head, pivot);
             QuickSortHelper(pivot.NextSibling, tail);
         }
-        public static TreeNode<HashCode, ValidMove> QuickSort(TreeNode<HashCode, ValidMove> head)
+        public static TreeNode<ValidMove> QuickSort(TreeNode<ValidMove> head)
         {
-            TreeNode<HashCode, ValidMove> tail = GetTailNode(head);
+            TreeNode<ValidMove> tail = GetTailNode(head);
             QuickSortHelper(head, tail);
             return head;
         }
