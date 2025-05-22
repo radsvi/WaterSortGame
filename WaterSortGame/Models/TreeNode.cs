@@ -40,6 +40,10 @@ namespace WaterSortGame.Models
             Data = otherNode.Data;
             otherNode.Data = temp;
         }
+        //public override int GetHashCode()
+        //{
+        //    return Data.GetHashCode();
+        //}
 
 
         //public TreeNode(T data, TreeNode<T>? sender = null, TreeNode<T>? child = null, TreeNode<T>? sibling = null)
@@ -102,7 +106,7 @@ namespace WaterSortGame.Models
             TreeNode<ValidMove> pivot = head;
             TreeNode<ValidMove> iNode = head;
             TreeNode<ValidMove> jNode = head;
-            
+
             while (jNode != null)
             {
                 if (jNode.Data.Priority > pivot.Data.Priority)
@@ -135,6 +139,8 @@ namespace WaterSortGame.Models
             QuickSortHelper(head, tail);
             return head;
         }
+
+
         //private static void DebugPrint(TreeNode<ValidMove> first, TreeNode<ValidMove> second)
         //{
         //    Debug.Write($"[{first.Data.StepNumber}: {first.Data.Priority}], ");

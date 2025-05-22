@@ -27,6 +27,7 @@ namespace WaterSortGame.Models
             //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             var treeNode = new TreeNode<ValidMove>(new ValidMove(startingPosition));
+            Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps = new Dictionary<int, LinkedList<TreeNode<ValidMove>>>();
 
             //FirstStep.Data.GameState = startingPosition;
             //TreeNode<ValidMove> previousStep = FirstStep;
@@ -100,23 +101,33 @@ namespace WaterSortGame.Models
                     }
 
                     // Pro kazdy validMove vytvorim sibling ve strome:
-                    CreateAllPossibleNextStates(treeNode, validMoves);
+                    CreateAllPossibleNextStates(hashedSteps, treeNode, validMoves);
+
+                    CheckRepeating(hashedSteps, )
 
                     // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode.FirstChild);
 
+                    // ## kde kontroluju jestli "highestPriority_TreeNode" neni null?
 
                     treeNode = highestPriority_TreeNode;
                     MakeAMove(treeNode);
                 }
             }
         }
-        private void CreateAllPossibleNextStates(TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
+        private void CreateAllPossibleNextStates(Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps, TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
         {
             var node = parentNode;
             for (int i = 0; i < validMoves.Count; i++)
             {
                 var nextNode = new TreeNode<ValidMove>(validMoves[i]);
+
+                if (GameStateAlreadyExists(hashedSteps, nextNode))
+                {
+                    continue;
+                }
+
+                hashedSteps.Add(nextNode.Data.Hash, nextNode);
                 if (i == 0)
                 {
                     node.AddChild(nextNode);
@@ -127,7 +138,6 @@ namespace WaterSortGame.Models
                 }
                 node = nextNode;
 
-                // Changing GameState:
                 int j = 0;
                 while (j < node.Data.Source.NumberOfRepeatingLiquids
                     && node.Data.Target.Y + j < node.Data.GameState.GetLength(1)) // pocet stejnych barev na sobe source && uroven barvy v targetu
@@ -138,6 +148,23 @@ namespace WaterSortGame.Models
                 }
             }
         }
+
+        private bool GameStateAlreadyExists(Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps, TreeNode<ValidMove> nextNode)
+        {
+            if (hashedSteps.ContainsKey(nextNode.Data.Hash))
+            {
+                foreach (var hashItem in hashedSteps[nextNode.Data.Hash])
+                {
+                    if (hashItem.Data.Equals(nextNode.Data.GameState))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Checks siblings of provided node
         /// </summary>

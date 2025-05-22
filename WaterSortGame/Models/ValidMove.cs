@@ -17,6 +17,7 @@ namespace WaterSortGame.Models
             Target = target;
             Source = source; // mam to v tomhle poradi kvuli eventum
             Liquid = gameState[source.X, source.Y];
+            Hash = GetHashCode();
 
             IsTargetSingleColor = isTargetSingleColor;
             //CalculatePriority();
@@ -54,33 +55,38 @@ namespace WaterSortGame.Models
         public float Priority { get; set; } = 0; // higher weight means better move
         public LiquidColorNew[,] GameState { get; set; }
         public int SolutionValue { get; set; }
+        public int Hash { get; private set; }
         //public int MaxSolutionValue { get; set; }
 
         //public static bool operator ==(ValidMove first, ValidMove second)
-        private static bool OperatorOverload(ValidMove first, ValidMove second)
-        {
-            //Debug.WriteLine($"first.Source.X [{first.Source.X}] == second.Source.X [{second.Source.X}] && first.Source.Y [{first.Source.Y}] == second.Source.Y [{second.Source.Y}]");
-            //Debug.WriteLine($"&& first.Target.X [{first.Target.X}] == second.Target.X[{second.Target.X}] && first.Target.Y [{first.Target.Y}] == second.Target.Y [{second.Target.Y}]");
-            //Debug.WriteLine($"&& first.Liquid.Name [{first.Liquid.Name}] == second.Liquid.Name [{second.Liquid.Name}]");
+        //private static bool EqualsOverload(ValidMove first, ValidMove second)
+        //{
+        //    //Debug.WriteLine($"first.Source.X [{first.Source.X}] == second.Source.X [{second.Source.X}] && first.Source.Y [{first.Source.Y}] == second.Source.Y [{second.Source.Y}]");
+        //    //Debug.WriteLine($"&& first.Target.X [{first.Target.X}] == second.Target.X[{second.Target.X}] && first.Target.Y [{first.Target.Y}] == second.Target.Y [{second.Target.Y}]");
+        //    //Debug.WriteLine($"&& first.Liquid.Name [{first.Liquid.Name}] == second.Liquid.Name [{second.Liquid.Name}]");
             
-            //Debug.WriteLine($"[{first.Source.X}] == [{second.Source.X}] && [{first.Source.Y}] == [{second.Source.Y}]");
-            //Debug.WriteLine($"&& [{first.Target.X}] == [{second.Target.X}] && [{first.Target.Y}] == [{second.Target.Y}]");
-            //Debug.WriteLine($"&& [{first.Liquid.Name}] == [{second.Liquid.Name}]");
-            if (first.Source.X == second.Source.X && first.Source.Y == second.Source.Y
-                && first.Target.X == second.Target.X && first.Target.Y == second.Target.Y
-                && first.Liquid.Name == second.Liquid.Name)
-            {
-                return true;
-            }
-            return false;
-        }
-        public static bool operator ==(ValidMove first, ValidMove second)
+        //    //Debug.WriteLine($"[{first.Source.X}] == [{second.Source.X}] && [{first.Source.Y}] == [{second.Source.Y}]");
+        //    //Debug.WriteLine($"&& [{first.Target.X}] == [{second.Target.X}] && [{first.Target.Y}] == [{second.Target.Y}]");
+        //    //Debug.WriteLine($"&& [{first.Liquid.Name}] == [{second.Liquid.Name}]");
+        //    if (first.Source.X == second.Source.X && first.Source.Y == second.Source.Y
+        //        && first.Target.X == second.Target.X && first.Target.Y == second.Target.Y
+        //        && first.Liquid.Name == second.Liquid.Name)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        //public static bool operator ==(ValidMove first, ValidMove second)
+        //{
+        //    return EqualsOverload(first, second);
+        //}
+        //public static bool operator !=(ValidMove first, ValidMove second)
+        //{
+        //    return !EqualsOverload(first, second);
+        //}
+        public bool Equals(LiquidColorNew[,] otherGameState)
         {
-            return OperatorOverload(first, second);
-        }
-        public static bool operator !=(ValidMove first, ValidMove second)
-        {
-            return !OperatorOverload(first, second);
+            return GameStateToInt(GameState) == GameStateToInt(otherGameState);
         }
         private void CalculatePriority()
         {
@@ -97,6 +103,55 @@ namespace WaterSortGame.Models
                 }
             }
             Priority = newPriority;
+        }
+        public override int GetHashCode()
+        {
+            var intGameState = GameStateToInt(GameState);
+            //var hash = intGameState.GetHashCode();
+            //var hashSlow = GameState.GetHashCode();
+            
+            return intGameState.GetHashCode();
+
+            //return GameState.GetHashCode();
+        }
+        //private static List<string> GameStateToInt(LiquidColorNew[,] gameState)
+        //{
+        //    List<string> intGameState = new List<string>();
+        //    for (int x = 0; x < gameState.GetLength(0); x++)
+        //    {
+        //        string tubeString = string.Empty;
+        //        for (int y = gameState.GetLength(1) - 1; y >= 0; y--)
+        //        {
+        //            if (gameState[x, y] is not null)
+        //                //tubeInt += (int)gameState[x, y].Name * (int)Math.Pow(100,y);
+        //                tubeString += ((int)gameState[x, y].Name).ToString("00");
+        //        }
+        //        intGameState.Add(tubeString);
+        //    }
+        //    intGameState.Sort();
+        //    return intGameState;
+        //}
+        private static string GameStateToInt(LiquidColorNew[,] gameState)
+        {
+            List<string> intGameState = new List<string>();
+            for (int x = 0; x < gameState.GetLength(0); x++)
+            {
+                string tubeString = string.Empty;
+                for (int y = gameState.GetLength(1) - 1; y >= 0; y--)
+                {
+                    if (gameState[x, y] is not null)
+                        //tubeInt += (int)gameState[x, y].Name * (int)Math.Pow(100,y);
+                        tubeString += ((int)gameState[x, y].Name).ToString("00");
+                }
+                intGameState.Add(tubeString);
+            }
+            intGameState.Sort();
+            string stringGameState = string.Empty;
+            foreach (var tube in intGameState)
+            {
+                stringGameState += tube.ToString();
+            }
+            return stringGameState;
         }
     }
     internal class NullValidMove : ValidMove

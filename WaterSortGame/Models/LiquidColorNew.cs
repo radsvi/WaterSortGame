@@ -12,6 +12,7 @@ namespace WaterSortGame.Models
 {
     internal enum LiquidColorName
     {
+        Blank,
         Blue,
         GrayBlue,
         LightBlue,
@@ -24,7 +25,6 @@ namespace WaterSortGame.Models
         LightGreen,
         Olive,
         Red,
-        Blank
     }
     internal class LiquidColorNew
     {
