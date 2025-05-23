@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace WaterSortGame.Models
         //TreeNode<ValidMove> SolvingSteps;
         //TreeNode<ValidMove> FirstStep;
         public bool ResumeRequest { get; set; }
+        public int ResumeRequestCounterDebug { get; set; } = 0; // used only for debugging how many times I clicked the button and only triggering breakpoint upon certain number.
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
@@ -27,12 +29,13 @@ namespace WaterSortGame.Models
             //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             var treeNode = new TreeNode<ValidMove>(new ValidMove(startingPosition));
-            Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps = new Dictionary<int, LinkedList<TreeNode<ValidMove>>>();
+            //Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps = new Dictionary<int, LinkedList<TreeNode<ValidMove>>>();
+            CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps = new CollisionDictionary<int, TreeNode<ValidMove>>();
 
             //FirstStep.Data.GameState = startingPosition;
             //TreeNode<ValidMove> previousStep = FirstStep;
             //var gameState = startingPosition;
-            
+
             while (true) // ## dodelat aby skoncilo kdyz nejsou zadny mozny nody s Visited == false
             {
                 await WaitForButtonPress();
@@ -48,7 +51,7 @@ namespace WaterSortGame.Models
 
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
 
-                    if (highestPriority_TreeNode.Data.StepNumber == -1) // this means that the NullTreeNode has been chosen
+                    if (highestPriority_TreeNode.GetType() == typeof(NullTreeNode))
                     {
                         //treeNode.Visited = true;
                         treeNode = highestPriority_TreeNode.Parent;
@@ -87,7 +90,11 @@ namespace WaterSortGame.Models
 
                     RemoveSolvedTubesFromMoves(treeNode.Data.GameState, validMoves);
 
-                    if (validMoves.Count == 0)
+                    // Pro kazdy validMove vytvorim sibling ve strome:
+                    CreateAllPossibleFutureStates(hashedSteps, treeNode, validMoves);
+
+                    //if (validMoves.Count == 0)
+                    if (UnvisitedChildrenExist(treeNode) == false)
                     {
                         if (MainWindowVM.GameState.IsLevelCompleted() is false)
                         {
@@ -99,28 +106,53 @@ namespace WaterSortGame.Models
 
                         return;
                     }
-
-                    // Pro kazdy validMove vytvorim sibling ve strome:
-                    CreateAllPossibleNextStates(hashedSteps, treeNode, validMoves);
-
-                    CheckRepeating(hashedSteps, )
+                    
 
                     // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode.FirstChild);
-
-                    // ## kde kontroluju jestli "highestPriority_TreeNode" neni null?
-
                     treeNode = highestPriority_TreeNode;
+
+                    if (treeNode.GetType() == typeof(NullTreeNode))
+                    {
+                        Notification.Show("highestPriority_TreeNode is null, continuing.");
+                        continue;
+                    }
+
                     MakeAMove(treeNode);
                 }
             }
         }
-        private void CreateAllPossibleNextStates(Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps, TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
+        /// <summary>
+        /// basically checks if there are any valid moves. If there is at least one children and it is unvisited, it returns true.
+        /// </summary>
+        /// <param name="treeNode"></param>
+        /// <returns></returns>
+        private bool UnvisitedChildrenExist(TreeNode<ValidMove> treeNode)
         {
-            var node = parentNode;
+            if (treeNode.FirstChild is null)
+            {
+                return false;
+            }
+
+            var node = treeNode.FirstChild;
+            while (node is not null)
+            {
+                if (node.Data.Visited is false)
+                {
+                    return true;
+                }
+
+                node = node.NextSibling;
+            }
+            return false;
+        }
+        private void CreateAllPossibleFutureStates(CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps, TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
+        {
+            var node = parentNode; // this is not a mistake!
             for (int i = 0; i < validMoves.Count; i++)
             {
                 var nextNode = new TreeNode<ValidMove>(validMoves[i]);
+                UpdateGameState(nextNode);
 
                 if (GameStateAlreadyExists(hashedSteps, nextNode))
                 {
@@ -137,19 +169,21 @@ namespace WaterSortGame.Models
                     node.AddSibling(nextNode);
                 }
                 node = nextNode;
-
-                int j = 0;
-                while (j < node.Data.Source.NumberOfRepeatingLiquids
-                    && node.Data.Target.Y + j < node.Data.GameState.GetLength(1)) // pocet stejnych barev na sobe source && uroven barvy v targetu
-                {
-                    node.Data.GameState[node.Data.Target.X, node.Data.Target.Y + j] = node.Data.GameState[node.Data.Source.X, node.Data.Source.Y - j];
-                    node.Data.GameState[node.Data.Source.X, node.Data.Source.Y - j] = null;
-                    j++;
-                }
+            }
+        }
+        private void UpdateGameState(TreeNode<ValidMove> node)
+        {
+            int j = 0;
+            while (j < node.Data.Source.NumberOfRepeatingLiquids
+                && node.Data.Target.Y + j < node.Data.GameState.GetLength(1)) // pocet stejnych barev na sobe source && uroven barvy v targetu
+            {
+                node.Data.GameState[node.Data.Target.X, node.Data.Target.Y + j] = node.Data.GameState[node.Data.Source.X, node.Data.Source.Y - j];
+                node.Data.GameState[node.Data.Source.X, node.Data.Source.Y - j] = null;
+                j++;
             }
         }
 
-        private bool GameStateAlreadyExists(Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps, TreeNode<ValidMove> nextNode)
+        private bool GameStateAlreadyExists(CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps, TreeNode<ValidMove> nextNode)
         {
             if (hashedSteps.ContainsKey(nextNode.Data.Hash))
             {
@@ -177,12 +211,12 @@ namespace WaterSortGame.Models
                 if (currentNode.Data.Visited is false)
                 {
                     resultNode = currentNode;
-                    break; // i have got it sorted by priority, so first non-visited is fine
+                    break; // i have got it sorted by highest priority, so first non-visited is fine
                 }
 
                 currentNode = currentNode.NextSibling;
             }
-            if (resultNode.Data.StepNumber != -1)
+            if (resultNode.GetType() == typeof(NullTreeNode))
             {
                 if (node.Parent is not null)
                 {
@@ -554,6 +588,7 @@ namespace WaterSortGame.Models
         public void CalculateNextStep(LiquidColorNew[,] gameState)
         {
             ResumeRequest = true; // provede se i pri prvnim spusteni, protoze je pauza na zacatku
+            ResumeRequestCounterDebug++;
             if (MainWindowVM.UIEnabled == true) // disable UI once starting the Auto Solve process
             {
                 MainWindowVM.UIEnabled = false;

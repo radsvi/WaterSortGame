@@ -86,6 +86,10 @@ namespace WaterSortGame.Models
         //}
         public bool Equals(LiquidColorNew[,] otherGameState)
         {
+            //var jedna = GameStateToInt(GameState);
+            //var dva = GameStateToInt(otherGameState);
+
+
             return GameStateToInt(GameState) == GameStateToInt(otherGameState);
         }
         private void CalculatePriority()
@@ -161,6 +165,7 @@ namespace WaterSortGame.Models
             Target = new NullPositionPointer();
             Source = new NullPositionPointer();
             Liquid = new NullLiquidColorNew();
+            Visited = true; // changing this to true because NullValidMove shouldn't even be even considered as a valid move.
         }
     }
 }
