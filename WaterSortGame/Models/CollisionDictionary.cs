@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace WaterSortGame.Models
 {
-    internal class CollisionDictionary<TKey, TValue>
+    internal class CollisionDictionary<TKey, TValue> //: IDictionary<TKey, TValue>
     {
         private Dictionary<TKey, List<TValue>> data = new Dictionary<TKey, List<TValue>>();
         public bool ContainsKey(TKey key)
@@ -31,6 +31,11 @@ namespace WaterSortGame.Models
         public List<TValue> this[TKey key]
         {
             get => data[key];
+        }
+
+        [Obsolete]public Dictionary<TKey, List<TValue>> DebugData
+        {
+            get { return data; }
         }
     }
 }

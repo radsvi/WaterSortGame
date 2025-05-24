@@ -16,7 +16,7 @@ namespace WaterSortGame.Models
     {
         MainWindowVM MainWindowVM;
         const int closeDelayDefault = 2000; // in ms
-        private bool DisplayDebugMessages { get; set; }
+        private bool DisplayDebugMessages { get; set; } = true;
         public CancellationTokenSource TokenSource { get; set; } = null;
         public Notification(MainWindowVM mainWindowVM)
         {

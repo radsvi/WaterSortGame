@@ -11,7 +11,7 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    internal class AutoSolve
+    internal class AutoSolve : ViewModelBase
     {
         MainWindowVM MainWindowVM;
         Notification Notification;
@@ -19,18 +19,34 @@ namespace WaterSortGame.Models
         //TreeNode<ValidMove> FirstStep;
         private bool ResumeRequest { get; set; }
         [Obsolete]public int ResumeRequestCounterDebug { get; set; } = 0; // used only for debugging how many times I clicked the button and only triggering breakpoint upon certain number.
-        public List<ValidMove> CompleteSolution { get; private set; }
+        //public List<ValidMove> CompleteSolution { get; private set; }
+        private List<ValidMove> completeSolution;
+        public List<ValidMove> CompleteSolution
+        {
+            get { return completeSolution; }
+            set
+            {
+                if (value != completeSolution)
+                {
+                    completeSolution = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public Action StepThrough;
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
             Notification = mainWindowVM.Notification;
+            StepThrough = StepThroughMethod;
         }
-        private void Start(LiquidColorNew[,] startingPosition)
+        private async void Start(LiquidColorNew[,] startingPosition)
         {
+            bool debugVisualiseState = false; // ## smazat?
             //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             var treeNode = new TreeNode<ValidMove>(new ValidMove(startingPosition));
-            treeNode.Data.StepNumber = -55; // ## smazat
+            treeNode.Data.StepNumber = -1000; // ## smazat
             //Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps = new Dictionary<int, LinkedList<TreeNode<ValidMove>>>();
             CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps = new CollisionDictionary<int, TreeNode<ValidMove>>();
 
@@ -42,16 +58,16 @@ namespace WaterSortGame.Models
             while (iterations < 1000) // ## dodelat aby skoncilo kdyz nejsou zadny mozny nody s Visited == false
             {
                 iterations++;
-                //await WaitForButtonPress();
+                if (debugVisualiseState) await WaitForButtonPress();
+                
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
                 if (treeNode.Data.Visited == true)
                 {
-                    
                     treeNode = treeNode.Parent;
-                    //MakeAMove(treeNode.Data);
+                    if (debugVisualiseState) MakeAMove(treeNode.Data);
                     Notification.Show("Returning to previous move", MessageType.Debug);
-                    //await WaitForButtonPress();
+                    if (debugVisualiseState) await WaitForButtonPress();
 
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
 
@@ -65,7 +81,7 @@ namespace WaterSortGame.Models
                     {
                         treeNode = highestPriority_TreeNode;
                         Notification.Show("Continuing with next child", MessageType.Debug);
-                        //MakeAMove(treeNode.Data);
+                        if (debugVisualiseState) MakeAMove(treeNode.Data);
                         continue;
                     }
                 }
@@ -107,7 +123,7 @@ namespace WaterSortGame.Models
                             continue;
                         }
 
-                        return;
+                        break;
                     }
 
                     // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
@@ -120,7 +136,7 @@ namespace WaterSortGame.Models
                         continue;
                     }
 
-                    //MakeAMove(treeNode.Data);
+                    if (debugVisualiseState) MakeAMove(treeNode.Data);
                 }
             }
             if (iterations >= 1000)
@@ -208,7 +224,7 @@ namespace WaterSortGame.Models
             {
                 foreach (var hashItem in hashedSteps[nextNode.Data.Hash])
                 {
-                    if (hashItem.Data.Equals(nextNode.Data.GameState))
+                    if (hashItem.Data.Equals(nextNode.Data.GameState) && hashItem.Data.Visited == true) // pokud neni Visited == true tak jsem to jen vygeneroval jako dalsi krok, ale jeste nikdy neprozkoumal
                     {
                         return true;
                     }
@@ -618,14 +634,30 @@ namespace WaterSortGame.Models
             //Vertices[1].CalculateGValue(Vertices.First());
             
         }
-        public async void StepThrough()
+
+        public async void StepThroughMethod()
         {
-            ResumeRequest = true;
+            ResumeRequest = false;
+            StepThrough = () => ResumeRequest = true;
             foreach (var validMove in CompleteSolution)
             {
                 MakeAMove(validMove);
                 await WaitForButtonPress();
             }
+        }
+        #endregion
+        #region debug
+        private List<int> ListHashedSteps(CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps)
+        {
+            List<int> result = [];
+            foreach (var itemList in hashedSteps.DebugData)
+            {
+                foreach (var item in itemList.Value)
+                {
+                    result.Add(item.Data.StepNumber);
+                }
+            }
+            return result;
         }
         #endregion
     }
