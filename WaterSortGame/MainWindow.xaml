@@ -105,10 +105,9 @@
                     <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.LoadLevel}"/>
                     <Button Content="Save level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.SaveLevel}"/>
                     <Button Content="Auto Solve" Command="{Binding AutoSolveCommand}"/>
+                    <Button Content="StepThrough" Command="{Binding StepThroughCommand}"/>
                     
-                    <!--<Button Content="[temp2]" Command="{Binding CloseQuickNotificationCommand}"/>-->
-                    <!--<Button Content="[temp2]" Command="{Binding TempLevelFinished}" CommandParameter="LevelComplete"/>-->
-                    <!--<Button Content="[temp3]" Command="{Binding PopupWindow}" CommandParameter="Help"/>-->
+                    
                     <Button Content="[testMethod]" Command="{Binding TestMethodCommand}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">

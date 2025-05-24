@@ -7,18 +7,30 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
+    internal enum MessageType
+    {
+        Information,
+        Debug
+    }
     internal class Notification
     {
         MainWindowVM MainWindowVM;
         const int closeDelayDefault = 2000; // in ms
+        private bool DisplayDebugMessages { get; set; }
         public CancellationTokenSource TokenSource { get; set; } = null;
         public Notification(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
         }
-        
-        public void Show(string text, int closeDelay = closeDelayDefault)
+        public void Show(string text) => Show(text, MessageType.Information);
+        public void Show(string text, int closeDelay = closeDelayDefault) => Show(text, MessageType.Information, closeDelayDefault);
+        public void Show(string text, MessageType messageType, int closeDelay = closeDelayDefault)
         {
+            if (messageType == MessageType.Debug && DisplayDebugMessages is false)
+            {
+                return;
+            }
+
             MainWindowVM.QuickNotificationText = text;
             MainWindowVM.QuickNotificationVisibilityBool = true;
 

@@ -17,14 +17,15 @@ namespace WaterSortGame.Models
         Notification Notification;
         //TreeNode<ValidMove> SolvingSteps;
         //TreeNode<ValidMove> FirstStep;
-        public bool ResumeRequest { get; set; }
+        private bool ResumeRequest { get; set; }
         [Obsolete]public int ResumeRequestCounterDebug { get; set; } = 0; // used only for debugging how many times I clicked the button and only triggering breakpoint upon certain number.
+        public List<ValidMove> CompleteSolution { get; private set; }
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
             Notification = mainWindowVM.Notification;
         }
-        public async void Start(LiquidColorNew[,] startingPosition)
+        private async void Start(LiquidColorNew[,] startingPosition)
         {
             //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
@@ -45,7 +46,7 @@ namespace WaterSortGame.Models
                 {
                     treeNode = treeNode.Parent;
                     MakeAMove(treeNode);
-                    Notification.Show("Returning to previous move");
+                    Notification.Show("Returning to previous move", MessageType.Debug);
                     await WaitForButtonPress();
 
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
@@ -54,13 +55,13 @@ namespace WaterSortGame.Models
                     {
                         //treeNode.Visited = true;
                         treeNode = highestPriority_TreeNode.Parent;
-                        Notification.Show("All siblings visited, returning to parent");
+                        Notification.Show("All siblings visited, returning to parent", MessageType.Debug);
                         continue;
                     }
                     else
                     {
                         treeNode = highestPriority_TreeNode;
-                        Notification.Show("Continuing with next child");
+                        Notification.Show("Continuing with next child", MessageType.Debug);
                         MakeAMove(treeNode);
                         continue;
                     }
@@ -99,13 +100,12 @@ namespace WaterSortGame.Models
                         {
                             treeNode.Data.Visited = true;
 
-                            Notification.Show("Reached a dead end");
+                            Notification.Show("Reached a dead end", MessageType.Debug);
                             continue;
                         }
 
                         return;
                     }
-                    
 
                     // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode.FirstChild);
@@ -113,7 +113,7 @@ namespace WaterSortGame.Models
 
                     if (treeNode.GetType() == typeof(NullTreeNode))
                     {
-                        Notification.Show("highestPriority_TreeNode is null, continuing.");
+                        Notification.Show("highestPriority_TreeNode is null, continuing.", MessageType.Debug);
                         continue;
                     }
 
@@ -598,6 +598,10 @@ namespace WaterSortGame.Models
             
             //Vertices[1].CalculateGValue(Vertices.First());
             
+        }
+        public void StepThrough()
+        {
+
         }
         #endregion
     }
