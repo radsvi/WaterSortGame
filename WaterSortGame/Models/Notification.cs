@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +34,7 @@ namespace WaterSortGame.Models
 
             MainWindowVM.QuickNotificationText = text;
             MainWindowVM.QuickNotificationVisibilityBool = true;
+            Debug.WriteLine("[Notification: ]" + text);
 
             TokenSource = new CancellationTokenSource();
             var token = TokenSource.Token;

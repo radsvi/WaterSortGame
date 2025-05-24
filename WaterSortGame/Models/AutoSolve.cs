@@ -42,11 +42,11 @@ namespace WaterSortGame.Models
         }
         private async void Start(LiquidColorNew[,] startingPosition)
         {
-            bool debugVisualiseState = false; // ## smazat?
+            bool debugVisualiseState = true; // ## smazat?
             //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             var treeNode = new TreeNode<ValidMove>(new ValidMove(startingPosition));
-            treeNode.Data.StepNumber = -1000; // ## smazat
+            treeNode.Data.StepNumber = -1000; // ## smazat. mam to tu jen abych oznacil prvni node pro debugovani
             //Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps = new Dictionary<int, LinkedList<TreeNode<ValidMove>>>();
             CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps = new CollisionDictionary<int, TreeNode<ValidMove>>();
 
@@ -62,11 +62,11 @@ namespace WaterSortGame.Models
                 
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
-                if (treeNode.Data.Visited == true)
+                if (treeNode.Data.LeavesVisited == true)
                 {
                     treeNode = treeNode.Parent;
                     if (debugVisualiseState) MakeAMove(treeNode.Data);
-                    Notification.Show("Returning to previous move", MessageType.Debug);
+                    Notification.Show($"{{{iterations}}} Returning to previous move", MessageType.Debug);
                     if (debugVisualiseState) await WaitForButtonPress();
 
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
@@ -74,13 +74,13 @@ namespace WaterSortGame.Models
                     if (highestPriority_TreeNode.GetType() == typeof(NullTreeNode))
                     {
                         treeNode = highestPriority_TreeNode.Parent;
-                        Notification.Show("All siblings visited, returning to parent", MessageType.Debug);
+                        Notification.Show($"{{{iterations}}} All siblings visited, returning to parent", MessageType.Debug);
                         continue;
                     }
                     else
                     {
                         treeNode = highestPriority_TreeNode;
-                        Notification.Show("Continuing with next child", MessageType.Debug);
+                        Notification.Show($"{{{iterations}}} Continuing with next child", MessageType.Debug);
                         if (debugVisualiseState) MakeAMove(treeNode.Data);
                         continue;
                     }
@@ -103,7 +103,7 @@ namespace WaterSortGame.Models
                     var mostFrequentColors = PickMostFrequentColor(movableLiquids); // ## tohle jsem jeste nezacal nikde pouzivat!
 
                     //RemoveUnoptimalMoves(validMoves, emptySpots);
-                    RemoveEqualColorMoves(validMoves); // ## oddelat kroky ktery jen prehazujou treba z 2 modrych na 1 modrou. -> RemoveUselessMoves()
+                    RemoveEqualColorMoves(validMoves);
                     RemoveUselessMoves(validMoves);
                     //RemoveRepeatingMoves(validMoves, node);
 
@@ -117,9 +117,11 @@ namespace WaterSortGame.Models
                     {
                         if (MainWindowVM.GameState.IsLevelCompleted(treeNode.Data.GameState) is false)
                         {
-                            treeNode.Data.Visited = true;
+                            treeNode.Data.LeavesVisited = true;
+                            if (treeNode.Parent is not null)
+                                treeNode.Parent.Data.LeavesVisited = true;
 
-                            Notification.Show("Reached a dead end", MessageType.Debug);
+                            Notification.Show($"{{{iterations}}} Reached a dead end.", MessageType.Debug);
                             continue;
                         }
 
@@ -132,7 +134,7 @@ namespace WaterSortGame.Models
 
                     if (treeNode.GetType() == typeof(NullTreeNode))
                     {
-                        Notification.Show("highestPriority_TreeNode is null, continuing.", MessageType.Debug);
+                        Notification.Show($"{{{iterations}}} highestPriority_TreeNode is null, continuing.", MessageType.Debug);
                         continue;
                     }
 
@@ -171,7 +173,7 @@ namespace WaterSortGame.Models
             var node = treeNode.FirstChild;
             while (node is not null)
             {
-                if (node.Data.Visited is false)
+                if (node.Data.LeavesVisited is false)
                 {
                     return true;
                 }
@@ -188,12 +190,13 @@ namespace WaterSortGame.Models
                 var nextNode = new TreeNode<ValidMove>(validMoves[i]);
                 UpdateGameState(nextNode);
 
-                if (GameStateAlreadyExists(hashedSteps, nextNode))
+                if (GameStateAlreadyExists(hashedSteps, nextNode)) // excludes duplicate moves
                 {
                     continue;
                 }
 
                 hashedSteps.Add(nextNode.Data.Hash, nextNode);
+
                 if (i == 0)
                 {
                     node.AddChild(nextNode);
@@ -217,15 +220,15 @@ namespace WaterSortGame.Models
             }
             node.Data.UpdateHash();
         }
-
         private bool GameStateAlreadyExists(CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps, TreeNode<ValidMove> nextNode)
         {
             if (hashedSteps.ContainsKey(nextNode.Data.Hash))
             {
                 foreach (var hashItem in hashedSteps[nextNode.Data.Hash])
                 {
-                    if (hashItem.Data.Equals(nextNode.Data.GameState) && hashItem.Data.Visited == true) // pokud neni Visited == true tak jsem to jen vygeneroval jako dalsi krok, ale jeste nikdy neprozkoumal
+                    if (hashItem.Data.Equals(nextNode.Data.GameState) && hashItem.Data.LeavesVisited == true) // pokud neni Visited == true tak jsem to jen vygeneroval jako dalsi krok, ale jeste nikdy neprozkoumal
                     {
+                        Debug.WriteLine("Nasel jsem opakujici se stav!");
                         return true;
                     }
                 }
@@ -233,7 +236,6 @@ namespace WaterSortGame.Models
             }
             return false;
         }
-
         /// <summary>
         /// Checks siblings of provided node
         /// </summary>
@@ -243,7 +245,7 @@ namespace WaterSortGame.Models
             TreeNode<ValidMove> resultNode = new NullTreeNode(node);
             while (currentNode != null)
             {
-                if (currentNode.Data.Visited is false)
+                if (currentNode.Data.LeavesVisited is false)
                 {
                     resultNode = currentNode;
                     break; // i have got it sorted by highest priority, so first non-visited is fine
@@ -251,11 +253,12 @@ namespace WaterSortGame.Models
 
                 currentNode = currentNode.NextSibling;
             }
-            if (resultNode.GetType() != typeof(NullTreeNode))
+
+            if (resultNode.GetType() == typeof(NullTreeNode))
             {
-                if (node.Parent is not null)
+                if (resultNode.Parent is not null) // null by mel byt jen v pripade ze jsme uplne na zacatku
                 {
-                    node.Parent.Data.Visited = true;
+                    resultNode.Parent.Data.LeavesVisited = true;
                 }
                 resultNode.Data.SolutionValue = GetStepValue(resultNode.Data.GameState);
             }
