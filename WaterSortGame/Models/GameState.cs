@@ -179,18 +179,18 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 4,1,3,5 });
             //AddTube(i++, new int[] { 5,3,5,4 });
 
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Purple, LiquidColorName.LightBlue });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.LightBlue });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Orange });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Purple, LiquidColorName.GrayBlue, LiquidColorName.Yellow });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.LightBlue, LiquidColorName.Yellow, LiquidColorName.GrayBlue });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightGreen, LiquidColorName.Blue, LiquidColorName.Olive, LiquidColorName.LightGreen });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.LightGreen, LiquidColorName.Olive, LiquidColorName.Pink });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightBlue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Gray, LiquidColorName.Gray, LiquidColorName.Green });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Olive, LiquidColorName.LightGreen });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.Orange, LiquidColorName.Purple, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Purple, LiquidColorName.LightBlue });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.LightBlue });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Purple, LiquidColorName.GrayBlue, LiquidColorName.Yellow });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.LightBlue, LiquidColorName.Yellow, LiquidColorName.GrayBlue });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.LightGreen, LiquidColorName.Blue, LiquidColorName.Olive, LiquidColorName.LightGreen });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.LightGreen, LiquidColorName.Olive, LiquidColorName.Pink });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.LightBlue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Gray, LiquidColorName.Gray, LiquidColorName.Green });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Olive, LiquidColorName.LightGreen });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.Orange, LiquidColorName.Purple, LiquidColorName.Orange });
 
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Purple });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Red });
@@ -219,6 +219,10 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 2, 2 });
             //AddTube(i++, new int[] { 2, 2, 1, 1 });
             //AddTube(i++, new int[] { });
+
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Gray, LiquidColorName.Red, LiquidColorName.Blue });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Gray });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Red });
 
             //AddTube(i++, new LiquidColorName[] { });
             //AddTube(i++, new LiquidColorName[] { });
@@ -405,6 +409,10 @@ namespace WaterSortGame.Models
         }
         public bool IsLevelCompleted()
         {
+            return IsLevelCompleted(gameGrid);
+        }
+        public bool IsLevelCompleted(LiquidColorNew[,] internalGameGrid)
+        {
             for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
                 //if (gameGrid[x, 0] is null || gameGrid[x, 1] is null || gameGrid[x, 2] is null || gameGrid[x, 3] is null)
@@ -413,24 +421,24 @@ namespace WaterSortGame.Models
                 //}
                 
                 // tohle tu je abych nikdy neporovnaval hodnoty GameGridu kdyz je moznost ze budou null:
-                if (gameGrid[x, 0] is not null &&
-                    gameGrid[x, 1] is not null &&
-                    gameGrid[x, 2] is not null &&
-                    gameGrid[x, 3] is not null)
+                if (internalGameGrid[x, 0] is not null &&
+                    internalGameGrid[x, 1] is not null &&
+                    internalGameGrid[x, 2] is not null &&
+                    internalGameGrid[x, 3] is not null)
                 {
-                    if (!(gameGrid[x, 0].Name == gameGrid[x, 1].Name &&
-                        gameGrid[x, 0].Name == gameGrid[x, 2].Name &&
-                        gameGrid[x, 0].Name == gameGrid[x, 3].Name))
+                    if (!(internalGameGrid[x, 0].Name == internalGameGrid[x, 1].Name &&
+                        internalGameGrid[x, 0].Name == internalGameGrid[x, 2].Name &&
+                        internalGameGrid[x, 0].Name == internalGameGrid[x, 3].Name))
                     {
                         return false;
                     }
                 }
                 else
                 { // v pripade ze aspon jeden objekt je null, otestovat jestli jsou vsechny null
-                    if (!(gameGrid[x, 0] is null &&
-                    gameGrid[x, 1] is null &&
-                    gameGrid[x, 2] is null &&
-                    gameGrid[x, 3] is null))
+                    if (!(internalGameGrid[x, 0] is null &&
+                    internalGameGrid[x, 1] is null &&
+                    internalGameGrid[x, 2] is null &&
+                    internalGameGrid[x, 3] is null))
                     {
                         return false;
                     }

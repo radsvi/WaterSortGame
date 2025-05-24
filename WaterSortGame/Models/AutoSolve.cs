@@ -25,11 +25,12 @@ namespace WaterSortGame.Models
             MainWindowVM = mainWindowVM;
             Notification = mainWindowVM.Notification;
         }
-        private async void Start(LiquidColorNew[,] startingPosition)
+        private void Start(LiquidColorNew[,] startingPosition)
         {
             //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             var treeNode = new TreeNode<ValidMove>(new ValidMove(startingPosition));
+            treeNode.Data.StepNumber = -55; // ## smazat
             //Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps = new Dictionary<int, LinkedList<TreeNode<ValidMove>>>();
             CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps = new CollisionDictionary<int, TreeNode<ValidMove>>();
 
@@ -37,23 +38,25 @@ namespace WaterSortGame.Models
             //TreeNode<ValidMove> previousStep = FirstStep;
             //var gameState = startingPosition;
 
-            while (true) // ## dodelat aby skoncilo kdyz nejsou zadny mozny nody s Visited == false
+            int iterations = 0;
+            while (iterations < 1000) // ## dodelat aby skoncilo kdyz nejsou zadny mozny nody s Visited == false
             {
-                await WaitForButtonPress();
+                iterations++;
+                //await WaitForButtonPress();
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
                 if (treeNode.Data.Visited == true)
                 {
+                    
                     treeNode = treeNode.Parent;
-                    MakeAMove(treeNode);
+                    //MakeAMove(treeNode.Data);
                     Notification.Show("Returning to previous move", MessageType.Debug);
-                    await WaitForButtonPress();
+                    //await WaitForButtonPress();
 
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
 
                     if (highestPriority_TreeNode.GetType() == typeof(NullTreeNode))
                     {
-                        //treeNode.Visited = true;
                         treeNode = highestPriority_TreeNode.Parent;
                         Notification.Show("All siblings visited, returning to parent", MessageType.Debug);
                         continue;
@@ -62,7 +65,7 @@ namespace WaterSortGame.Models
                     {
                         treeNode = highestPriority_TreeNode;
                         Notification.Show("Continuing with next child", MessageType.Debug);
-                        MakeAMove(treeNode);
+                        //MakeAMove(treeNode.Data);
                         continue;
                     }
                 }
@@ -96,7 +99,7 @@ namespace WaterSortGame.Models
                     //if (validMoves.Count == 0)
                     if (UnvisitedChildrenExist(treeNode) == false)
                     {
-                        if (MainWindowVM.GameState.IsLevelCompleted() is false)
+                        if (MainWindowVM.GameState.IsLevelCompleted(treeNode.Data.GameState) is false)
                         {
                             treeNode.Data.Visited = true;
 
@@ -117,9 +120,25 @@ namespace WaterSortGame.Models
                         continue;
                     }
 
-                    MakeAMove(treeNode);
+                    //MakeAMove(treeNode.Data);
                 }
             }
+            if (iterations >= 1000)
+            {
+                Notification.Show($"Reached {iterations} steps. Interrupting", MessageType.Debug);
+            }
+            BacktrackThroughAllSteps(treeNode!);
+        }
+        private void BacktrackThroughAllSteps(TreeNode<ValidMove> treeNode)
+        {
+            CompleteSolution = new List<ValidMove>();
+
+            while (treeNode.Parent is not null)
+            {
+                CompleteSolution.Add(treeNode.Data);
+                treeNode = treeNode.Parent;
+            }
+            CompleteSolution.Reverse();
         }
         /// <summary>
         /// basically checks if there are any valid moves. If there is at least one children and it is unvisited, it returns true.
@@ -216,7 +235,7 @@ namespace WaterSortGame.Models
 
                 currentNode = currentNode.NextSibling;
             }
-            if (resultNode.GetType() == typeof(NullTreeNode))
+            if (resultNode.GetType() != typeof(NullTreeNode))
             {
                 if (node.Parent is not null)
                 {
@@ -227,9 +246,9 @@ namespace WaterSortGame.Models
 
             return resultNode;
         }
-        private void MakeAMove(TreeNode<ValidMove> node)
+        private void MakeAMove(ValidMove node)
         {
-            Debug.WriteLine($"# [{node.Data.Source.X},{node.Data.Source.Y}] => [{node.Data.Target.X},{node.Data.Target.Y}] {{{node.Data.Source.ColorName}}} {{HowMany {node.Data.Source.NumberOfRepeatingLiquids}}}");
+            Debug.WriteLine($"# [{node.Source.X},{node.Source.Y}] => [{node.Target.X},{node.Target.Y}] {{{node.Source.ColorName}}} {{HowMany {node.Source.NumberOfRepeatingLiquids}}}");
             
             //Node.Data.GameState = newGameState;
 
@@ -237,7 +256,7 @@ namespace WaterSortGame.Models
             //SolvingStepsOLD.Add(upcomingStep);
 
             //previousGameState = node.Data.GameState; // tohle je gamestate kterej uchovavam jen uvnitr autosolvu
-            MainWindowVM.GameState.SetGameState(node.Data.GameState);
+            MainWindowVM.GameState.SetGameState(node.GameState);
 
             MainWindowVM.DrawTubes();
             MainWindowVM.OnChangingGameState();
@@ -440,10 +459,10 @@ namespace WaterSortGame.Models
                 Debug.WriteLine("");
             }
         }
-        private LiquidColorNew[,] CloneGrid(LiquidColorNew[,] gameState)
-        {
-            return MainWindowVM.GameState.CloneGrid(gameState);
-        }
+        //private LiquidColorNew[,] CloneGrid(LiquidColorNew[,] gameState)
+        //{
+        //    return MainWindowVM.GameState.CloneGrid(gameState);
+        //}
         private (bool, int) AreAllLayersIdentical(LiquidColorNew[,] gameState, int x, int y)
         {
             if (y == 0) return (true, 1); // jen jedna tekutina, takze dycky musi byt "vsechny"(jedna) stejny
@@ -599,9 +618,14 @@ namespace WaterSortGame.Models
             //Vertices[1].CalculateGValue(Vertices.First());
             
         }
-        public void StepThrough()
+        public async void StepThrough()
         {
-
+            ResumeRequest = true;
+            foreach (var validMove in CompleteSolution)
+            {
+                MakeAMove(validMove);
+                await WaitForButtonPress();
+            }
         }
         #endregion
     }

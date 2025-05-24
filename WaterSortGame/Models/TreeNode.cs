@@ -98,11 +98,10 @@ namespace WaterSortGame.Models
         {
             while (currentNode != null && currentNode.NextSibling != null)
                 currentNode = currentNode.NextSibling;
-            return currentNode;
+            return currentNode!;
         }
         private static TreeNode<ValidMove> Partition(TreeNode<ValidMove> head, TreeNode<ValidMove> tail)
         {
-            //100,1,5,3
             TreeNode<ValidMove> pivot = head;
             TreeNode<ValidMove> iNode = head;
             TreeNode<ValidMove> jNode = head;

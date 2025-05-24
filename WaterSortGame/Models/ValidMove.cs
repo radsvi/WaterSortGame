@@ -17,6 +17,7 @@ namespace WaterSortGame.Models
             Target = target;
             Source = source; // mam to v tomhle poradi kvuli eventum
             Liquid = gameState[source.X, source.Y];
+            StepNumber = stepCounter++;
             //Hash = GetHashCode();
             //ReadableHash = GameStateToInt(GameState);
 
@@ -57,7 +58,8 @@ namespace WaterSortGame.Models
         public LiquidColorNew[,] GameState { get; set; }
         public int SolutionValue { get; set; }
         public int Hash { get; private set; }
-        //[Obsolete]public string ReadableHash { get; private set; }
+        [Obsolete] public string ReadableHash { get; private set; }
+        [Obsolete] public string ReadableGameState { get; private set; }
         //public int MaxSolutionValue { get; set; }
 
         //public static bool operator ==(ValidMove first, ValidMove second)
@@ -123,7 +125,8 @@ namespace WaterSortGame.Models
         public void UpdateHash()
         {
             Hash = GetHashCode();
-            //ReadableHash = GameStateToInt(GameState);
+            ReadableHash = GameStateToInt(GameState);
+            ReadableGameState = GameStateToStr(GameState);
         }
         //private static List<string> GameStateToInt(LiquidColorNew[,] gameState)
         //{
@@ -161,6 +164,29 @@ namespace WaterSortGame.Models
             foreach (var tube in intGameState)
             {
                 stringGameState += tube.ToString() + "-";
+            }
+            stringGameState = stringGameState.Substring(0, stringGameState.Length - 1);
+            return stringGameState;
+        }
+        [Obsolete]private static string GameStateToStr(LiquidColorNew[,] gameState)
+        {
+            List<string> intGameState = new List<string>();
+            for (int x = 0; x < gameState.GetLength(0); x++)
+            {
+                string tubeString = string.Empty;
+                for (int y = gameState.GetLength(1) - 1; y >= 0; y--)
+                {
+                    if (gameState[x, y] is not null)
+                        //tubeInt += (int)gameState[x, y].Name * (int)Math.Pow(100,y);
+                        tubeString += (gameState[x, y].Name).ToString() + "-";
+                }
+                intGameState.Add(tubeString);
+            }
+            intGameState.Sort();
+            string stringGameState = string.Empty;
+            foreach (var tube in intGameState)
+            {
+                stringGameState += tube.ToString() + "|";
             }
             stringGameState = stringGameState.Substring(0, stringGameState.Length - 1);
             return stringGameState;
