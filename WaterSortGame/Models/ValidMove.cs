@@ -17,7 +17,8 @@ namespace WaterSortGame.Models
             Target = target;
             Source = source; // mam to v tomhle poradi kvuli eventum
             Liquid = gameState[source.X, source.Y];
-            Hash = GetHashCode();
+            //Hash = GetHashCode();
+            //ReadableHash = GameStateToInt(GameState);
 
             IsTargetSingleColor = isTargetSingleColor;
             //CalculatePriority();
@@ -56,6 +57,7 @@ namespace WaterSortGame.Models
         public LiquidColorNew[,] GameState { get; set; }
         public int SolutionValue { get; set; }
         public int Hash { get; private set; }
+        //[Obsolete]public string ReadableHash { get; private set; }
         //public int MaxSolutionValue { get; set; }
 
         //public static bool operator ==(ValidMove first, ValidMove second)
@@ -64,7 +66,7 @@ namespace WaterSortGame.Models
         //    //Debug.WriteLine($"first.Source.X [{first.Source.X}] == second.Source.X [{second.Source.X}] && first.Source.Y [{first.Source.Y}] == second.Source.Y [{second.Source.Y}]");
         //    //Debug.WriteLine($"&& first.Target.X [{first.Target.X}] == second.Target.X[{second.Target.X}] && first.Target.Y [{first.Target.Y}] == second.Target.Y [{second.Target.Y}]");
         //    //Debug.WriteLine($"&& first.Liquid.Name [{first.Liquid.Name}] == second.Liquid.Name [{second.Liquid.Name}]");
-            
+
         //    //Debug.WriteLine($"[{first.Source.X}] == [{second.Source.X}] && [{first.Source.Y}] == [{second.Source.Y}]");
         //    //Debug.WriteLine($"&& [{first.Target.X}] == [{second.Target.X}] && [{first.Target.Y}] == [{second.Target.Y}]");
         //    //Debug.WriteLine($"&& [{first.Liquid.Name}] == [{second.Liquid.Name}]");
@@ -118,6 +120,11 @@ namespace WaterSortGame.Models
 
             //return GameState.GetHashCode();
         }
+        public void UpdateHash()
+        {
+            Hash = GetHashCode();
+            //ReadableHash = GameStateToInt(GameState);
+        }
         //private static List<string> GameStateToInt(LiquidColorNew[,] gameState)
         //{
         //    List<string> intGameState = new List<string>();
@@ -153,8 +160,9 @@ namespace WaterSortGame.Models
             string stringGameState = string.Empty;
             foreach (var tube in intGameState)
             {
-                stringGameState += tube.ToString();
+                stringGameState += tube.ToString() + "-";
             }
+            stringGameState = stringGameState.Substring(0, stringGameState.Length - 1);
             return stringGameState;
         }
     }

@@ -18,7 +18,7 @@ namespace WaterSortGame.Models
         //TreeNode<ValidMove> SolvingSteps;
         //TreeNode<ValidMove> FirstStep;
         public bool ResumeRequest { get; set; }
-        public int ResumeRequestCounterDebug { get; set; } = 0; // used only for debugging how many times I clicked the button and only triggering breakpoint upon certain number.
+        [Obsolete]public int ResumeRequestCounterDebug { get; set; } = 0; // used only for debugging how many times I clicked the button and only triggering breakpoint upon certain number.
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
@@ -46,7 +46,6 @@ namespace WaterSortGame.Models
                     treeNode = treeNode.Parent;
                     MakeAMove(treeNode);
                     Notification.Show("Returning to previous move");
-                    //treeNode = treeNode.FirstChild;
                     await WaitForButtonPress();
 
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
@@ -148,7 +147,7 @@ namespace WaterSortGame.Models
         }
         private void CreateAllPossibleFutureStates(CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps, TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
         {
-            var node = parentNode; // this is not a mistake!
+            var node = parentNode; // this is not a mistake. If I made "node" in the parameters then I would change the node on the outside!
             for (int i = 0; i < validMoves.Count; i++)
             {
                 var nextNode = new TreeNode<ValidMove>(validMoves[i]);
@@ -181,6 +180,7 @@ namespace WaterSortGame.Models
                 node.Data.GameState[node.Data.Source.X, node.Data.Source.Y - j] = null;
                 j++;
             }
+            node.Data.UpdateHash();
         }
 
         private bool GameStateAlreadyExists(CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps, TreeNode<ValidMove> nextNode)
