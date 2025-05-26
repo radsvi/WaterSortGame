@@ -123,13 +123,13 @@
             </Grid>
 
             <!--<Grid Width="400" Height="170" Visibility="{Binding QuickNotificationVisibility}" d:Visibility="Hidden">-->
-            <Grid Visibility="{Binding QuickNotificationVisibility}" d:Visibility="Hidden" VerticalAlignment="Top" Margin="10,40,10,10">
+            <StackPanel VerticalAlignment="Top" Margin="10,40,10,10" x:Name="NotificationBox">
                 <!--<views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>-->
                 <!--<views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>-->
                 <!--<views:QuickNotificationOverlay NotificationText="qwer"/>-->
-                <views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText}"/>
+                <!--<views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText}"/>-->
                 <!--<TextBlock Text="{Binding QuickNotificationText}"/>-->
-            </Grid>
+            </StackPanel>
             <ContentControl Content="{Binding SelectedViewModel}" d:Visibility="Hidden"/>
 
         </Grid>

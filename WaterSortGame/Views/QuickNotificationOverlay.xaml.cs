@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WaterSortGame.MVVM;
+using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Views
 {
@@ -20,13 +22,19 @@ namespace WaterSortGame.Views
     /// </summary>
     public partial class QuickNotificationOverlay : UserControl
     {
+        MainWindowVM MainWindowVM;
         public QuickNotificationOverlay()
         {
             InitializeComponent();
         }
-
-
-
+        internal QuickNotificationOverlay(MainWindowVM mainWindowVM, string notificationText, CancellationToken token)
+        {
+            InitializeComponent();
+            MainWindowVM = mainWindowVM;
+            NotificationText = notificationText;
+            Token = token;
+        }
+        public CancellationToken Token { get; private set; }
         public string NotificationText
         {
             get { return (string)GetValue(NotificationTextProperty); }
@@ -36,6 +44,6 @@ namespace WaterSortGame.Views
         public static DependencyProperty NotificationTextProperty =
             DependencyProperty.Register("NotificationText", typeof(string), typeof(QuickNotificationOverlay));
 
-
+        public RelayCommand CloseQuickNotificationCommandInternal => new RelayCommand(token => MainWindowVM.Notification.CloseNotification(token));
     }
 }

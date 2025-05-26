@@ -45,7 +45,7 @@ namespace WaterSortGame.ViewModels
         public AppSettings AppSettings { get; }
         public Notification Notification { get; }
         public AutoSolve AutoSolve { get; set; }
-        public GameState GameState { get; set; }
+        public GameState GameState { get; }
         private LoadLevelVM loadLevelVM;
         public LoadLevelVM LoadLevelVM
         {
@@ -162,7 +162,7 @@ namespace WaterSortGame.ViewModels
         }
 
         private bool quickNotificationVisibilityBool = false;
-        public bool QuickNotificationVisibilityBool
+        [Obsolete]public bool QuickNotificationVisibilityBool
         {
             get { return quickNotificationVisibilityBool; }
             set
@@ -348,7 +348,7 @@ namespace WaterSortGame.ViewModels
             WindowService?.CloseWindow();
             SelectedViewModel = new HelpVM(this);
         });
-        public RelayCommand CloseQuickNotificationCommand => new RelayCommand(execute => Notification.CloseNotification());
+        //public RelayCommand CloseQuickNotificationCommand => new RelayCommand(execute => Notification.CloseNotification());
         //public RelayCommand DisplayQuickNotificationCommand => new RelayCommand(execute => DisplayQuickNotification("asdf"));
         private void DisplayQuickNotification(string displayText)
         {
@@ -357,26 +357,6 @@ namespace WaterSortGame.ViewModels
         public RelayCommand TestMethodCommand => new RelayCommand(execute => TestMethod());
         private void TestMethod()
         {
-            //TreeNode<ValidMove> node = new TreeNode<ValidMove>(new ValidMove(null));
-            //var startintNode = node;
-            //TreeNode<ValidMove> nextNode;
-
-            //nextNode = new TreeNode<ValidMove>(new ValidMove(null));
-            //node.AddSibling(nextNode);
-            //node = nextNode;
-
-            //nextNode = new TreeNode<ValidMove>(new ValidMove(null));
-            //node.AddSibling(nextNode);
-            //node = nextNode;
-
-            //nextNode = new TreeNode<ValidMove>(new ValidMove(null));
-            //node.AddSibling(nextNode);
-            //node = nextNode;
-
-
-            //int number = TreeNode<ValidMove>.CountSiblings(startintNode);
-            //Notification.Show("Count: " + number);
-
             TreeNode<ValidMove> node = new TreeNode<ValidMove>(new ValidMove(null));
             var startingNode = node;
             TreeNode<ValidMove> nextNode;
