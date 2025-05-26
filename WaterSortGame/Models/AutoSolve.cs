@@ -161,16 +161,16 @@ namespace WaterSortGame.Models
         /// <summary>
         /// basically checks if there are any valid moves. If there is at least one children and it is unvisited, it returns true.
         /// </summary>
-        /// <param name="treeNode"></param>
+        /// <param name="parentNode"></param>
         /// <returns></returns>
-        private bool UnvisitedChildrenExist(TreeNode<ValidMove> treeNode)
+        private bool UnvisitedChildrenExist(TreeNode<ValidMove> parentNode)
         {
-            if (treeNode.FirstChild is null)
+            if (parentNode.FirstChild is null)
             {
                 return false;
             }
 
-            var node = treeNode.FirstChild;
+            var node = parentNode.FirstChild;
             while (node is not null)
             {
                 if (node.Data.LeavesVisited is false)
