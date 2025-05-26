@@ -27,14 +27,16 @@ namespace WaterSortGame.Views
         {
             InitializeComponent();
         }
-        internal QuickNotificationOverlay(MainWindowVM mainWindowVM, string notificationText, CancellationToken token)
+        internal QuickNotificationOverlay(MainWindowVM mainWindowVM, string notificationText, CancellationTokenSource tokenSource)
         {
             InitializeComponent();
+            (this.Content as FrameworkElement).DataContext = this;
+
             MainWindowVM = mainWindowVM;
             NotificationText = notificationText;
-            Token = token;
+            TokenSource = tokenSource;
         }
-        public CancellationToken Token { get; private set; }
+        public CancellationTokenSource TokenSource { get; private set; }
         public string NotificationText
         {
             get { return (string)GetValue(NotificationTextProperty); }

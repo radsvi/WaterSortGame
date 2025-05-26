@@ -45,10 +45,10 @@ namespace WaterSortGame.Models
     internal class Notification
     {
         MainWindowVM MainWindowVM;
-        const int closeDelayDefault = 2000; // in ms
+        const int closeDelayDefault = 10000; // in ms
         [Obsolete]public int Counter { get; set; } = 0;
         private bool DisplayDebugMessages { get; set; } = true;
-        public CancellationTokenSource TokenSource { get; set; } = null;
+        //public CancellationTokenSource TokenSource { get; set; } = null;
         public Panel NotificationBox { get; private set; }
         //public NotificationsList NotificationList { get; private set; }
         public Dictionary<CancellationToken, QuickNotificationOverlay> NotificationsDictionary { get; private set; } = [];
@@ -71,18 +71,18 @@ namespace WaterSortGame.Models
             MainWindowVM.QuickNotificationText = text;
             MainWindowVM.QuickNotificationVisibilityBool = true;
 
-            TokenSource = new CancellationTokenSource();
-            var token = TokenSource.Token;
+            var tokenSource = new CancellationTokenSource();
+            var token = tokenSource.Token;
 
             //var notificationControl = new QuickNotificationOverlay() { NotificationText = $"{{{Counter++}}}" + text, Token = token };
-            var notificationControl = new QuickNotificationOverlay(MainWindowVM, $"{{{Counter++}}}" + text, token);
+            var notificationControl = new QuickNotificationOverlay(MainWindowVM, $"{{{Counter++}}}" + text, tokenSource);
             //NotificationList.Add(notificationControl, token);
             NotificationBox.Children.Add(notificationControl);
-            NotificationsDictionary.Add(token, notificationControl);
+            NotificationsDictionary.Add(token, notificationControl); // prepsat na tokenSource?
 
-            PopupNotification(token, closeDelay);
+            PopupNotification(tokenSource, closeDelay);
         }
-        private async void PopupNotification(CancellationToken token, int closeDelay)
+        private async void PopupNotification(CancellationTokenSource tokenSource, int closeDelay)
         {
             //await Task.Delay(closeDelayDefault, token);
 
@@ -90,32 +90,30 @@ namespace WaterSortGame.Models
             for (int i = 0; i < closeDelay; i++)
             {
                 await Task.Delay(100);
-                if (token.IsCancellationRequested)
+                if (tokenSource.Token.IsCancellationRequested)
                 {
                     break;
                 }
             }
 
-            ClosePopupWindow(token);
+            ClosePopupWindow(tokenSource);
         }
         public void CloseNotification(object tokenObject)
         {
-            if (tokenObject.GetType() != typeof(CancellationToken))
+            if (tokenObject.GetType() != typeof(CancellationTokenSource))
             {
                 return;
             }
-            CancellationToken token = (CancellationToken)tokenObject;
+            CancellationTokenSource tokenSource = (CancellationTokenSource)tokenObject;
 
-            
-
-            TokenSource?.Cancel();
+            tokenSource?.Cancel();
         }
-        private void ClosePopupWindow(CancellationToken token)
+        private void ClosePopupWindow(CancellationTokenSource tokenSource)
         {
-            if (NotificationsDictionary.ContainsKey(token))
+            if (NotificationsDictionary.ContainsKey(tokenSource.Token))
             {
-                NotificationBox.Children.Remove(NotificationsDictionary[token]);
-                NotificationsDictionary.Remove(token);
+                NotificationBox.Children.Remove(NotificationsDictionary[tokenSource.Token]);
+                NotificationsDictionary.Remove(tokenSource.Token);
             }
         }
     }
