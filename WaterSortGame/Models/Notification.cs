@@ -42,16 +42,24 @@ namespace WaterSortGame.Models
     //        Notifications.Add(reference);
     //    }
     //}
+    public class NotificationDetails
+    {
+        public NotificationDetails(QuickNotificationOverlay refVisualElement, CancellationTokenSource tokenSource)
+        {
+            RefVisualElement = refVisualElement;
+            TokenSource = tokenSource;
+        }
+        public CancellationTokenSource TokenSource { get; private set; }
+        public QuickNotificationOverlay RefVisualElement { get; private set; }
+    }
     internal class Notification
     {
         MainWindowVM MainWindowVM;
         const int closeDelayDefault = 10000; // in ms
-        [Obsolete]public int Counter { get; set; } = 0;
         private bool DisplayDebugMessages { get; set; } = true;
         //public CancellationTokenSource TokenSource { get; set; } = null;
         public Panel NotificationBox { get; private set; }
         //public NotificationsList NotificationList { get; private set; }
-        public Dictionary<CancellationToken, QuickNotificationOverlay> NotificationsDictionary { get; private set; } = [];
         public Notification(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
@@ -68,21 +76,14 @@ namespace WaterSortGame.Models
                 return;
             }
 
-            MainWindowVM.QuickNotificationText = text;
-            MainWindowVM.QuickNotificationVisibilityBool = true;
-
             var tokenSource = new CancellationTokenSource();
-            var token = tokenSource.Token;
+            var notificationControl = new QuickNotificationOverlay(MainWindowVM, text, tokenSource);
 
-            //var notificationControl = new QuickNotificationOverlay() { NotificationText = $"{{{Counter++}}}" + text, Token = token };
-            var notificationControl = new QuickNotificationOverlay(MainWindowVM, $"{{{Counter++}}}" + text, tokenSource);
-            //NotificationList.Add(notificationControl, token);
             NotificationBox.Children.Add(notificationControl);
-            NotificationsDictionary.Add(token, notificationControl); // prepsat na tokenSource?
 
-            PopupNotification(tokenSource, closeDelay);
+            PopupNotification(notificationControl, closeDelay);
         }
-        private async void PopupNotification(CancellationTokenSource tokenSource, int closeDelay)
+        private async void PopupNotification(QuickNotificationOverlay notificationControl, int closeDelay)
         {
             //await Task.Delay(closeDelayDefault, token);
 
@@ -90,30 +91,29 @@ namespace WaterSortGame.Models
             for (int i = 0; i < closeDelay; i++)
             {
                 await Task.Delay(100);
-                if (tokenSource.Token.IsCancellationRequested)
+                if (notificationControl.NotificationDetails.TokenSource.Token.IsCancellationRequested)
                 {
                     break;
                 }
             }
 
-            ClosePopupWindow(tokenSource);
+            ClosePopupWindow(notificationControl.NotificationDetails);
         }
-        public void CloseNotification(object tokenObject)
+        public void CloseNotification(object notificationDetailsGenericObject)
         {
-            if (tokenObject.GetType() != typeof(CancellationTokenSource))
+            if (notificationDetailsGenericObject.GetType() != typeof(NotificationDetails))
             {
                 return;
             }
-            CancellationTokenSource tokenSource = (CancellationTokenSource)tokenObject;
-
-            tokenSource?.Cancel();
+            NotificationDetails notificationDetails = (NotificationDetails)notificationDetailsGenericObject;
+            notificationDetails.TokenSource.Cancel();
+            //tokenSource?.Cancel();
         }
-        private void ClosePopupWindow(CancellationTokenSource tokenSource)
+        private void ClosePopupWindow(NotificationDetails notificationDetails)
         {
-            if (NotificationsDictionary.ContainsKey(tokenSource.Token))
+            if (notificationDetails.TokenSource.IsCancellationRequested == true)
             {
-                NotificationBox.Children.Remove(NotificationsDictionary[tokenSource.Token]);
-                NotificationsDictionary.Remove(tokenSource.Token);
+                NotificationBox.Children.Remove(notificationDetails.RefVisualElement);
             }
         }
     }

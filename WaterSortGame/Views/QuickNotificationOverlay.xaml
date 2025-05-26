@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="30" d:DesignWidth="600">
     <Grid>
-        <Button Style="{StaticResource ClickBackgroundButtonQuickNotification}" Command="{Binding CloseQuickNotificationCommandInternal}" CommandParameter="{Binding TokenSource}">
+        <Button Style="{StaticResource ClickBackgroundButtonQuickNotification}" Command="{Binding CloseQuickNotificationCommandInternal}" CommandParameter="{Binding NotificationDetails}">
             <Grid Style="{StaticResource QuickNotificationPopupScreen}">
                 <StackPanel Margin="3" HorizontalAlignment="Center">
                     <TextBlock Text="{Binding Path=NotificationText, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" d:Text="Notification text"/>

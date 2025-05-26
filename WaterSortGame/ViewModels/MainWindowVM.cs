@@ -160,42 +160,6 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
-
-        private bool quickNotificationVisibilityBool = false;
-        [Obsolete]public bool QuickNotificationVisibilityBool
-        {
-            get { return quickNotificationVisibilityBool; }
-            set
-            {
-                if (value != quickNotificationVisibilityBool)
-                {
-                    quickNotificationVisibilityBool = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(QuickNotificationVisibility));
-                }
-            }
-        }
-        public string QuickNotificationVisibility
-        {
-            get {
-                if (quickNotificationVisibilityBool) return "Visible";
-                else return "Hidden";
-            }
-        }
-
-        private string quickNotificationText;
-        public string QuickNotificationText
-        {
-            get { return quickNotificationText; }
-            set
-            {
-                if (value != quickNotificationText)
-                {
-                    quickNotificationText = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
         public bool PropertyChangedEventPaused { get; set; } = false;
         public ObservableCollection<PopupScreenActions> PopupActions { get; set; }
         #endregion
@@ -348,7 +312,6 @@ namespace WaterSortGame.ViewModels
             WindowService?.CloseWindow();
             SelectedViewModel = new HelpVM(this);
         });
-        //public RelayCommand CloseQuickNotificationCommand => new RelayCommand(execute => Notification.CloseNotification());
         //public RelayCommand DisplayQuickNotificationCommand => new RelayCommand(execute => DisplayQuickNotification("asdf"));
         private void DisplayQuickNotification(string displayText)
         {
