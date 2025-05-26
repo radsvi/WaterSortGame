@@ -313,10 +313,10 @@ namespace WaterSortGame.ViewModels
             SelectedViewModel = new HelpVM(this);
         });
         //public RelayCommand DisplayQuickNotificationCommand => new RelayCommand(execute => DisplayQuickNotification("asdf"));
-        private void DisplayQuickNotification(string displayText)
-        {
-            Notification.Show(displayText);
-        }
+        //private void DisplayQuickNotification(string displayText)
+        //{
+        //    Notification.Show(displayText);
+        //}
         public RelayCommand TestMethodCommand => new RelayCommand(execute => TestMethod());
         private void TestMethod()
         {

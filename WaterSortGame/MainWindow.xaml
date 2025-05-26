@@ -122,13 +122,16 @@
                 </StackPanel>
             </Grid>
 
-            <StackPanel VerticalAlignment="Top" Margin="10,40,10,10" x:Name="NotificationBox">
-                <!--<views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>-->
-                <!--<views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>-->
-                <!--<views:QuickNotificationOverlay NotificationText="qwer"/>-->
-                <!--<views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText}"/>-->
-                <!--<TextBlock Text="{Binding QuickNotificationText}"/>-->
-            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,40,10,10" VerticalAlignment="Top" MaxHeight="62">
+                <StackPanel VerticalAlignment="Top"  x:Name="NotificationBox">
+                    <!--<views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>-->
+                    <!--<views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>-->
+                    <!--<views:QuickNotificationOverlay NotificationText="qwer"/>-->
+                    <!--<views:QuickNotificationOverlay NotificationText="{Binding Path=QuickNotificationText}"/>-->
+                    <!--<TextBlock Text="{Binding QuickNotificationText}"/>-->
+                </StackPanel>
+            </ScrollViewer>
+            
             <ContentControl Content="{Binding SelectedViewModel}" d:Visibility="Hidden"/>
 
         </Grid>

@@ -17,31 +17,6 @@ namespace WaterSortGame.Models
         Information,
         Debug
     }
-    //internal class NotificationDetails
-    //{
-    //    public NotificationDetails(QuickNotificationOverlay refVisualElement, CancellationToken token)
-    //    {
-    //        RefVisualElement = refVisualElement;
-    //        Token = token;
-    //    }
-    //    public CancellationToken Token { get; private set; }
-    //    public QuickNotificationOverlay RefVisualElement { get; private set; }
-    //}
-    //internal class NotificationsList
-    //{
-    //    public List<NotificationDetails> Notifications { get; private set; }
-    //    public Panel NotificationBox { get; private set; }
-    //    public NotificationsList(Panel notificationBoxVisualElement)
-    //    {
-    //        NotificationBox = notificationBoxVisualElement;
-    //    }
-    //    public void Add(QuickNotificationOverlay notificationControl, CancellationToken token)
-    //    {
-    //        NotificationBox.Children.Add(notificationControl);
-    //        var reference = new NotificationDetails(notificationControl, token);
-    //        Notifications.Add(reference);
-    //    }
-    //}
     public class NotificationDetails
     {
         public NotificationDetails(QuickNotificationOverlay refVisualElement, CancellationTokenSource tokenSource)
@@ -67,7 +42,7 @@ namespace WaterSortGame.Models
             NotificationBox = mainWindowVM.MainWindow.NotificationBox;
         }
         public void Show(string text) => Show(text, MessageType.Information);
-        public void Show(string text, int closeDelay = closeDelayDefault) => Show(text, MessageType.Information, closeDelayDefault);
+        public void Show(string text, int closeDelay = closeDelayDefault) => Show(text, MessageType.Information, closeDelay);
         public void Show(string text, MessageType messageType, int closeDelay = closeDelayDefault)
         {
             Debug.WriteLine("[Notification: ]" + text);
@@ -107,14 +82,10 @@ namespace WaterSortGame.Models
             }
             NotificationDetails notificationDetails = (NotificationDetails)notificationDetailsGenericObject;
             notificationDetails.TokenSource.Cancel();
-            //tokenSource?.Cancel();
         }
         private void ClosePopupWindow(NotificationDetails notificationDetails)
         {
-            if (notificationDetails.TokenSource.IsCancellationRequested == true)
-            {
-                NotificationBox.Children.Remove(notificationDetails.RefVisualElement);
-            }
+            NotificationBox.Children.Remove(notificationDetails.RefVisualElement);
         }
     }
 }
