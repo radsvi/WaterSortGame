@@ -62,7 +62,7 @@ namespace WaterSortGame.Models
                 
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
-                if (treeNode.Data.LeavesVisited == true)
+                if (treeNode.Data.Visited == true)
                 {
                     treeNode = treeNode.Parent;
                     if (debugVisualiseState) MakeAMove(treeNode.Data);
@@ -117,9 +117,9 @@ namespace WaterSortGame.Models
                     {
                         if (MainWindowVM.GameState.IsLevelCompleted(treeNode.Data.GameState) is false)
                         {
-                            treeNode.Data.LeavesVisited = true;
+                            treeNode.Data.Visited = true;
                             if (treeNode.Parent is not null)
-                                treeNode.Parent.Data.LeavesVisited = true;
+                                treeNode.Parent.Data.Visited = true;
 
                             Notification.Show($"{{{iterations}}} Reached a dead end.", MessageType.Debug);
                             continue;
@@ -173,7 +173,7 @@ namespace WaterSortGame.Models
             var node = parentNode.FirstChild;
             while (node is not null)
             {
-                if (node.Data.LeavesVisited is false)
+                if (node.Data.Visited is false)
                 {
                     return true;
                 }
@@ -197,7 +197,7 @@ namespace WaterSortGame.Models
 
                 hashedSteps.Add(nextNode.Data.Hash, nextNode);
 
-                if (i == 0)
+                if (parentNode.FirstChild is null)
                 {
                     node.AddChild(nextNode);
                 }
@@ -226,7 +226,7 @@ namespace WaterSortGame.Models
             {
                 foreach (var hashItem in hashedSteps[nextNode.Data.Hash])
                 {
-                    if (hashItem.Data.Equals(nextNode.Data.GameState) && hashItem.Data.LeavesVisited == true) // pokud neni Visited == true tak jsem to jen vygeneroval jako dalsi krok, ale jeste nikdy neprozkoumal
+                    if (hashItem.Data.Equals(nextNode.Data.GameState) && hashItem.Data.Visited == true) // pokud neni Visited == true tak jsem to jen vygeneroval jako dalsi krok, ale jeste nikdy neprozkoumal
                     {
                         Debug.WriteLine("Nasel jsem opakujici se stav!");
                         return true;
@@ -245,7 +245,7 @@ namespace WaterSortGame.Models
             TreeNode<ValidMove> resultNode = new NullTreeNode(node);
             while (currentNode != null)
             {
-                if (currentNode.Data.LeavesVisited is false)
+                if (currentNode.Data.Visited is false)
                 {
                     resultNode = currentNode;
                     break; // i have got it sorted by highest priority, so first non-visited is fine
@@ -258,7 +258,7 @@ namespace WaterSortGame.Models
             {
                 if (resultNode.Parent is not null) // null by mel byt jen v pripade ze jsme uplne na zacatku
                 {
-                    resultNode.Parent.Data.LeavesVisited = true;
+                    resultNode.Parent.Data.Visited = true;
                 }
                 resultNode.Data.SolutionValue = GetStepValue(resultNode.Data.GameState);
             }
