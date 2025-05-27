@@ -279,25 +279,37 @@ namespace WaterSortGame.ViewModels
 
             ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
 
-            var additionalLevels = new List<StoredLevel>();
+            //var additionalLevels = new List<StoredLevel>();
             var firstLevel = new int?[,]
             {
-                {8, 1, 3, 0},
-                {2, 7, 10, 4},
-                {8, 10, 10, 11},
-                {2, 2, 1, 4},
-                {0, 6, 5, 9},
-                {2, 3, 6, 3},
-                {3, 7, 4, 9},
-                {5, 0, 1, 8},
-                {10, 9, 6, 5},
-                {4, 6, 9, 3},
-                {7, 11, 5, 11},
-                {0, 11, 7, 8},
+                //{8, 1, 3, 0},
+                //{2, 7, 10, 4},
+                //{8, 10, 10, 11},
+                //{2, 2, 1, 4},
+                //{0, 6, 5, 9},
+                //{2, 3, 6, 3},
+                //{3, 7, 4, 9},
+                //{5, 0, 1, 8},
+                //{10, 9, 6, 5},
+                //{4, 6, 9, 3},
+                //{7, 11, 5, 11},
+                //{0, 11, 7, 8},
+                {9, 2, 4, 1},
+                {3, 8, 11, 5},
+                {9, 11, 11, 12},
+                {3, 3, 2, 5},
+                {1, 7, 6, 10},
+                {3, 4, 7, 4},
+                {2, 8, 5, 10},
+                {6, 1, 2, 9},
+                {11, 10, 7, 6},
+                {5, 7, 10, 4},
+                {8, 12, 6, 12},
+                {1, 12, 8, 9},
                 {null, null, null,null },
                 {null, null, null,null }
             };
-            additionalLevels.Insert(0, new StoredLevel(ConvertToColorBrush(firstLevel), "Never solved this level without adding extra tubes."));
+            savedLevelList.Insert(0, new StoredLevel(ConvertToColorBrush(firstLevel), "Never solved this level without adding extra tubes."));
 
             //{ new Tube(8, 1, 3, 0) },
             //{ new Tube(2, 7, 10, 4) },
@@ -347,7 +359,7 @@ namespace WaterSortGame.ViewModels
                 { 11, 11, 11, null },
                 { null, null, null, null },
             };
-            additionalLevels.Insert(0, new StoredLevel(ConvertToColorBrush(secondLevel), "Never solved this level without adding extra tubes."));
+            savedLevelList.Insert(0, new StoredLevel(ConvertToColorBrush(secondLevel), "asdfTesting"));
 
 
             Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);

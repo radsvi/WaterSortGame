@@ -179,18 +179,18 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 4,1,3,5 });
             //AddTube(i++, new int[] { 5,3,5,4 });
 
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Purple, LiquidColorName.LightBlue });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.LightBlue });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Orange });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Purple, LiquidColorName.GrayBlue, LiquidColorName.Yellow });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.LightBlue, LiquidColorName.Yellow, LiquidColorName.GrayBlue });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightGreen, LiquidColorName.Blue, LiquidColorName.Olive, LiquidColorName.LightGreen });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.LightGreen, LiquidColorName.Olive, LiquidColorName.Pink });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightBlue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Gray, LiquidColorName.Gray, LiquidColorName.Green });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Olive, LiquidColorName.LightGreen });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.Orange, LiquidColorName.Purple, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Purple, LiquidColorName.LightBlue });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.LightBlue });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Purple, LiquidColorName.GrayBlue, LiquidColorName.Yellow });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.LightBlue, LiquidColorName.Yellow, LiquidColorName.GrayBlue });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.LightGreen, LiquidColorName.Blue, LiquidColorName.Olive, LiquidColorName.LightGreen });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.LightGreen, LiquidColorName.Olive, LiquidColorName.Pink });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.LightBlue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Gray, LiquidColorName.Gray, LiquidColorName.Green });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Olive, LiquidColorName.LightGreen });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.Orange, LiquidColorName.Purple, LiquidColorName.Orange });
 
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Purple });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Red });
@@ -223,6 +223,35 @@ namespace WaterSortGame.Models
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Gray, LiquidColorName.Red, LiquidColorName.Blue });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Gray });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Red });
+
+            //// Nikdy nevyresenej level:
+            //AddTube(i++, new int[] { 9, 2, 4, 1 });
+            //AddTube(i++, new int[] { 3, 8, 11, 5 });
+            //AddTube(i++, new int[] { 9, 11, 11, 12 });
+            //AddTube(i++, new int[] { 3, 3, 2, 5 });
+            //AddTube(i++, new int[] { 1, 7, 6, 10 });
+            //AddTube(i++, new int[] { 3, 4, 7, 4 });
+            //AddTube(i++, new int[] { 2, 8, 5, 10 });
+            //AddTube(i++, new int[] { 6, 1, 2, 9 });
+            //AddTube(i++, new int[] { 11, 10, 7, 6 });
+            //AddTube(i++, new int[] { 5, 7, 10, 4 });
+            //AddTube(i++, new int[] { 8, 12, 6, 12 });
+            //AddTube(i++, new int[] { 1, 12, 8, 9 });
+
+            // sejvnutej level z te novejsi hry. Level jsem vyresil, ale byl tezkej:
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.GrayBlue, LiquidColorName.LightBlue, LiquidColorName.LightGreen });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.LightBlue, LiquidColorName.LightBlue, LiquidColorName.Gray });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Purple, LiquidColorName.Red, LiquidColorName.LightGreen });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Yellow, LiquidColorName.Olive, LiquidColorName.Green });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Blue, LiquidColorName.Yellow, LiquidColorName.Blue });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.GrayBlue, LiquidColorName.LightGreen, LiquidColorName.Green });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Red, LiquidColorName.Pink });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightBlue, LiquidColorName.Green, LiquidColorName.Yellow, LiquidColorName.Olive });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightGreen, LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Blue });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.Gray, LiquidColorName.Olive, LiquidColorName.Gray });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Gray, LiquidColorName.GrayBlue, LiquidColorName.Pink });
+
 
             //AddTube(i++, new LiquidColorName[] { });
             //AddTube(i++, new LiquidColorName[] { });
@@ -305,12 +334,12 @@ namespace WaterSortGame.Models
             }
 
             List<int> selectedColors = new List<int>();
-            for (int i = 0; i < LiquidColorNew.ColorKeys.Count; i++) // generate list of all colors
+            for (int i = 1; i < LiquidColorNew.ColorKeys.Count; i++) // generate list of all colors. Starting at i=1 because color number 0 is blank and used for other purposes.
             {
                 selectedColors.Add(i);
             }
 
-            for (int i = 0; i < LiquidColorNew.ColorKeys.Count - appSettings.NumberOfColorsToGenerate; i++) // now remove some random ones
+            for (int i = 1; i < LiquidColorNew.ColorKeys.Count - appSettings.NumberOfColorsToGenerate; i++) // now remove some random ones. Starting at i=1 because color number 0 is blank and used for other purposes.
             {
                 //selectedColors.Remove(selectedColors[NumberOfColorsToGenerate]); // this always keeps the same colors
                 selectedColors.Remove(selectedColors[rnd.Next(0, selectedColors.Count)]);

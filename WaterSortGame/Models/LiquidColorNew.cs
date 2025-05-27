@@ -20,10 +20,10 @@ namespace WaterSortGame.Models
         Gray,
         Purple,
         Yellow,
-        Pink,
+        Pink, // -> dark red
         Green,
         LightGreen,
-        Olive,
+        Olive, // -> brown
         Red,
     }
     internal class LiquidColorNew
@@ -31,6 +31,7 @@ namespace WaterSortGame.Models
         public LiquidColorName Name { get; set; }
         public SolidColorBrush Brush { get; set; }
         public static List<LiquidColorNew> ColorKeys { get; } = new List<LiquidColorNew>() {
+            new LiquidColorNew(LiquidColorName.Blank, new SolidColorBrush(Color.FromRgb(0,0,0))),
             new LiquidColorNew(LiquidColorName.Blue, new SolidColorBrush(Color.FromRgb(20,93,239))),
             new LiquidColorNew(LiquidColorName.GrayBlue, new SolidColorBrush(Color.FromRgb(63,68,130))),
             new LiquidColorNew(LiquidColorName.LightBlue, new SolidColorBrush(Color.FromRgb(136,170,255))),

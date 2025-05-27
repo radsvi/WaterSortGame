@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -55,15 +56,26 @@ namespace WaterSortGame.Models
             //var gameState = startingPosition;
 
             int iterations = 0;
-            while (iterations < 1000) // ## dodelat aby skoncilo kdyz nejsou zadny mozny nody s Visited == false
+            while (true)
             {
                 iterations++;
+                if (iterations%1000 == 0)
+                {
+                    var msgResult = MessageBox.Show($"Already went through {iterations} iterations. Do you wish to continue?", "Do you wish to continue?", MessageBoxButton.YesNo);
+                    if (msgResult == MessageBoxResult.No)
+                    {
+                        break;
+                    }
+                }
+
                 if (debugVisualiseState) await WaitForButtonPress();
                 
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
                 if (treeNode.Data.Closed == true)
                 {
+                    if (treeNode.Parent is null)
+                        throw new Exception("treeNode.Parent is null for some reason");
                     treeNode = treeNode.Parent;
                     if (debugVisualiseState) MakeAMove(treeNode.Data);
                     Notification.Show($"{{{iterations}}} Returning to previous move", MessageType.Debug);
@@ -269,7 +281,7 @@ namespace WaterSortGame.Models
         }
         private void MakeAMove(ValidMove node)
         {
-            Debug.WriteLine($"# [{node.Source.X},{node.Source.Y}] => [{node.Target.X},{node.Target.Y}] {{{node.Source.ColorName}}} {{HowMany {node.Source.NumberOfRepeatingLiquids}}}");
+            //Debug.WriteLine($"# [{node.Source.X},{node.Source.Y}] => [{node.Target.X},{node.Target.Y}] {{{node.Source.ColorName}}} {{HowMany {node.Source.NumberOfRepeatingLiquids}}}");
             
             //Node.Data.GameState = newGameState;
 
