@@ -51,7 +51,7 @@ namespace WaterSortGame.Models
         private static protected int stepCounter = 0;
         public int StepNumber { get; set; }
         public bool Visited { get; set; }
-        public bool Closed { get; set; }
+        public bool Closed { get; set; } // True means that all children were visited.
         public PositionPointer Target { get; private protected set; }
         public bool IsTargetSingleColor { get; private set; }
         public LiquidColorNew Liquid { get; private protected set; }

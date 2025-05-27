@@ -238,7 +238,7 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 8, 12, 6, 12 });
             //AddTube(i++, new int[] { 1, 12, 8, 9 });
 
-            // sejvnutej level z te novejsi hry. Level jsem vyresil, ale byl tezkej:
+            // sejvnutej level z te novejsi hry. Level jsem vyresil, ale byl tezkej (jeste jednou jsem to overil ze je to resitelny. Uspesne!):
             AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
             AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.GrayBlue, LiquidColorName.LightBlue, LiquidColorName.LightGreen });
             AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.LightBlue, LiquidColorName.LightBlue, LiquidColorName.Gray });
