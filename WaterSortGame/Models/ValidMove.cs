@@ -51,6 +51,7 @@ namespace WaterSortGame.Models
         private static protected int stepCounter = 0;
         public int StepNumber { get; set; }
         public bool Visited { get; set; }
+        public bool Closed { get; set; }
         public PositionPointer Target { get; private protected set; }
         public bool IsTargetSingleColor { get; private set; }
         public LiquidColorNew Liquid { get; private protected set; }
@@ -199,7 +200,7 @@ namespace WaterSortGame.Models
             Target = new NullPositionPointer();
             Source = new NullPositionPointer();
             Liquid = new NullLiquidColorNew();
-            Visited = true; // changing this to true because NullValidMove shouldn't even be even considered as a valid move.
+            Closed = true; // changing this to true because NullValidMove shouldn't even be even considered as a valid move.
         }
     }
 }

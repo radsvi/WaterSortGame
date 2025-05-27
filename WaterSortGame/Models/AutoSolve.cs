@@ -42,7 +42,7 @@ namespace WaterSortGame.Models
         }
         private async void Start(LiquidColorNew[,] startingPosition)
         {
-            bool debugVisualiseState = true; // ## smazat?
+            bool debugVisualiseState = false; // ## smazat?
             //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             var treeNode = new TreeNode<ValidMove>(new ValidMove(startingPosition));
@@ -62,7 +62,7 @@ namespace WaterSortGame.Models
                 
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
-                if (treeNode.Data.Visited == true)
+                if (treeNode.Data.Closed == true)
                 {
                     treeNode = treeNode.Parent;
                     if (debugVisualiseState) MakeAMove(treeNode.Data);
@@ -117,9 +117,9 @@ namespace WaterSortGame.Models
                     {
                         if (MainWindowVM.GameState.IsLevelCompleted(treeNode.Data.GameState) is false)
                         {
-                            treeNode.Data.Visited = true;
+                            treeNode.Data.Closed = true;
                             if (treeNode.Parent is not null)
-                                treeNode.Parent.Data.Visited = true;
+                                treeNode.Parent.Data.Closed = true;
 
                             Notification.Show($"{{{iterations}}} Reached a dead end.", MessageType.Debug);
                             continue;
@@ -141,11 +141,12 @@ namespace WaterSortGame.Models
                     if (debugVisualiseState) MakeAMove(treeNode.Data);
                 }
             }
+            BacktrackThroughAllSteps(treeNode!);
             if (iterations >= 1000)
             {
                 Notification.Show($"Reached {iterations} steps. Interrupting", MessageType.Debug);
             }
-            BacktrackThroughAllSteps(treeNode!);
+            Notification.Show($"Total steps taken to generate: {iterations}. Steps required to solve the puzzle {CompleteSolution.Count}", MessageType.Debug, 10000);
         }
         private void BacktrackThroughAllSteps(TreeNode<ValidMove> treeNode)
         {
@@ -173,7 +174,7 @@ namespace WaterSortGame.Models
             var node = parentNode.FirstChild;
             while (node is not null)
             {
-                if (node.Data.Visited is false)
+                if (node.Data.Closed is false && node.Data.Visited is false)
                 {
                     return true;
                 }
@@ -245,7 +246,7 @@ namespace WaterSortGame.Models
             TreeNode<ValidMove> resultNode = new NullTreeNode(node);
             while (currentNode != null)
             {
-                if (currentNode.Data.Visited is false)
+                if (currentNode.Data.Closed is false)
                 {
                     resultNode = currentNode;
                     break; // i have got it sorted by highest priority, so first non-visited is fine
@@ -258,11 +259,12 @@ namespace WaterSortGame.Models
             {
                 if (resultNode.Parent is not null) // null by mel byt jen v pripade ze jsme uplne na zacatku
                 {
-                    resultNode.Parent.Data.Visited = true;
+                    resultNode.Parent.Data.Closed = true;
                 }
                 resultNode.Data.SolutionValue = GetStepValue(resultNode.Data.GameState);
             }
 
+            resultNode.Data.Visited = true; // have it here to prevent infinitely repeating gameStates like for example [1133],[-155] into - [-133],[1155]
             return resultNode;
         }
         private void MakeAMove(ValidMove node)

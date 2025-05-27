@@ -30,7 +30,7 @@ namespace WaterSortGame.Models
     internal class Notification
     {
         MainWindowVM MainWindowVM;
-        const int closeDelayDefault = 10000; // in ms
+        const int closeDelayDefault = 2000; // in ms
         private bool DisplayDebugMessages { get; set; } = true;
         //public CancellationTokenSource TokenSource { get; set; } = null;
         public Panel NotificationBox { get; private set; }
