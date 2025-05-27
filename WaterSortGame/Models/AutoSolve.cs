@@ -60,14 +60,7 @@ namespace WaterSortGame.Models
             {
                 debugList.Add(treeNode);
                 iterations++;
-                if (iterations%1000 == 0)
-                {
-                    var msgResult = MessageBox.Show($"Already went through {iterations} iterations. Do you wish to continue?", "Do you wish to continue?", MessageBoxButton.YesNo);
-                    if (msgResult == MessageBoxResult.No)
-                    {
-                        break;
-                    }
-                }
+                if (AskUserToContinue(treeNode, iterations) == false) return;
 
                 if (debugVisualiseState) await WaitForButtonPress();
 
@@ -159,6 +152,18 @@ namespace WaterSortGame.Models
                 Notification.Show($"Reached {iterations} steps. Interrupting", MessageType.Debug);
             }
             Notification.Show($"Total steps taken to generate: {iterations}. Steps required to solve the puzzle {CompleteSolution.Count}", MessageType.Debug, 10000);
+        }
+        private bool AskUserToContinue(TreeNode<ValidMove> treeNode, int iterations)
+        {
+            if (iterations % 1000 == 0)
+            {
+                var msgResult = MessageBox.Show($"Already went through {iterations} iterations. Do you wish to continue?", "Do you wish to continue?", MessageBoxButton.YesNo);
+                if (msgResult == MessageBoxResult.No)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         private void BacktrackThroughAllSteps(TreeNode<ValidMove> treeNode)
         {
