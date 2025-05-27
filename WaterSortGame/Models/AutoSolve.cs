@@ -50,7 +50,7 @@ namespace WaterSortGame.Models
             treeNode.Data.StepNumber = -1000; // ## smazat. mam to tu jen abych oznacil prvni node pro debugovani
             //Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps = new Dictionary<int, LinkedList<TreeNode<ValidMove>>>();
             CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps = new CollisionDictionary<int, TreeNode<ValidMove>>();
-
+            List<TreeNode<ValidMove>> debugList = new List<TreeNode<ValidMove>>(); // ## smazat
             //FirstStep.Data.GameState = startingPosition;
             //TreeNode<ValidMove> previousStep = FirstStep;
             //var gameState = startingPosition;
@@ -58,6 +58,7 @@ namespace WaterSortGame.Models
             int iterations = 0;
             while (true)
             {
+                debugList.Add(treeNode);
                 iterations++;
                 if (iterations%1000 == 0)
                 {
@@ -69,7 +70,6 @@ namespace WaterSortGame.Models
                 }
 
                 if (debugVisualiseState) await WaitForButtonPress();
-                
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
                 if (treeNode.Data.Closed == true)

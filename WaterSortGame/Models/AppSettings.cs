@@ -24,6 +24,22 @@ namespace WaterSortGame.Models
                 Settings.Default.Save();
                 //OnPropertyChanged();
                 //}
+                OnPropertyChanged(nameof(NewLevelButtonText));
+            }
+        }
+        public string NewLevelButtonText
+        {
+            get
+            {
+                if (LoadDebugLevel)
+                {
+                    return "[DEBUG] level";
+                }
+                else
+                {
+                    return "New level";
+                }
+                    
             }
         }
         private int numberOfColorsToGenerate = Settings.Default.NumberOfColorsToGenerate;

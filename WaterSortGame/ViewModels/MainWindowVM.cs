@@ -120,7 +120,7 @@ namespace WaterSortGame.ViewModels
                 //OnPropertyChanged();
             }
         }
-
+        
         [Obsolete] private ObservableCollection<Tube> tubes;
         [Obsolete]
         public ObservableCollection<Tube> Tubes
