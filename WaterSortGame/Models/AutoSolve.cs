@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -86,6 +87,7 @@ namespace WaterSortGame.Models
             //int Iterations = 0;
             while (true)
             {
+                await Task.Delay(1);
                 debugList.Add(treeNode);
                 Iterations++;
                 if (AskUserToContinue(treeNode, Iterations) == false) return;
@@ -680,9 +682,6 @@ namespace WaterSortGame.Models
                 Start(gameState);
                 return;
             }
-            
-            //Vertices[1].CalculateGValue(Vertices.First());
-            
         }
 
         public async void StepThroughMethod()
