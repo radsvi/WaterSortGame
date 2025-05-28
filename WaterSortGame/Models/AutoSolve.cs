@@ -95,7 +95,7 @@ namespace WaterSortGame.Models
                 if (debugVisualiseState) await WaitForButtonPress();
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
-                if (treeNode.Data.Closed == true)
+                if (treeNode.Data.FullyVisited == true)
                 {
                     if (treeNode.Parent is null)
                         throw new Exception("treeNode.Parent is null for some reason");
@@ -152,9 +152,9 @@ namespace WaterSortGame.Models
                     {
                         if (MainWindowVM.GameState.IsLevelCompleted(treeNode.Data.GameState) is false)
                         {
-                            treeNode.Data.Closed = true;
+                            treeNode.Data.FullyVisited = true;
                             if (treeNode.Parent is not null)
-                                treeNode.Parent.Data.Closed = true;
+                                treeNode.Parent.Data.FullyVisited = true;
 
                             Notification.Show($"{{{Iterations}}} Reached a dead end.", MessageType.Debug);
                             continue;
@@ -221,7 +221,7 @@ namespace WaterSortGame.Models
             var node = parentNode.FirstChild;
             while (node is not null)
             {
-                if (node.Data.Closed is false && node.Data.Visited is false)
+                if (node.Data.FullyVisited is false && node.Data.Visited is false)
                 {
                     return true;
                 }
@@ -274,7 +274,7 @@ namespace WaterSortGame.Models
             {
                 foreach (var hashItem in hashedSteps[nextNode.Data.Hash])
                 {
-                    if (hashItem.Data.Equals(nextNode.Data.GameState) && hashItem.Data.Visited == true) // pokud neni Visited == true tak jsem to jen vygeneroval jako dalsi krok, ale jeste nikdy neprozkoumal
+                    if (hashItem.Data.Equals(nextNode.Data.GameState) && hashItem.Data.Visited == true) // pokud neni Visited == true tak jsem to jen vygeneroval jako dalsi krok, ale jeste nikdy neprozkoumal, takze stale muzu pouzit
                     {
                         Debug.WriteLine("Nasel jsem opakujici se stav!");
                         return true;
@@ -293,7 +293,7 @@ namespace WaterSortGame.Models
             TreeNode<ValidMove> resultNode = new NullTreeNode(node);
             while (currentNode != null)
             {
-                if (currentNode.Data.Closed is false)
+                if (currentNode.Data.FullyVisited is false)
                 {
                     resultNode = currentNode;
                     break; // i have got it sorted by highest priority, so first non-visited is fine
@@ -306,7 +306,7 @@ namespace WaterSortGame.Models
             {
                 if (resultNode.Parent is not null) // null by mel byt jen v pripade ze jsme uplne na zacatku
                 {
-                    resultNode.Parent.Data.Closed = true;
+                    resultNode.Parent.Data.FullyVisited = true;
                 }
                 resultNode.Data.SolutionValue = GetStepValue(resultNode.Data.GameState);
             }

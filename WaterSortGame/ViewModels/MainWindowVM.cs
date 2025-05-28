@@ -253,7 +253,7 @@ namespace WaterSortGame.ViewModels
             GameState.RestartLevel();
             OnStartingLevel();
         }
-        private void OnStartingLevel()
+        public void OnStartingLevel()
         {
             UIEnabled = true;
             DeselectTube();

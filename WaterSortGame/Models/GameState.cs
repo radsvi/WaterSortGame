@@ -215,10 +215,7 @@ namespace WaterSortGame.Models
 
 
 
-            //AddTube(i++, new int[] { 1, 1 });
-            //AddTube(i++, new int[] { 2, 2 });
-            //AddTube(i++, new int[] { 2, 2, 1, 1 });
-            //AddTube(i++, new int[] { });
+
 
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Gray, LiquidColorName.Red, LiquidColorName.Blue });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Gray });
@@ -252,6 +249,10 @@ namespace WaterSortGame.Models
             AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.Gray, LiquidColorName.Olive, LiquidColorName.Gray });
             AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Gray, LiquidColorName.GrayBlue, LiquidColorName.Pink });
 
+            //AddTube(i++, new int[] { 1, 1 });
+            //AddTube(i++, new int[] { 2, 2 });
+            //AddTube(i++, new int[] { 3, 3, 1, 1 });
+            //AddTube(i++, new int[] { 3, 2, 3, 2 });
 
             //AddTube(i++, new LiquidColorName[] { });
             //AddTube(i++, new LiquidColorName[] { });

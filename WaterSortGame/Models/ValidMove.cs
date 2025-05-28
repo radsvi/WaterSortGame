@@ -9,6 +9,11 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
+    internal enum StringFormat
+    {
+        Names,
+        Numbers
+    }
     internal class ValidMove // prejmenovat na SolvingStep
     {
         public ValidMove(PositionPointer source, PositionPointer target, LiquidColorNew[,] gameState, bool isTargetSingleColor = false)
@@ -51,7 +56,7 @@ namespace WaterSortGame.Models
         private static protected int stepCounter = 0;
         public int StepNumber { get; set; }
         public bool Visited { get; set; }
-        public bool Closed { get; set; } // True means that all children were visited.
+        public bool FullyVisited { get; set; } // True means that all children were visited.
         public PositionPointer Target { get; private protected set; }
         public bool IsTargetSingleColor { get; private set; }
         public LiquidColorNew Liquid { get; private protected set; }
@@ -127,7 +132,9 @@ namespace WaterSortGame.Models
         {
             Hash = GetHashCode();
             ReadableHash = GameStateToInt(GameState);
-            ReadableGameState = GameStateToStr(GameState);
+            //ReadableGameState = GameStateToString(GameState);
+            ReadableGameState = GameStateToString(GameState, StringFormat.Numbers);
+
         }
         //private static List<string> GameStateToInt(LiquidColorNew[,] gameState)
         //{
@@ -169,27 +176,39 @@ namespace WaterSortGame.Models
             stringGameState = stringGameState.Substring(0, stringGameState.Length - 1);
             return stringGameState;
         }
-        [Obsolete]private static string GameStateToStr(LiquidColorNew[,] gameState)
+        private static string GameStateToString(LiquidColorNew[,] gameState, StringFormat format = StringFormat.Names)
         {
             List<string> intGameState = new List<string>();
             for (int x = 0; x < gameState.GetLength(0); x++)
             {
-                string tubeString = string.Empty;
+                string tubeString = "[";
                 for (int y = gameState.GetLength(1) - 1; y >= 0; y--)
                 {
                     if (gameState[x, y] is not null)
+                    {
                         //tubeInt += (int)gameState[x, y].Name * (int)Math.Pow(100,y);
-                        tubeString += (gameState[x, y].Name).ToString() + "-";
+                        if (format == StringFormat.Names)
+                        {
+                            tubeString += (gameState[x, y].Name).ToString();
+                        }
+                        else
+                        {
+                            tubeString += ((int)gameState[x, y].Name).ToString("00"); // this format is used for debugging. To easily export the gamestate as a string.
+                        }
+                    }
+                    else
+                        tubeString += "-";
+                    if (y > 0) tubeString += ".";
                 }
+                tubeString += "]";
                 intGameState.Add(tubeString);
             }
             intGameState.Sort();
             string stringGameState = string.Empty;
             foreach (var tube in intGameState)
             {
-                stringGameState += tube.ToString() + "|";
+                stringGameState += tube.ToString();
             }
-            stringGameState = stringGameState.Substring(0, stringGameState.Length - 1);
             return stringGameState;
         }
     }
@@ -200,7 +219,7 @@ namespace WaterSortGame.Models
             Target = new NullPositionPointer();
             Source = new NullPositionPointer();
             Liquid = new NullLiquidColorNew();
-            Closed = true; // changing this to true because NullValidMove shouldn't even be even considered as a valid move.
+            FullyVisited = true; // changing this to true because NullValidMove shouldn't even be even considered as a valid move.
         }
     }
 }

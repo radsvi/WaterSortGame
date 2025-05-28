@@ -7,6 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="620" d:DesignWidth="600">
     <UserControl.Resources>
+
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+
         <!--<Style x:Key="myHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="Visibility" Value="Collapsed" />
         </Style>-->
@@ -141,6 +144,14 @@
                             <Button Content="Delete" Command="{Binding DeleteSelectedLevelsCommand}" Style="{StaticResource ConfirmDeleteButton}" Width="150"/>
                             <Button Content="Close" Command="{Binding MainWindowVM.CancelScreenCommand}" Width="150"/>
                         </StackPanel>
+                        
+                        <GroupBox Header="Import exact gamestate" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}" Margin="0 15 0 0">
+                            <DockPanel >
+                                <Button Content="Import" Width="50" DockPanel.Dock="Right" Command="{Binding ImportExactGameStateCommand}" />
+                                <TextBox Text="{Binding ImportGameStateString, UpdateSourceTrigger=PropertyChanged}" />
+                            </DockPanel>
+                            
+                        </GroupBox>
                     </StackPanel>
                 </Grid>
 

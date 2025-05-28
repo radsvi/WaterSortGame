@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 using WaterSortGame.Properties;
@@ -373,6 +374,44 @@ namespace WaterSortGame.ViewModels
 
             Settings.Default.SavedLevels = JsonConvert.SerializeObject(savedLevelList);
             Settings.Default.Save();
+        }
+        public string ImportGameStateString { get; set; } = string.Empty;
+        //public string ImportGameStateString { get; set; } = "[-.-.-.-][-.-.-.-][-.-.03.03][-.02.02.02][-.03.02.03][01.01.01.01]";
+        public RelayCommand ImportExactGameStateCommand => new RelayCommand(execute => ImportExactGameState(), canExecute => ImportGameStateString != string.Empty);
+        private void ImportExactGameState()
+        {
+            var importedGameState = DecodeImportedString(ImportGameStateString);
+
+            MainWindowVM.GameState.SetGameState(importedGameState);
+            MainWindowVM.OnStartingLevel();
+            MainWindowVM.ClosePopupWindow();
+        }
+        private LiquidColorNew[,] DecodeImportedString(string importString)
+        {
+            // "[-.-.-.-][-.-.-.-][-.-.03.03][-.02.02.02][-.03.02.03][01.01.01.01]"
+            //var countTubes = importString.Count(f => f == '[');
+            var importStringTrimmed = importString.Trim(new char[] { '[', ']', '"' });
+            var splitToTubes = importStringTrimmed.Split("][");
+            LiquidColorNew[,] importedGameState = new LiquidColorNew[splitToTubes.Count(), MainWindowVM.GameState.gameGrid.GetLength(1)];
+
+            for (int x = 0; x < splitToTubes.Length; x++)
+            {
+                string? tube = splitToTubes[x];
+                var layer = tube.Split('.');
+                Array.Reverse(layer);
+
+                for (int y = 0; y < layer.Length; y++)
+                //for (int y = layer.Length - 1; y >= 0 ; y--)
+                {
+                    if (layer[y] != "-")
+                    {
+                        var liquid = Int32.Parse(layer[y]);
+                        importedGameState[x, y] = new LiquidColorNew(liquid);
+                    }
+                }
+            }
+
+            return importedGameState;
         }
     }
 }
