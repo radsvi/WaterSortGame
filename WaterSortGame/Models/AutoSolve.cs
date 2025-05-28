@@ -82,6 +82,7 @@ namespace WaterSortGame.Models
             //FirstStep.Data.GameState = startingPosition;
             //TreeNode<ValidMove> previousStep = FirstStep;
             //var gameState = startingPosition;
+
             //int Iterations = 0;
             while (true)
             {
