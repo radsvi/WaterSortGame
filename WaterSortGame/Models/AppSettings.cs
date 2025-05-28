@@ -121,35 +121,20 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        private bool developerOptionsVisibleBool = Settings.Default.DeveloperOptionsVisibleBool;
-        public bool DeveloperOptionsVisibleBool
+        private bool developerOptionsVisible = Settings.Default.DeveloperOptionsVisible;
+        public bool DeveloperOptionsVisible
         {
-            get { return developerOptionsVisibleBool; }
+            get { return developerOptionsVisible; }
             set
             {
-                if (value != developerOptionsVisibleBool)
+                if (value != developerOptionsVisible)
                 {
-                    developerOptionsVisibleBool = value;
-                    Settings.Default.DeveloperOptionsVisibleBool = developerOptionsVisibleBool;
+                    developerOptionsVisible = value;
+                    Settings.Default.DeveloperOptionsVisible = developerOptionsVisible;
                     Settings.Default.Save();
-                    OnPropertyChanged(nameof(DeveloperOptionsVisible));
+                    OnPropertyChanged();
                 }
             }
-        }
-        public string DeveloperOptionsVisible
-        {
-            get
-            {
-                if (developerOptionsVisibleBool == true)
-                {
-                    return "Visible";
-                }
-                else
-                {
-                    return "Hidden";
-                }
-            }
-
         }
         private bool unselectTubeEvenOnIllegalMove = Settings.Default.UnselectTubeEvenOnIllegalMove;
         public bool UnselectTubeEvenOnIllegalMove

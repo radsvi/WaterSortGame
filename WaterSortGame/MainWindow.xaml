@@ -28,6 +28,7 @@
     </Window.InputBindings>
     <Window.Resources>
         <!--#region Resources -->
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
         <converters:MultiValueConverter x:Key="MultiValueConv"/>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
         <!--<models:TubesManager x:Key="TubesList"/>-->
@@ -81,6 +82,10 @@
 
 
                 <Border Grid.Row="1" Style="{StaticResource Separator}"/>
+                <Border BorderBrush="AliceBlue" BorderThickness="1" HorizontalAlignment="Left" Background="White" Visibility="{Binding AutoSolve.DisplayIterations}">
+                    <TextBlock Text="{Binding AutoSolve.Iterations}" d:Text="1" Width="20" TextAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+
                 <StackPanel Style="{StaticResource NavigationButtonsPrimary}">
                     <!--<TextBlock Text="{Binding GameStates.Count}" Foreground="White" />-->
                     <Button Content="{Binding AppSettings.NewLevelButtonText}" d:Content="New level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.NewLevel}"/>
@@ -101,14 +106,15 @@
                     </UniformGrid>
                 </ScrollViewer>
 
-                <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}" Visibility="{Binding AppSettings.DeveloperOptionsVisible}">
+                <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}">
                     <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.LoadLevel}"/>
                     <Button Content="Save level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.SaveLevel}"/>
-                    <Button Content="Auto Solve" Command="{Binding AutoSolveCommand}"/>
-                    <Button Content="StepThrough" Command="{Binding StepThroughCommand}"/>
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}">
+                        <Button Content="Auto Solve" Command="{Binding AutoSolveCommand}"/>
+                        <Button Content="StepThrough" Command="{Binding StepThroughCommand}"/>
+                        <!--<Button Content="[testMethod]" Command="{Binding TestMethodCommand}"/>-->
+                    </StackPanel>
                     
-                    
-                    <Button Content="[testMethod]" Command="{Binding TestMethodCommand}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
                     <Button Command="{Binding StepBackCommand}">

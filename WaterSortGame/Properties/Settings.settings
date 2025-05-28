@@ -17,7 +17,7 @@
     <Setting Name="OptionsWindowWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">800</Value>
     </Setting>
-    <Setting Name="DeveloperOptionsVisibleBool" Type="System.Boolean" Scope="User">
+    <Setting Name="DeveloperOptionsVisible" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="DontShowHelpScreenAtStart" Type="System.Boolean" Scope="User">

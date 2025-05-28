@@ -35,6 +35,34 @@ namespace WaterSortGame.Models
             }
         }
         public Action StepThrough;
+        private int iterations = 0;
+        public int Iterations
+        {
+            get { return iterations; }
+            set
+            {
+                if (value != iterations)
+                {
+                    iterations = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DisplayIterations));
+                }
+            }
+        }
+        public Visibility DisplayIterations
+        {
+            get
+            {
+                if (iterations > 0)
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Hidden;
+                }
+            }
+        }
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
@@ -54,13 +82,12 @@ namespace WaterSortGame.Models
             //FirstStep.Data.GameState = startingPosition;
             //TreeNode<ValidMove> previousStep = FirstStep;
             //var gameState = startingPosition;
-
-            int iterations = 0;
+            //int Iterations = 0;
             while (true)
             {
                 debugList.Add(treeNode);
-                iterations++;
-                if (AskUserToContinue(treeNode, iterations) == false) return;
+                Iterations++;
+                if (AskUserToContinue(treeNode, Iterations) == false) return;
 
                 if (debugVisualiseState) await WaitForButtonPress();
 
@@ -71,7 +98,7 @@ namespace WaterSortGame.Models
                         throw new Exception("treeNode.Parent is null for some reason");
                     treeNode = treeNode.Parent;
                     if (debugVisualiseState) MakeAMove(treeNode.Data);
-                    Notification.Show($"{{{iterations}}} Returning to previous move", MessageType.Debug);
+                    Notification.Show($"{{{Iterations}}} Returning to previous move", MessageType.Debug);
                     if (debugVisualiseState) await WaitForButtonPress();
 
                     highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
@@ -79,13 +106,13 @@ namespace WaterSortGame.Models
                     if (highestPriority_TreeNode.GetType() == typeof(NullTreeNode))
                     {
                         treeNode = highestPriority_TreeNode.Parent;
-                        Notification.Show($"{{{iterations}}} All siblings visited, returning to parent", MessageType.Debug);
+                        Notification.Show($"{{{Iterations}}} All siblings visited, returning to parent", MessageType.Debug);
                         continue;
                     }
                     else
                     {
                         treeNode = highestPriority_TreeNode;
-                        Notification.Show($"{{{iterations}}} Continuing with next child", MessageType.Debug);
+                        Notification.Show($"{{{Iterations}}} Continuing with next child", MessageType.Debug);
                         if (debugVisualiseState) MakeAMove(treeNode.Data);
                         continue;
                     }
@@ -126,7 +153,7 @@ namespace WaterSortGame.Models
                             if (treeNode.Parent is not null)
                                 treeNode.Parent.Data.Closed = true;
 
-                            Notification.Show($"{{{iterations}}} Reached a dead end.", MessageType.Debug);
+                            Notification.Show($"{{{Iterations}}} Reached a dead end.", MessageType.Debug);
                             continue;
                         }
 
@@ -139,7 +166,7 @@ namespace WaterSortGame.Models
 
                     if (treeNode.GetType() == typeof(NullTreeNode))
                     {
-                        Notification.Show($"{{{iterations}}} highestPriority_TreeNode is null, continuing.", MessageType.Debug);
+                        Notification.Show($"{{{Iterations}}} highestPriority_TreeNode is null, continuing.", MessageType.Debug);
                         continue;
                     }
 
@@ -147,11 +174,11 @@ namespace WaterSortGame.Models
                 }
             }
             BacktrackThroughAllSteps(treeNode!);
-            if (iterations >= 1000)
+            if (Iterations >= 1000)
             {
-                Notification.Show($"Reached {iterations} steps. Interrupting", MessageType.Debug);
+                Notification.Show($"Reached {Iterations} steps. Interrupting", MessageType.Debug);
             }
-            Notification.Show($"Total steps taken to generate: {iterations}. Steps required to solve the puzzle {CompleteSolution.Count}", MessageType.Debug, 10000);
+            Notification.Show($"Total steps taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}", MessageType.Debug, 10000);
         }
         private bool AskUserToContinue(TreeNode<ValidMove> treeNode, int iterations)
         {
