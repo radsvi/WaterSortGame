@@ -507,7 +507,8 @@ namespace WaterSortGame.ViewModels
         {
             if (GameState.IsLevelCompleted())
             {
-                UIEnabled = false;
+                if (AppSettings.DeveloperOptionsVisible == false)
+                    UIEnabled = false;
                 PopupWindow.Execute(PopupParams.LevelComplete);
             }
         }

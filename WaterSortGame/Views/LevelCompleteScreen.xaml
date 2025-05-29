@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:WaterSortGame.Views"
              mc:Ignorable="d" 
              d:DesignHeight="220" d:DesignWidth="600">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+    </UserControl.Resources>
     <Grid Style="{StaticResource PopupScreenOuter}">
         <Border Style="{StaticResource PopupScreen}">
             <Grid>
@@ -22,10 +25,12 @@
                         <Button Content="Restart level" Command="{Binding RestartLevel_Command}" Width="150"/>
                     </StackPanel>
                     <!--<StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
-                    Style="{StaticResource NavigationButtonsPrimary}">
-                <Button Content="Return" Command="{Binding CloseLevelCompleteWindowCommand}"/>
-            </StackPanel>-->
+                            Style="{StaticResource NavigationButtonsPrimary}">
+                        <Button Content="Return" Command="{Binding CloseLevelCompleteWindowCommand}"/>
+                    </StackPanel>-->
                 </StackPanel>
+
+                <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding CancelScreenCommand}" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}"/>
             </Grid>
         </Border>
     </Grid>
