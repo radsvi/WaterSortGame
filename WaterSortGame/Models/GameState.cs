@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -252,17 +253,17 @@ namespace WaterSortGame.Models
 
             // sejvnutej level z te novejsi hry. Level jsem vyresil, ale byl tezkej (jeste jednou jsem to overil ze je to resitelny. Uspesne!):
             AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.GrayBlue, LiquidColorName.LightBlue, LiquidColorName.LightGreen });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.LightBlue, LiquidColorName.LightBlue, LiquidColorName.Gray });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Purple, LiquidColorName.Red, LiquidColorName.LightGreen });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Indigo, LiquidColorName.Sky, LiquidColorName.Teal });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Sky, LiquidColorName.Sky, LiquidColorName.Gray });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Purple, LiquidColorName.Red, LiquidColorName.Teal });
             AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Yellow, LiquidColorName.Olive, LiquidColorName.Green });
             AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Blue, LiquidColorName.Yellow, LiquidColorName.Blue });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.GrayBlue, LiquidColorName.LightGreen, LiquidColorName.Green });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Indigo, LiquidColorName.Teal, LiquidColorName.Green });
             AddTube(i++, new LiquidColorName[] { LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Red, LiquidColorName.Pink });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightBlue, LiquidColorName.Green, LiquidColorName.Yellow, LiquidColorName.Olive });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.LightGreen, LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Blue });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.GrayBlue, LiquidColorName.Gray, LiquidColorName.Olive, LiquidColorName.Gray });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Gray, LiquidColorName.GrayBlue, LiquidColorName.Pink });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Sky, LiquidColorName.Green, LiquidColorName.Yellow, LiquidColorName.Olive });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Teal, LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Blue });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Gray, LiquidColorName.Olive, LiquidColorName.Gray });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Gray, LiquidColorName.Indigo, LiquidColorName.Pink });
 
             //AddTube(i++, new int[] { 1, 1, 1, 1 });
             //AddTube(i++, new int[] { 2 });
@@ -498,20 +499,21 @@ namespace WaterSortGame.Models
             SavedGameStates.Remove(lastGameStatus);
             MainWindowVM.DrawTubes();
         }
-        public void ExportStepBack()
+        public void WriteToFileStepBack()
         {
             string exportString = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss") + "\n";
             foreach (var savedState in SavedGameStates)
             {
-                exportString += GameStateToString(savedState, StringFormat.Numbers) + "\n";
+                exportString += GameStateToString(savedState, StringFormat.Names, true) + "\n";
             }
-            exportString += GameStateToString(gameGrid, StringFormat.Numbers) + "\n";
+            exportString += GameStateToString(gameGrid, StringFormat.Names) + "\n";
             exportString += "===================================\n";
 
             //System.IO.File.WriteAllText("ExportStepBack.log", exportString);
-            System.IO.File.AppendAllText("ExportStepBack.log", exportString);
+            System.IO.File.AppendAllText("Export-StepBack.log", exportString);
             MainWindowVM.WindowService?.CloseWindow(); // close options menu
         }
+
         private int CountColors()
         {
             int numberOfColors = 0;
@@ -538,7 +540,11 @@ namespace WaterSortGame.Models
             Clipboard.SetText(ReadableGameState);
             MainWindowVM.ClosePopupWindow();
         }
-        public static string GameStateToString(LiquidColorNew[,] gameState, StringFormat format = StringFormat.Names)
+        //public static string GameStateToString(LiquidColorNew[,] gameState, bool enableSort = false)
+        //{
+        //    return GameStateToString(gameState, StringFormat.Names, enableSort);
+        //}
+        public static string GameStateToString(LiquidColorNew[,] gameState, StringFormat format = StringFormat.Names, bool enableSort = false)
         {
             List<string> intGameState = new List<string>();
             for (int x = 0; x < gameState.GetLength(0); x++)
@@ -565,7 +571,10 @@ namespace WaterSortGame.Models
                 tubeString += "]";
                 intGameState.Add(tubeString);
             }
-            //intGameState.Sort(); // nechci sortovat kdyz chci vizualizaci
+            if (enableSort)
+            {
+                intGameState.Sort(); // nechci sortovat kdyz chci vizualizaci
+            }
             string stringGameState = string.Empty;
             foreach (var tube in intGameState)
             {

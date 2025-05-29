@@ -64,6 +64,7 @@ namespace WaterSortGame.Models
                 }
             }
         }
+        readonly string exportLogFilename = "Export-AutoSolve-" + DateTime.Now.ToString("MMddyyyy-HH.mm.ss") + ".log";
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
@@ -90,6 +91,7 @@ namespace WaterSortGame.Models
             {
                 await Task.Delay(1);
                 debugList.Add(treeNode);
+                WriteToFileAutoSolveSteps(treeNode, "Visiting node");
                 Iterations++;
                 if (AskUserToContinue(treeNode, Iterations) == false) return;
 
@@ -245,6 +247,7 @@ namespace WaterSortGame.Models
                 }
 
                 hashedSteps.Add(nextNode.Data.Hash, nextNode);
+                WriteToFileAutoSolveSteps(nextNode, "Generating node");
 
                 if (parentNode.FirstChild is null)
                 {
@@ -708,6 +711,15 @@ namespace WaterSortGame.Models
                 }
             }
             return result;
+        }
+        private void WriteToFileAutoSolveSteps(TreeNode<ValidMove> treeNode, string note = "")
+        {
+            string exportString = DateTime.Now.ToString("[MM/dd/yyyy HH:mm:ss]");
+
+            exportString += GameState.GameStateToString(treeNode.Data.GameState, StringFormat.Numbers, true);
+            exportString += "{" + note + "}" + "\n";
+
+            System.IO.File.AppendAllText(exportLogFilename, exportString);
         }
         #endregion
     }
