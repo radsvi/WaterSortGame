@@ -23,35 +23,34 @@
 
     </UserControl.Resources>
     <Grid Style="{StaticResource PopupScreenOuter}">
-        <Button Style="{StaticResource ClickBackgroundButton}" Command="{Binding CancelScreenCommand}">
-            <Border Style="{StaticResource PopupScreen}" Height="200">
+        <Button Style="{StaticResource ClickBackgroundButton}" Command="{Binding CancelScreenCommand}"/>
+        <Border Style="{StaticResource PopupScreen}" Height="200">
+            <Grid>
                 <Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="1">
-                            <TextBlock Text="Help" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
-                            <StackPanel Style="{StaticResource StackPanelList}">
-                                <ContentControl Template="{StaticResource BulletTemplate}"  Content="Separate each color into different vials."/>
-                                <ContentControl Template="{StaticResource BulletTemplate}" Content="You can only move matching colors onto each other."/>
-                                <ContentControl Template="{StaticResource BulletTemplate}" Content="You can always move colors to empty vial."/>
-                                <ContentControl Template="{StaticResource BulletTemplate}" Content="You can add empty vials, if you are really stuck."/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Help" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
+                        <StackPanel Style="{StaticResource StackPanelList}">
+                            <ContentControl Template="{StaticResource BulletTemplate}"  Content="Separate each color into different vials."/>
+                            <ContentControl Template="{StaticResource BulletTemplate}" Content="You can only move matching colors onto each other."/>
+                            <ContentControl Template="{StaticResource BulletTemplate}" Content="You can always move colors to empty vial."/>
+                            <ContentControl Template="{StaticResource BulletTemplate}" Content="You can add empty vials, if you are really stuck."/>
 
-                                <CheckBox Content="Don't show help again." Margin="0,10,0,0" IsChecked="{Binding AppSettings.DontShowHelpScreenAtStart}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
-                                Style="{StaticResource NavigationButtonsPrimary}">
-                                <Button Content="Close" Command="{Binding CancelScreenCommand}" Width="150"/>
-                            </StackPanel>
+                            <CheckBox Content="Don't show help again." Margin="0,10,0,0" IsChecked="{Binding AppSettings.DontShowHelpScreenAtStart}"/>
                         </StackPanel>
-                    </Grid>
-
-                    <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding CancelScreenCommand}"/>
+                        <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
+                    Style="{StaticResource NavigationButtonsPrimary}">
+                            <Button Content="Close" Command="{Binding CancelScreenCommand}" Width="150"/>
+                        </StackPanel>
+                    </StackPanel>
                 </Grid>
-            </Border>
-        </Button>
+
+                <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding CancelScreenCommand}"/>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

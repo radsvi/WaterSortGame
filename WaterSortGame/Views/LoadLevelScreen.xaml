@@ -49,6 +49,7 @@
         </Style>
     </UserControl.Resources>
     <Grid Style="{StaticResource PopupScreenOuter}">
+        <Button Style="{StaticResource ClickBackgroundButton}" Command="{Binding MainWindowVM.CancelScreenCommand}"/>
         <Border Style="{StaticResource PopupScreen}" Width="580" Height="{Binding LoadLevelScreenHeight}" d:Height="280">
             <Grid>
                 <Grid>

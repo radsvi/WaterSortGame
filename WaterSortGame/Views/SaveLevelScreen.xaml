@@ -10,43 +10,43 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
     </UserControl.Resources>
     <Grid Style="{StaticResource PopupScreenOuter}">
-        <Button Style="{StaticResource ClickBackgroundButton}" Command="{Binding CancelScreenCommand}">
-            <Border Style="{StaticResource PopupScreen}" Height="Auto" ><!--Height="Auto"-->
+        <Button Style="{StaticResource ClickBackgroundButton}" Command="{Binding CancelScreenCommand}"/>
+        <Border Style="{StaticResource PopupScreen}" Height="250" >
+            <!--Height="Auto"-->
+            <Grid>
                 <Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="1">
-                            <TextBlock Text="Save level" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
-                            <Label Content="Add note (optional):"/>
-                            <TextBox Text="{Binding NoteForSavedLevel, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="5" Height="50" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                             MaxLength="60"/>
-                            <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
-                                Style="{StaticResource NavigationButtonsPrimary}">
-                                <Button Content="OK" Command="{Binding ConfirmCommand}" Width="150"/>
-                                <Button Content="Cancel" Command="{Binding CancelScreenCommand}" Width="150"/>
-                            </StackPanel>
-
-                            <GroupBox Header="Export current gamestate as string" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}" Margin="0 15 0 0">
-                                <DockPanel >
-                                    <Button Content="Copy" DockPanel.Dock="Right" Command="{Binding CopyExportStringCommand}" Padding="5" />
-                                    <TextBox Text="{Binding GameState.ReadableGameState}" IsReadOnly="True" Padding="5" />
-                                </DockPanel>
-                            </GroupBox>
-                            <!--<GroupBox Header="Export current AutoSolve gamestate as string" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}">
-                                <TextBox Text="{Binding AutoSolve.}" IsReadOnly="True"/>
-                            </GroupBox>-->
-
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="Save level" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
+                        <Label Content="Add note (optional):"/>
+                        <TextBox Text="{Binding NoteForSavedLevel, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="5" Height="50" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 MaxLength="60"/>
+                        <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
+                    Style="{StaticResource NavigationButtonsPrimary}">
+                            <Button Content="OK" Command="{Binding ConfirmCommand}" Width="150"/>
+                            <Button Content="Cancel" Command="{Binding CancelScreenCommand}" Width="150"/>
                         </StackPanel>
-                    </Grid>
 
-                    <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding CancelScreenCommand}"/>
+                        <GroupBox Header="Export current gamestate as string" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}" Margin="0 15 0 0">
+                            <DockPanel >
+                                <Button Content="Copy" DockPanel.Dock="Right" Command="{Binding CopyExportStringCommand}" Padding="5" />
+                                <TextBox Text="{Binding GameState.ReadableGameState}" IsReadOnly="True" Padding="5" />
+                            </DockPanel>
+                        </GroupBox>
+                        <!--<GroupBox Header="Export current AutoSolve gamestate as string" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}">
+                    <TextBox Text="{Binding AutoSolve.}" IsReadOnly="True"/>
+                </GroupBox>-->
+
+                    </StackPanel>
                 </Grid>
-            </Border>
-        </Button>
+
+                <Button Style="{StaticResource PopupTopRightCloseButton}" Command="{Binding CancelScreenCommand}"/>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>
