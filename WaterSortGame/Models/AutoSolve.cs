@@ -64,6 +64,7 @@ namespace WaterSortGame.Models
                 }
             }
         }
+        readonly string exportLogFilename = "Export-AutoSolve-" + DateTime.Now.ToString("MMddyyyy-HH.mm.ss") + ".log";
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
@@ -90,8 +91,9 @@ namespace WaterSortGame.Models
             {
                 await Task.Delay(1);
                 debugList.Add(treeNode);
+                WriteToFileAutoSolveSteps(treeNode, $"[{hashedSteps.DebugData.Count}] Visiting node");
                 Iterations++;
-                if (AskUserToContinue(treeNode, Iterations) == false) return;
+                //if (AskUserToContinue(treeNode, Iterations) == false) return;
 
                 if (debugVisualiseState) await WaitForButtonPress();
 
@@ -155,7 +157,7 @@ namespace WaterSortGame.Models
                         {
                             treeNode.Data.FullyVisited = true;
                             if (treeNode.Parent is not null)
-                                treeNode.Parent.Data.FullyVisited = true;
+                                treeNode.Parent.Data.Visited = true;
 
                             Notification.Show($"{{{Iterations}}} Reached a dead end.", MessageType.Debug);
                             continue;
@@ -245,6 +247,7 @@ namespace WaterSortGame.Models
                 }
 
                 hashedSteps.Add(nextNode.Data.Hash, nextNode);
+                WriteToFileAutoSolveSteps(nextNode, $"[{hashedSteps.DebugData.Count}][{nextNode.Data.Hash}] Generating node");
 
                 if (parentNode.FirstChild is null)
                 {
@@ -255,6 +258,10 @@ namespace WaterSortGame.Models
                     node.AddSibling(nextNode);
                 }
                 node = nextNode;
+            }
+            if (node == parentNode) // pokud se ani jeden node nepridal protoze byli vsechno duplikaty:
+            {
+                parentNode.Data.FullyVisited = true;
             }
         }
         private void UpdateGameState(TreeNode<ValidMove> node)
@@ -294,7 +301,7 @@ namespace WaterSortGame.Models
             TreeNode<ValidMove> resultNode = new NullTreeNode(node);
             while (currentNode != null)
             {
-                if (currentNode.Data.FullyVisited is false)
+                if (currentNode.Data.FullyVisited is false && currentNode.Data.Visited is false)
                 {
                     resultNode = currentNode;
                     break; // i have got it sorted by highest priority, so first non-visited is fine
@@ -303,7 +310,7 @@ namespace WaterSortGame.Models
                 currentNode = currentNode.NextSibling;
             }
 
-            if (resultNode.GetType() == typeof(NullTreeNode))
+            if (resultNode.GetType() == typeof(NullTreeNode)) // tohle znamena - prosel jsem vsechno a nenasel jsem zadnej unvisited child
             {
                 if (resultNode.Parent is not null) // null by mel byt jen v pripade ze jsme uplne na zacatku
                 {
@@ -708,6 +715,14 @@ namespace WaterSortGame.Models
                 }
             }
             return result;
+        }
+        private void WriteToFileAutoSolveSteps(TreeNode<ValidMove> treeNode, string note = "")
+        {
+            string exportString = DateTime.Now.ToString("[MM/dd/yyyy HH:mm:ss]");
+
+            exportString += GameState.GameStateToString(treeNode.Data.GameState, StringFormat.Numbers, true);
+            exportString += "{" + note + "}" + "\n";
+            System.IO.File.AppendAllText(exportLogFilename, exportString);
         }
         #endregion
     }

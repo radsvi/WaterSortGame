@@ -55,7 +55,7 @@ namespace WaterSortGame.Models
         }
         private static protected int stepCounter = 0;
         public int StepNumber { get; set; }
-        public bool Visited { get; set; }
+        public bool Visited { get; set; } // True means we just peaked once, but didn't necesarily visited all children
         public bool FullyVisited { get; set; } // True means that all children were visited.
         public PositionPointer Target { get; private protected set; }
         public bool IsTargetSingleColor { get; private set; }

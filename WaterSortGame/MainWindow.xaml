@@ -83,7 +83,7 @@
 
                 <Border Grid.Row="1" Style="{StaticResource Separator}"/>
                 <Border BorderBrush="AliceBlue" BorderThickness="1" HorizontalAlignment="Left" Background="White" Visibility="{Binding AutoSolve.DisplayIterations}">
-                    <TextBlock Text="{Binding AutoSolve.Iterations}" d:Text="1" Width="20" TextAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding AutoSolve.Iterations}" d:Text="1" Width="40" TextAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
                 <StackPanel Style="{StaticResource NavigationButtonsPrimary}">

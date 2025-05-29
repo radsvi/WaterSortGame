@@ -295,7 +295,7 @@ namespace WaterSortGame.ViewModels
         }
         public RelayCommand CopyExportStringCommand => new RelayCommand(execute => GameState.CopyExportString());
         public RelayCommand AddPresetLevels_Command => new RelayCommand(execute => LoadLevelVM.AddPresetLevels());
-        public RelayCommand ExportStepBack_Command => new RelayCommand(execute => GameState.ExportStepBack());
+        public RelayCommand ExportStepBack_Command => new RelayCommand(execute => GameState.WriteToFileStepBack());
         public CancellationTokenSource TokenSource { get; set; } = null;
         public async void PopupWindowNotification(CancellationToken token)
         {

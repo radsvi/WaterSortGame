@@ -402,6 +402,12 @@ namespace WaterSortGame.ViewModels
         {
             MainWindowVM.ClosePopupWindow();
 
+            if (ImportGameStateString.Substring(0,2) != "\"[" && ImportGameStateString.Substring(0, 1) != "[")
+            {
+                MainWindowVM.Notification.Show($"Wrong format of the import string. Canceling import.", 10000);
+                return;
+            }
+
             var importedGameState = DecodeImportedString(ImportGameStateString);
             if (importedGameState is null) return;
 
@@ -413,6 +419,7 @@ namespace WaterSortGame.ViewModels
         {
             // "[-.-.-.-][-.-.-.-][-.-.03.03][-.02.02.02][-.03.02.03][01.01.01.01]"
             //var countTubes = importString.Count(f => f == '[');
+
             var importStringTrimmed = importString.Trim(new char[] { '[', ']', '"' });
             var splitToTubes = importStringTrimmed.Split("][");
             LiquidColorNew[,] importedGameState = new LiquidColorNew[splitToTubes.Count(), MainWindowVM.GameState.gameGrid.GetLength(1)];

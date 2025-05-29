@@ -32,7 +32,7 @@ namespace WaterSortGame.Models
         public void AddChild(TreeNode<T> childNode)
         {
             FirstChild = childNode;
-            childNode.Parent = this;
+            FirstChild.Parent = this;
         }
         public void SwapData(TreeNode<T> otherNode)
         {

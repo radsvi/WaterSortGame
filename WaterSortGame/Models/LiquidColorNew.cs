@@ -14,16 +14,16 @@ namespace WaterSortGame.Models
     {
         Blank = -1,
         Blue = 0,
-        GrayBlue,
-        LightBlue,
+        Indigo, // GrayBlue
+        Sky, // LightBlue
         Orange,
         Gray,
         Purple,
         Yellow,
-        Pink, // -> dark red
+        Pink, // -> dark red (in another version of the game)
         Green,
-        LightGreen,
-        Olive, // -> brown
+        Teal, // LightGreen
+        Olive, // -> brown (in another version of the game)
         Red,
     }
     internal class LiquidColorNew
@@ -48,15 +48,15 @@ namespace WaterSortGame.Models
         public static Dictionary<LiquidColorName, LiquidColorNew> ColorKeys { get; } = new Dictionary<LiquidColorName, LiquidColorNew>() {
             { LiquidColorName.Blank, new LiquidColorNew(LiquidColorName.Blank, new SolidColorBrush(Color.FromRgb(0,0,0))) }, // blank to mam kvuli typu NullLiquidColorNew
             { LiquidColorName.Blue, new LiquidColorNew(LiquidColorName.Blue, new SolidColorBrush(Color.FromRgb(20,93,239))) },
-            { LiquidColorName.GrayBlue, new LiquidColorNew(LiquidColorName.GrayBlue, new SolidColorBrush(Color.FromRgb(63,68,130))) },
-            { LiquidColorName.LightBlue, new LiquidColorNew(LiquidColorName.LightBlue, new SolidColorBrush(Color.FromRgb(136,170,255))) },
+            { LiquidColorName.Indigo, new LiquidColorNew(LiquidColorName.Indigo, new SolidColorBrush(Color.FromRgb(63,68,130))) },
+            { LiquidColorName.Sky, new LiquidColorNew(LiquidColorName.Sky, new SolidColorBrush(Color.FromRgb(136,170,255))) },
             { LiquidColorName.Orange, new LiquidColorNew(LiquidColorName.Orange, new SolidColorBrush(Color.FromRgb(242,121,20))) },
             { LiquidColorName.Gray, new LiquidColorNew(LiquidColorName.Gray, new SolidColorBrush(Color.FromRgb(108,116,144))) },
             { LiquidColorName.Purple, new LiquidColorNew(LiquidColorName.Purple, new SolidColorBrush(Color.FromRgb(191,60,191))) },
             { LiquidColorName.Yellow, new LiquidColorNew(LiquidColorName.Yellow, new SolidColorBrush(Color.FromRgb(244,201,22))) },
             { LiquidColorName.Pink, new LiquidColorNew(LiquidColorName.Pink, new SolidColorBrush(Color.FromRgb(255,148,209))) },
             { LiquidColorName.Green, new LiquidColorNew(LiquidColorName.Green, new SolidColorBrush(Color.FromRgb(0,129,96))) },
-            { LiquidColorName.LightGreen, new LiquidColorNew(LiquidColorName.LightGreen, new SolidColorBrush(Color.FromRgb(179,214,102))) },
+            { LiquidColorName.Teal, new LiquidColorNew(LiquidColorName.Teal, new SolidColorBrush(Color.FromRgb(179,214,102))) },
             { LiquidColorName.Olive, new LiquidColorNew(LiquidColorName.Olive, new SolidColorBrush(Color.FromRgb(128,153,23))) },
             { LiquidColorName.Red, new LiquidColorNew(LiquidColorName.Red, new SolidColorBrush(Color.FromRgb(188,36,94))) },
         };
