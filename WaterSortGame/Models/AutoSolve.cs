@@ -562,7 +562,7 @@ namespace WaterSortGame.Models
             foreach (var colorItem in LiquidColorNew.ColorKeys)
             {
                 //colorCount.Add(new KeyValuePair<LiquidColorNames, int>(colorItem.Name, 0));
-                colorCount.Add(colorItem.Name, 0);
+                colorCount.Add(colorItem.Value.Name, 0);
             }
 
 

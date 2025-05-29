@@ -12,8 +12,8 @@ namespace WaterSortGame.Models
 {
     internal enum LiquidColorName
     {
-        Blank,
-        Blue,
+        Blank = -1,
+        Blue = 0,
         GrayBlue,
         LightBlue,
         Orange,
@@ -30,20 +30,35 @@ namespace WaterSortGame.Models
     {
         public LiquidColorName Name { get; set; }
         public SolidColorBrush Brush { get; set; }
-        public static List<LiquidColorNew> ColorKeys { get; } = new List<LiquidColorNew>() {
-            new LiquidColorNew(LiquidColorName.Blank, new SolidColorBrush(Color.FromRgb(0,0,0))),
-            new LiquidColorNew(LiquidColorName.Blue, new SolidColorBrush(Color.FromRgb(20,93,239))),
-            new LiquidColorNew(LiquidColorName.GrayBlue, new SolidColorBrush(Color.FromRgb(63,68,130))),
-            new LiquidColorNew(LiquidColorName.LightBlue, new SolidColorBrush(Color.FromRgb(136,170,255))),
-            new LiquidColorNew(LiquidColorName.Orange, new SolidColorBrush(Color.FromRgb(242,121,20))),
-            new LiquidColorNew(LiquidColorName.Gray, new SolidColorBrush(Color.FromRgb(108,116,144))),
-            new LiquidColorNew(LiquidColorName.Purple, new SolidColorBrush(Color.FromRgb(191,60,191))),
-            new LiquidColorNew(LiquidColorName.Yellow, new SolidColorBrush(Color.FromRgb(244,201,22))),
-            new LiquidColorNew(LiquidColorName.Pink, new SolidColorBrush(Color.FromRgb(255,148,209))),
-            new LiquidColorNew(LiquidColorName.Green, new SolidColorBrush(Color.FromRgb(0,129,96))),
-            new LiquidColorNew(LiquidColorName.LightGreen, new SolidColorBrush(Color.FromRgb(179,214,102))),
-            new LiquidColorNew(LiquidColorName.Olive, new SolidColorBrush(Color.FromRgb(128,153,23))),
-            new LiquidColorNew(LiquidColorName.Red, new SolidColorBrush(Color.FromRgb(188,36,94))),
+        //public static List<LiquidColorNew> ColorKeys { get; } = new List<LiquidColorNew>() {
+        //    new LiquidColorNew(LiquidColorName.Blank, new SolidColorBrush(Color.FromRgb(0,0,0))),
+        //    new LiquidColorNew(LiquidColorName.Blue, new SolidColorBrush(Color.FromRgb(20,93,239))),
+        //    new LiquidColorNew(LiquidColorName.GrayBlue, new SolidColorBrush(Color.FromRgb(63,68,130))),
+        //    new LiquidColorNew(LiquidColorName.LightBlue, new SolidColorBrush(Color.FromRgb(136,170,255))),
+        //    new LiquidColorNew(LiquidColorName.Orange, new SolidColorBrush(Color.FromRgb(242,121,20))),
+        //    new LiquidColorNew(LiquidColorName.Gray, new SolidColorBrush(Color.FromRgb(108,116,144))),
+        //    new LiquidColorNew(LiquidColorName.Purple, new SolidColorBrush(Color.FromRgb(191,60,191))),
+        //    new LiquidColorNew(LiquidColorName.Yellow, new SolidColorBrush(Color.FromRgb(244,201,22))),
+        //    new LiquidColorNew(LiquidColorName.Pink, new SolidColorBrush(Color.FromRgb(255,148,209))),
+        //    new LiquidColorNew(LiquidColorName.Green, new SolidColorBrush(Color.FromRgb(0,129,96))),
+        //    new LiquidColorNew(LiquidColorName.LightGreen, new SolidColorBrush(Color.FromRgb(179,214,102))),
+        //    new LiquidColorNew(LiquidColorName.Olive, new SolidColorBrush(Color.FromRgb(128,153,23))),
+        //    new LiquidColorNew(LiquidColorName.Red, new SolidColorBrush(Color.FromRgb(188,36,94))),
+        //};
+        public static Dictionary<LiquidColorName, LiquidColorNew> ColorKeys { get; } = new Dictionary<LiquidColorName, LiquidColorNew>() {
+            { LiquidColorName.Blank, new LiquidColorNew(LiquidColorName.Blank, new SolidColorBrush(Color.FromRgb(0,0,0))) }, // blank to mam kvuli typu NullLiquidColorNew
+            { LiquidColorName.Blue, new LiquidColorNew(LiquidColorName.Blue, new SolidColorBrush(Color.FromRgb(20,93,239))) },
+            { LiquidColorName.GrayBlue, new LiquidColorNew(LiquidColorName.GrayBlue, new SolidColorBrush(Color.FromRgb(63,68,130))) },
+            { LiquidColorName.LightBlue, new LiquidColorNew(LiquidColorName.LightBlue, new SolidColorBrush(Color.FromRgb(136,170,255))) },
+            { LiquidColorName.Orange, new LiquidColorNew(LiquidColorName.Orange, new SolidColorBrush(Color.FromRgb(242,121,20))) },
+            { LiquidColorName.Gray, new LiquidColorNew(LiquidColorName.Gray, new SolidColorBrush(Color.FromRgb(108,116,144))) },
+            { LiquidColorName.Purple, new LiquidColorNew(LiquidColorName.Purple, new SolidColorBrush(Color.FromRgb(191,60,191))) },
+            { LiquidColorName.Yellow, new LiquidColorNew(LiquidColorName.Yellow, new SolidColorBrush(Color.FromRgb(244,201,22))) },
+            { LiquidColorName.Pink, new LiquidColorNew(LiquidColorName.Pink, new SolidColorBrush(Color.FromRgb(255,148,209))) },
+            { LiquidColorName.Green, new LiquidColorNew(LiquidColorName.Green, new SolidColorBrush(Color.FromRgb(0,129,96))) },
+            { LiquidColorName.LightGreen, new LiquidColorNew(LiquidColorName.LightGreen, new SolidColorBrush(Color.FromRgb(179,214,102))) },
+            { LiquidColorName.Olive, new LiquidColorNew(LiquidColorName.Olive, new SolidColorBrush(Color.FromRgb(128,153,23))) },
+            { LiquidColorName.Red, new LiquidColorNew(LiquidColorName.Red, new SolidColorBrush(Color.FromRgb(188,36,94))) },
         };
         //public static List<LiquidColorNew> CloneColorKeys()
         //{
@@ -76,9 +91,13 @@ namespace WaterSortGame.Models
         //{
         //    return ColorKeys.Where(key => key.Name == Name).ToList()[0].Brush;
         //}
-        private LiquidColorNew GetColor(LiquidColorName Name)
+        private static LiquidColorNew GetColor(LiquidColorName name)
         {
-            return ColorKeys.Where(key => key.Name == Name).ToList()[0];
+            //if ((int)name > 11)
+            //    return ColorKeys[LiquidColorName.Blue];
+            
+            //return ColorKeys.Where(key => key.Name == Name).ToList()[0];
+            return ColorKeys[name];
         }
         public LiquidColorNew Clone()
         {

@@ -132,7 +132,6 @@ namespace WaterSortGame.Models
         {
             
             //Tube.ResetCounter();
-            SetFreshGameState();
             //Tubes?.Clear();
             
             int i = 0;
@@ -338,24 +337,25 @@ namespace WaterSortGame.Models
         }
         private void GenerateStandardLevel()
         {
-            gameGrid = new LiquidColorNew[appSettings.NumberOfColorsToGenerate + 2, NumberOfLayers];
-            //Tube.ResetCounter();
-            SetFreshGameState();
             Random rnd = new Random();
 
             List<LiquidColorNew> colorsList = new List<LiquidColorNew>();
             if (appSettings.RandomNumberOfTubes)
             {
-                appSettings.NumberOfColorsToGenerate = rnd.Next(3, LiquidColorNew.ColorKeys.Count);
+                appSettings.NumberOfColorsToGenerate = rnd.Next(3, LiquidColorNew.ColorKeys.Count - 1);
             }
 
+            gameGrid = new LiquidColorNew[appSettings.NumberOfColorsToGenerate + 2, NumberOfLayers];
+            //Tube.ResetCounter();
+            SetFreshGameState();
+
             List<int> selectedColors = new List<int>();
-            for (int i = 1; i < LiquidColorNew.ColorKeys.Count; i++) // generate list of all colors. Starting at i=1 because color number 0 is blank and used for other purposes.
+            for (int i = 0; i < LiquidColorNew.ColorKeys.Count - 1; i++) // generate list of all colors. Doing '- 1' because color number 0 is blank (and is used for other purposes) but still count towards total.
             {
                 selectedColors.Add(i);
             }
 
-            for (int i = 1; i < LiquidColorNew.ColorKeys.Count - appSettings.NumberOfColorsToGenerate; i++) // now remove some random ones. Starting at i=1 because color number 0 is blank and used for other purposes.
+            for (int i = 0; i < LiquidColorNew.ColorKeys.Count - 1 - appSettings.NumberOfColorsToGenerate; i++) // now remove some random colors. 
             {
                 //selectedColors.Remove(selectedColors[NumberOfColorsToGenerate]); // this always keeps the same colors
                 selectedColors.Remove(selectedColors[rnd.Next(0, selectedColors.Count)]);
@@ -368,39 +368,27 @@ namespace WaterSortGame.Models
                 colorsList.Add(new LiquidColorNew(color));
             }
 
-            //Tubes?.Clear();
-            //InitializeGameGrid(appSettings.NumberOfColorsToGenerate + ExtraTubesAdded);
-            
-            //var tubes = new ObservableCollection<Tube>();
+            // add colors randomly to the grid
             for (int x = 0; x < appSettings.NumberOfColorsToGenerate; x++)
             {
-                LiquidColorNew[] layer = new LiquidColorNew[NumberOfLayers];
                 for (int y = 0; y < NumberOfLayers; y++)
                 {
+                    //var maxNumber = colorsList.Count > 0 ? colorsList.Count - 1 : 0;
+                    //int colorNumber = rnd.Next(0, maxNumber);
                     int colorNumber = rnd.Next(0, colorsList.Count);
-                    //layer[y] = colorsList[colorNumber];
 
+                    //var asdf = colorsList[colorNumber];
                     gameGrid[x, y] = colorsList[colorNumber];
-
                     colorsList.Remove(colorsList[colorNumber]);
                 }
-
-                //Tubes.Add(new Tube(layer[0], layer[1], layer[2], layer[3]));
-                
             }
-            //Tubes.Add(new Tube());
-            //Tubes.Add(new Tube());
-
-            //Tubes?.Clear();
-            //Tubes.AddRange(tubes); // have it here like this because I dont want to call CollectionChanged event during the generation
-            // ## change into BulkObservableCollection<T> Class ? 
-
 
             StoreStartingGrid();
         }
         private void SetFreshGameState()
         {
             //ExtraTubesAdded = 0; // resets how much extra tubes has been added
+            // commented out, because its reset automatically every time new GameState object is created
         }
         private void StoreStartingGrid()
         {
