@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WaterSortGame.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="600">
+             d:DesignHeight="320" d:DesignWidth="600">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
     </UserControl.Resources>
@@ -24,24 +24,23 @@
                         <TextBlock Text="Save level" Grid.Row="1" FontSize="20" HorizontalAlignment="Center"/>
                         <Label Content="Add note (optional):"/>
                         <TextBox Text="{Binding NoteForSavedLevel, UpdateSourceTrigger=PropertyChanged}"
-                 Margin="5" Height="50" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 MaxLength="60"/>
+                             Margin="5" Height="50" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             MaxLength="60"/>
                         <StackPanel Orientation="Horizontal" Height="25" HorizontalAlignment="Center" Margin="0,10,0,0"
-                    Style="{StaticResource NavigationButtonsPrimary}">
+                            Style="{StaticResource NavigationButtonsPrimary}">
                             <Button Content="OK" Command="{Binding ConfirmCommand}" Width="150"/>
                             <Button Content="Cancel" Command="{Binding CancelScreenCommand}" Width="150"/>
                         </StackPanel>
 
                         <GroupBox Header="Export current gamestate as string" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}" Margin="0 15 0 0">
-                            <DockPanel >
+                            <DockPanel>
                                 <Button Content="Copy" DockPanel.Dock="Right" Command="{Binding CopyExportStringCommand}" Padding="5" />
                                 <TextBox Text="{Binding GameState.ReadableGameState}" IsReadOnly="True" Padding="5" />
                             </DockPanel>
                         </GroupBox>
                         <!--<GroupBox Header="Export current AutoSolve gamestate as string" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}">
-                    <TextBox Text="{Binding AutoSolve.}" IsReadOnly="True"/>
-                </GroupBox>-->
-
+                            <TextBox Text="{Binding AutoSolve.}" IsReadOnly="True"/>
+                        </GroupBox>-->
                     </StackPanel>
                 </Grid>
 

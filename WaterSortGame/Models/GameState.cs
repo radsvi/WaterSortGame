@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using WaterSortGame.ViewModels;
@@ -497,6 +498,20 @@ namespace WaterSortGame.Models
             SavedGameStates.Remove(lastGameStatus);
             MainWindowVM.DrawTubes();
         }
+        public void ExportStepBack()
+        {
+            string exportString = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss") + "\n";
+            foreach (var savedState in SavedGameStates)
+            {
+                exportString += GameStateToString(savedState, StringFormat.Numbers) + "\n";
+            }
+            exportString += GameStateToString(gameGrid, StringFormat.Numbers) + "\n";
+            exportString += "===================================\n";
+
+            //System.IO.File.WriteAllText("ExportStepBack.log", exportString);
+            System.IO.File.AppendAllText("ExportStepBack.log", exportString);
+            MainWindowVM.WindowService?.CloseWindow(); // close options menu
+        }
         private int CountColors()
         {
             int numberOfColors = 0;
@@ -517,6 +532,11 @@ namespace WaterSortGame.Models
                 }
             }
             return numberOfColors;
+        }
+        public void CopyExportString()
+        {
+            Clipboard.SetText(ReadableGameState);
+            MainWindowVM.ClosePopupWindow();
         }
         public static string GameStateToString(LiquidColorNew[,] gameState, StringFormat format = StringFormat.Names)
         {

@@ -293,13 +293,9 @@ namespace WaterSortGame.ViewModels
             var token = TokenSource.Token;
             PopupWindowNotification(token);
         }
-        public RelayCommand CopyExportStringCommand => new RelayCommand(execute => CopyExportString());
-        private void CopyExportString()
-        {
-            Clipboard.SetText(GameState.ReadableGameState);
-            ClosePopupWindow();
-        }
+        public RelayCommand CopyExportStringCommand => new RelayCommand(execute => GameState.CopyExportString());
         public RelayCommand AddPresetLevels_Command => new RelayCommand(execute => LoadLevelVM.AddPresetLevels());
+        public RelayCommand ExportStepBack_Command => new RelayCommand(execute => GameState.ExportStepBack());
         public CancellationTokenSource TokenSource { get; set; } = null;
         public async void PopupWindowNotification(CancellationToken token)
         {

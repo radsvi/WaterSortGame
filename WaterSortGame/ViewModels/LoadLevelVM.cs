@@ -400,11 +400,13 @@ namespace WaterSortGame.ViewModels
         public RelayCommand ImportExactGameStateCommand => new RelayCommand(execute => ImportExactGameState(), canExecute => ImportGameStateString != string.Empty);
         private void ImportExactGameState()
         {
+            MainWindowVM.ClosePopupWindow();
+
             var importedGameState = DecodeImportedString(ImportGameStateString);
+            if (importedGameState is null) return;
 
             MainWindowVM.GameState.SetGameState(importedGameState);
             MainWindowVM.OnStartingLevel();
-            MainWindowVM.ClosePopupWindow();
             ImportGameStateString = string.Empty;
         }
         private LiquidColorNew[,] DecodeImportedString(string importString)
@@ -426,7 +428,12 @@ namespace WaterSortGame.ViewModels
                 {
                     if (layer[y] != "-")
                     {
-                        var liquid = Int32.Parse(layer[y]);
+                        int liquid = Int32.Parse(layer[y]);
+                        if (liquid > LiquidColorNew.ColorKeys.Count - 2)
+                        {
+                            MainWindowVM.Notification.Show($"Wrong number ({liquid}) in the import string. Canceling import.", 10000);
+                            return null;
+                        }
                         importedGameState[x, y] = new LiquidColorNew(liquid);
                     }
                 }
