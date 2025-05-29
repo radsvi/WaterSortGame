@@ -268,7 +268,19 @@ namespace WaterSortGame.ViewModels
         {
             ClosePopupWindow();
 
-            ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+            ObservableCollection<StoredLevel>? savedLevelList;
+            try
+            {
+                savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+            }
+            catch
+            {
+                return;
+            }
+            if (savedLevelList is null)
+            {
+                savedLevelList = new ObservableCollection<StoredLevel>();
+            }
 
             savedLevelList.Add(new StoredLevel(GameState.StartingPosition, NoteForSavedLevel));
 
@@ -280,6 +292,12 @@ namespace WaterSortGame.ViewModels
             TokenSource = new CancellationTokenSource();
             var token = TokenSource.Token;
             PopupWindowNotification(token);
+        }
+        public RelayCommand CopyExportStringCommand => new RelayCommand(execute => CopyExportString());
+        private void CopyExportString()
+        {
+            Clipboard.SetText(GameState.ReadableGameState);
+            ClosePopupWindow();
         }
         public RelayCommand AddPresetLevels_Command => new RelayCommand(execute => LoadLevelVM.AddPresetLevels());
         public CancellationTokenSource TokenSource { get; set; } = null;

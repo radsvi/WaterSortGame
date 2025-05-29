@@ -146,9 +146,9 @@
                         </StackPanel>
                         
                         <GroupBox Header="Import exact gamestate" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}" Margin="0 15 0 0">
-                            <DockPanel >
-                                <Button Content="Import" Width="50" DockPanel.Dock="Right" Command="{Binding ImportExactGameStateCommand}" />
-                                <TextBox Text="{Binding ImportGameStateString, UpdateSourceTrigger=PropertyChanged}" />
+                            <DockPanel>
+                                <Button Content="Import" Width="50" DockPanel.Dock="Right" Command="{Binding ImportExactGameStateCommand}" Padding="5" />
+                                <TextBox Text="{Binding ImportGameStateString, UpdateSourceTrigger=PropertyChanged}" Padding="5" />
                             </DockPanel>
                             
                         </GroupBox>

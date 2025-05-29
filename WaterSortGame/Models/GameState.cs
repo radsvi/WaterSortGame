@@ -10,13 +10,28 @@ using WaterSortGame.ViewModels;
 
 namespace WaterSortGame.Models
 {
-    internal class GameState// : ViewModelBase
+    internal class GameState : ViewModelBase
     {
         private MainWindowVM MainWindowVM;
         private AppSettings appSettings;
 
 
-
+        private string readableGameState;
+        public string ReadableGameState
+        {
+            get { 
+                
+                return GameStateToString(gameGrid, StringFormat.Numbers); 
+            }
+            set
+            {
+                if (value != readableGameState)
+                {
+                    readableGameState = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         //public int NumberOfTubes { get; private set; }
         public int NumberOfLayers { get; } = 4;
         public LiquidColorNew[,] gameGrid;
@@ -514,6 +529,41 @@ namespace WaterSortGame.Models
                 }
             }
             return numberOfColors;
+        }
+        public static string GameStateToString(LiquidColorNew[,] gameState, StringFormat format = StringFormat.Names)
+        {
+            List<string> intGameState = new List<string>();
+            for (int x = 0; x < gameState.GetLength(0); x++)
+            {
+                string tubeString = "[";
+                for (int y = gameState.GetLength(1) - 1; y >= 0; y--)
+                {
+                    if (gameState[x, y] is not null)
+                    {
+                        //tubeInt += (int)gameState[x, y].Name * (int)Math.Pow(100,y);
+                        if (format == StringFormat.Names)
+                        {
+                            tubeString += (gameState[x, y].Name).ToString();
+                        }
+                        else
+                        {
+                            tubeString += ((int)gameState[x, y].Name).ToString("00"); // this format is used for debugging. To easily export the gamestate as a string.
+                        }
+                    }
+                    else
+                        tubeString += "-";
+                    if (y > 0) tubeString += ".";
+                }
+                tubeString += "]";
+                intGameState.Add(tubeString);
+            }
+            //intGameState.Sort(); // nechci sortovat kdyz chci vizualizaci
+            string stringGameState = string.Empty;
+            foreach (var tube in intGameState)
+            {
+                stringGameState += tube.ToString();
+            }
+            return stringGameState;
         }
 
 

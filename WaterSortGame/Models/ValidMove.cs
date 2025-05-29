@@ -178,38 +178,7 @@ namespace WaterSortGame.Models
         }
         private static string GameStateToString(LiquidColorNew[,] gameState, StringFormat format = StringFormat.Names)
         {
-            List<string> intGameState = new List<string>();
-            for (int x = 0; x < gameState.GetLength(0); x++)
-            {
-                string tubeString = "[";
-                for (int y = gameState.GetLength(1) - 1; y >= 0; y--)
-                {
-                    if (gameState[x, y] is not null)
-                    {
-                        //tubeInt += (int)gameState[x, y].Name * (int)Math.Pow(100,y);
-                        if (format == StringFormat.Names)
-                        {
-                            tubeString += (gameState[x, y].Name).ToString();
-                        }
-                        else
-                        {
-                            tubeString += ((int)gameState[x, y].Name).ToString("00"); // this format is used for debugging. To easily export the gamestate as a string.
-                        }
-                    }
-                    else
-                        tubeString += "-";
-                    if (y > 0) tubeString += ".";
-                }
-                tubeString += "]";
-                intGameState.Add(tubeString);
-            }
-            intGameState.Sort();
-            string stringGameState = string.Empty;
-            foreach (var tube in intGameState)
-            {
-                stringGameState += tube.ToString();
-            }
-            return stringGameState;
+            return Models.GameState.GameStateToString(gameState, format);
         }
     }
     internal class NullValidMove : ValidMove

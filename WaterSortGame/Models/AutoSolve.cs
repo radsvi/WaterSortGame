@@ -77,6 +77,7 @@ namespace WaterSortGame.Models
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             var treeNode = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             treeNode.Data.StepNumber = -1000; // ## smazat. mam to tu jen abych oznacil prvni node pro debugovani
+            treeNode.Data.UpdateHash();
             //Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps = new Dictionary<int, LinkedList<TreeNode<ValidMove>>>();
             CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps = new CollisionDictionary<int, TreeNode<ValidMove>>();
             List<TreeNode<ValidMove>> debugList = new List<TreeNode<ValidMove>>(); // ## smazat

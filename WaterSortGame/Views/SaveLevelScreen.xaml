@@ -6,12 +6,12 @@
              xmlns:local="clr-namespace:WaterSortGame.Views"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="600">
-    <!--<UserControl.Resources>
+    <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
-    </UserControl.Resources>-->
+    </UserControl.Resources>
     <Grid Style="{StaticResource PopupScreenOuter}">
         <Button Style="{StaticResource ClickBackgroundButton}" Command="{Binding CancelScreenCommand}">
-            <Border Style="{StaticResource PopupScreen}" ><!--Height="Auto"-->
+            <Border Style="{StaticResource PopupScreen}" Height="Auto" ><!--Height="Auto"-->
                 <Grid>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -31,9 +31,12 @@
                                 <Button Content="Cancel" Command="{Binding CancelScreenCommand}" Width="150"/>
                             </StackPanel>
 
-                            <!--<GroupBox Header="Export current gamestate as string">
-                                <TextBox Text="asfd" IsReadOnly="True"/>
-                            </GroupBox>-->
+                            <GroupBox Header="Export current gamestate as string" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}" Margin="0 15 0 0">
+                                <DockPanel >
+                                    <Button Content="Copy" DockPanel.Dock="Right" Command="{Binding CopyExportStringCommand}" Padding="5" />
+                                    <TextBox Text="{Binding GameState.ReadableGameState}" IsReadOnly="True" Padding="5" />
+                                </DockPanel>
+                            </GroupBox>
                             <!--<GroupBox Header="Export current AutoSolve gamestate as string" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}">
                                 <TextBox Text="{Binding AutoSolve.}" IsReadOnly="True"/>
                             </GroupBox>-->

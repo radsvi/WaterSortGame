@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Linq;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
@@ -25,7 +26,6 @@ namespace WaterSortGame.ViewModels
             //MainWindowVM.LoadLevelList = LoadLevelList;
             //MainWindowVM.LoadLevelVM = this;
         }
-
         private StoredLevel selectedLevelForLoading;
         public StoredLevel SelectedLevelForLoading
         {
@@ -117,9 +117,21 @@ namespace WaterSortGame.ViewModels
         {
             //LoadLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
 
-            LoadLevelList?.Clear();
-            var deserializedList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+            FillImportBoxFromClipboard();
 
+            LoadLevelList?.Clear();
+            
+            ObservableCollection<StoredLevel>? deserializedList;
+            try
+            {
+                deserializedList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+            }
+            catch
+            {
+                return;
+            }
+
+            if (deserializedList is null) return;
             foreach (var item in deserializedList)
             {
                 item.GameGridDisplayList = ArrayToTubeList(item.GameGrid);
@@ -377,6 +389,14 @@ namespace WaterSortGame.ViewModels
         }
         public string ImportGameStateString { get; set; } = string.Empty;
         //public string ImportGameStateString { get; set; } = "[-.-.-.-][-.-.-.-][-.-.03.03][-.02.02.02][-.03.02.03][01.01.01.01]";
+        private void FillImportBoxFromClipboard()
+        {
+            var content = Clipboard.GetText();
+
+            if (content is not null)
+                if (content.Substring(0,1) == "[")
+                    ImportGameStateString = Clipboard.GetText();
+        }
         public RelayCommand ImportExactGameStateCommand => new RelayCommand(execute => ImportExactGameState(), canExecute => ImportGameStateString != string.Empty);
         private void ImportExactGameState()
         {
@@ -385,6 +405,7 @@ namespace WaterSortGame.ViewModels
             MainWindowVM.GameState.SetGameState(importedGameState);
             MainWindowVM.OnStartingLevel();
             MainWindowVM.ClosePopupWindow();
+            ImportGameStateString = string.Empty;
         }
         private LiquidColorNew[,] DecodeImportedString(string importString)
         {
