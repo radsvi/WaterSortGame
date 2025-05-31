@@ -203,33 +203,37 @@ namespace WaterSortGame.Models
                 return new NullTreeNode(parentNode);
             }
             
-            var singleColorTubes = HasSingleColorTube(parentNode.Data.GameState);
-            if (singleColorTubes.Count() == 0)
+            var singleColorTubeList = HasSingleColorTube(parentNode.Data.GameState);
+            if (singleColorTubeList.Count() == 0)
             {
                 return new NullTreeNode(parentNode);
             }
 
-            var dualColorTube = HasCorrespondingDualColorTube(parentNode.Data.GameState, singleColorTubes);
+            (var dualColorTube, var singleColorTube) = HasCorrespondingDualColorTube(parentNode.Data.GameState, singleColorTubeList);
             if (dualColorTube is not null)
             {
-                return GeneratePriorityFutureState(parentNode, singleColorTubes, dualColorTube, hashedSteps);
+                var newGameState = MainWindowVM.GameState.CloneGrid(parentNode.Data.GameState);
+                var validMove = new ValidMove(dualColorTube, singleColorTube, newGameState, true);
+
+                return GeneratePriorityFutureState(parentNode, validMove, hashedSteps);
             }
 
             return new NullTreeNode(parentNode);
         }
-        private TreeNode<ValidMove> GeneratePriorityFutureState(TreeNode<ValidMove> parentNode, List<SimpleTube> singleColorTubes, SimpleTube? dualColorTube, CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps)
+        private TreeNode<ValidMove> GeneratePriorityFutureState(TreeNode<ValidMove> parentNode, ValidMove validMove, CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps)
         {
             parentNode.Data.Visited = true; // have it here to prevent infinitely repeating gameStates like for example [1133],[-155] into - [-133],[1155]. The Visited state is checked while generating new moves in 'CreateAllPossibleFutureStates'
             var node = parentNode; // this is not a mistake. If I made "node" in the parameters then I would change the node on the outside!
 
             var newGameState = MainWindowVM.GameState.CloneGrid(parentNode.Data.GameState);
-            ForceChangeGameState(newGameState, singleColorTubes, dualColorTube);
+            ForceChangeGameState(newGameState, validMove);
 
             var nextNode = new TreeNode<ValidMove>(validMoves[i]);
 
 
+            node.Data.UpdateHash();
 
-            
+
 
 
 
@@ -270,20 +274,22 @@ namespace WaterSortGame.Models
 
 
         }
-        private void ForceChangeGameState(LiquidColorNew[,] newGameState, List<SimpleTube> singleColorTubes, SimpleTube? dualColorTube)
+        private void ForceChangeGameState(LiquidColorNew[,] gameState, ValidMove validMove)
         {
-            
-            
-            
-            int j = 0;
-            while (j < node.Data.Source.NumberOfRepeatingLiquids
-                && node.Data.Target.Y + j < node.Data.GameState.GetLength(1)) // pocet stejnych barev na sobe source && uroven barvy v targetu
+            // singleColorTube is target
+            // dualColorTube is source
+
+            for (int y = gameState.GetLength(1) - 2; y >= 0 ; y--)
             {
-                node.Data.GameState[node.Data.Target.X, node.Data.Target.Y + j] = node.Data.GameState[node.Data.Source.X, node.Data.Source.Y - j];
-                node.Data.GameState[node.Data.Source.X, node.Data.Source.Y - j] = null;
-                j++;
+                gameState[singleColorTube.X, y] = gameState[singleColorTube.X, y + 1];
             }
-            node.Data.UpdateHash();
+            //newGameState[singleColorTube.X, 0] = null;
+
+            gameState[singleColorTube.X, 0] = gameState[dualColorTube.X, dualColorTube.Y];
+            for (int y = 0; y < gameState.GetLength(1) - 1; y++)
+            {
+                gameState[dualColorTube.X, y] = gameState[dualColorTube.X, y + 1];
+            }
         }
         private List<int> HasEmptyTubes(LiquidColorNew[,] gameState)
         {
@@ -303,14 +309,14 @@ namespace WaterSortGame.Models
         /// <param name="gameState"></param>
         /// <param name="singleColorTubeList"></param>
         /// <returns></returns>
-        private SimpleTube? HasCorrespondingDualColorTube(LiquidColorNew[,] gameState, List<SimpleTube> singleColorTubeList)
+        private (PositionPointer?, PositionPointer?) HasCorrespondingDualColorTube(LiquidColorNew[,] gameState, List<PositionPointer> singleColorTubeList)
         {
             foreach (var singleColorTube in singleColorTubeList)
             {
                 for (int x = 0; x < gameState.GetLength(0); x++)
                 {
                     if (singleColorTube is not null && gameState[x, 0] is not null &&
-                        singleColorTube.Color.Name == gameState[x, 0].Name)
+                        singleColorTube.ColorName == gameState[x, 0].Name)
                     {
                         if (gameState[x, 0] is null) continue;
 
@@ -332,21 +338,22 @@ namespace WaterSortGame.Models
                         }
                         if (dualColorTube)
                         {
-                            return new SimpleTube(gameState[x, 1], x, 0);
+                            return (new PositionPointer(gameState, x, 1, 0), singleColorTube);
                         }
                     }
                 }
             }
-            return null;
+            return (null, null);
         }
         /// <summary>
         /// Determines whether this is a move that should always be taken because it is always correct. Such as moving [--12][-222] into [---1][2222]
         /// </summary>
         /// <param name="gameState"></param>
         /// <returns></returns>
-        private List<SimpleTube> HasSingleColorTube(LiquidColorNew[,] gameState)
+        private List<PositionPointer> HasSingleColorTube(LiquidColorNew[,] gameState)
         {
-            List<SimpleTube> singleColorTubes = new List<SimpleTube>();
+            List<PositionPointer> singleColorTubes = new List<PositionPointer>();
+            //List<SimpleTube> singleColorTubes = new List<SimpleTube>();
             for (int x = 0; x < gameState.GetLength(0); x++)
             {
                 bool isSingleColor = true;
@@ -361,7 +368,7 @@ namespace WaterSortGame.Models
                         break;
                     }
                 }
-                if (isSingleColor) singleColorTubes.Add(new SimpleTube(gameState[x, 0], x, y));
+                if (isSingleColor) singleColorTubes.Add(new PositionPointer(gameState, x, 0, y));
             }
             return singleColorTubes;
         }

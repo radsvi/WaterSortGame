@@ -16,6 +16,13 @@ namespace WaterSortGame.Models
             Y = y;
             ColorName = (gameState[x, y] != null) ? gameState[x, y].Name : null;
         }
+        public PositionPointer(LiquidColorNew[,] gameState, int x, int y, int numberOfRepeatingLiquids)
+        {
+            X = x;
+            Y = y;
+            ColorName = (gameState[x, y] != null) ? gameState[x, y].Name : null;
+            NumberOfRepeatingLiquids = numberOfRepeatingLiquids;
+        }
         public int X { get; set; }
         public int Y { get; set; }
         public LiquidColorName? ColorName { get; set; }
