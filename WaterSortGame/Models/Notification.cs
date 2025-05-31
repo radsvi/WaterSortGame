@@ -15,7 +15,8 @@ namespace WaterSortGame.Models
     internal enum MessageType
     {
         Information,
-        Debug
+        Debug,
+        Hidden
     }
     public class NotificationDetails
     {
@@ -46,7 +47,7 @@ namespace WaterSortGame.Models
         public void Show(string text, MessageType messageType, int closeDelay = closeDelayDefault)
         {
             Debug.WriteLine("[Notification: ]" + text);
-            if (messageType == MessageType.Debug && DisplayDebugMessages is false)
+            if (messageType == MessageType.Debug && DisplayDebugMessages is false || messageType == MessageType.Hidden)
             {
                 return;
             }

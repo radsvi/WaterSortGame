@@ -2,12 +2,14 @@
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Xml.Linq;
 using WaterSortGame.ViewModels;
 
@@ -22,8 +24,8 @@ namespace WaterSortGame.Models
         private bool ResumeRequest { get; set; }
         [Obsolete]public int ResumeRequestCounterDebug { get; set; } = 0; // used only for debugging how many times I clicked the button and only triggering breakpoint upon certain number.
         //public List<ValidMove> CompleteSolution { get; private set; }
-        private List<ValidMove> completeSolution;
-        public List<ValidMove> CompleteSolution
+        private ObservableCollection<ValidMove> completeSolution;
+        public ObservableCollection<ValidMove> CompleteSolution
         {
             get { return completeSolution; }
             set
@@ -75,6 +77,9 @@ namespace WaterSortGame.Models
         private async void Start(LiquidColorNew[,] startingPosition)
         {
             bool debugVisualiseState = false; // ## smazat?
+            var startTime = DateTime.Now;
+            //var notificationType = MessageType.Debug;
+            var notificationType = MessageType.Hidden;
             //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             var treeNode = new TreeNode<ValidMove>(new ValidMove(startingPosition));
@@ -103,13 +108,13 @@ namespace WaterSortGame.Models
                 {
                     if (treeNode.Parent is null)
                     {
-                        Notification.Show("Tried all branches, and didn't find a solution!", MessageType.Debug, 60000); // this should rarely happen.
+                        Notification.Show("Tried all branches, and didn't find a solution!", notificationType, 60000); // this should rarely happen.
                         break;
                     }
                         
                     treeNode = treeNode.Parent;
                     
-                    Notification.Show($"{{{Iterations}}} Returning to previous move", MessageType.Debug);
+                    Notification.Show($"{{{Iterations}}} Returning to previous move", notificationType);
                 }
                 else if (treeNode.Data.FullyVisited == false && treeNode.Data.Visited == true)
                 {
@@ -119,13 +124,13 @@ namespace WaterSortGame.Models
                     {
                         highestPriority_TreeNode.Parent.Data.FullyVisited = true;
                         treeNode = highestPriority_TreeNode.Parent;
-                        Notification.Show($"{{{Iterations}}} All siblings visited, marking parent as FullyVisited", MessageType.Debug);
+                        Notification.Show($"{{{Iterations}}} All siblings visited, marking parent as FullyVisited", notificationType);
                         continue;
                     }
                     else
                     {
                         treeNode = highestPriority_TreeNode;
-                        Notification.Show($"{{{Iterations}}} Continuing with next child", MessageType.Debug); // continuing to child generated in previous loop iteration
+                        Notification.Show($"{{{Iterations}}} Continuing with next child", notificationType); // continuing to child generated in previous loop iteration
                         continue;
                     }
                 }
@@ -152,6 +157,7 @@ namespace WaterSortGame.Models
 
                     // Pro kazdy validMove vytvorim sibling ve strome:
                     CreateAllPossibleFutureStates(hashedSteps, treeNode, validMoves); // also checks for repeating moves
+                    //PickTopPriorityMoves(treeNode);
 
                     if (UnvisitedChildrenExist(treeNode) == false)
                     {
@@ -161,7 +167,7 @@ namespace WaterSortGame.Models
                             //if (treeNode.Parent is not null)
                             //    treeNode.Parent.Data.Visited = true;
 
-                            Notification.Show($"{{{Iterations}}} Reached a dead end.", MessageType.Debug);
+                            Notification.Show($"{{{Iterations}}} Reached a dead end.", notificationType);
                             continue;
                         }
 
@@ -174,16 +180,33 @@ namespace WaterSortGame.Models
 
                     if (treeNode.GetType() == typeof(NullTreeNode))
                     {
-                        Notification.Show($"{{{Iterations}}} highestPriority_TreeNode is null, continuing.", MessageType.Debug);
+                        Notification.Show($"{{{Iterations}}} highestPriority_TreeNode is null, continuing.", notificationType);
                         continue;
                     }
 
                     if (debugVisualiseState) MakeAMove(treeNode.Data);
                 }
             }
-            BacktrackThroughAllSteps(treeNode!);
-            Notification.Show($"Total steps taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}", MessageType.Debug, 60000);
+            var duration = DateTime.Now.Subtract(startTime);
+            BacktrackThroughAllStepsAndRecordThem(treeNode!);
+            Notification.Show($"Total steps taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}. Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
         }
+
+        private void PickTopPriorityMoves(TreeNode<ValidMove> parentNode)
+        {
+            var node = parentNode.FirstChild;
+            while (node is not null)
+            {
+                if (node.Data.FullyVisited is false && node.Data.Visited is false)
+                {
+                    return;
+                }
+
+                node = node.NextSibling;
+            }
+            return;
+        }
+
         private bool AskUserToContinue(TreeNode<ValidMove> treeNode, int iterations)
         {
             if (iterations % 1000 == 0)
@@ -196,16 +219,17 @@ namespace WaterSortGame.Models
             }
             return true;
         }
-        private void BacktrackThroughAllSteps(TreeNode<ValidMove> treeNode)
+        private void BacktrackThroughAllStepsAndRecordThem(TreeNode<ValidMove> treeNode)
         {
-            CompleteSolution = new List<ValidMove>();
+            var newList = new List<ValidMove>();
 
             while (treeNode.Parent is not null)
             {
-                CompleteSolution.Add(treeNode.Data);
+                newList.Add(treeNode.Data);
                 treeNode = treeNode.Parent;
             }
-            CompleteSolution.Reverse();
+            //newList.Reverse();
+            CompleteSolution = new ObservableCollection<ValidMove>(newList);
         }
         /// <summary>
         /// basically checks if there are any valid moves. If there is at least one children and it is unvisited, it returns true.
@@ -214,11 +238,6 @@ namespace WaterSortGame.Models
         /// <returns></returns>
         private bool UnvisitedChildrenExist(TreeNode<ValidMove> parentNode)
         {
-            if (parentNode.FirstChild is null)
-            {
-                return false;
-            }
-
             var node = parentNode.FirstChild;
             while (node is not null)
             {
@@ -630,9 +649,10 @@ namespace WaterSortGame.Models
         {
             ResumeRequest = false;
             StepThrough = () => ResumeRequest = true;
-            foreach (var validMove in CompleteSolution)
+            for (int i = CompleteSolution.Count - 1; i >= 0; i--)
             {
-                MakeAMove(validMove);
+                MakeAMove(CompleteSolution[i]);
+                CompleteSolution.Remove(CompleteSolution[i]);
                 await WaitForButtonPress();
             }
         }
