@@ -188,7 +188,8 @@ namespace WaterSortGame.Models
             Target = new NullPositionPointer();
             Source = new NullPositionPointer();
             Liquid = new NullLiquidColorNew();
-            FullyVisited = true; // changing this to true because NullValidMove shouldn't even be even considered as a valid move.
+            Visited = true; // setting this to true because NullValidMove shouldn't even be even considered as a valid move.
+            FullyVisited = true; // setting this to true because NullValidMove shouldn't even be even considered as a valid move.
         }
     }
 }

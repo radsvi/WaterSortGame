@@ -237,7 +237,7 @@ namespace WaterSortGame.Models
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Gray });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Red });
 
-            //// Nikdy nevyresenej level:
+            //// Nikdy nevyresenej level (stary cislovani):
             //AddTube(i++, new int[] { 9, 2, 4, 1 });
             //AddTube(i++, new int[] { 3, 8, 11, 5 });
             //AddTube(i++, new int[] { 9, 11, 11, 12 });
@@ -251,19 +251,47 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 8, 12, 6, 12 });
             //AddTube(i++, new int[] { 1, 12, 8, 9 });
 
-            // sejvnutej level z te novejsi hry. Level jsem vyresil, ale byl tezkej (jeste jednou jsem to overil ze je to resitelny. Uspesne!):
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Indigo, LiquidColorName.Sky, LiquidColorName.Teal });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Sky, LiquidColorName.Sky, LiquidColorName.Gray });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Purple, LiquidColorName.Red, LiquidColorName.Teal });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Yellow, LiquidColorName.Olive, LiquidColorName.Green });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Blue, LiquidColorName.Yellow, LiquidColorName.Blue });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Indigo, LiquidColorName.Teal, LiquidColorName.Green });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Red, LiquidColorName.Pink });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Sky, LiquidColorName.Green, LiquidColorName.Yellow, LiquidColorName.Olive });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Teal, LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Blue });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Gray, LiquidColorName.Olive, LiquidColorName.Gray });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Gray, LiquidColorName.Indigo, LiquidColorName.Pink });
+            // Nikdy nevyresenej level:
+            AddTube(i++, new int[] { 8, 1, 3, 0 });
+            AddTube(i++, new int[] { 2, 7, 10, 4 });
+            AddTube(i++, new int[] { 8, 10, 10, 11 });
+            AddTube(i++, new int[] { 2, 2, 1, 4 });
+            AddTube(i++, new int[] { 0, 6, 5, 9 });
+            AddTube(i++, new int[] { 2, 3, 6, 3 });
+            AddTube(i++, new int[] { 1, 7, 4, 9 });
+            AddTube(i++, new int[] { 5, 0, 1, 8 });
+            AddTube(i++, new int[] { 10, 9, 6, 5 });
+            AddTube(i++, new int[] { 4, 6, 9, 3 });
+            AddTube(i++, new int[] { 7, 11, 5, 11 });
+            AddTube(i++, new int[] { 0, 11, 7, 8 });
+
+
+            //// sejvnutej level z te novejsi hry. Level jsem vyresil, ale byl tezkej (jeste jednou jsem to overil ze je to resitelny. Uspesne!):
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Indigo, LiquidColorName.Sky, LiquidColorName.Teal });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Sky, LiquidColorName.Sky, LiquidColorName.Gray });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Purple, LiquidColorName.Red, LiquidColorName.Teal });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Yellow, LiquidColorName.Olive, LiquidColorName.Green });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Blue, LiquidColorName.Yellow, LiquidColorName.Blue });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Indigo, LiquidColorName.Teal, LiquidColorName.Green });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Red, LiquidColorName.Pink });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Sky, LiquidColorName.Green, LiquidColorName.Yellow, LiquidColorName.Olive });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Teal, LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Blue });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Gray, LiquidColorName.Olive, LiquidColorName.Gray });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Gray, LiquidColorName.Indigo, LiquidColorName.Pink });
+
+            //AddTube(i++, new int[] { 1, 1, 1, 7 });
+            //AddTube(i++, new int[] { 2, 6, 7, 4 });
+            //AddTube(i++, new int[] { 3, 1, 11, 5 });
+            //AddTube(i++, new int[] { 5, 0, 4, 3 });
+            //AddTube(i++, new int[] { 5, 11, 6, 6 });
+            //AddTube(i++, new int[] { 8, 2, 1, 7 });
+            //AddTube(i++, new int[] { 8, 3, 5, 3 });
+            //AddTube(i++, new int[] { 8, 1, 4, 9 });
+            //AddTube(i++, new int[] { 9, 0, 8, 2 });
+            //AddTube(i++, new int[] { 9, 11, 6, 4 });
+            //AddTube(i++, new int[] { 1, 0, 7, 1 });
+            //AddTube(i++, new int[] { 11, 0, 2, 9 });
 
             //AddTube(i++, new int[] { 1, 1, 1, 1 });
             //AddTube(i++, new int[] { 2 });

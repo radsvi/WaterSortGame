@@ -64,12 +64,13 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        readonly string exportLogFilename = "Export-AutoSolve-" + DateTime.Now.ToString("MMddyyyy-HH.mm.ss") + ".log";
+        readonly string exportLogFilename;
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
             Notification = mainWindowVM.Notification;
             StepThrough = StepThroughMethod;
+            exportLogFilename = MainWindowVM.logFolderName + "/Export-AutoSolve-" + DateTime.Now.ToString("MMddyyyy-HH.mm.ss") + ".log";
         }
         private async void Start(LiquidColorNew[,] startingPosition)
         {
@@ -85,8 +86,8 @@ namespace WaterSortGame.Models
             //FirstStep.Data.GameState = startingPosition;
             //TreeNode<ValidMove> previousStep = FirstStep;
             //var gameState = startingPosition;
+            //Iterations = 0;
 
-            //int Iterations = 0;
             while (true)
             {
                 await Task.Delay(1);
@@ -94,32 +95,37 @@ namespace WaterSortGame.Models
                 WriteToFileAutoSolveSteps(treeNode, $"[{hashedSteps.DebugData.Count}] Visiting node");
                 Iterations++;
                 //if (AskUserToContinue(treeNode, Iterations) == false) return;
-
+                if (debugVisualiseState) MakeAMove(treeNode.Data);
                 if (debugVisualiseState) await WaitForButtonPress();
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
                 if (treeNode.Data.FullyVisited == true)
                 {
                     if (treeNode.Parent is null)
-                        throw new Exception("treeNode.Parent is null for some reason");
+                    {
+                        Notification.Show("Tried all branches, and didn't find a solution!", MessageType.Debug, 60000); // this should rarely happen.
+                        break;
+                    }
+                        
                     treeNode = treeNode.Parent;
-                    if (debugVisualiseState) MakeAMove(treeNode.Data);
+                    
                     Notification.Show($"{{{Iterations}}} Returning to previous move", MessageType.Debug);
-                    if (debugVisualiseState) await WaitForButtonPress();
-
-                    highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode);
+                }
+                else if (treeNode.Data.FullyVisited == false && treeNode.Data.Visited == true)
+                {
+                    highestPriority_TreeNode = PickHighestPriorityNonVisitedChild(treeNode);
 
                     if (highestPriority_TreeNode.GetType() == typeof(NullTreeNode))
                     {
+                        highestPriority_TreeNode.Parent.Data.FullyVisited = true;
                         treeNode = highestPriority_TreeNode.Parent;
-                        Notification.Show($"{{{Iterations}}} All siblings visited, returning to parent", MessageType.Debug);
+                        Notification.Show($"{{{Iterations}}} All siblings visited, marking parent as FullyVisited", MessageType.Debug);
                         continue;
                     }
                     else
                     {
                         treeNode = highestPriority_TreeNode;
-                        Notification.Show($"{{{Iterations}}} Continuing with next child", MessageType.Debug);
-                        if (debugVisualiseState) MakeAMove(treeNode.Data);
+                        Notification.Show($"{{{Iterations}}} Continuing with next child", MessageType.Debug); // continuing to child generated in previous loop iteration
                         continue;
                     }
                 }
@@ -140,24 +146,20 @@ namespace WaterSortGame.Models
 
                     var mostFrequentColors = PickMostFrequentColor(movableLiquids); // ## tohle jsem jeste nezacal nikde pouzivat!
 
-                    //RemoveUnoptimalMoves(validMoves, emptySpots);
                     RemoveEqualColorMoves(validMoves);
                     RemoveUselessMoves(validMoves);
-                    //RemoveRepeatingMoves(validMoves, node);
-
                     RemoveSolvedTubesFromMoves(treeNode.Data.GameState, validMoves);
 
                     // Pro kazdy validMove vytvorim sibling ve strome:
-                    CreateAllPossibleFutureStates(hashedSteps, treeNode, validMoves);
+                    CreateAllPossibleFutureStates(hashedSteps, treeNode, validMoves); // also checks for repeating moves
 
-                    //if (validMoves.Count == 0)
                     if (UnvisitedChildrenExist(treeNode) == false)
                     {
                         if (MainWindowVM.GameState.IsLevelCompleted(treeNode.Data.GameState) is false)
                         {
                             treeNode.Data.FullyVisited = true;
-                            if (treeNode.Parent is not null)
-                                treeNode.Parent.Data.Visited = true;
+                            //if (treeNode.Parent is not null)
+                            //    treeNode.Parent.Data.Visited = true;
 
                             Notification.Show($"{{{Iterations}}} Reached a dead end.", MessageType.Debug);
                             continue;
@@ -167,7 +169,7 @@ namespace WaterSortGame.Models
                     }
 
                     // Projdu vsechny siblingy a vyberu ten s nejvetsi prioritou:
-                    highestPriority_TreeNode = PickHighestPriorityNonVisitedNode(treeNode.FirstChild);
+                    highestPriority_TreeNode = PickHighestPriorityNonVisitedChild(treeNode);
                     treeNode = highestPriority_TreeNode;
 
                     if (treeNode.GetType() == typeof(NullTreeNode))
@@ -180,11 +182,7 @@ namespace WaterSortGame.Models
                 }
             }
             BacktrackThroughAllSteps(treeNode!);
-            if (Iterations >= 1000)
-            {
-                Notification.Show($"Reached {Iterations} steps. Interrupting", MessageType.Debug);
-            }
-            Notification.Show($"Total steps taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}", MessageType.Debug, 10000);
+            Notification.Show($"Total steps taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}", MessageType.Debug, 60000);
         }
         private bool AskUserToContinue(TreeNode<ValidMove> treeNode, int iterations)
         {
@@ -235,6 +233,7 @@ namespace WaterSortGame.Models
         }
         private void CreateAllPossibleFutureStates(CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps, TreeNode<ValidMove> parentNode, List<ValidMove> validMoves)
         {
+            parentNode.Data.Visited = true; // have it here to prevent infinitely repeating gameStates like for example [1133],[-155] into - [-133],[1155]. The Visited state is checked while generating new moves in 'CreateAllPossibleFutureStates'
             var node = parentNode; // this is not a mistake. If I made "node" in the parameters then I would change the node on the outside!
             for (int i = 0; i < validMoves.Count; i++)
             {
@@ -259,7 +258,7 @@ namespace WaterSortGame.Models
                 }
                 node = nextNode;
             }
-            if (node == parentNode) // pokud se ani jeden node nepridal protoze byli vsechno duplikaty:
+            if (node == parentNode) // pokud se ani jeden node nepridal protoze byly vsechno duplikaty:
             {
                 parentNode.Data.FullyVisited = true;
             }
@@ -295,31 +294,31 @@ namespace WaterSortGame.Models
         /// <summary>
         /// Checks siblings of provided node
         /// </summary>
-        private TreeNode<ValidMove> PickHighestPriorityNonVisitedNode(TreeNode<ValidMove> node)
+        private TreeNode<ValidMove> PickHighestPriorityNonVisitedChild(TreeNode<ValidMove> parentNode)
         {
-            TreeNode<ValidMove> currentNode = node;
-            TreeNode<ValidMove> resultNode = new NullTreeNode(node);
-            while (currentNode != null)
+            TreeNode<ValidMove> node = parentNode.FirstChild;
+            TreeNode<ValidMove> resultNode = new NullTreeNode(parentNode);
+            while (node is not null)
             {
-                if (currentNode.Data.FullyVisited is false && currentNode.Data.Visited is false)
+                if (node.Data.FullyVisited is false && node.Data.Visited is false)
                 {
-                    resultNode = currentNode;
+                    resultNode = node;
                     break; // i have got it sorted by highest priority, so first non-visited is fine
                 }
 
-                currentNode = currentNode.NextSibling;
+                node = node.NextSibling;
             }
 
             if (resultNode.GetType() == typeof(NullTreeNode)) // tohle znamena - prosel jsem vsechno a nenasel jsem zadnej unvisited child
             {
                 if (resultNode.Parent is not null) // null by mel byt jen v pripade ze jsme uplne na zacatku
                 {
+                    resultNode.Parent.Data.Visited = true;
                     resultNode.Parent.Data.FullyVisited = true;
                 }
                 resultNode.Data.SolutionValue = GetStepValue(resultNode.Data.GameState);
             }
 
-            resultNode.Data.Visited = true; // have it here to prevent infinitely repeating gameStates like for example [1133],[-155] into - [-133],[1155]
             return resultNode;
         }
         private void MakeAMove(ValidMove node)
@@ -448,70 +447,6 @@ namespace WaterSortGame.Models
 
             return validMoves;
         }
-        private void RemoveRepeatingMoves(List<ValidMove> validMoves, TreeNode<ValidMove> parentNode)
-        {
-            //bool first = true;
-            //do
-            //{
-            //    if (first)
-            //    {
-            //        first = false;
-            //    }
-            //    else
-            //    {
-            //        parentOfParentNode = parentOfParentNode.Parent;
-            //        if (parentOfParentNode is null) continue;
-            //    }
-            //    if (AreStatesIdentical(upcomingState, parentOfParentNode.Data.GameState)) return true;
-            //} while (parentOfParentNode is not null);
-
-
-            for (int i = validMoves.Count() - 1; i >= 0; i--)
-            {
-                //if (parent == null) return;
-
-                //var upcomingState = CloneGrid(parentNode.Data.GameState);
-                //upcomingState[parentNode.Data.Target.X, parentNode.Data.Target.Y] = upcomingState[parentNode.Data.Source.X, parentNode.Data.Source.Y];
-                //upcomingState[parentNode.Data.Source.X, parentNode.Data.Source.Y] = null;
-
-                var parentOfParentNode = parentNode.Parent;
-                if (parentOfParentNode is null) return; // pokud nema parent znamena ze je prvni a tim padem se ani nemuze opakovat
-                if (AreStatesIdentical(validMoves[i].GameState, parentOfParentNode.Data.GameState))
-                {
-                    validMoves.Remove(validMoves[i]);
-                }
-            }
-        }
-        private bool AreStatesIdentical(LiquidColorNew[,] first, LiquidColorNew[,] second)
-        {
-            //DebugGrid(first, "currentGamestate");
-            //DebugGrid(second, "previousStep");
-
-
-
-            for (int x = 0; x < first.GetLength(0); x++)
-            {
-                for (int y = 0; y < first.GetLength(1); y++)
-                {
-                    if (first[x, y] == null || second[x, y] == null)
-                    {
-                        if (first[x, y] == second[x, y])
-                            continue;
-
-                        return false;
-                    }
-
-                    if (first[x, y].Name == second[x, y].Name)
-                    {
-                        continue;
-                    }
-                    return false;
-
-                    //if (first[x, y] == second[x, y]) return true;
-                }
-            }
-            return true;
-        }
         private void DebugGrid(LiquidColorNew[,] grid, string header)
         {
             Debug.WriteLine("=====================================================");
@@ -601,7 +536,6 @@ namespace WaterSortGame.Models
         /// <summary>
         /// If there are multiple moves for the same color, and in one of them the target is singleColor tube, always choose that one.
         /// </summary>
-        //private void RemoveUnoptimalMoves(List<ValidMove> validMoves, List<PositionPointer> emptySpots)
         private void RemoveEqualColorMoves(List<ValidMove> validMoves)
         {
             //var singleColorTargets = emptySpots.Exists((move) => move.SingleColor == true);

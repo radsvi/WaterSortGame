@@ -162,6 +162,7 @@ namespace WaterSortGame.ViewModels
         }
         public bool PropertyChangedEventPaused { get; set; } = false;
         public ObservableCollection<PopupScreenActions> PopupActions { get; set; }
+        internal readonly string logFolderName = "log";
         #endregion
         #region Constructor
         public MainWindowVM(MainWindow mainWindow, UniformGrid containerForTubes)
@@ -199,6 +200,9 @@ namespace WaterSortGame.ViewModels
             };
 
             ContainerForTubes = containerForTubes;
+
+            
+            if (System.IO.Directory.Exists(logFolderName) == false) System.IO.Directory.CreateDirectory(logFolderName);
 
             AutoSolve = new AutoSolve(this);
 
