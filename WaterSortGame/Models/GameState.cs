@@ -251,19 +251,19 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 8, 12, 6, 12 });
             //AddTube(i++, new int[] { 1, 12, 8, 9 });
 
-            // Nikdy nevyresenej level:
-            AddTube(i++, new int[] { 8, 1, 3, 0 });
-            AddTube(i++, new int[] { 2, 7, 10, 4 });
-            AddTube(i++, new int[] { 8, 10, 10, 11 });
-            AddTube(i++, new int[] { 2, 2, 1, 4 });
-            AddTube(i++, new int[] { 0, 6, 5, 9 });
-            AddTube(i++, new int[] { 2, 3, 6, 3 });
-            AddTube(i++, new int[] { 1, 7, 4, 9 });
-            AddTube(i++, new int[] { 5, 0, 1, 8 });
-            AddTube(i++, new int[] { 10, 9, 6, 5 });
-            AddTube(i++, new int[] { 4, 6, 9, 3 });
-            AddTube(i++, new int[] { 7, 11, 5, 11 });
-            AddTube(i++, new int[] { 0, 11, 7, 8 });
+            //// Nikdy nevyresenej level:
+            //AddTube(i++, new int[] { 8, 1, 3, 0 });
+            //AddTube(i++, new int[] { 2, 7, 10, 4 });
+            //AddTube(i++, new int[] { 8, 10, 10, 11 });
+            //AddTube(i++, new int[] { 2, 2, 1, 4 });
+            //AddTube(i++, new int[] { 0, 6, 5, 9 });
+            //AddTube(i++, new int[] { 2, 3, 6, 3 });
+            //AddTube(i++, new int[] { 1, 7, 4, 9 });
+            //AddTube(i++, new int[] { 5, 0, 1, 8 });
+            //AddTube(i++, new int[] { 10, 9, 6, 5 });
+            //AddTube(i++, new int[] { 4, 6, 9, 3 });
+            //AddTube(i++, new int[] { 7, 11, 5, 11 });
+            //AddTube(i++, new int[] { 0, 11, 7, 8 });
 
 
             //// sejvnutej level z te novejsi hry. Level jsem vyresil, ale byl tezkej (jeste jednou jsem to overil ze je to resitelny. Uspesne!):
@@ -293,10 +293,15 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 1, 0, 7, 1 });
             //AddTube(i++, new int[] { 11, 0, 2, 9 });
 
-            //AddTube(i++, new int[] { 1, 1, 1, 1 });
-            //AddTube(i++, new int[] { 2 });
-            //AddTube(i++, new int[] { 2, 2, 2 });
 
+            //AddTube(i++, new int[] { 1,1,1 });
+            AddTube(i++, new int[] { 2, 1 });
+            AddTube(i++, new int[] { 2, 2, 2 });
+            AddTube(i++, new int[] { 3, 4, 5, 6 });
+            AddTube(i++, new int[] { 3, 4, 5, 6 });
+            AddTube(i++, new int[] { 3, 4, 5, 6 });
+            AddTube(i++, new int[] { 3, 4, 5, 6 });
+            AddTube(i++, new int[] { 1, 1, 1 });
 
             //AddTube(i++, new LiquidColorName[] { });
             //AddTube(i++, new LiquidColorName[] { });

@@ -44,7 +44,20 @@ namespace WaterSortGame.ViewModels
         public MainWindow MainWindow { get; }
         public AppSettings AppSettings { get; }
         public Notification Notification { get; }
-        public AutoSolve AutoSolve { get; set; }
+        //public AutoSolve AutoSolve { get; set; }
+        private AutoSolve autoSolve;
+        public AutoSolve AutoSolve
+        {
+            get { return autoSolve; }
+            set
+            {
+                if (value != autoSolve)
+                {
+                    autoSolve = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public GameState GameState { get; }
         private LoadLevelVM loadLevelVM;
         public LoadLevelVM LoadLevelVM

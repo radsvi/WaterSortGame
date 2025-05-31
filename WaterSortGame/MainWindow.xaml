@@ -110,10 +110,10 @@
                     <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.LoadLevel}"/>
                     <Button Content="Save level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.SaveLevel}"/>
                     <StackPanel Orientation="Horizontal" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}">
-                        <Button Content="Auto Solve" Command="{Binding AutoSolveCommand}"/>
+                        <Button Content="Get solution" Command="{Binding AutoSolveCommand}" />
                         <Button Command="{Binding StepThroughCommand}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="StepThrough ("/>
+                                <TextBlock Text="Next Step ("/>
                                 <TextBlock Text="{Binding AutoSolve.CompleteSolution.Count}" d:Text="0"/>
                                 <TextBlock Text=")"/>
                             </StackPanel>
