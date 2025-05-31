@@ -112,7 +112,7 @@ namespace WaterSortGame.Models
         //    //Debug.WriteLine($"[{first.Source.X}] == [{second.Source.X}] && [{first.Source.Y}] == [{second.Source.Y}]");
         //    //Debug.WriteLine($"&& [{first.Target.X}] == [{second.Target.X}] && [{first.Target.Y}] == [{second.Target.Y}]");
         //    //Debug.WriteLine($"&& [{first.Liquid.Name}] == [{second.Liquid.Name}]");
-            
+
         //    //if (first.Source.X == second.Source.X && first.Source.Y == second.Source.Y
         //    //    && first.Target.X == second.Target.X && first.Target.Y == second.Target.Y
         //    //    && first.Liquid.Name == second.Liquid.Name)

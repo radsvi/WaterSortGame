@@ -136,6 +136,12 @@ namespace WaterSortGame.Models
                 }
                 else
                 {
+                    var topPriorityNode = PickTopPriorityMoves(treeNode, hashedSteps);
+                    if (topPriorityNode.GetType() != typeof(NullTreeNode))
+                    {
+                        continue; // vygeneroval jsem dalsi stav, takze zbytek preskakuju
+                    }
+
                     var movableLiquids = GetMovableLiquids(treeNode.Data.GameState);
 
                     Debug.WriteLine("movableLiquids:");
@@ -157,7 +163,6 @@ namespace WaterSortGame.Models
 
                     // Pro kazdy validMove vytvorim sibling ve strome:
                     CreateAllPossibleFutureStates(hashedSteps, treeNode, validMoves); // also checks for repeating moves
-                    //PickTopPriorityMoves(treeNode);
 
                     if (UnvisitedChildrenExist(treeNode) == false)
                     {
@@ -191,22 +196,175 @@ namespace WaterSortGame.Models
             BacktrackThroughAllStepsAndRecordThem(treeNode!);
             Notification.Show($"Total steps taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}. Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
         }
-
-        private void PickTopPriorityMoves(TreeNode<ValidMove> parentNode)
+        private TreeNode<ValidMove> PickTopPriorityMoves(TreeNode<ValidMove> parentNode, CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps) // dat to hned na zacatek jeste nez delam valid move a podobny veci
         {
-            var node = parentNode.FirstChild;
-            while (node is not null)
+            if (HasEmptyTubes(parentNode.Data.GameState).Count > 0)
             {
-                if (node.Data.FullyVisited is false && node.Data.Visited is false)
+                return new NullTreeNode(parentNode);
+            }
+            
+            var singleColorTubes = HasSingleColorTube(parentNode.Data.GameState);
+            if (singleColorTubes.Count() == 0)
+            {
+                return new NullTreeNode(parentNode);
+            }
+
+            var dualColorTube = HasCorrespondingDualColorTube(parentNode.Data.GameState, singleColorTubes);
+            if (dualColorTube is not null)
+            {
+                return GeneratePriorityFutureState(parentNode, singleColorTubes, dualColorTube, hashedSteps);
+            }
+
+            return new NullTreeNode(parentNode);
+        }
+        private TreeNode<ValidMove> GeneratePriorityFutureState(TreeNode<ValidMove> parentNode, List<SimpleTube> singleColorTubes, SimpleTube? dualColorTube, CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps)
+        {
+            parentNode.Data.Visited = true; // have it here to prevent infinitely repeating gameStates like for example [1133],[-155] into - [-133],[1155]. The Visited state is checked while generating new moves in 'CreateAllPossibleFutureStates'
+            var node = parentNode; // this is not a mistake. If I made "node" in the parameters then I would change the node on the outside!
+
+            var newGameState = MainWindowVM.GameState.CloneGrid(parentNode.Data.GameState);
+            ForceChangeGameState(newGameState, singleColorTubes, dualColorTube);
+
+            var nextNode = new TreeNode<ValidMove>(validMoves[i]);
+
+
+
+            
+
+
+
+            hashedSteps.Add(nextNode.Data.Hash, nextNode);
+
+
+
+
+
+            for (int i = 0; i < validMoves.Count; i++)
+            {
+                var nextNode = new TreeNode<ValidMove>(validMoves[i]);
+                UpdateGameState(nextNode);
+
+                if (GameStateAlreadyExists(hashedSteps, nextNode)) // excludes duplicate moves
                 {
-                    return;
+                    continue;
                 }
 
-                node = node.NextSibling;
-            }
-            return;
-        }
+                hashedSteps.Add(nextNode.Data.Hash, nextNode);
+                WriteToFileAutoSolveSteps(nextNode, $"[{hashedSteps.DebugData.Count}][{nextNode.Data.Hash}] Generating node");
 
+                if (parentNode.FirstChild is null)
+                {
+                    node.AddChild(nextNode);
+                }
+                else
+                {
+                    node.AddSibling(nextNode);
+                }
+                node = nextNode;
+            }
+            if (node == parentNode) // pokud se ani jeden node nepridal protoze byly vsechno duplikaty:
+            {
+                parentNode.Data.FullyVisited = true;
+            }
+            
+
+
+        }
+        private void ForceChangeGameState(LiquidColorNew[,] newGameState, List<SimpleTube> singleColorTubes, SimpleTube? dualColorTube)
+        {
+            
+            
+            
+            int j = 0;
+            while (j < node.Data.Source.NumberOfRepeatingLiquids
+                && node.Data.Target.Y + j < node.Data.GameState.GetLength(1)) // pocet stejnych barev na sobe source && uroven barvy v targetu
+            {
+                node.Data.GameState[node.Data.Target.X, node.Data.Target.Y + j] = node.Data.GameState[node.Data.Source.X, node.Data.Source.Y - j];
+                node.Data.GameState[node.Data.Source.X, node.Data.Source.Y - j] = null;
+                j++;
+            }
+            node.Data.UpdateHash();
+        }
+        private List<int> HasEmptyTubes(LiquidColorNew[,] gameState)
+        {
+            List<int> emptyTubes = new List<int>();
+            for (int x = 0; x < gameState.GetLength(0); x++)
+            {
+                if (gameState[x, 0] is null)
+                {
+                    emptyTubes.Add(x);
+                }
+            }
+            return emptyTubes;
+        }
+        /// <summary>
+        /// Looking for tube that has format such as [1112] where 2 is the same color number as is the singleColorTube
+        /// </summary>
+        /// <param name="gameState"></param>
+        /// <param name="singleColorTubeList"></param>
+        /// <returns></returns>
+        private SimpleTube? HasCorrespondingDualColorTube(LiquidColorNew[,] gameState, List<SimpleTube> singleColorTubeList)
+        {
+            foreach (var singleColorTube in singleColorTubeList)
+            {
+                for (int x = 0; x < gameState.GetLength(0); x++)
+                {
+                    if (singleColorTube is not null && gameState[x, 0] is not null &&
+                        singleColorTube.Color.Name == gameState[x, 0].Name)
+                    {
+                        if (gameState[x, 0] is null) continue;
+
+                        LiquidColorName colorName = gameState[x, 1].Name;
+                        bool dualColorTube = true;
+
+                        // check if remaining liquids of that same tube are all the same color:
+                        for (int y = 1; y < gameState.GetLength(1); y++)
+                        {
+                            if (gameState[x, y] is null)
+                            {
+                                break;
+                            }
+                            if (colorName != gameState[x, y].Name)
+                            {
+                                dualColorTube = false;
+                                break;
+                            }
+                        }
+                        if (dualColorTube)
+                        {
+                            return new SimpleTube(gameState[x, 1], x, 0);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// Determines whether this is a move that should always be taken because it is always correct. Such as moving [--12][-222] into [---1][2222]
+        /// </summary>
+        /// <param name="gameState"></param>
+        /// <returns></returns>
+        private List<SimpleTube> HasSingleColorTube(LiquidColorNew[,] gameState)
+        {
+            List<SimpleTube> singleColorTubes = new List<SimpleTube>();
+            for (int x = 0; x < gameState.GetLength(0); x++)
+            {
+                bool isSingleColor = true;
+                int y;
+                for (y = 0; y < gameState.GetLength(1) - 1; y++)
+                {
+                    if (gameState[x, y] is null || gameState[x, y + 1] is null) break;
+
+                    if (gameState[x, y] != gameState[x, y])
+                    {
+                        isSingleColor = false;
+                        break;
+                    }
+                }
+                if (isSingleColor) singleColorTubes.Add(new SimpleTube(gameState[x, 0], x, y));
+            }
+            return singleColorTubes;
+        }
         private bool AskUserToContinue(TreeNode<ValidMove> treeNode, int iterations)
         {
             if (iterations % 1000 == 0)
