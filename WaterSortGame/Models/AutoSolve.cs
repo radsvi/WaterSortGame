@@ -779,6 +779,7 @@ namespace WaterSortGame.Models
         }
         public void CalculateNextStep(LiquidColorNew[,] gameState)
         {
+            //Notification.Show("Game grid locked while automatic solution is engaged",MessageType.Information, 10000);
             ResumeRequest = true; // provede se i pri prvnim spusteni, protoze je pauza na zacatku
             ResumeRequestCounterDebug++;
             if (MainWindowVM.UIEnabled == true) // disable UI once starting the Auto Solve process

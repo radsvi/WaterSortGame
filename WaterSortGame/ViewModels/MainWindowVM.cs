@@ -170,6 +170,7 @@ namespace WaterSortGame.ViewModels
                 if (value != uiEnabled)
                 {
                     uiEnabled = value;
+                    OnPropertyChanged();
                 }
             }
         }

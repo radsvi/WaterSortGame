@@ -29,6 +29,8 @@
     <Window.Resources>
         <!--#region Resources -->
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+        <converters:BooleanToVisibilityInvertConverter x:Key="BoolToVisInvertConverter" />
+        
         <converters:MultiValueConverter x:Key="MultiValueConv"/>
         <!--<Models:LiquidsManager x:Key="LiquidsManager"/>-->
         <!--<models:TubesManager x:Key="TubesList"/>-->
@@ -82,7 +84,7 @@
 
 
                 <Border Grid.Row="1" Style="{StaticResource Separator}"/>
-                <Border BorderBrush="AliceBlue" BorderThickness="1" HorizontalAlignment="Left" Background="White" Visibility="{Binding AutoSolve.DisplayIterations}">
+                <Border BorderBrush="AliceBlue" BorderThickness="1" HorizontalAlignment="Left" Background="White" Visibility="{Binding AutoSolve.DisplayIterations}" d:Visibility="Hidden">
                     <TextBlock Text="{Binding AutoSolve.Iterations}" d:Text="1" Width="40" TextAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
@@ -99,11 +101,19 @@
                     </Button>-->
                 </StackPanel>
 
+                
+
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,5,0,0">
-                    <UniformGrid VerticalAlignment="Top" HorizontalAlignment="Center"
+                    <Grid>
+                        <UniformGrid VerticalAlignment="Top" HorizontalAlignment="Center"
                         x:Name="GridForTubes" d:Columns="8" Columns="{Binding TubeCount}">
-                        <!--<usercontrols:TubeControl TubeItem="{Binding Tubes[0]}"/>-->
-                    </UniformGrid>
+                            <!--<usercontrols:TubeControl TubeItem="{Binding Tubes[0]}"/>-->
+                        </UniformGrid>
+                        <Border BorderBrush="White" BorderThickness="1" VerticalAlignment="Bottom" Margin="0,0,0,5" HorizontalAlignment="Right"
+                                Visibility="{Binding UIEnabled, Converter={StaticResource BoolToVisInvertConverter}}" d:Visibility="Hidden">
+                            <TextBlock Text="Game grid locked while automatic solution is engaged." Foreground="White" Margin="1" FontSize="9" />
+                        </Border>
+                    </Grid>
                 </ScrollViewer>
 
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}">
