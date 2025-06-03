@@ -295,13 +295,13 @@ namespace WaterSortGame.Models
 
 
             //AddTube(i++, new int[] { 1,1,1 });
+            AddTube(i++, new int[] { 1, 1 });
             AddTube(i++, new int[] { 2, 1 });
-            AddTube(i++, new int[] { 2, 2, 2 });
-            AddTube(i++, new int[] { 3, 4, 5, 6 });
-            AddTube(i++, new int[] { 3, 4, 5, 6 });
-            AddTube(i++, new int[] { 3, 4, 5, 6 });
-            AddTube(i++, new int[] { 3, 4, 5, 6 });
-            AddTube(i++, new int[] { 1, 1, 1 });
+            AddTube(i++, new int[] { 3 });
+            AddTube(i++, new int[] { 4, 3, 3 });
+            AddTube(i++, new int[] { 5 });
+            AddTube(i++, new int[] { 4, 5  });
+
 
             //AddTube(i++, new LiquidColorName[] { });
             //AddTube(i++, new LiquidColorName[] { });

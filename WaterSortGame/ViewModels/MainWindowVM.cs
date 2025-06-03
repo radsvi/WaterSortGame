@@ -1,27 +1,9 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.CodeDom;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Data.Common;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Reflection.Metadata;
-using System.Resources;
-using System.Runtime.InteropServices.Marshalling;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -30,10 +12,7 @@ using System.Windows.Shapes;
 using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 using WaterSortGame.Properties;
-using WaterSortGame.Views;
 using WaterSortGame.Views.UserControls;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WaterSortGame.ViewModels
 {
@@ -123,8 +102,9 @@ namespace WaterSortGame.ViewModels
         //}
         public TubeReference LastClickedTube { get; set; }
         public TubeReference SourceTube { get; set; }
-        [Obsolete]private Tube targetTube;
-        [Obsolete]public Tube TargetTube
+        [Obsolete] private Tube targetTube;
+        [Obsolete]
+        public Tube TargetTube
         {
             get { return targetTube; }
             set
@@ -133,7 +113,7 @@ namespace WaterSortGame.ViewModels
                 //OnPropertyChanged();
             }
         }
-        
+
         [Obsolete] private ObservableCollection<Tube> tubes;
         [Obsolete]
         public ObservableCollection<Tube> Tubes
@@ -215,7 +195,7 @@ namespace WaterSortGame.ViewModels
 
             ContainerForTubes = containerForTubes;
 
-            
+
             if (System.IO.Directory.Exists(logFolderName) == false) System.IO.Directory.CreateDirectory(logFolderName);
 
             AutoSolve = new AutoSolve(this);
@@ -466,10 +446,10 @@ namespace WaterSortGame.ViewModels
                 }
             }
         }
-        
+
         private bool AddLiquidToTargetTube(TubeReference currentTubeReference)
         {
-            int firstEmptyLayer = - 1;
+            int firstEmptyLayer = -1;
             for (int y = 0; y < GameState.NumberOfLayers; y++)
             {
                 if (GameState[currentTubeReference.TubeId, y] == null)
@@ -700,7 +680,7 @@ namespace WaterSortGame.ViewModels
         private void RippleSurfaceAnimation(TubeReference currentTubeReference, int numberOfLiquids)
         {
             TubeControl tubeControl = ContainerForTubes.Children[currentTubeReference.TubeId] as TubeControl;
-            
+
             // Getting reference to the main grid that contains individual liquids in a tube.
             Grid container = (GetDescendantByTypeAndName(tubeControl, typeof(Grid), "TubeGrid")) as Grid;
 
@@ -708,11 +688,11 @@ namespace WaterSortGame.ViewModels
             container.Children.Add(gridElement);
 
             Grid.SetRow(gridElement, 3 - currentTubeReference.TargetEmptyRow);
+            Grid.SetRowSpan(gridElement, numberOfLiquids);
 
-            Grid.SetRowSpan(gridElement, 4);
             //Canvas.SetZIndex(borderElement, 3);
             //Grid.SetZIndex(borderElement, 4);
-            
+
             StartAnimatingSurface(brush, container, gridElement, numberOfLiquids);
         }
         private void StartAnimatingSurface(ImageBrush brush, Grid container, Grid gridElement, int numberOfLiquids)
