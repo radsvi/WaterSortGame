@@ -16,8 +16,8 @@ namespace WaterSortGame.Models
         public int TubeId { get; set; }
         public TubeControl TubeControl { get; set; }
         public Grid GridElement { get; set; }
-        public LiquidColorNew TopMostLiquid {  get; set; }
-        public LiquidColorNew LastColorMoved { get; set; }
+        public LiquidColor TopMostLiquid {  get; set; }
+        public LiquidColor LastColorMoved { get; set; }
         public int TargetEmptyRow { get; set; }
     }
 }

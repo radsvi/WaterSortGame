@@ -72,7 +72,7 @@ namespace WaterSortGame.ViewModels
         internal void LoadLevelList_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             int increaseHeight = 0;
-            if (LoadLevelList.Count > 3 && LoadLevelList.Count < LiquidColorNew.ColorKeys.Count)
+            if (LoadLevelList.Count > 3 && LoadLevelList.Count < LiquidColor.ColorKeys.Count)
             {
                 increaseHeight = (LoadLevelList.Count - 3) * 45; //vyska jedne polozky je 45
                 LoadLevelScreenHeight = 280 + increaseHeight;
@@ -81,7 +81,7 @@ namespace WaterSortGame.ViewModels
             {
                 LoadLevelScreenHeight = 280;
             }
-            else if (LoadLevelList.Count >= LiquidColorNew.ColorKeys.Count)
+            else if (LoadLevelList.Count >= LiquidColor.ColorKeys.Count)
             {
                 LoadLevelScreenHeight = 640;
                 LoadLevelScreenScroll = true;
@@ -176,9 +176,9 @@ namespace WaterSortGame.ViewModels
             MainWindowVM.RestartLevel();
             MainWindowVM.PropertyChangedEventPaused = false;
         }
-        private LiquidColorNew[,] CloneGrid(LiquidColorNew[,] gameGrid)
+        private LiquidColor[,] CloneGrid(LiquidColor[,] gameGrid)
         {
-            LiquidColorNew[,] gridClone = new LiquidColorNew[gameGrid.GetLength(0), gameGrid.GetLength(1)];
+            LiquidColor[,] gridClone = new LiquidColor[gameGrid.GetLength(0), gameGrid.GetLength(1)];
             for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
                 for (int y = 0; y < gameGrid.GetLength(1); y++)
@@ -245,13 +245,13 @@ namespace WaterSortGame.ViewModels
         //    }
         //    return list;
         //}
-        private List<TubeNew> ArrayToTubeList(LiquidColorNew[,] array)
+        private List<Tube> ArrayToTubeList(LiquidColor[,] array)
         {
-            List<TubeNew> list = new List<TubeNew>();
+            List<Tube> list = new List<Tube>();
 
             for (int x = 0; x < array.GetLength(0); x++)
             {
-                var row = new TubeNew(array[x, 0], array[x, 1], array[x, 2], array[x, 3]);
+                var row = new Tube(array[x, 0], array[x, 1], array[x, 2], array[x, 3]);
 
                 list.Add(row);
             }
@@ -267,16 +267,16 @@ namespace WaterSortGame.ViewModels
 
         //    return returnArray;
         //}
-        private LiquidColorNew?[,] ConvertToColorBrush(int?[,] intArray)
+        private LiquidColor?[,] ConvertToColorBrush(int?[,] intArray)
         {
-            var returnArray = new LiquidColorNew?[intArray.GetLength(0), intArray.GetLength(1)];
+            var returnArray = new LiquidColor?[intArray.GetLength(0), intArray.GetLength(1)];
             for (int x = 0; x < intArray.GetLength(0); x++)
             {
                 for (int y = 0; y < intArray.GetLength(1); y++)
                 {
                     if (intArray[x, y] is not null)
                     {
-                        returnArray[x, y] = new LiquidColorNew((int)intArray[x, y]);
+                        returnArray[x, y] = new LiquidColor((int)intArray[x, y]);
                     }
                     else
                     {
@@ -415,14 +415,14 @@ namespace WaterSortGame.ViewModels
             MainWindowVM.OnStartingLevel();
             ImportGameStateString = string.Empty;
         }
-        private LiquidColorNew[,] DecodeImportedString(string importString)
+        private LiquidColor[,] DecodeImportedString(string importString)
         {
             // "[-.-.-.-][-.-.-.-][-.-.03.03][-.02.02.02][-.03.02.03][01.01.01.01]"
             //var countTubes = importString.Count(f => f == '[');
 
             var importStringTrimmed = importString.Trim(new char[] { '[', ']', '"' });
             var splitToTubes = importStringTrimmed.Split("][");
-            LiquidColorNew[,] importedGameState = new LiquidColorNew[splitToTubes.Count(), MainWindowVM.GameState.gameGrid.GetLength(1)];
+            LiquidColor[,] importedGameState = new LiquidColor[splitToTubes.Count(), MainWindowVM.GameState.gameGrid.GetLength(1)];
 
             for (int x = 0; x < splitToTubes.Length; x++)
             {
@@ -436,12 +436,12 @@ namespace WaterSortGame.ViewModels
                     if (layer[y] != "-")
                     {
                         int liquid = Int32.Parse(layer[y]);
-                        if (liquid > LiquidColorNew.ColorKeys.Count - 2)
+                        if (liquid > LiquidColor.ColorKeys.Count - 2)
                         {
                             MainWindowVM.Notification.Show($"Wrong number ({liquid}) in the import string. Canceling import.", 10000);
                             return null;
                         }
-                        importedGameState[x, y] = new LiquidColorNew(liquid);
+                        importedGameState[x, y] = new LiquidColor(liquid);
                     }
                 }
             }

@@ -32,7 +32,7 @@ namespace WaterSortGame.Views.UserControls
         //    MainWindowVM = mainWindowVM;
         //    TubeItem = tubeItem;
         //}
-        internal TubeControl(MainWindowVM mainWindowVM, int tubeId, LiquidColorNew[] liquidColors)
+        internal TubeControl(MainWindowVM mainWindowVM, int tubeId, LiquidColor[] liquidColors)
         {
             InitializeComponent();
             (this.Content as FrameworkElement).DataContext = this;
@@ -43,15 +43,15 @@ namespace WaterSortGame.Views.UserControls
         }
         private MainWindowVM MainWindowVM { get; }
         public int TubeId { get; }
-        internal LiquidColorNew[] LiquidColors
+        internal LiquidColor[] LiquidColors
         {
-            get { return (LiquidColorNew[])GetValue(LiquidColorsProperty); }
+            get { return (LiquidColor[])GetValue(LiquidColorsProperty); }
             set { SetValue(LiquidColorsProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for TubeItem.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LiquidColorsProperty =
-            DependencyProperty.Register("LiquidColors", typeof(LiquidColorNew[]), typeof(TubeControl));
+            DependencyProperty.Register("LiquidColors", typeof(LiquidColor[]), typeof(TubeControl));
 
 
 

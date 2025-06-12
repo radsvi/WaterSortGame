@@ -16,8 +16,8 @@ namespace WaterSortGame.Models
         public int NumberOfColors { get; set; }
         public DateTime Date { get; set; }
         public string Note { get; set; }
-        public LiquidColorNew[,] GameGrid { get; set; }
-        public List<TubeNew> GameGridDisplayList { get; set; }
+        public LiquidColor[,] GameGrid { get; set; }
+        public List<Tube> GameGridDisplayList { get; set; }
         private bool markedForDeletion;
         public bool MarkedForDeletion
         {
@@ -44,7 +44,7 @@ namespace WaterSortGame.Models
         }
 
         [JsonConstructor]
-        public StoredLevel(LiquidColorNew[,] gameGrid, string noteForSavedLevel)
+        public StoredLevel(LiquidColor[,] gameGrid, string noteForSavedLevel)
         {
             if (gameGrid is null)
             {

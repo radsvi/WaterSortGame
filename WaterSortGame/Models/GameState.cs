@@ -36,8 +36,8 @@ namespace WaterSortGame.Models
         }
         //public int NumberOfTubes { get; private set; }
         public int NumberOfLayers { get; } = 4;
-        public LiquidColorNew[,] gameGrid;
-        public LiquidColorNew this[int tubes, int layers]
+        public LiquidColor[,] gameGrid;
+        public LiquidColor this[int tubes, int layers]
         {
             get => gameGrid[tubes, layers];
             set
@@ -82,10 +82,10 @@ namespace WaterSortGame.Models
 
         private int extraTubesAdded = 0;
         public int ExtraTubesAdded { get; private set; }
-        private LiquidColorNew[,] startingPosition;
-        public LiquidColorNew[,] StartingPosition { get; set; }
-        private ObservableCollection<LiquidColorNew[,]> savedGameSteps = new ObservableCollection<LiquidColorNew[,]>();
-        public ObservableCollection<LiquidColorNew[,]> SavedGameStates
+        private LiquidColor[,] startingPosition;
+        public LiquidColor[,] StartingPosition { get; set; }
+        private ObservableCollection<LiquidColor[,]> savedGameSteps = new ObservableCollection<LiquidColor[,]>();
+        public ObservableCollection<LiquidColor[,]> SavedGameStates
         {
             get { return savedGameSteps; }
             private set
@@ -97,7 +97,7 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        public LiquidColorNew[,] LastGameState { get; set; }
+        public LiquidColor[,] LastGameState { get; set; }
 
         public GameState() { }
         public GameState(MainWindowVM mainWindowVM)
@@ -137,7 +137,7 @@ namespace WaterSortGame.Models
             //Tubes?.Clear();
             
             int i = 0;
-            gameGrid = new LiquidColorNew[20, NumberOfLayers];
+            gameGrid = new LiquidColor[20, NumberOfLayers];
 
             //AddTube(i++, new int[] { 1, 1, 4, 4 });
             //AddTube(i++, new int[] { 8, 8, 1, 1 });
@@ -324,14 +324,14 @@ namespace WaterSortGame.Models
         {
             for (int i = 0; i < layers.Length; i++)
             {
-                this[tubeNumber, i] = new LiquidColorNew(layers[i]);
+                this[tubeNumber, i] = new LiquidColor(layers[i]);
             }
         }
         private void AddTube(int tubeNumber, LiquidColorName[] liquids)
         {
             for (int i = 0; i < liquids.Length; i++)
             {
-                this[tubeNumber, i] = new LiquidColorNew((int)liquids[i]);
+                this[tubeNumber, i] = new LiquidColor((int)liquids[i]);
             }
         }
         /// <summary>
@@ -348,17 +348,17 @@ namespace WaterSortGame.Models
                 gameGrid = CloneGrid(gameGrid, gameGrid.GetLength(0) + 1);
             }
         }
-        public static LiquidColorNew[,] CloneGridStatic(LiquidColorNew[,] grid)
+        public static LiquidColor[,] CloneGridStatic(LiquidColor[,] grid)
         {
             return new GameState().CloneGrid(grid, grid.GetLength(0));
         }
-        public LiquidColorNew[,] CloneGrid(LiquidColorNew[,] grid)
+        public LiquidColor[,] CloneGrid(LiquidColor[,] grid)
         {
             return CloneGrid(grid, grid.GetLength(0));
         }
-        public LiquidColorNew[,] CloneGrid(LiquidColorNew[,] gameGrid, int numberOfTubes)
+        public LiquidColor[,] CloneGrid(LiquidColor[,] gameGrid, int numberOfTubes)
         {
-            LiquidColorNew[,] gridClone = new LiquidColorNew[numberOfTubes, gameGrid.GetLength(1)];
+            LiquidColor[,] gridClone = new LiquidColor[numberOfTubes, gameGrid.GetLength(1)];
             for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
                 for (int y = 0; y < gameGrid.GetLength(1); y++)
@@ -371,7 +371,7 @@ namespace WaterSortGame.Models
             }
             return gridClone;
         }
-        public void SetGameState(LiquidColorNew[,] newGameState)
+        public void SetGameState(LiquidColor[,] newGameState)
         {
             gameGrid = CloneGrid(newGameState);
         }
@@ -384,33 +384,33 @@ namespace WaterSortGame.Models
         {
             Random rnd = new Random();
 
-            List<LiquidColorNew> colorsList = new List<LiquidColorNew>();
+            List<LiquidColor> colorsList = new List<LiquidColor>();
             if (appSettings.RandomNumberOfTubes)
             {
-                appSettings.NumberOfColorsToGenerate = rnd.Next(3, LiquidColorNew.ColorKeys.Count - 1);
+                appSettings.NumberOfColorsToGenerate = rnd.Next(3, LiquidColor.ColorKeys.Count - 1);
             }
 
-            gameGrid = new LiquidColorNew[appSettings.NumberOfColorsToGenerate + 2, NumberOfLayers];
+            gameGrid = new LiquidColor[appSettings.NumberOfColorsToGenerate + 2, NumberOfLayers];
             //Tube.ResetCounter();
             SetFreshGameState();
 
             List<int> selectedColors = new List<int>();
-            for (int i = 0; i < LiquidColorNew.ColorKeys.Count - 1; i++) // generate list of all colors. Doing '- 1' because color number 0 is blank (and is used for other purposes) but still count towards total.
+            for (int i = 0; i < LiquidColor.ColorKeys.Count - 1; i++) // generate list of all colors. Doing '- 1' because color number 0 is blank (and is used for other purposes) but still count towards total.
             {
                 selectedColors.Add(i);
             }
 
-            for (int i = 0; i < LiquidColorNew.ColorKeys.Count - 1 - appSettings.NumberOfColorsToGenerate; i++) // now remove some random colors. 
+            for (int i = 0; i < LiquidColor.ColorKeys.Count - 1 - appSettings.NumberOfColorsToGenerate; i++) // now remove some random colors. 
             {
                 //selectedColors.Remove(selectedColors[NumberOfColorsToGenerate]); // this always keeps the same colors
                 selectedColors.Remove(selectedColors[rnd.Next(0, selectedColors.Count)]);
             }
             foreach (var color in selectedColors)
             {
-                colorsList.Add(new LiquidColorNew(color));
-                colorsList.Add(new LiquidColorNew(color));
-                colorsList.Add(new LiquidColorNew(color));
-                colorsList.Add(new LiquidColorNew(color));
+                colorsList.Add(new LiquidColor(color));
+                colorsList.Add(new LiquidColor(color));
+                colorsList.Add(new LiquidColor(color));
+                colorsList.Add(new LiquidColor(color));
             }
 
             // add colors randomly to the grid
@@ -489,7 +489,7 @@ namespace WaterSortGame.Models
         {
             return IsLevelCompleted(gameGrid);
         }
-        public bool IsLevelCompleted(LiquidColorNew[,] internalGameGrid)
+        public bool IsLevelCompleted(LiquidColor[,] internalGameGrid)
         {
             for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
@@ -531,7 +531,7 @@ namespace WaterSortGame.Models
                 return;
             }
 
-            LiquidColorNew[,] lastGameStatus = SavedGameStates[SavedGameStates.Count - 1];
+            LiquidColor[,] lastGameStatus = SavedGameStates[SavedGameStates.Count - 1];
 
             MainWindowVM.PropertyChangedEventPaused = true;
             gameGrid = lastGameStatus;
@@ -587,7 +587,7 @@ namespace WaterSortGame.Models
         //{
         //    return GameStateToString(gameState, StringFormat.Names, enableSort);
         //}
-        public static string GameStateToString(LiquidColorNew[,] gameState, StringFormat format = StringFormat.Names, bool enableSort = true)
+        public static string GameStateToString(LiquidColor[,] gameState, StringFormat format = StringFormat.Names, bool enableSort = true)
         {
             List<string> intGameState = new List<string>();
             for (int x = 0; x < gameState.GetLength(0); x++)

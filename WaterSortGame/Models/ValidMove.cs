@@ -16,7 +16,7 @@ namespace WaterSortGame.Models
     }
     internal class ValidMove // prejmenovat na SolvingStep
     {
-        public ValidMove(PositionPointer source, PositionPointer target, LiquidColorNew[,] gameState, bool isTargetSingleColor = false)
+        public ValidMove(PositionPointer source, PositionPointer target, LiquidColor[,] gameState, bool isTargetSingleColor = false)
         {
             GameState = Models.GameState.CloneGridStatic(gameState);
             Target = target;
@@ -34,7 +34,7 @@ namespace WaterSortGame.Models
         {
             StepNumber = -1;
         }
-        public ValidMove(LiquidColorNew[,] gameState)
+        public ValidMove(LiquidColor[,] gameState)
         {
             GameState = gameState;
             StepNumber = stepCounter++;
@@ -59,9 +59,9 @@ namespace WaterSortGame.Models
         public bool FullyVisited { get; set; } // True means that all children were visited.
         public PositionPointer Target { get; private protected set; }
         public bool IsTargetSingleColor { get; private set; }
-        public LiquidColorNew Liquid { get; private protected set; }
+        public LiquidColor Liquid { get; private protected set; }
         public float Priority { get; set; } = 0; // higher weight means better move
-        public LiquidColorNew[,] GameState { get; set; }
+        public LiquidColor[,] GameState { get; set; }
         public int SolutionValue { get; set; }
         public int Hash { get; private set; }
         [Obsolete] public string ReadableHash { get; private set; }
@@ -94,7 +94,7 @@ namespace WaterSortGame.Models
         //{
         //    return !EqualsOverload(first, second);
         //}
-        public bool Equals(LiquidColorNew[,] otherGameState)
+        public bool Equals(LiquidColor[,] otherGameState)
         {
             //var jedna = GameStateToInt(GameState);
             //var dva = GameStateToInt(otherGameState);
@@ -153,7 +153,7 @@ namespace WaterSortGame.Models
         //    intGameState.Sort();
         //    return intGameState;
         //}
-        private static string GameStateToInt(LiquidColorNew[,] gameState)
+        private static string GameStateToInt(LiquidColor[,] gameState)
         {
             List<string> intGameState = new List<string>();
             for (int x = 0; x < gameState.GetLength(0); x++)
@@ -176,7 +176,7 @@ namespace WaterSortGame.Models
             stringGameState = stringGameState.Substring(0, stringGameState.Length - 1);
             return stringGameState;
         }
-        private static string GameStateToString(LiquidColorNew[,] gameState, StringFormat format = StringFormat.Names)
+        private static string GameStateToString(LiquidColor[,] gameState, StringFormat format = StringFormat.Names)
         {
             return Models.GameState.GameStateToString(gameState, format);
         }
@@ -184,7 +184,7 @@ namespace WaterSortGame.Models
     internal class NullValidMove : ValidMove
     {
         public NullValidMove() : base(true) {
-            GameState = new LiquidColorNew[0,0];
+            GameState = new LiquidColor[0,0];
             Target = new NullPositionPointer();
             Source = new NullPositionPointer();
             Liquid = new NullLiquidColorNew();

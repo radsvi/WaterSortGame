@@ -74,7 +74,7 @@ namespace WaterSortGame.Models
             StepThrough = StepThroughMethod;
             exportLogFilename = MainWindowVM.logFolderName + "/Export-AutoSolve-" + DateTime.Now.ToString("MMddyyyy-HH.mm.ss") + ".log";
         }
-        private async void Start(LiquidColorNew[,] startingPosition)
+        private async void Start(LiquidColor[,] startingPosition)
         {
             bool debugVisualiseState = false;
             //var notificationType = MessageType.Debug;
@@ -241,7 +241,7 @@ namespace WaterSortGame.Models
 
             return nextNode;
         }
-        private void ForceChangeGameState(LiquidColorNew[,] gameState, ValidMove validMove)
+        private void ForceChangeGameState(LiquidColor[,] gameState, ValidMove validMove)
         {
             // singleColorTube is target
             // dualColorTube is source
@@ -258,7 +258,7 @@ namespace WaterSortGame.Models
                 gameState[validMove.Source.X, y] = gameState[validMove.Source.X, y + 1];
             }
         }
-        private List<int> HasEmptyTubes(LiquidColorNew[,] gameState)
+        private List<int> HasEmptyTubes(LiquidColor[,] gameState)
         {
             List<int> emptyTubes = new List<int>();
             for (int x = 0; x < gameState.GetLength(0); x++)
@@ -276,7 +276,7 @@ namespace WaterSortGame.Models
         /// <param name="gameState"></param>
         /// <param name="singleColorTubeList"></param>
         /// <returns></returns>
-        private (PositionPointer?, PositionPointer?) HasCorrespondingDualColorTube(LiquidColorNew[,] gameState, List<PositionPointer> singleColorTubeList)
+        private (PositionPointer?, PositionPointer?) HasCorrespondingDualColorTube(LiquidColor[,] gameState, List<PositionPointer> singleColorTubeList)
         {
             foreach (var singleColorTube in singleColorTubeList)
             {
@@ -317,7 +317,7 @@ namespace WaterSortGame.Models
         /// </summary>
         /// <param name="gameState"></param>
         /// <returns></returns>
-        private List<PositionPointer> HasSingleColorTube(LiquidColorNew[,] gameState)
+        private List<PositionPointer> HasSingleColorTube(LiquidColor[,] gameState)
         {
             List<PositionPointer> singleColorTubes = new List<PositionPointer>();
             //List<SimpleTube> singleColorTubes = new List<SimpleTube>();
@@ -502,7 +502,7 @@ namespace WaterSortGame.Models
         /// <summary>
         /// Determines how close we are to a solution. Higher value means closer to a solution
         /// </summary>
-        private int GetStepValue(LiquidColorNew[,] gameState)
+        private int GetStepValue(LiquidColor[,] gameState)
         {
             int solutionValue = 0;
             
@@ -537,7 +537,7 @@ namespace WaterSortGame.Models
         /// <summary>
         /// Picks topmost liquid from each tube, but excludes tubes that are already solved
         /// </summary>
-        private List<PositionPointer> GetMovableLiquids(LiquidColorNew[,] gameState)
+        private List<PositionPointer> GetMovableLiquids(LiquidColor[,] gameState)
         {
             //var pointer = new List<Tuple<int, int>>();
             var pointer = new List<PositionPointer>();
@@ -560,7 +560,7 @@ namespace WaterSortGame.Models
             }
             return pointer;
         }
-        private List<PositionPointer> GetEmptySpots(LiquidColorNew[,] gameState, List<PositionPointer> movableLiquids)
+        private List<PositionPointer> GetEmptySpots(LiquidColor[,] gameState, List<PositionPointer> movableLiquids)
         {
             var emptySpots = new List<PositionPointer>();
             for (int x = 0; x < gameState.GetLength(0); x++)
@@ -576,7 +576,7 @@ namespace WaterSortGame.Models
             }
             return emptySpots;
         }
-        private List<ValidMove> GetValidMoves(LiquidColorNew[,] gameState, List<PositionPointer> movableLiquids, List<PositionPointer> emptySpots)
+        private List<ValidMove> GetValidMoves(LiquidColor[,] gameState, List<PositionPointer> movableLiquids, List<PositionPointer> emptySpots)
         {
             var validMoves = new List<ValidMove>();
             foreach (var liquid in movableLiquids)
@@ -610,7 +610,7 @@ namespace WaterSortGame.Models
 
             return validMoves;
         }
-        private void DebugGrid(LiquidColorNew[,] grid, string header)
+        private void DebugGrid(LiquidColor[,] grid, string header)
         {
             Debug.WriteLine("=====================================================");
             Debug.WriteLine(header);
@@ -637,7 +637,7 @@ namespace WaterSortGame.Models
         //{
         //    return MainWindowVM.GameState.CloneGrid(gameState);
         //}
-        private (bool, int) AreAllLayersIdentical(LiquidColorNew[,] gameState, int x, int y)
+        private (bool, int) AreAllLayersIdentical(LiquidColor[,] gameState, int x, int y)
         {
             if (y == 0) return (true, 1); // jen jedna tekutina, takze dycky musi byt "vsechny"(jedna) stejny
 
@@ -664,7 +664,7 @@ namespace WaterSortGame.Models
             //    colorCount[i] = new Tuple<LiquidColorNames, int>(LiquidColorNew.ColorKeys[i].Name, 0);
 
             Dictionary<LiquidColorName, int> colorCount = new Dictionary<LiquidColorName, int>();
-            foreach (var colorItem in LiquidColorNew.ColorKeys)
+            foreach (var colorItem in LiquidColor.ColorKeys)
             {
                 //colorCount.Add(new KeyValuePair<LiquidColorNames, int>(colorItem.Name, 0));
                 colorCount.Add(colorItem.Value.Name, 0);
@@ -740,7 +740,7 @@ namespace WaterSortGame.Models
         /// </summary>
         /// <param name="gameState"></param>
         /// <param name="validMoves"></param>
-        private void RemoveSolvedTubesFromMoves(LiquidColorNew[,] gameState, List<ValidMove> validMoves)
+        private void RemoveSolvedTubesFromMoves(LiquidColor[,] gameState, List<ValidMove> validMoves)
         {
             //var preferentialMoves = new List<ValidMove>();
 
@@ -777,7 +777,7 @@ namespace WaterSortGame.Models
             }
             ResumeRequest = false;
         }
-        public void CalculateNextStep(LiquidColorNew[,] gameState)
+        public void CalculateNextStep(LiquidColor[,] gameState)
         {
             //Notification.Show("Game grid locked while automatic solution is engaged",MessageType.Information, 10000);
             ResumeRequest = true; // provede se i pri prvnim spusteni, protoze je pauza na zacatku

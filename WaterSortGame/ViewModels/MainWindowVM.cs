@@ -102,30 +102,7 @@ namespace WaterSortGame.ViewModels
         //}
         public TubeReference LastClickedTube { get; set; }
         public TubeReference SourceTube { get; set; }
-        [Obsolete] private Tube targetTube;
-        [Obsolete]
-        public Tube TargetTube
-        {
-            get { return targetTube; }
-            set
-            {
-                targetTube = value;
-                //OnPropertyChanged();
-            }
-        }
-
-        [Obsolete] private ObservableCollection<Tube> tubes;
-        [Obsolete]
-        public ObservableCollection<Tube> Tubes
-        {
-            get { return tubes; }
-            set
-            {
-                tubes = value;
-                OnPropertyChanged();
-                OnPropertyChanged("TubeCount");
-            }
-        }
+        
         private int tubeCount;
         public int TubeCount
         {
@@ -519,7 +496,7 @@ namespace WaterSortGame.ViewModels
             //for (int x = 0; x < GameState.NumberOfTubes; x++)
             for (int x = 0; x < GameState.GetLength(0); x++)
             {
-                LiquidColorNew[] liquidColorsArray = new LiquidColorNew[GameState.NumberOfLayers];
+                LiquidColor[] liquidColorsArray = new LiquidColor[GameState.NumberOfLayers];
                 for (int y = 0; y < GameState.NumberOfLayers; y++)
                 {
                     liquidColorsArray[y] = GameState[x, y];

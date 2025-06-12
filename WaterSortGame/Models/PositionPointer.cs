@@ -10,7 +10,7 @@ namespace WaterSortGame.Models
     internal class PositionPointer
     {
         private protected PositionPointer() {}
-        public PositionPointer(LiquidColorNew[,] gameState, int x, int y)
+        public PositionPointer(LiquidColor[,] gameState, int x, int y)
         {
             X = x;
             Y = y;
