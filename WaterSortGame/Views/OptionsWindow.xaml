@@ -38,7 +38,7 @@
                             <CheckBox x:Name="RandomColors" IsChecked="{Binding AppSettings.RandomNumberOfTubes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Random number of colors"/>
                         </DockPanel>
                         <DockPanel IsEnabled="{Binding ElementName=RandomColors,Path=IsChecked,Converter={StaticResource StatusToEnabled}}"
-                                   ToolTip="This number (3~12) coresponds to the latest number of colors generated.">
+                                   ToolTip="This number (3~15) coresponds to the latest number of colors generated.">
                             <Label Content="Number of colors to generate"/>
                             <TextBox
                                  Text="{Binding AppSettings.NumberOfColorsToGenerate, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"

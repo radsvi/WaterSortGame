@@ -72,7 +72,7 @@ namespace WaterSortGame.ViewModels
         internal void LoadLevelList_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             int increaseHeight = 0;
-            if (LoadLevelList.Count > 3 && LoadLevelList.Count < 12)
+            if (LoadLevelList.Count > 3 && LoadLevelList.Count < LiquidColorNew.ColorKeys.Count)
             {
                 increaseHeight = (LoadLevelList.Count - 3) * 45; //vyska jedne polozky je 45
                 LoadLevelScreenHeight = 280 + increaseHeight;
@@ -81,7 +81,7 @@ namespace WaterSortGame.ViewModels
             {
                 LoadLevelScreenHeight = 280;
             }
-            else if (LoadLevelList.Count >= 12)
+            else if (LoadLevelList.Count >= LiquidColorNew.ColorKeys.Count)
             {
                 LoadLevelScreenHeight = 640;
                 LoadLevelScreenScroll = true;

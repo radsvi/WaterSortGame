@@ -50,7 +50,7 @@ namespace WaterSortGame.Models
             {
                 if (numberOfColorsToGenerate != value)
                 {
-                    if (value >= 3 && value <= LiquidColor.ColorKeys.Count)
+                    if (value >= 3 && value <= LiquidColorNew.ColorKeys.Count)
                     {
                         numberOfColorsToGenerate = value;
                     }
@@ -58,9 +58,9 @@ namespace WaterSortGame.Models
                     {
                         numberOfColorsToGenerate = 3;
                     }
-                    else if (value > LiquidColor.ColorKeys.Count)
+                    else if (value > LiquidColorNew.ColorKeys.Count)
                     {
-                        numberOfColorsToGenerate = LiquidColor.ColorKeys.Count;
+                        numberOfColorsToGenerate = LiquidColorNew.ColorKeys.Count;
                     }
                     //OnPropertyChanged();
                     //OnGlobalPropertyChanged("NumberOfColorsToGenerate");
