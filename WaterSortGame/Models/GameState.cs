@@ -251,32 +251,47 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 8, 12, 6, 12 });
             //AddTube(i++, new int[] { 1, 12, 8, 9 });
 
-            //// Nikdy nevyresenej level:
-            //AddTube(i++, new int[] { 8, 1, 3, 0 });
-            //AddTube(i++, new int[] { 2, 7, 10, 4 });
-            //AddTube(i++, new int[] { 8, 10, 10, 11 });
-            //AddTube(i++, new int[] { 2, 2, 1, 4 });
-            //AddTube(i++, new int[] { 0, 6, 5, 9 });
-            //AddTube(i++, new int[] { 2, 3, 6, 3 });
-            //AddTube(i++, new int[] { 1, 7, 4, 9 });
-            //AddTube(i++, new int[] { 5, 0, 1, 8 });
-            //AddTube(i++, new int[] { 10, 9, 6, 5 });
-            //AddTube(i++, new int[] { 4, 6, 9, 3 });
-            //AddTube(i++, new int[] { 7, 11, 5, 11 });
-            //AddTube(i++, new int[] { 0, 11, 7, 8 });
+            // Ten starej nikdy nevyresenej level:
+            AddTube(i++, new int[] { 8, 1, 3, 0 });
+            AddTube(i++, new int[] { 2, 7, 10, 4 });
+            AddTube(i++, new int[] { 8, 10, 10, 11 });
+            AddTube(i++, new int[] { 2, 2, 1, 4 });
+            AddTube(i++, new int[] { 0, 6, 5, 9 });
+            AddTube(i++, new int[] { 2, 3, 6, 3 });
+            AddTube(i++, new int[] { 1, 7, 4, 9 });
+            AddTube(i++, new int[] { 5, 0, 1, 8 });
+            AddTube(i++, new int[] { 10, 9, 6, 5 });
+            AddTube(i++, new int[] { 4, 6, 9, 3 });
+            AddTube(i++, new int[] { 7, 11, 5, 11 });
+            AddTube(i++, new int[] { 0, 11, 7, 8 });
+
+            //// Ten starej nikdy nevyresenej level (testuju napul vyreseny:
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.Indigo, LiquidColorName.Orange, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Pink });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.Green, LiquidColorName.Green });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Turquoise, LiquidColorName.Indigo, LiquidColorName.Indigo });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Lime, LiquidColorName.Lime, LiquidColorName.Lime, LiquidColorName.Lime});
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Orange, LiquidColorName.Yellow, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Pink, LiquidColorName.Pink, LiquidColorName.Pink });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Red, LiquidColorName.Red, LiquidColorName.Red });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Olive, LiquidColorName.Olive, LiquidColorName.Olive, LiquidColorName.Olive });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Yellow, LiquidColorName.Yellow, LiquidColorName.Yellow });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Gray, LiquidColorName.Gray });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Blue, LiquidColorName.Blue, LiquidColorName.Blue });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Purple, LiquidColorName.Purple, LiquidColorName.Purple });
 
 
             //// sejvnutej level z te novejsi hry. Level jsem vyresil, ale byl tezkej (jeste jednou jsem to overil ze je to resitelny. Uspesne!):
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Indigo, LiquidColorName.Sky, LiquidColorName.Teal });
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Sky, LiquidColorName.Sky, LiquidColorName.Gray });
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Purple, LiquidColorName.Red, LiquidColorName.Teal });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Indigo, LiquidColorName.Turquoise, LiquidColorName.Lime });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Turquoise, LiquidColorName.Turquoise, LiquidColorName.Gray });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Purple, LiquidColorName.Red, LiquidColorName.Lime });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Yellow, LiquidColorName.Olive, LiquidColorName.Green });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Blue, LiquidColorName.Yellow, LiquidColorName.Blue });
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Indigo, LiquidColorName.Teal, LiquidColorName.Green });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Indigo, LiquidColorName.Lime, LiquidColorName.Green });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Olive, LiquidColorName.Orange, LiquidColorName.Red, LiquidColorName.Pink });
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Sky, LiquidColorName.Green, LiquidColorName.Yellow, LiquidColorName.Olive });
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Teal, LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Blue });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Green, LiquidColorName.Yellow, LiquidColorName.Olive });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Lime, LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Blue });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Gray, LiquidColorName.Olive, LiquidColorName.Gray });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Orange, LiquidColorName.Gray, LiquidColorName.Indigo, LiquidColorName.Pink });
 
@@ -296,24 +311,31 @@ namespace WaterSortGame.Models
 
             //AddTube(i++, new int[] { 1,1,1 });
 
-            // tenhle level jsem nevyresil manualne, tim bruteforce exponencialnim scriptem to trvalo 7 sekund a 685 kroku:
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Turquoise, LiquidColorName.Lime, LiquidColorName.Purple });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Scarlet, LiquidColorName.Orange, LiquidColorName.Indigo, LiquidColorName.Indigo });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Orange, LiquidColorName.Green, LiquidColorName.Gray });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Brown, LiquidColorName.Blue, LiquidColorName.Purple, LiquidColorName.Gray });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Scarlet, LiquidColorName.Indigo, LiquidColorName.Lime });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Scarlet, LiquidColorName.Yellow, LiquidColorName.Red });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Scarlet, LiquidColorName.Blue, LiquidColorName.Brown, LiquidColorName.Orange });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Lime });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Yellow, LiquidColorName.Turquoise, LiquidColorName.Green });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Brown, LiquidColorName.Purple, LiquidColorName.Lime });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Brown, LiquidColorName.Green, LiquidColorName.Purple });
+            //// tenhle level jsem nevyresil manualne, tim bruteforce exponencialnim scriptem to trvalo 7 sekund a 685 kroku:
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Turquoise, LiquidColorName.Lime, LiquidColorName.Purple });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Scarlet, LiquidColorName.Orange, LiquidColorName.Indigo, LiquidColorName.Indigo });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Orange, LiquidColorName.Green, LiquidColorName.Gray });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Brown, LiquidColorName.Blue, LiquidColorName.Purple, LiquidColorName.Gray });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Scarlet, LiquidColorName.Indigo, LiquidColorName.Lime });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Scarlet, LiquidColorName.Yellow, LiquidColorName.Red });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Scarlet, LiquidColorName.Blue, LiquidColorName.Brown, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Lime });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Yellow, LiquidColorName.Turquoise, LiquidColorName.Green });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Brown, LiquidColorName.Purple, LiquidColorName.Lime });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Brown, LiquidColorName.Green, LiquidColorName.Purple });
+
+            ////AddTube(i++, new int[] { 1,1,1 });
+            //AddTube(i++, new int[] { 3, 4, 5, 6 });
+            //AddTube(i++, new int[] { 2, 1 });
+            //AddTube(i++, new int[] { 2, 2, 2 });
+            //AddTube(i++, new int[] { 3, 4, 5, 6 });
+            //AddTube(i++, new int[] { 3, 4, 5, 6 });
+            //AddTube(i++, new int[] { 3, 4, 5, 6 });
+            //AddTube(i++, new int[] { 1, 1, 1 });
 
 
-
-
-            //AddTube(i++, new LiquidColorName[] { });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName });
             //AddTube(i++, new LiquidColorName[] { });
 
             //gameGrid = CloneGrid(gameGrid, i + 2);

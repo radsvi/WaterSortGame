@@ -19,6 +19,7 @@ namespace WaterSortGame.Models
     {
         MainWindowVM MainWindowVM;
         Notification Notification;
+        readonly string exportLogFilename;
         //TreeNode<ValidMove> SolvingSteps;
         //TreeNode<ValidMove> FirstStep;
         private bool ResumeRequest { get; set; }
@@ -66,7 +67,6 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        readonly string exportLogFilename;
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             MainWindowVM = mainWindowVM;
@@ -136,12 +136,12 @@ namespace WaterSortGame.Models
                 }
                 else
                 {
-                    //var topPriorityNode = PickTopPriorityMoves(treeNode, hashedSteps);
-                    //if (topPriorityNode.GetType() != typeof(NullTreeNode))
-                    //{
-                    //    treeNode = topPriorityNode;
-                    //    continue; // vygeneroval jsem dalsi stav, takze zbytek preskakuju
-                    //}
+                    var topPriorityNode = PickNeverincorectMovesFirst(treeNode, hashedSteps);
+                    if (topPriorityNode.GetType() != typeof(NullTreeNode))
+                    {
+                        treeNode = topPriorityNode;
+                        continue; // vygeneroval jsem dalsi stav, takze zbytek preskakuju
+                    }
 
                     var movableLiquids = GetMovableLiquids(treeNode.Data.GameState);
 
@@ -197,8 +197,8 @@ namespace WaterSortGame.Models
             BacktrackThroughAllStepsAndRecordThem(treeNode!);
             Notification.Show($"Total steps taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}. Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
         }
-        private TreeNode<ValidMove> PickTopPriorityMoves(TreeNode<ValidMove> parentNode, CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps) // dat to hned na zacatek jeste nez delam valid move a podobny veci
-        {
+        private TreeNode<ValidMove> PickNeverincorectMovesFirst(TreeNode<ValidMove> parentNode, CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps) // dat to hned na zacatek jeste nez delam valid move a podobny veci
+        { // name implies that its not always the best or optimal move, but its never wrong. Can at worst generate one extra move, but at best remove whole branch and cut the whole solution tree in half if its early on in the solution.
             if (HasEmptyTubes(parentNode.Data.GameState).Count == 0)
             {
                 return new NullTreeNode(parentNode);
@@ -225,8 +225,7 @@ namespace WaterSortGame.Models
         {
             parentNode.Data.Visited = true; // have it here to prevent infinitely repeating gameStates like for example [1133],[-155] into - [-133],[1155]. The Visited state is checked while generating new moves in 'CreateAllPossibleFutureStates'
 
-            var newGameState = MainWindowVM.GameState.CloneGrid(parentNode.Data.GameState);
-            ForceChangeGameState(newGameState, validMove);
+            ForceChangeGameState(validMove);
 
             var nextNode = new TreeNode<ValidMove>(validMove);
             nextNode.Data.UpdateHash();
@@ -241,22 +240,30 @@ namespace WaterSortGame.Models
 
             return nextNode;
         }
-        private void ForceChangeGameState(LiquidColor[,] gameState, ValidMove validMove)
+        private void ForceChangeGameState(ValidMove validMove)
         {
             // singleColorTube is target
             // dualColorTube is source
 
-            for (int y = gameState.GetLength(1) - 2; y >= 0 ; y--)
+            //for (int y = validMove.GameState.GetLength(1) - 2; y >= 0 ; y--)
+            //{
+            //    validMove.GameState[validMove.Target.X, y] = validMove.GameState[validMove.Target.X, y + 1];
+            //}
+            for (int y = 0; y < validMove.GameState.GetLength(1); y++)
             {
-                gameState[validMove.Target.X, y] = gameState[validMove.Target.X, y + 1];
+                if (validMove.GameState[validMove.Target.X, y] is null) 
+                {
+                    validMove.GameState[validMove.Target.X, y] = validMove.GameState[validMove.Source.X, validMove.Source.Y];
+                }
             }
             //newGameState[singleColorTube.X, 0] = null;
 
-            gameState[validMove.Target.X, 0] = gameState[validMove.Source.X, validMove.Source.Y];
-            for (int y = 0; y < gameState.GetLength(1) - 1; y++)
+            //validMove.GameState[validMove.Target.X, 0] = validMove.GameState[validMove.Source.X, validMove.Source.Y];
+            for (int y = 0; y < validMove.GameState.GetLength(1) - 1; y++)
             {
-                gameState[validMove.Source.X, y] = gameState[validMove.Source.X, y + 1];
+                validMove.GameState[validMove.Source.X, y] = validMove.GameState[validMove.Source.X, y + 1];
             }
+            validMove.GameState[validMove.Source.X, validMove.GameState.GetLength(1) - 1] = null;
         }
         private List<int> HasEmptyTubes(LiquidColor[,] gameState)
         {
@@ -283,9 +290,11 @@ namespace WaterSortGame.Models
                 for (int x = 0; x < gameState.GetLength(0); x++)
                 {
                     if (gameState[x, 0] is null) break;
+                    if (singleColorTube is not null && singleColorTube.X == x) continue;
 
-                    if (singleColorTube is not null && gameState[x, 0] is not null &&
-                        singleColorTube.ColorName == gameState[x, 0].Name)
+                    if (singleColorTube is not null && gameState[x, 0] is not null
+                        && singleColorTube.ColorName == gameState[x, 0].Name
+                        && gameState[x, 1] is not null)
                     {
                         bool dualColorTube = true;
                         LiquidColorName colorName = gameState[x, 1].Name;
@@ -305,7 +314,7 @@ namespace WaterSortGame.Models
                         }
                         if (dualColorTube)
                         {
-                            return (new PositionPointer(gameState[x, 0].Name, x, 1, 0), singleColorTube);
+                            return (new PositionPointer(gameState[x, 0].Name, x, 0, 0), singleColorTube);
                         }
                     }
                 }
