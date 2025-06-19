@@ -1,14 +1,16 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace WaterSortGame.Models
 {
-    internal class ColorCount
+    internal class ColorCount : IEnumerable<KeyValuePair<LiquidColorName, int>>
     {
         public Dictionary<LiquidColorName, int> data { get; set; } = new Dictionary<LiquidColorName, int>();
 
@@ -49,6 +51,16 @@ namespace WaterSortGame.Models
         public void OrderDesc()
         {
             data.OrderByDescending(x => x.Value).ToList();
+        }
+
+        public IEnumerator<KeyValuePair<LiquidColorName, int>> GetEnumerator()
+        {
+            return data.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
     }
 }

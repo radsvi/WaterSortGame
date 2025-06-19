@@ -14,21 +14,29 @@ namespace WaterSortGame.Models
         Names,
         Numbers
     }
+    internal enum MoveType
+    {
+        Standard,
+        NeverWrong
+    }
     internal class ValidMove // prejmenovat na SolvingStep
     {
-        public ValidMove(PositionPointer source, PositionPointer target, LiquidColor[,] gameState, bool isTargetSingleColor = false)
+        public ValidMove(PositionPointer source, PositionPointer target, LiquidColor[,] gameState, bool isTargetSingleColor = false, MoveType moveType = MoveType.Standard)
         {
             GameState = Models.GameState.CloneGridStatic(gameState);
             Target = target;
             Source = source; // mam to v tomhle poradi kvuli eventum
             Liquid = gameState[source.X, source.Y];
             StepNumber = stepCounter++;
+            MoveType = moveType;
             //Hash = GetHashCode();
             //ReadableHash = GameStateToInt(GameState);
 
             IsTargetSingleColor = isTargetSingleColor;
             //CalculatePriority();
         }
+        public ValidMove(PositionPointer source, PositionPointer target, LiquidColor[,] gameState, MoveType moveType)
+            : this(source, target, gameState, false, moveType) {}
         public ValidMove() {}
         private protected ValidMove(bool nullMove)
         {
@@ -49,7 +57,8 @@ namespace WaterSortGame.Models
                 if (value != source)
                 {
                     source = value;
-                    CalculatePriority();
+                    //CalculatePriority(); // aktualne nepouzivam, protoze jsem pro prioritu zavedl uz tim ze seradim ValidMoves jeste predtim nez je priradim do Nodu.
+                    // aktualne to pouzivam pouze pro urceni priority u uplne prvniho tahu
                 }
             }
         }
@@ -66,6 +75,7 @@ namespace WaterSortGame.Models
         public int Hash { get; private set; }
         [Obsolete] public string ReadableHash { get; private set; }
         [Obsolete] public string ReadableGameState { get; private set; }
+        public MoveType MoveType { get; set; } = MoveType.Standard;
         //public int MaxSolutionValue { get; set; }
 
         //public static bool operator ==(ValidMove first, ValidMove second)
