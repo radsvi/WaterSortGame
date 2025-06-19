@@ -50,7 +50,15 @@ namespace WaterSortGame.Models
         }
         public void OrderDesc()
         {
-            data.OrderByDescending(x => x.Value).ToList();
+            //data = data.OrderByDescending(x => x.Value);
+            // chci aby to to byl ordered list, ale zaroven stale i dictionary:
+            Dictionary<LiquidColorName, int> newData = [];
+            IOrderedEnumerable<KeyValuePair<LiquidColorName, int>> orderedList = data.OrderByDescending(x => x.Value);
+            foreach (var item in orderedList)
+            {
+                newData.Add(item.Key, item.Value);
+            }
+            data = newData;
         }
 
         public IEnumerator<KeyValuePair<LiquidColorName, int>> GetEnumerator()

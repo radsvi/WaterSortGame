@@ -160,19 +160,28 @@ namespace WaterSortGame.Models
                     var emptySpots = GetEmptySpots(treeNode.Data.GameState, movableLiquids);
                     var validMoves = GetValidMoves(treeNode.Data.GameState, movableLiquids, emptySpots);
 
-                    if (treeNode.Data.StepNumber == -1 // i.e. first node
-                        || treeNode.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Data.StepNumber == -1
-                        || treeNode.Parent is not null && treeNode.Parent.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Parent.Data.StepNumber == -1
-                        || treeNode.Parent.Parent is not null && treeNode.Parent.Parent.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Parent.Parent.Data.StepNumber == -1)
+                    //if (treeNode.Data.StepNumber == -1 // i.e. first node
+                    //    || treeNode.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Data.StepNumber == -1
+                    //    || treeNode.Parent is not null && treeNode.Parent.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Parent.Data.StepNumber == -1
+                    //    || treeNode.Parent.Parent is not null && treeNode.Parent.Parent.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Parent.Parent.Data.StepNumber == -1)
+                    //if (treeNode.Data.StepNumber == -1 // i.e. first node
+                    //    || treeNode.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Data.StepNumber == -1
+                    //    || treeNode.Data.MoveType == MoveType.NeverWrong && treeNode.Parent is not null && treeNode.Parent.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Parent is not null && treeNode.Parent.Parent.Data.StepNumber == -1
+                    //    || treeNode.Data.MoveType == MoveType.NeverWrong && treeNode.Parent is not null && treeNode.Parent.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Parent is not null && treeNode.Parent.Parent.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Parent.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Parent.Parent is not null && treeNode.Parent.Parent.Parent.Data.StepNumber == -1)
+                    //if (treeNode.Data.StepNumber == -1 // i.e. first node
+                    //    || treeNode.Data.MoveType == MoveType.NeverWrong && (treeNode.Parent.Data.StepNumber == -1
+                    //        || treeNode.Parent is not null && treeNode.Parent.Data.MoveType == MoveType.NeverWrong && (treeNode.Parent.Parent.Data.StepNumber == -1
+                    //            || treeNode.Parent.Parent is not null && treeNode.Parent.Parent.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Parent.Parent.Data.StepNumber == -1)))
+                    if (treeNode.Data.StepNumber == -1) // i.e. first node
                     {
-                        OrderList(validMoves, mostFrequentColors);
+                        validMoves = OrderList(validMoves, mostFrequentColors);
                         //validMoves = validMoves.OrderByDescending(x => x.Priority).ToList();
                     }
-
+#if DEBUG
                     Debug.WriteLine("validMoves:");
                     foreach (var move in validMoves)
                         Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{treeNode.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
-
+#endif
                     //var mostFrequentColors = PickMostFrequentColor(movableLiquids); // ## tohle jsem jeste nezacal nikde pouzivat!
 
                     RemoveEqualColorMoves(validMoves);
@@ -218,7 +227,7 @@ namespace WaterSortGame.Models
             else 
                 Notification.Show($"Total steps taken to generate: {Iterations}. Puzzle wasn't solved, something went wrong ({CompleteSolution.Count} steps generated). Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
         }
-        private void OrderList(List<ValidMove> validMoves, ColorCount mostFrequentColors)
+        private List<ValidMove> OrderList(List<ValidMove> validMoves, ColorCount mostFrequentColors)
         {
             int priorityNum = 100;
             foreach (var color in mostFrequentColors)
@@ -232,7 +241,7 @@ namespace WaterSortGame.Models
                 }
                 priorityNum--;
             }
-            validMoves = validMoves.OrderByDescending(x => x.Priority).ToList();
+            return validMoves.OrderByDescending(x => x.Priority).ToList();
         }
         private TreeNode<ValidMove> PickNeverincorectMovesFirst(TreeNode<ValidMove> parentNode, CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps) // dat to hned na zacatek jeste nez delam valid move a podobny veci
         { // name implies that its not always the best or optimal move, but its never wrong. Can at worst generate one extra move, but at best remove whole branch and cut the whole solution tree in half if its early on in the solution.
