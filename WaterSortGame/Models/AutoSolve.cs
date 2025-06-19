@@ -23,7 +23,7 @@ namespace WaterSortGame.Models
         //TreeNode<ValidMove> SolvingSteps;
         //TreeNode<ValidMove> FirstStep;
         private bool ResumeRequest { get; set; }
-        [Obsolete]public int ResumeRequestCounterDebug { get; set; } = 0; // used only for debugging how many times I clicked the button and only triggering breakpoint upon certain number.
+        //[Obsolete]public int ResumeRequestCounterDebug { get; set; } = 0; // used only for debugging how many times I clicked the button and only triggering breakpoint upon certain number.
         //public List<ValidMove> CompleteSolution { get; private set; }
         private ObservableCollection<ValidMove> completeSolution;
         public ObservableCollection<ValidMove> CompleteSolution
@@ -76,18 +76,22 @@ namespace WaterSortGame.Models
         }
         private async void Start(LiquidColor[,] startingPosition)
         {
+#if DEBUG
             bool debugVisualiseState = false;
+#endif
             //var notificationType = MessageType.Debug;
             var notificationType = MessageType.Hidden;
             var startTime = DateTime.Now;
             //SolvingSteps = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             //FirstStep = new TreeNode<ValidMove>(new ValidMove(startingPosition));
             var treeNode = new TreeNode<ValidMove>(new ValidMove(startingPosition));
-            treeNode.Data.StepNumber = -1000; // ## smazat. mam to tu jen abych oznacil prvni node pro debugovani
+            treeNode.Data.StepNumber = -1;
             treeNode.Data.UpdateHash();
             //Dictionary<int, LinkedList<TreeNode<ValidMove>>> hashedSteps = new Dictionary<int, LinkedList<TreeNode<ValidMove>>>();
             CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps = new CollisionDictionary<int, TreeNode<ValidMove>>();
-            List<TreeNode<ValidMove>> debugList = new List<TreeNode<ValidMove>>(); // ## smazat
+#if DEBUG            
+            List<TreeNode<ValidMove>> debugList = new List<TreeNode<ValidMove>>();
+#endif
             //FirstStep.Data.GameState = startingPosition;
             //TreeNode<ValidMove> previousStep = FirstStep;
             //var gameState = startingPosition;
@@ -96,12 +100,16 @@ namespace WaterSortGame.Models
             while (true)
             {
                 await Task.Delay(1);
+#if DEBUG
                 debugList.Add(treeNode);
                 WriteToFileAutoSolveSteps(treeNode, $"[{hashedSteps.DebugData.Count}] Visiting node");
+#endif
                 Iterations++;
                 //if (AskUserToContinue(treeNode, Iterations) == false) return;
+#if DEBUG
                 if (debugVisualiseState) MakeAMove(treeNode.Data);
                 if (debugVisualiseState) await WaitForButtonPress();
+#endif
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
                 if (treeNode.Data.FullyVisited == true)
@@ -143,7 +151,7 @@ namespace WaterSortGame.Models
                         continue; // vygeneroval jsem dalsi stav, takze zbytek preskakuju
                     }
 
-                    var movableLiquids = GetMovableLiquids(treeNode.Data.GameState);
+                    (var movableLiquids, var mostFrequentColors) = GetMovableLiquids(treeNode.Data.GameState);
 
                     Debug.WriteLine("movableLiquids:");
                     foreach (var liquid in movableLiquids)
@@ -156,7 +164,7 @@ namespace WaterSortGame.Models
                     foreach (var move in validMoves)
                         Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{treeNode.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
 
-                    var mostFrequentColors = PickMostFrequentColor(movableLiquids); // ## tohle jsem jeste nezacal nikde pouzivat!
+                    //var mostFrequentColors = PickMostFrequentColor(movableLiquids); // ## tohle jsem jeste nezacal nikde pouzivat!
 
                     RemoveEqualColorMoves(validMoves);
                     RemoveUselessMoves(validMoves);
@@ -189,13 +197,14 @@ namespace WaterSortGame.Models
                         Notification.Show($"{{{Iterations}}} highestPriority_TreeNode is null, continuing.", notificationType);
                         continue;
                     }
-
+#if DEBUG
                     if (debugVisualiseState) MakeAMove(treeNode.Data);
+#endif
                 }
             }
             var duration = DateTime.Now.Subtract(startTime);
             BacktrackThroughAllStepsAndRecordThem(treeNode!);
-            Notification.Show($"Total steps taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}. Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
+            Notification.Show($"Total steps taken to generate: {Iterations}. Puzzle wasn't solved. something went wrong ({CompleteSolution.Count} steps generated). Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
         }
         private TreeNode<ValidMove> PickNeverincorectMovesFirst(TreeNode<ValidMove> parentNode, CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps) // dat to hned na zacatek jeste nez delam valid move a podobny veci
         { // name implies that its not always the best or optimal move, but its never wrong. Can at worst generate one extra move, but at best remove whole branch and cut the whole solution tree in half if its early on in the solution.
@@ -418,7 +427,9 @@ namespace WaterSortGame.Models
                 }
 
                 hashedSteps.Add(nextNode.Data.Hash, nextNode);
+#if DEBUG
                 WriteToFileAutoSolveSteps(nextNode, $"[{hashedSteps.DebugData.Count}][{nextNode.Data.Hash}] Generating node");
+#endif
 
                 if (parentNode.FirstChild is null)
                 {
@@ -546,9 +557,10 @@ namespace WaterSortGame.Models
         /// <summary>
         /// Picks topmost liquid from each tube, but excludes tubes that are already solved
         /// </summary>
-        private List<PositionPointer> GetMovableLiquids(LiquidColor[,] gameState)
+        private (List<PositionPointer>, ColorCount) GetMovableLiquids(LiquidColor[,] gameState)
         {
             //var pointer = new List<Tuple<int, int>>();
+            var colorCount = new ColorCount();
             var pointer = new List<PositionPointer>();
             for (int x = 0; x < gameState.GetLength(0); x++)
             {
@@ -557,6 +569,7 @@ namespace WaterSortGame.Models
                     if (gameState[x, y] == null) continue;
 
                     var currentItem = new PositionPointer(gameState, x, y);
+                    colorCount.AddColor(gameState[x, y].Name);
                     (bool allIdenticalLiquids, int numberOfRepeatingLiquids) = AreAllLayersIdentical(gameState, x, y);
                     currentItem.NumberOfRepeatingLiquids = numberOfRepeatingLiquids;
                     pointer.Add(currentItem);
@@ -567,7 +580,9 @@ namespace WaterSortGame.Models
                     break;
                 }
             }
-            return pointer;
+            colorCount.OrderDesc();
+
+            return (pointer, colorCount);
         }
         private List<PositionPointer> GetEmptySpots(LiquidColor[,] gameState, List<PositionPointer> movableLiquids)
         {
@@ -664,47 +679,47 @@ namespace WaterSortGame.Models
 
             return (true, numberOfRepeatingLiquids);
         }
-        private List<KeyValuePair<LiquidColorName, int>> PickMostFrequentColor(List<PositionPointer> movableLiquids)
-        {
+        //private List<KeyValuePair<LiquidColorName, int>> PickMostFrequentColor(List<PositionPointer> movableLiquids)
+        //{
 
 
-            //Tuple<LiquidColorNames, int>[] colorCount = new Tuple<LiquidColorNames, int>[LiquidColorNew.ColorKeys.Count()];
-            //for (int i = 0; i < LiquidColorNew.ColorKeys.Count; i++)
-            //    colorCount[i] = new Tuple<LiquidColorNames, int>(LiquidColorNew.ColorKeys[i].Name, 0);
+        //    //Tuple<LiquidColorNames, int>[] colorCount = new Tuple<LiquidColorNames, int>[LiquidColorNew.ColorKeys.Count()];
+        //    //for (int i = 0; i < LiquidColorNew.ColorKeys.Count; i++)
+        //    //    colorCount[i] = new Tuple<LiquidColorNames, int>(LiquidColorNew.ColorKeys[i].Name, 0);
 
-            Dictionary<LiquidColorName, int> colorCount = new Dictionary<LiquidColorName, int>();
-            foreach (var colorItem in LiquidColor.ColorKeys)
-            {
-                //colorCount.Add(new KeyValuePair<LiquidColorNames, int>(colorItem.Name, 0));
-                colorCount.Add(colorItem.Value.Name, 0);
-            }
-
-
-            foreach (var liquid in movableLiquids)
-            {
-                colorCount[(LiquidColorName)liquid.ColorName]++;
-            }
-            //var colorCountSorted = (Dictionary<LiquidColorNames, int>)from entry in colorCount orderby entry.Value ascending select entry;
-            //var colorCountSorted = from entry in colorCount orderby entry.Value ascending select entry;
-            //var colorCountSorted = colorCount.OrderBy(x => x.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
-            var mostFrequentColors = colorCount.OrderByDescending(x => x.Value).ToList();
+        //    Dictionary<LiquidColorName, int> colorCount = new Dictionary<LiquidColorName, int>();
+        //    foreach (var colorItem in LiquidColor.ColorKeys)
+        //    {
+        //        //colorCount.Add(new KeyValuePair<LiquidColorNames, int>(colorItem.Name, 0));
+        //        colorCount.Add(colorItem.Value.Name, 0);
+        //    }
 
 
+        //    foreach (var liquid in movableLiquids)
+        //    {
+        //        colorCount[(LiquidColorName)liquid.ColorName]++;
+        //    }
+        //    //var colorCountSorted = (Dictionary<LiquidColorNames, int>)from entry in colorCount orderby entry.Value ascending select entry;
+        //    //var colorCountSorted = from entry in colorCount orderby entry.Value ascending select entry;
+        //    //var colorCountSorted = colorCount.OrderBy(x => x.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+        //    var mostFrequentColors = colorCount.OrderByDescending(x => x.Value).ToList();
 
 
-            //Tuple<LiquidColorNames, int>[] colorCountSortedTuple = new Tuple<LiquidColorNames, int>[LiquidColorNew.ColorKeys.Count()];
 
 
-            //foreach (var liquid in movableLiquids)
-            //{
-            //    if (!mostFrequentColors.Exists(x => x.ColorName == liquid.ColorName))
-            //    {
-            //        mostFrequentColors.Add(liquid);
-            //    }
-            //}
+        //    //Tuple<LiquidColorNames, int>[] colorCountSortedTuple = new Tuple<LiquidColorNames, int>[LiquidColorNew.ColorKeys.Count()];
 
-            return mostFrequentColors;
-        }
+
+        //    //foreach (var liquid in movableLiquids)
+        //    //{
+        //    //    if (!mostFrequentColors.Exists(x => x.ColorName == liquid.ColorName))
+        //    //    {
+        //    //        mostFrequentColors.Add(liquid);
+        //    //    }
+        //    //}
+
+        //    return mostFrequentColors;
+        //}
         /// <summary>
         /// If there are multiple moves for the same color, and in one of them the target is singleColor tube, always choose that one.
         /// </summary>
@@ -790,7 +805,7 @@ namespace WaterSortGame.Models
         {
             //Notification.Show("Game grid locked while automatic solution is engaged",MessageType.Information, 10000);
             ResumeRequest = true; // provede se i pri prvnim spusteni, protoze je pauza na zacatku
-            ResumeRequestCounterDebug++;
+            //ResumeRequestCounterDebug++;
             if (MainWindowVM.UIEnabled == true) // disable UI once starting the Auto Solve process
             {
                 MainWindowVM.UIEnabled = false;
@@ -824,6 +839,7 @@ namespace WaterSortGame.Models
             }
             return result;
         }
+#if DEBUG
         private void WriteToFileAutoSolveSteps(TreeNode<ValidMove> treeNode, string note = "")
         {
             string exportString = DateTime.Now.ToString("[MM/dd/yyyy HH:mm:ss]");
@@ -832,6 +848,7 @@ namespace WaterSortGame.Models
             exportString += "{" + note + "}" + "\n";
             System.IO.File.AppendAllText(exportLogFilename, exportString);
         }
-        #endregion
+#endif
+#endregion
     }
 }
