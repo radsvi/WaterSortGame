@@ -204,7 +204,10 @@ namespace WaterSortGame.Models
             }
             var duration = DateTime.Now.Subtract(startTime);
             BacktrackThroughAllStepsAndRecordThem(treeNode!);
-            Notification.Show($"Total steps taken to generate: {Iterations}. Puzzle wasn't solved. something went wrong ({CompleteSolution.Count} steps generated). Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
+            if (CompleteSolution.Count > 0)
+                Notification.Show($"Total steps taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}. Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
+            else 
+                Notification.Show($"Total steps taken to generate: {Iterations}. Puzzle wasn't solved, something went wrong ({CompleteSolution.Count} steps generated). Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
         }
         private TreeNode<ValidMove> PickNeverincorectMovesFirst(TreeNode<ValidMove> parentNode, CollisionDictionary<int, TreeNode<ValidMove>> hashedSteps) // dat to hned na zacatek jeste nez delam valid move a podobny veci
         { // name implies that its not always the best or optimal move, but its never wrong. Can at worst generate one extra move, but at best remove whole branch and cut the whole solution tree in half if its early on in the solution.
@@ -287,7 +290,7 @@ namespace WaterSortGame.Models
             return emptyTubes;
         }
         /// <summary>
-        /// Looking for tube that has format such as [1112] where 2 is the same color number as is the singleColorTube
+        /// Looks for tube that has format such as [1112] where 2 is the same color number as is the singleColorTube
         /// </summary>
         /// <param name="gameState"></param>
         /// <param name="singleColorTubeList"></param>
@@ -303,7 +306,8 @@ namespace WaterSortGame.Models
 
                     if (singleColorTube is not null && gameState[x, 0] is not null
                         && singleColorTube.ColorName == gameState[x, 0].Name
-                        && gameState[x, 1] is not null)
+                        && gameState[x, 1] is not null
+                        && gameState[x, 1].Name != singleColorTube.ColorName)
                     {
                         bool dualColorTube = true;
                         LiquidColorName colorName = gameState[x, 1].Name;
