@@ -152,11 +152,11 @@ namespace WaterSortGame.Models
                     }
 
                     (var movableLiquids, var mostFrequentColors) = GetMovableLiquids(treeNode.Data.GameState);
-
+#if DEBUG
                     Debug.WriteLine("movableLiquids:");
                     foreach (var liquid in movableLiquids)
                         Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{treeNode.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
-
+#endif
                     var emptySpots = GetEmptySpots(treeNode.Data.GameState, movableLiquids);
                     var validMoves = GetValidMoves(treeNode.Data.GameState, movableLiquids, emptySpots);
 

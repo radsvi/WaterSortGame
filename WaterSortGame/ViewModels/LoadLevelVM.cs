@@ -393,9 +393,8 @@ namespace WaterSortGame.ViewModels
         {
             var content = Clipboard.GetText();
 
-            if (content is not null)
-                if (content.Substring(0,1) == "[")
-                    ImportGameStateString = Clipboard.GetText();
+            if (content is not null && content.Length > 10 && content.Substring(0, 1) == "[")
+                ImportGameStateString = Clipboard.GetText();
         }
         public RelayCommand ImportExactGameStateCommand => new RelayCommand(execute => ImportExactGameState(), canExecute => ImportGameStateString != string.Empty);
         private void ImportExactGameState()
