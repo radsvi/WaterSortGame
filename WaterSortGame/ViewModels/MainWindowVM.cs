@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Automation.Text;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
@@ -11,7 +10,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WaterSortGame.Models;
-using WaterSortGame.Models.Enums;
 using WaterSortGame.MVVM;
 using WaterSortGame.Properties;
 using WaterSortGame.Views.UserControls;
@@ -394,8 +392,8 @@ namespace WaterSortGame.ViewModels
             } while (success == true && SourceTube.TopMostLiquid is not null);
             if (successAtLeastOnce > 0)
             {
-                //DrawTubes();
-                //RippleSurfaceAnimation(currentTubeReference, successAtLeastOnce);
+                DrawTubes();
+                RippleSurfaceAnimation(currentTubeReference, successAtLeastOnce);
                 OnChangingGameState();
             }
             if (successAtLeastOnce == 0 && AppSettings.UnselectTubeEvenOnIllegalMove == true)
@@ -403,13 +401,8 @@ namespace WaterSortGame.ViewModels
                 DeselectTube();
             }
         }
-        public void OnChangingGameState(DrawStyle drawStyle = DrawStyle.Instant)
+        public void OnChangingGameState()
         {
-            DrawTubes();
-
-            if (drawStyle == DrawStyle.Animate)
-                RippleSurfaceAnimation(currentTubeReference, successAtLeastOnce);
-
             DeselectTube();
 
             IsLevelCompleted();

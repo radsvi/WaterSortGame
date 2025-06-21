@@ -12,7 +12,6 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Xml.Linq;
 using WaterSortGame.ViewModels;
-using WaterSortGame.Models.Enums;
 
 namespace WaterSortGame.Models
 {
@@ -551,7 +550,7 @@ namespace WaterSortGame.Models
             //previousGameState = node.Data.GameState; // tohle je gamestate kterej uchovavam jen uvnitr autosolvu
             mainWindowVM.GameState.SetGameState(node.GameState);
 
-            //mainWindowVM.DrawTubes();
+            mainWindowVM.DrawTubes();
             mainWindowVM.OnChangingGameState();
         }
         /// <summary>
