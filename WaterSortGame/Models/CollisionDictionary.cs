@@ -33,7 +33,7 @@ namespace WaterSortGame.Models
             get => data[key];
         }
 
-        [Obsolete]public Dictionary<TKey, List<TValue>> DebugData
+        public Dictionary<TKey, List<TValue>> DebugData
         {
             get { return data; }
         }

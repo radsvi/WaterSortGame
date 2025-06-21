@@ -38,7 +38,8 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        public Action StepThrough;
+        private Action stepThrough;
+        public Action StepThrough { get => stepThrough; set => stepThrough = value; }
         private int iterations = 0;
         public int Iterations
         {
@@ -69,9 +70,7 @@ namespace WaterSortGame.Models
         }
         private int currentSolutionStep = 0;
         public int CurrentSolutionStep { get => currentSolutionStep; set { currentSolutionStep = value; OnPropertyChanged(); } }
-#if DEBUG
-        public bool debugVisualiseState = false;
-#endif
+        public bool LimitToOneStep { get; set; } = true; // When true - makes the AutoSolve generate only one step for each press of the button and visualises the changes. When false - generates whole solution
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             this.mainWindowVM = mainWindowVM;
@@ -104,13 +103,12 @@ namespace WaterSortGame.Models
                 await Task.Delay(1);
 #if DEBUG
                 debugList.Add(treeNode);
-                WriteToFileAutoSolveSteps(treeNode, $"[{hashedSteps.DebugData.Count}] Visiting node");
 #endif
+                Debug_WriteToFileAutoSolveSteps(treeNode, $"[{hashedSteps.DebugData.Count}] Visiting node");
                 Iterations++;
-                //if (AskUserToContinue(treeNode, Iterations) == false) return;
+                
 #if DEBUG
-                if (debugVisualiseState) MakeAMove(treeNode.Data);
-                if (debugVisualiseState) await WaitForButtonPress();
+                if (LimitToOneStep) { MakeAMove(treeNode.Data); await WaitForButtonPress(); }
 #endif
 
                 TreeNode<ValidMove> highestPriority_TreeNode = null;
@@ -154,11 +152,9 @@ namespace WaterSortGame.Models
                     }
 
                     (var movableLiquids, var mostFrequentColors) = GetMovableLiquids(treeNode.Data.GameState);
-#if DEBUG
-                    Debug.WriteLine("movableLiquids:");
-                    foreach (var liquid in movableLiquids)
-                        Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{treeNode.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
-#endif
+
+                    Debug_IterateThroughList(movableLiquids, "movableLiquids:", (liquid) => $"[{liquid.X},{liquid.Y}] {{{treeNode.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
+
                     var emptySpots = GetEmptySpots(treeNode.Data.GameState, movableLiquids);
                     var validMoves = GetValidMoves(treeNode.Data.GameState, movableLiquids, emptySpots);
 
@@ -179,11 +175,9 @@ namespace WaterSortGame.Models
                         validMoves = OrderList(validMoves, mostFrequentColors);
                         //validMoves = validMoves.OrderByDescending(x => x.Priority).ToList();
                     }
-#if DEBUG
-                    Debug.WriteLine("validMoves:");
-                    foreach (var move in validMoves)
-                        Debug.WriteLine($"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{treeNode.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
-#endif
+
+                    Debug_IterateThroughList(validMoves, "validMoves:", (move) => $"[{move.Source.X},{move.Source.Y}] => [{move.Target.X},{move.Target.Y}] {{{treeNode.Data.GameState[move.Source.X, move.Source.Y].Name}}} {{HowMany {move.Source.NumberOfRepeatingLiquids}}}");
+
                     //var mostFrequentColors = PickMostFrequentColor(movableLiquids); // ## tohle jsem jeste nezacal nikde pouzivat!
 
                     RemoveEqualColorMoves(validMoves);
@@ -218,7 +212,7 @@ namespace WaterSortGame.Models
                         continue;
                     }
 #if DEBUG
-                    if (debugVisualiseState) MakeAMove(treeNode.Data);
+                    if (LimitToOneStep) MakeAMove(treeNode.Data);
 #endif
                 }
             }
@@ -464,9 +458,8 @@ namespace WaterSortGame.Models
                 }
 
                 hashedSteps.Add(nextNode.Data.Hash, nextNode);
-#if DEBUG
-                WriteToFileAutoSolveSteps(nextNode, $"[{hashedSteps.DebugData.Count}][{nextNode.Data.Hash}] Generating node");
-#endif
+
+                Debug_WriteToFileAutoSolveSteps(nextNode, $"[{hashedSteps.DebugData.Count}][{nextNode.Data.Hash}] Generating node");
 
                 if (parentNode.FirstChild is null)
                 {
@@ -876,8 +869,22 @@ namespace WaterSortGame.Models
             }
             return result;
         }
-#if DEBUG
-        private void WriteToFileAutoSolveSteps(TreeNode<ValidMove> treeNode, string note = "")
+        //[System.Diagnostics.Conditional("DEBUG")]
+        //void DebugWriteFromList(List<PositionPointer> movableLiquids,TreeNode<ValidMove> treeNode)
+        //{
+        //    Debug.WriteLine("movableLiquids:");
+        //    foreach (var liquid in movableLiquids)
+        //        Debug.WriteLine($"[{liquid.X},{liquid.Y}] {{{treeNode.Data.GameState[liquid.X, liquid.Y].Name}}} {{{liquid.AllIdenticalLiquids}}} {{{liquid.NumberOfRepeatingLiquids}}}");
+        //}
+        [System.Diagnostics.Conditional("DEBUG")]
+        void Debug_IterateThroughList<T>(List<T> movableLiquids, string title, Func<T, string> action)
+        {
+            Debug.WriteLine(title);
+            foreach (var liquid in movableLiquids)
+                Debug.WriteLine(action(liquid));
+        }
+        [System.Diagnostics.Conditional("DEBUG")]
+        private void Debug_WriteToFileAutoSolveSteps(TreeNode<ValidMove> treeNode, string note = "")
         {
             string exportString = DateTime.Now.ToString("[MM/dd/yyyy HH:mm:ss]");
 
@@ -885,7 +892,6 @@ namespace WaterSortGame.Models
             exportString += "{" + note + "}" + "\n";
             System.IO.File.AppendAllText(exportLogFilename, exportString);
         }
-#endif
-#endregion
+        #endregion
     }
 }
