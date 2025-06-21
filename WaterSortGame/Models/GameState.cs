@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using WaterSortGame.ViewModels;
+using ColN = WaterSortGame.Models.LiquidColorName; // creating alias so that I dont have to have long names in GenerateDebugLevel();
 
 namespace WaterSortGame.Models
 {
@@ -344,18 +345,18 @@ namespace WaterSortGame.Models
 
             // Dalsi random level kterej zaina s 3 stejnejma barvama nahore (114 states, 50 steps, 1.94sec - s tim checkovanim na zacatku):
             // (175 states, 45 steps, 2.62sec - bez tim checkovanim na zacatku):
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Blue, LiquidColorName.Turquoise, LiquidColorName.Lime });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Scarlet, LiquidColorName.Indigo, LiquidColorName.Gray, LiquidColorName.Scarlet });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Brown, LiquidColorName.Green, LiquidColorName.Orange });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Lime, LiquidColorName.Blue, LiquidColorName.Purple });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Scarlet, LiquidColorName.Blue, LiquidColorName.Green });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Yellow, LiquidColorName.Yellow, LiquidColorName.Green });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Turquoise, LiquidColorName.Brown, LiquidColorName.Orange });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Lime, LiquidColorName.Red, LiquidColorName.Indigo, LiquidColorName.Gray });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.Red, LiquidColorName.Orange, LiquidColorName.Red });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Brown, LiquidColorName.Brown, LiquidColorName.Scarlet, LiquidColorName.Indigo });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Lime, LiquidColorName.Gray, LiquidColorName.Turquoise, LiquidColorName.Purple });
+            AddTube(i++, new ColN[] { ColN.Indigo, ColN.Blue, ColN.Turquoise, ColN.Lime });
+            AddTube(i++, new ColN[] { ColN.Scarlet, ColN.Indigo, ColN.Gray, ColN.Scarlet });
+            AddTube(i++, new ColN[] { ColN.Purple, ColN.Brown, ColN.Green, ColN.Orange });
+            AddTube(i++, new ColN[] { ColN.Purple, ColN.Red, ColN.Blue, ColN.Orange });
+            AddTube(i++, new ColN[] { ColN.Yellow, ColN.Lime, ColN.Blue, ColN.Purple });
+            AddTube(i++, new ColN[] { ColN.Turquoise, ColN.Scarlet, ColN.Blue, ColN.Green });
+            AddTube(i++, new ColN[] { ColN.Gray, ColN.Yellow, ColN.Yellow, ColN.Green });
+            AddTube(i++, new ColN[] { ColN.Yellow, ColN.Turquoise, ColN.Brown, ColN.Orange });
+            AddTube(i++, new ColN[] { ColN.Lime, ColN.Red, ColN.Indigo, ColN.Gray });
+            AddTube(i++, new ColN[] { ColN.Green, ColN.Red, ColN.Orange, ColN.Red });
+            AddTube(i++, new ColN[] { ColN.Brown, ColN.Brown, ColN.Scarlet, ColN.Indigo });
+            AddTube(i++, new ColN[] { ColN.Lime, ColN.Gray, ColN.Turquoise, ColN.Purple });
 
             ////AddTube(i++, new int[] { 1,1,1 });
             //AddTube(i++, new int[] { 3, 4, 5, 6 });
