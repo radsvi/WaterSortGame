@@ -17,15 +17,15 @@ namespace WaterSortGame.Models
 {
     internal class AutoSolve : ViewModelBase
     {
-        MainWindowVM MainWindowVM;
-        Notification Notification;
+        MainWindowVM mainWindowVM;
+        Notification notification;
         readonly string exportLogFilename;
         //TreeNode<ValidMove> SolvingSteps;
         //TreeNode<ValidMove> FirstStep;
         private bool ResumeRequest { get; set; }
         //[Obsolete]public int ResumeRequestCounterDebug { get; set; } = 0; // used only for debugging how many times I clicked the button and only triggering breakpoint upon certain number.
         //public List<ValidMove> CompleteSolution { get; private set; }
-        private ObservableCollection<ValidMove> completeSolution;
+        private ObservableCollection<ValidMove> completeSolution = new ObservableCollection<ValidMove>();
         public ObservableCollection<ValidMove> CompleteSolution
         {
             get { return completeSolution; }
@@ -69,10 +69,10 @@ namespace WaterSortGame.Models
         }
         public AutoSolve(MainWindowVM mainWindowVM)
         {
-            MainWindowVM = mainWindowVM;
-            Notification = mainWindowVM.Notification;
+            this.mainWindowVM = mainWindowVM;
+            notification = mainWindowVM.Notification;
             StepThrough = StepThroughMethod;
-            exportLogFilename = MainWindowVM.logFolderName + "/Export-AutoSolve-" + DateTime.Now.ToString("MMddyyyy-HH.mm.ss") + ".log";
+            exportLogFilename = this.mainWindowVM.logFolderName + "/Export-AutoSolve-" + DateTime.Now.ToString("MMddyyyy-HH.mm.ss") + ".log";
         }
         private async void Start(LiquidColor[,] startingPosition)
         {
@@ -116,13 +116,13 @@ namespace WaterSortGame.Models
                 {
                     if (treeNode.Parent is null)
                     {
-                        Notification.Show("Tried all branches, and didn't find a solution!", notificationType, 60000); // this should rarely happen.
+                        notification.Show("Tried all branches, and didn't find a solution!", notificationType, 60000); // this should rarely happen.
                         break;
                     }
                         
                     treeNode = treeNode.Parent;
                     
-                    Notification.Show($"{{{Iterations}}} Returning to previous move", notificationType);
+                    notification.Show($"{{{Iterations}}} Returning to previous move", notificationType);
                 }
                 else if (treeNode.Data.FullyVisited == false && treeNode.Data.Visited == true)
                 {
@@ -130,15 +130,15 @@ namespace WaterSortGame.Models
 
                     if (highestPriority_TreeNode.GetType() == typeof(NullTreeNode))
                     {
-                        highestPriority_TreeNode.Parent.Data.FullyVisited = true;
+                        highestPriority_TreeNode.Parent!.Data.FullyVisited = true;
                         treeNode = highestPriority_TreeNode.Parent;
-                        Notification.Show($"{{{Iterations}}} All siblings visited, marking parent as FullyVisited", notificationType);
+                        notification.Show($"{{{Iterations}}} All siblings visited, marking parent as FullyVisited", notificationType);
                         continue;
                     }
                     else
                     {
                         treeNode = highestPriority_TreeNode;
-                        Notification.Show($"{{{Iterations}}} Continuing with next child", notificationType); // continuing to child generated in previous loop iteration
+                        notification.Show($"{{{Iterations}}} Continuing with next child", notificationType); // continuing to child generated in previous loop iteration
                         continue;
                     }
                 }
@@ -193,13 +193,13 @@ namespace WaterSortGame.Models
 
                     if (UnvisitedChildrenExist(treeNode) == false)
                     {
-                        if (MainWindowVM.GameState.IsLevelCompleted(treeNode.Data.GameState) is false)
+                        if (mainWindowVM.GameState.IsLevelCompleted(treeNode.Data.GameState) is false)
                         {
                             treeNode.Data.FullyVisited = true;
                             //if (treeNode.Parent is not null)
                             //    treeNode.Parent.Data.Visited = true;
 
-                            Notification.Show($"{{{Iterations}}} Reached a dead end.", notificationType);
+                            notification.Show($"{{{Iterations}}} Reached a dead end.", notificationType);
                             continue;
                         }
 
@@ -212,7 +212,7 @@ namespace WaterSortGame.Models
 
                     if (treeNode.GetType() == typeof(NullTreeNode))
                     {
-                        Notification.Show($"{{{Iterations}}} highestPriority_TreeNode is null, continuing.", notificationType);
+                        notification.Show($"{{{Iterations}}} highestPriority_TreeNode is null, continuing.", notificationType);
                         continue;
                     }
 #if DEBUG
@@ -221,11 +221,11 @@ namespace WaterSortGame.Models
                 }
             }
             var duration = DateTime.Now.Subtract(startTime);
-            BacktrackThroughAllStepsAndRecordThem(treeNode!);
+            CreateListOfSteps(treeNode!);
             if (CompleteSolution.Count > 0)
-                Notification.Show($"Total states taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}. Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
+                notification.Show($"Total states taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}. Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
             else 
-                Notification.Show($"Total states taken to generate: {Iterations}. Puzzle wasn't solved, something went wrong ({CompleteSolution.Count} steps generated). Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
+                notification.Show($"Total states taken to generate: {Iterations}. Puzzle wasn't solved, something went wrong ({CompleteSolution.Count} steps generated). Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
         }
         private List<ValidMove> OrderList(List<ValidMove> validMoves, ColorCount mostFrequentColors)
         {
@@ -262,7 +262,7 @@ namespace WaterSortGame.Models
                 return new NullTreeNode(parentNode);
             }
 
-            var newGameState = MainWindowVM.GameState.CloneGrid(parentNode.Data.GameState);
+            var newGameState = mainWindowVM.GameState.CloneGrid(parentNode.Data.GameState);
             var validMove = new ValidMove(dualColorTube, singleColorTube, newGameState, MoveType.NeverWrong);
 
             return GeneratePriorityFutureState(parentNode, validMove, hashedSteps);
@@ -419,17 +419,13 @@ namespace WaterSortGame.Models
             }
             return true;
         }
-        private void BacktrackThroughAllStepsAndRecordThem(TreeNode<ValidMove> treeNode)
+        private void CreateListOfSteps(TreeNode<ValidMove> treeNode)
         {
-            var newList = new List<ValidMove>();
-
             while (treeNode.Parent is not null)
             {
-                newList.Add(treeNode.Data);
+                CompleteSolution.Add(treeNode.Data);
                 treeNode = treeNode.Parent;
             }
-            //newList.Reverse();
-            CompleteSolution = new ObservableCollection<ValidMove>(newList);
         }
         /// <summary>
         /// basically checks if there are any valid moves. If there is at least one children and it is unvisited, it returns true.
@@ -552,10 +548,10 @@ namespace WaterSortGame.Models
             //SolvingStepsOLD.Add(upcomingStep);
 
             //previousGameState = node.Data.GameState; // tohle je gamestate kterej uchovavam jen uvnitr autosolvu
-            MainWindowVM.GameState.SetGameState(node.GameState);
+            mainWindowVM.GameState.SetGameState(node.GameState);
 
-            MainWindowVM.DrawTubes();
-            MainWindowVM.OnChangingGameState();
+            mainWindowVM.DrawTubes();
+            mainWindowVM.OnChangingGameState();
         }
         /// <summary>
         /// Determines how close we are to a solution. Higher value means closer to a solution
@@ -844,9 +840,9 @@ namespace WaterSortGame.Models
             //Notification.Show("Game grid locked while automatic solution is engaged",MessageType.Information, 10000);
             ResumeRequest = true; // provede se i pri prvnim spusteni, protoze je pauza na zacatku
             //ResumeRequestCounterDebug++;
-            if (MainWindowVM.UIEnabled == true) // disable UI once starting the Auto Solve process
+            if (mainWindowVM.UIEnabled == true) // disable UI once starting the Auto Solve process
             {
-                MainWindowVM.UIEnabled = false;
+                mainWindowVM.UIEnabled = false;
                 Start(gameState);
                 return;
             }

@@ -14,9 +14,9 @@ namespace WaterSortGame.Models
 {
     internal class GameState : ViewModelBase
     {
-        private MainWindowVM MainWindowVM;
-        private AppSettings appSettings;
-
+        MainWindowVM mainWindowVM;
+        AppSettings appSettings;
+        Notification notification;
 
         private string readableGameState;
         public string ReadableGameState
@@ -102,8 +102,9 @@ namespace WaterSortGame.Models
         public GameState() { }
         public GameState(MainWindowVM mainWindowVM)
         {
-            MainWindowVM = mainWindowVM;
-            appSettings = MainWindowVM.AppSettings;
+            this.mainWindowVM = mainWindowVM;
+            appSettings = this.mainWindowVM.AppSettings;
+            notification = mainWindowVM.Notification;
 
             //if (Tubes.Count == 0)
             //{
@@ -311,19 +312,48 @@ namespace WaterSortGame.Models
 
             //AddTube(i++, new int[] { 1,1,1 });
 
-            // tenhle level jsem nevyresil manualne, tim bruteforce exponencialnim scriptem to trvalo 7 sekund a 685 kroku:
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Turquoise, LiquidColorName.Lime, LiquidColorName.Purple });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Scarlet, LiquidColorName.Orange, LiquidColorName.Indigo, LiquidColorName.Indigo });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Orange, LiquidColorName.Green, LiquidColorName.Gray });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Brown, LiquidColorName.Blue, LiquidColorName.Purple, LiquidColorName.Gray });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Scarlet, LiquidColorName.Indigo, LiquidColorName.Lime });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Scarlet, LiquidColorName.Yellow, LiquidColorName.Red });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Scarlet, LiquidColorName.Blue, LiquidColorName.Brown, LiquidColorName.Orange });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Lime });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Yellow, LiquidColorName.Turquoise, LiquidColorName.Green });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Brown, LiquidColorName.Purple, LiquidColorName.Lime });
-            AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Brown, LiquidColorName.Green, LiquidColorName.Purple });
+            //// tenhle level jsem nevyresil manualne, tim bruteforce exponencialnim scriptem to trvalo 7 sekund a 685 kroku:
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Turquoise, LiquidColorName.Lime, LiquidColorName.Purple });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Scarlet, LiquidColorName.Orange, LiquidColorName.Indigo, LiquidColorName.Indigo });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Orange, LiquidColorName.Green, LiquidColorName.Gray });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Brown, LiquidColorName.Blue, LiquidColorName.Purple, LiquidColorName.Gray });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Scarlet, LiquidColorName.Indigo, LiquidColorName.Lime });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Scarlet, LiquidColorName.Yellow, LiquidColorName.Red });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Scarlet, LiquidColorName.Blue, LiquidColorName.Brown, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Lime });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Yellow, LiquidColorName.Turquoise, LiquidColorName.Green });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Brown, LiquidColorName.Purple, LiquidColorName.Lime });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Brown, LiquidColorName.Green, LiquidColorName.Purple });
+
+            //// Random level kterej zacina s 3 stejnejma barvama nahore (178 states, 48 steps, 2.37sec - s tim checkovanim na zacatku):
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Turquoise, LiquidColorName.Orange, LiquidColorName.Lime });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.Gray, LiquidColorName.Indigo, LiquidColorName.Scarlet });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Brown, LiquidColorName.Brown, LiquidColorName.Brown, LiquidColorName.Purple });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.Turquoise, LiquidColorName.Green, LiquidColorName.Scarlet });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Indigo, LiquidColorName.Lime, LiquidColorName.Orange });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Gray, LiquidColorName.Yellow, LiquidColorName.Indigo });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Lime, LiquidColorName.Green, LiquidColorName.Purple });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Red, LiquidColorName.Scarlet, LiquidColorName.Purple });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Orange, LiquidColorName.Blue, LiquidColorName.Red });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Lime, LiquidColorName.Turquoise, LiquidColorName.Yellow });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Brown, LiquidColorName.Scarlet, LiquidColorName.Blue, LiquidColorName.Blue });
+
+            // Dalsi random level kterej zaina s 3 stejnejma barvama nahore (114 states, 50 steps, 1.94sec - s tim checkovanim na zacatku):
+            // (175 states, 45 steps, 2.62sec - bez tim checkovanim na zacatku):
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Indigo, LiquidColorName.Blue, LiquidColorName.Turquoise, LiquidColorName.Lime });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Scarlet, LiquidColorName.Indigo, LiquidColorName.Gray, LiquidColorName.Scarlet });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Brown, LiquidColorName.Green, LiquidColorName.Orange });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Purple, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Orange });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Lime, LiquidColorName.Blue, LiquidColorName.Purple });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Turquoise, LiquidColorName.Scarlet, LiquidColorName.Blue, LiquidColorName.Green });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Yellow, LiquidColorName.Yellow, LiquidColorName.Green });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Turquoise, LiquidColorName.Brown, LiquidColorName.Orange });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Lime, LiquidColorName.Red, LiquidColorName.Indigo, LiquidColorName.Gray });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.Red, LiquidColorName.Orange, LiquidColorName.Red });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Brown, LiquidColorName.Brown, LiquidColorName.Scarlet, LiquidColorName.Indigo });
+            AddTube(i++, new LiquidColorName[] { LiquidColorName.Lime, LiquidColorName.Gray, LiquidColorName.Turquoise, LiquidColorName.Purple });
 
             ////AddTube(i++, new int[] { 1,1,1 });
             //AddTube(i++, new int[] { 3, 4, 5, 6 });
@@ -335,12 +365,29 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 1, 1, 1 });
 
 
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName });
+            //AddTube(i++, new LiquidColorName[] { LiquidColorName. });
             //AddTube(i++, new LiquidColorName[] { });
+
+            // check if puzzle has correct number for each color:
+            CheckCorrectColorNumber(gameGrid);
 
             //gameGrid = CloneGrid(gameGrid, i + 2);
             gameGrid = CloneGrid(gameGrid, i + 2);
             StoreStartingGrid();
+        }
+        private void CheckCorrectColorNumber(LiquidColor[,] gameGrid)
+        {
+            ColorCount colorList = new ColorCount();
+            foreach (LiquidColor color in gameGrid)
+            {
+                if (color is not null)
+                    colorList.AddColor(color.Name);
+            }
+            foreach (var color in colorList)
+            {
+                if (color.Value != gameGrid.GetLength(1))
+                notification.Show($"{color.Key}: {color.Value}", 60000);
+            }
         }
         private void AddTube(int tubeNumber, int[] layers)
         {
@@ -555,14 +602,14 @@ namespace WaterSortGame.Models
 
             LiquidColor[,] lastGameStatus = SavedGameStates[SavedGameStates.Count - 1];
 
-            MainWindowVM.PropertyChangedEventPaused = true;
+            mainWindowVM.PropertyChangedEventPaused = true;
             gameGrid = lastGameStatus;
-            MainWindowVM.PropertyChangedEventPaused = false;
+            mainWindowVM.PropertyChangedEventPaused = false;
 
             LastGameState = CloneGrid(lastGameStatus);
 
             SavedGameStates.Remove(lastGameStatus);
-            MainWindowVM.DrawTubes();
+            mainWindowVM.DrawTubes();
         }
         public void WriteToFileStepBack()
         {
@@ -576,7 +623,7 @@ namespace WaterSortGame.Models
 
             //System.IO.File.WriteAllText("ExportStepBack.log", exportString);
             System.IO.File.AppendAllText("Export-StepBack.log", exportString);
-            MainWindowVM.WindowService?.CloseWindow(); // close options menu
+            mainWindowVM.WindowService?.CloseWindow(); // close options menu
         }
 
         private int CountColors()
@@ -603,7 +650,7 @@ namespace WaterSortGame.Models
         public void CopyExportString()
         {
             Clipboard.SetText(ReadableGameState);
-            MainWindowVM.ClosePopupWindow();
+            mainWindowVM.ClosePopupWindow();
         }
         //public static string GameStateToString(LiquidColorNew[,] gameState, bool enableSort = false)
         //{

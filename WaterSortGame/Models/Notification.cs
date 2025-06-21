@@ -58,6 +58,7 @@ namespace WaterSortGame.Models
             //NotificationBox.Children.Add(notificationControl);
             NotificationBox.Children.Insert(0, notificationControl);
 
+            //if (closeDelay != -1)
             PopupNotification(notificationControl, closeDelay);
         }
         private async void PopupNotification(QuickNotificationOverlay notificationControl, int closeDelay)
