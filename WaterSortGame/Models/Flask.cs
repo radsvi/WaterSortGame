@@ -101,10 +101,10 @@ namespace WaterSortGame.Models
     //    //}
     //}
 
-    internal class Tube : ViewModelBase
+    internal class Flask : ViewModelBase
     {
         public int Id { get; set; }
-        private static int tubeIdCounter = 0;
+        private static int flaskIdCounter = 0;
 
         private List<LiquidColor> layers = new List<LiquidColor>();
         public List<LiquidColor> Layers
@@ -130,22 +130,22 @@ namespace WaterSortGame.Models
         //    }
         //    return clone;
         //}
-        public Tube()
+        public Flask()
         {
-            Id = tubeIdCounter++;
+            Id = flaskIdCounter++;
         }
-        public Tube(int? firstLayer = null, int? secondLayer = null, int? thirdLayer = null, int? fourthLayer = null)
+        public Flask(int? firstLayer = null, int? secondLayer = null, int? thirdLayer = null, int? fourthLayer = null)
         {
-            Id = tubeIdCounter++;
+            Id = flaskIdCounter++;
 
             if (firstLayer is not null) Layers.Add(new LiquidColor((int)firstLayer));
             if (secondLayer is not null) Layers.Add(new LiquidColor((int)secondLayer));
             if (thirdLayer is not null) Layers.Add(new LiquidColor((int)thirdLayer));
             if (fourthLayer is not null) Layers.Add(new LiquidColor((int)fourthLayer));
         }
-        public Tube(LiquidColor? firstLayer = null, LiquidColor? secondLayer = null, LiquidColor? thirdLayer = null, LiquidColor? fourthLayer = null)
+        public Flask(LiquidColor? firstLayer = null, LiquidColor? secondLayer = null, LiquidColor? thirdLayer = null, LiquidColor? fourthLayer = null)
         {
-            Id = tubeIdCounter++;
+            Id = flaskIdCounter++;
 
             if (firstLayer is not null) Layers.Add(firstLayer);
             if (secondLayer is not null) Layers.Add(secondLayer);

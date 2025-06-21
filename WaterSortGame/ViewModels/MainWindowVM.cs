@@ -100,8 +100,8 @@ namespace WaterSortGame.ViewModels
 
         //    }
         //}
-        public TubeReference LastClickedTube { get; set; }
-        public TubeReference SourceTube { get; set; }
+        public FlaskReference LastClickedTube { get; set; }
+        public FlaskReference SourceTube { get; set; }
         
         private int tubeCount;
         public int TubeCount
@@ -362,7 +362,7 @@ namespace WaterSortGame.ViewModels
                 return;
             }
 
-            TubeReference currentTubeReference = obj as TubeReference;
+            FlaskReference currentTubeReference = obj as FlaskReference;
 
             if (LastClickedTube == null)
             {
@@ -408,15 +408,15 @@ namespace WaterSortGame.ViewModels
             IsLevelCompleted();
             GameState.SaveGameState();
         }
-        private void GetTopmostLiquid(TubeReference sourceTube) // selects topmost liquid in a sourceTube
+        private void GetTopmostLiquid(FlaskReference sourceTube) // selects topmost liquid in a sourceTube
         {
             for (int i = GameState.NumberOfLayers - 1; i >= 0; i--)
             {
-                if (GameState[sourceTube.TubeId, i] is not null)
+                if (GameState[sourceTube.FlaskId, i] is not null)
                 {
                     if (LastClickedTube != sourceTube)
                         LastClickedTube = sourceTube;
-                    sourceTube.TopMostLiquid = GameState[sourceTube.TubeId, i];
+                    sourceTube.TopMostLiquid = GameState[sourceTube.FlaskId, i];
                     VerticallyMoveTube(sourceTube, VerticalAnimation.Raise);
                     //MoveAndTiltTube(sourceTube);
                     return;
@@ -424,12 +424,12 @@ namespace WaterSortGame.ViewModels
             }
         }
 
-        private bool AddLiquidToTargetTube(TubeReference currentTubeReference)
+        private bool AddLiquidToTargetTube(FlaskReference currentTubeReference)
         {
             int firstEmptyLayer = -1;
             for (int y = 0; y < GameState.NumberOfLayers; y++)
             {
-                if (GameState[currentTubeReference.TubeId, y] == null)
+                if (GameState[currentTubeReference.FlaskId, y] == null)
                 {
                     firstEmptyLayer = y;
                     break;
@@ -442,14 +442,14 @@ namespace WaterSortGame.ViewModels
 
             if (firstEmptyLayer > 0)
             {
-                if (SourceTube.TopMostLiquid.Name != GameState[currentTubeReference.TubeId, firstEmptyLayer - 1].Name)
+                if (SourceTube.TopMostLiquid.Name != GameState[currentTubeReference.FlaskId, firstEmptyLayer - 1].Name)
                 {
                     return false; // Pokud ma zkumavka v sobe uz nejaky barvy a nejvrchnejsi barva neshoulasi se SourceLiquid tak vratit false
                 }
             }
 
             currentTubeReference.LastColorMoved = SourceTube.TopMostLiquid.Clone(); // saving this to use in CreateImageBackground(). Musim dat Clone protoze jinak se to deselectne
-            GameState[currentTubeReference.TubeId, firstEmptyLayer] = SourceTube.TopMostLiquid;
+            GameState[currentTubeReference.FlaskId, firstEmptyLayer] = SourceTube.TopMostLiquid;
             currentTubeReference.TargetEmptyRow = firstEmptyLayer;
             return true;
         }
@@ -457,9 +457,9 @@ namespace WaterSortGame.ViewModels
         {
             for (int y = GameState.NumberOfLayers - 1; y >= 0; y--)
             {
-                if (GameState[SourceTube.TubeId, y] is not null)
+                if (GameState[SourceTube.FlaskId, y] is not null)
                 {
-                    GameState[SourceTube.TubeId, y] = null;
+                    GameState[SourceTube.FlaskId, y] = null;
                     SourceTube.TopMostLiquid = null;
                     return;
                 }
@@ -501,7 +501,7 @@ namespace WaterSortGame.ViewModels
                 {
                     liquidColorsArray[y] = GameState[x, y];
                 }
-                var tubeControl = new TubeControl(this, x, liquidColorsArray);
+                var tubeControl = new FlaskControl(this, x, liquidColorsArray);
 
                 // mozna to tu udelat pres ten <ContentControl> nejak
 
@@ -576,7 +576,7 @@ namespace WaterSortGame.ViewModels
         //}
         #endregion
         #region Animation
-        private void VerticallyMoveTube(TubeReference tubeReference, VerticalAnimation tubeAnimation)
+        private void VerticallyMoveTube(FlaskReference tubeReference, VerticalAnimation tubeAnimation)
         {
             if (tubeReference.ButtonElement is null)
             {
@@ -594,18 +594,18 @@ namespace WaterSortGame.ViewModels
             }
             tubeReference.ButtonElement.BeginAnimation(Button.MarginProperty, HeightAnimation);
         }
-        private int GetFirstEmptyLayer(TubeReference lastClickedTube)
+        private int GetFirstEmptyLayer(FlaskReference lastClickedTube)
         {
             for (int y = 0; y < GameState.NumberOfLayers; y++)
             {
-                if (GameState[lastClickedTube.TubeId, y] is null)
+                if (GameState[lastClickedTube.FlaskId, y] is null)
                 {
                     return y;
                 }
             }
             throw new Exception("This tube should always have empty space.");
         }
-        private (ImageBrush, Grid) CreateVerticalTubeAnimationBackground(TubeReference currentTubeReference, int numberOfLiquids)
+        private (ImageBrush, Grid) CreateVerticalTubeAnimationBackground(FlaskReference currentTubeReference, int numberOfLiquids)
         {
             Grid gridElement = new Grid();
 
@@ -654,9 +654,9 @@ namespace WaterSortGame.ViewModels
 
             return (brush, gridElement);
         }
-        private void RippleSurfaceAnimation(TubeReference currentTubeReference, int numberOfLiquids)
+        private void RippleSurfaceAnimation(FlaskReference currentTubeReference, int numberOfLiquids)
         {
-            TubeControl tubeControl = ContainerForTubes.Children[currentTubeReference.TubeId] as TubeControl;
+            FlaskControl tubeControl = ContainerForTubes.Children[currentTubeReference.FlaskId] as FlaskControl;
 
             // Getting reference to the main grid that contains individual liquids in a tube.
             Grid container = (GetDescendantByTypeAndName(tubeControl, typeof(Grid), "TubeGrid")) as Grid;
@@ -696,7 +696,7 @@ namespace WaterSortGame.ViewModels
         {
             container.Children.Remove(gridElement);
         }
-        private void MoveAndTiltTube(TubeReference tubeReference)
+        private void MoveAndTiltTube(FlaskReference tubeReference)
         {
             if (tubeReference.ButtonElement is null)
             {
