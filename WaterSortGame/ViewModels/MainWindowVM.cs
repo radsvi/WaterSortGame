@@ -293,7 +293,7 @@ namespace WaterSortGame.ViewModels
         {
             TokenSource?.Cancel();
         }
-        public RelayCommand StepBackCommand => new RelayCommand(execute => GameState.StepBack(), canExecute => GameState.SavedGameStates.Count > 0 && UIEnabled == true);
+        public RelayCommand StepBackCommand => new RelayCommand(execute => GameState.StepBack(), canExecute => GameState.SavedGameStates.Count > 0 && AutoSolve.debugVisualiseState is false);
         public RelayCommand OpenOptionsWindowCommand => new RelayCommand(execute => WindowService?.OpenOptionsWindow(this));
         //public RelayCommand LevelCompleteWindowCommand => new RelayCommand(execute => windowService?.OpenLevelCompleteWindow(this));
         public RelayCommand OpenHelpFromOptionsCommand => new RelayCommand(execute =>

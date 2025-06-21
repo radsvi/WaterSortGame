@@ -67,18 +67,20 @@ namespace WaterSortGame.Models
                 }
             }
         }
+        private int currentSolutionStep = 0;
+        public int CurrentSolutionStep { get => currentSolutionStep; set { currentSolutionStep = value; OnPropertyChanged(); } }
+#if DEBUG
+        public bool debugVisualiseState = false;
+#endif
         public AutoSolve(MainWindowVM mainWindowVM)
         {
             this.mainWindowVM = mainWindowVM;
             notification = mainWindowVM.Notification;
-            StepThrough = StepThroughMethod;
+            StepThrough += StepThroughMethod;
             exportLogFilename = this.mainWindowVM.logFolderName + "/Export-AutoSolve-" + DateTime.Now.ToString("MMddyyyy-HH.mm.ss") + ".log";
         }
         private async void Start(LiquidColor[,] startingPosition)
         {
-#if DEBUG
-            bool debugVisualiseState = false;
-#endif
             //var notificationType = MessageType.Debug;
             var notificationType = MessageType.Hidden;
             var startTime = DateTime.Now;
@@ -426,6 +428,7 @@ namespace WaterSortGame.Models
                 CompleteSolution.Add(treeNode.Data);
                 treeNode = treeNode.Parent;
             }
+            CurrentSolutionStep = completeSolution.Count();
         }
         /// <summary>
         /// basically checks if there are any valid moves. If there is at least one children and it is unvisited, it returns true.
@@ -852,10 +855,10 @@ namespace WaterSortGame.Models
         {
             ResumeRequest = false;
             StepThrough = () => ResumeRequest = true;
-            for (int i = CompleteSolution.Count - 1; i >= 0; i--)
+            for (CurrentSolutionStep = CompleteSolution.Count - 1; CurrentSolutionStep >= 0; CurrentSolutionStep--)
             {
-                MakeAMove(CompleteSolution[i]);
-                CompleteSolution.Remove(CompleteSolution[i]);
+                MakeAMove(CompleteSolution[CurrentSolutionStep]);
+                //CompleteSolution.Remove(CompleteSolution[CurrentSolutionStep]);
                 await WaitForButtonPress();
             }
         }

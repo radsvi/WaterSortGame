@@ -124,7 +124,7 @@
                         <Button Command="{Binding StepThroughCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Next Step ("/>
-                                <TextBlock Text="{Binding AutoSolve.CompleteSolution.Count}" d:Text="0"/>
+                                <TextBlock Text="{Binding AutoSolve.CurrentSolutionStep}" d:Text="0"/>
                                 <TextBlock Text=")"/>
                             </StackPanel>
                         </Button>
