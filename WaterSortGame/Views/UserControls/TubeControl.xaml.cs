@@ -22,7 +22,7 @@ namespace WaterSortGame.Views.UserControls
     /// <summary>
     /// Interaction logic for TubeControl.xaml
     /// </summary>
-    public partial class FlaskControl : UserControl
+    public partial class TubeControl : UserControl
     {
         //internal TubeControl(MainWindowVM mainWindowVM, Tube tubeItem)
         //{
@@ -32,7 +32,7 @@ namespace WaterSortGame.Views.UserControls
         //    MainWindowVM = mainWindowVM;
         //    TubeItem = tubeItem;
         //}
-        internal FlaskControl(MainWindowVM mainWindowVM, int tubeId, LiquidColor[] liquidColors)
+        internal TubeControl(MainWindowVM mainWindowVM, int tubeId, LiquidColor[] liquidColors)
         {
             InitializeComponent();
             (this.Content as FrameworkElement).DataContext = this;
@@ -51,7 +51,7 @@ namespace WaterSortGame.Views.UserControls
 
         // Using a DependencyProperty as the backing store for TubeItem.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LiquidColorsProperty =
-            DependencyProperty.Register("LiquidColors", typeof(LiquidColor[]), typeof(FlaskControl));
+            DependencyProperty.Register("LiquidColors", typeof(LiquidColor[]), typeof(TubeControl));
 
 
 

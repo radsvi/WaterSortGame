@@ -17,7 +17,7 @@ namespace WaterSortGame.Models
         public DateTime Date { get; set; }
         public string Note { get; set; }
         public LiquidColor[,] GameGrid { get; set; }
-        public List<Flask> GameGridDisplayList { get; set; }
+        public List<Tube> GameGridDisplayList { get; set; }
         private bool markedForDeletion;
         public bool MarkedForDeletion
         {

@@ -34,11 +34,11 @@ namespace WaterSortGame.Converters
             //}
             if (values.Length > 0)
             {
-                FlaskReference obj = new FlaskReference
+                TubeReference obj = new TubeReference
                 {
-                    FlaskControl = (FlaskControl)values[0],
+                    TubeControl = (TubeControl)values[0],
                     ButtonElement = (Button)values[1],
-                    FlaskId = ((FlaskControl)values[0]).TubeId,
+                    TubeId = ((TubeControl)values[0]).TubeId,
                     GridElement = (Grid)values[2]
                 };
 

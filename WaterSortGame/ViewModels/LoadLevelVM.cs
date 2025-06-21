@@ -245,13 +245,13 @@ namespace WaterSortGame.ViewModels
         //    }
         //    return list;
         //}
-        private List<Flask> ArrayToTubeList(LiquidColor[,] array)
+        private List<Tube> ArrayToTubeList(LiquidColor[,] array)
         {
-            List<Flask> list = new List<Flask>();
+            List<Tube> list = new List<Tube>();
 
             for (int x = 0; x < array.GetLength(0); x++)
             {
-                var row = new Flask(array[x, 0], array[x, 1], array[x, 2], array[x, 3]);
+                var row = new Tube(array[x, 0], array[x, 1], array[x, 2], array[x, 3]);
 
                 list.Add(row);
             }
