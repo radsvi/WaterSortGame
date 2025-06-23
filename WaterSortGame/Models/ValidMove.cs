@@ -6,19 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using WaterSortGame.ViewModels;
+using WaterSortGame.Enums;
 
 namespace WaterSortGame.Models
 {
-    internal enum StringFormat
-    {
-        Names,
-        Numbers
-    }
-    internal enum MoveType
-    {
-        Standard,
-        NeverWrong
-    }
     internal class ValidMove // prejmenovat na SolvingStep
     {
         public ValidMove(PositionPointer source, PositionPointer target, LiquidColor[,] gameState, bool isTargetSingleColor = false, MoveType moveType = MoveType.Standard)

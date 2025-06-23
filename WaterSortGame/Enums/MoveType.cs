@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WaterSortGame.Models
+namespace WaterSortGame.Enums
 {
-    internal enum VerticalAnimation
+    internal enum MoveType
     {
-        Raise,
-        Lower
+        Standard,
+        NeverWrong
     }
 }

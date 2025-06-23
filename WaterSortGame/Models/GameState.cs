@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using WaterSortGame.ViewModels;
+using WaterSortGame.Enums;
 using ColN = WaterSortGame.Models.LiquidColorName; // creating alias so that I dont have to have long names in GenerateDebugLevel();
 
 namespace WaterSortGame.Models

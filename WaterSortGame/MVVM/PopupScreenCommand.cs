@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WaterSortGame.Models;
 using WaterSortGame.ViewModels;
+using WaterSortGame.Enums;
 
 namespace WaterSortGame.MVVM
 {

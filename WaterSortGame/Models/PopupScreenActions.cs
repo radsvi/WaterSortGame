@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WaterSortGame.ViewModels;
+using WaterSortGame.Enums;
 
 namespace WaterSortGame.Models
 {

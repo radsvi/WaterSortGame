@@ -9,6 +9,7 @@
         xmlns:views="clr-namespace:WaterSortGame.Views"
         xmlns:viewmodels="clr-namespace:WaterSortGame.ViewModels"
         xmlns:usercontrols="clr-namespace:WaterSortGame.Views.UserControls"
+        xmlns:enums="clr-namespace:WaterSortGame.Enums"
         x:Name="window"
         mc:Ignorable="d"
         Title="MainWindow"
@@ -90,8 +91,8 @@
 
                 <StackPanel Style="{StaticResource NavigationButtonsPrimary}">
                     <!--<TextBlock Text="{Binding GameStates.Count}" Foreground="White" />-->
-                    <Button Content="{Binding AppSettings.NewLevelButtonText}" d:Content="New level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.NewLevel}"/>
-                    <Button Content="Restart level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.RestartLevel}"/>
+                    <Button Content="{Binding AppSettings.NewLevelButtonText}" d:Content="New level" Command="{Binding PopupWindow}" CommandParameter="{x:Static enums:PopupParams.NewLevel}"/>
+                    <Button Content="Restart level" Command="{Binding PopupWindow}" CommandParameter="{x:Static enums:PopupParams.RestartLevel}"/>
                     <Button Content="Options" Command="{Binding OpenOptionsWindowCommand}"/>
                     <Button Command="{Binding CloseWindowCommand}" Style="{StaticResource CloseButton}">
                         <TextBlock Text="×" FontSize="25" Margin="0,-6,0,0"/>
@@ -117,8 +118,8 @@
                 </ScrollViewer>
 
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsBottomLeft}">
-                    <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.LoadLevel}"/>
-                    <Button Content="Save level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.SaveLevel}"/>
+                    <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static enums:PopupParams.LoadLevel}"/>
+                    <Button Content="Save level" Command="{Binding PopupWindow}" CommandParameter="{x:Static enums:PopupParams.SaveLevel}"/>
                     <StackPanel Orientation="Horizontal" Style="{StaticResource NavigationButtonsAdvanced}"
                                 Visibility="{Binding AppSettings.AdvancedOptionsVisible, Converter={StaticResource BoolToVisConverter}}">
                         <Button Content="Get solution" Command="{Binding AutoSolveCommand}" />

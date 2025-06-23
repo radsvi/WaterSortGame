@@ -14,6 +14,7 @@ using System.Windows.Documents;
 using System.Xml.Linq;
 using WaterSortGame.ViewModels;
 using WaterSortGame.Views.UserControls;
+using WaterSortGame.Enums;
 
 namespace WaterSortGame.Models
 {
@@ -866,9 +867,6 @@ namespace WaterSortGame.Models
         //}
         public void StepThroughMethod()
         {
-            if (CurrentSolutionStep == 0)
-                return;
-
             MakeAMove(CompleteSolution[--CurrentSolutionStep]);
         }
         #endregion

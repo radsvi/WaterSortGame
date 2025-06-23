@@ -13,6 +13,7 @@ using WaterSortGame.Models;
 using WaterSortGame.MVVM;
 using WaterSortGame.Properties;
 using WaterSortGame.Views.UserControls;
+using WaterSortGame.Enums;
 
 namespace WaterSortGame.ViewModels
 {
