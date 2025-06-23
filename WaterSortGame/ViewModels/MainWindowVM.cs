@@ -666,7 +666,7 @@ namespace WaterSortGame.ViewModels
             container.Children.Add(gridElement);
 
             Grid.SetRow(gridElement, GameState.Layers - 1 - currentTubeReference.TargetEmptyRow - currentTubeReference.NumberOfRepeatingLiquids + 1);
-            Grid.SetRowSpan(gridElement, currentTubeReference.NumberOfRepeatingLiquids);
+            Grid.SetRowSpan(gridElement, currentTubeReference.NumberOfRepeatingLiquids > 0 ? currentTubeReference.NumberOfRepeatingLiquids : 1); // I need to have this here in case of AutoSolve "skips" one step through PickNeverincorectMovesFirst()
 
             //Canvas.SetZIndex(borderElement, 3);
             //Grid.SetZIndex(borderElement, 4);
