@@ -777,7 +777,7 @@ namespace WaterSortGame.ViewModels
         //    //TubeCount = (int)Math.Ceiling((decimal)Tubes.Count / 2);
         //    TubeCount = Tubes.Count;
         //}
-        public RelayCommand AutoSolveCommand => new RelayCommand(execute => AutoSolve.CalculateNextStep(GameState.gameGrid));
+        public RelayCommand AutoSolveCommand => new RelayCommand(execute => AutoSolve.CalculateNextStep(GameState.gameGrid), canExecute => AutoSolve.CompleteSolution.Count == 0);
         public RelayCommand StepThroughCommand => new RelayCommand(execute => AutoSolve.StepThrough(), canExecute => AutoSolve.CompleteSolution.Count > 0);
         #endregion
     }

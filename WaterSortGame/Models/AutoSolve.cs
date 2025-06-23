@@ -36,7 +36,7 @@ namespace WaterSortGame.Models
                 if (value != completeSolution)
                 {
                     completeSolution = value;
-                    OnPropertyChanged();
+                    
                 }
             }
         }
@@ -424,7 +424,7 @@ namespace WaterSortGame.Models
                 CompleteSolution.Add(treeNode.Data);
                 treeNode = treeNode.Parent;
             }
-            CurrentSolutionStep = completeSolution.Count();
+            CurrentSolutionStep = CompleteSolution.Count;
         }
         /// <summary>
         /// basically checks if there are any valid moves. If there is at least one children and it is unvisited, it returns true.
@@ -832,14 +832,7 @@ namespace WaterSortGame.Models
         }
 
         #region Controls
-        private async Task WaitForButtonPress()
-        {
-            while (ResumeRequest is false)
-            {
-                await Task.Delay(100);
-            }
-            ResumeRequest = false;
-        }
+
         public void CalculateNextStep(LiquidColor[,] gameState)
         {
             //Notification.Show("Game grid locked while automatic solution is engaged",MessageType.Information, 10000);
@@ -852,17 +845,31 @@ namespace WaterSortGame.Models
                 return;
             }
         }
-
-        public async void StepThroughMethod()
+        private async Task WaitForButtonPress()
         {
-            ResumeRequest = false;
-            StepThrough = () => ResumeRequest = true;
-            for (CurrentSolutionStep = CompleteSolution.Count - 1; CurrentSolutionStep >= 0; CurrentSolutionStep--)
+            while (ResumeRequest is false)
             {
-                MakeAMove(CompleteSolution[CurrentSolutionStep]);
-                //CompleteSolution.Remove(CompleteSolution[CurrentSolutionStep]);
-                await WaitForButtonPress();
+                await Task.Delay(100);
             }
+            ResumeRequest = false;
+        }
+        //public async void StepThroughMethod()
+        //{
+        //    ResumeRequest = false;
+        //    StepThrough = () => ResumeRequest = true;
+        //    for (CurrentSolutionStep = CompleteSolution.Count - 1; CurrentSolutionStep >= 0; CurrentSolutionStep--)
+        //    {
+        //        MakeAMove(CompleteSolution[CurrentSolutionStep]);
+        //        //CompleteSolution.Remove(CompleteSolution[CurrentSolutionStep]);
+        //        await WaitForButtonPress();
+        //    }
+        //}
+        public void StepThroughMethod()
+        {
+            if (CurrentSolutionStep == 0)
+                CurrentSolutionStep = CompleteSolution.Count - 1;
+
+            MakeAMove(CompleteSolution[--CurrentSolutionStep]);
         }
         #endregion
         #region debug
