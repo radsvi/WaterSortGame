@@ -86,12 +86,12 @@ namespace WaterSortGame.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool DeveloperOptionsVisible {
+        public bool AdvancedOptionsVisible {
             get {
-                return ((bool)(this["DeveloperOptionsVisible"]));
+                return ((bool)(this["AdvancedOptionsVisible"]));
             }
             set {
-                this["DeveloperOptionsVisible"] = value;
+                this["AdvancedOptionsVisible"] = value;
             }
         }
         

@@ -309,6 +309,7 @@ namespace WaterSortGame.ViewModels
         public RelayCommand TestMethodCommand => new RelayCommand(execute => TestMethod());
         private void TestMethod()
         {
+#if DEBUG
             TreeNode<ValidMove> node = new TreeNode<ValidMove>(new ValidMove(null));
             var startingNode = node;
             TreeNode<ValidMove> nextNode;
@@ -350,6 +351,7 @@ namespace WaterSortGame.ViewModels
                 node = node.NextSibling;
             }
             Notification.Show("Priorities list: " + displayText, 10000);
+#endif
         }
 
         #endregion
@@ -478,7 +480,7 @@ namespace WaterSortGame.ViewModels
         {
             if (GameState.IsLevelCompleted())
             {
-                if (AppSettings.DeveloperOptionsVisible == false)
+                if (AppSettings.AdvancedOptionsVisible == false)
                     UIEnabled = false;
                 PopupWindow.Execute(PopupParams.LevelComplete);
             }

@@ -121,8 +121,8 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        private bool developerOptionsVisible = Settings.Default.DeveloperOptionsVisible;
-        public bool DeveloperOptionsVisible
+        private bool developerOptionsVisible = Settings.Default.AdvancedOptionsVisible;
+        public bool AdvancedOptionsVisible
         {
             get { return developerOptionsVisible; }
             set
@@ -130,7 +130,7 @@ namespace WaterSortGame.Models
                 if (value != developerOptionsVisible)
                 {
                     developerOptionsVisible = value;
-                    Settings.Default.DeveloperOptionsVisible = developerOptionsVisible;
+                    Settings.Default.AdvancedOptionsVisible = developerOptionsVisible;
                     Settings.Default.Save();
                     OnPropertyChanged();
                 }
