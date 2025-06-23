@@ -37,7 +37,7 @@ namespace WaterSortGame.Models
             }
         }
         //public int NumberOfTubes { get; private set; }
-        public int NumberOfLayers { get; } = 4;
+        public const int Layers = 4;
         public LiquidColor[,] gameGrid;
         public LiquidColor this[int tubes, int layers]
         {
@@ -141,7 +141,7 @@ namespace WaterSortGame.Models
             //Tubes?.Clear();
             
             int i = 0;
-            gameGrid = new LiquidColor[20, NumberOfLayers];
+            gameGrid = new LiquidColor[20, Layers];
 
             //AddTube(i++, new int[] { 1, 1, 4, 4 });
             //AddTube(i++, new int[] { 8, 8, 1, 1 });
@@ -343,20 +343,20 @@ namespace WaterSortGame.Models
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Gray, LiquidColorName.Lime, LiquidColorName.Turquoise, LiquidColorName.Yellow });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Brown, LiquidColorName.Scarlet, LiquidColorName.Blue, LiquidColorName.Blue });
 
-            // Dalsi random level kterej zaina s 3 stejnejma barvama nahore (114 states, 50 steps, 1.94sec - s tim checkovanim na zacatku):
-            // (175 states, 45 steps, 2.62sec - bez tim checkovanim na zacatku):
-            AddTube(i++, new ColN[] { ColN.Indigo, ColN.Blue, ColN.Turquoise, ColN.Lime });
-            AddTube(i++, new ColN[] { ColN.Scarlet, ColN.Indigo, ColN.Gray, ColN.Scarlet });
-            AddTube(i++, new ColN[] { ColN.Purple, ColN.Brown, ColN.Green, ColN.Orange });
-            AddTube(i++, new ColN[] { ColN.Purple, ColN.Red, ColN.Blue, ColN.Orange });
-            AddTube(i++, new ColN[] { ColN.Yellow, ColN.Lime, ColN.Blue, ColN.Purple });
-            AddTube(i++, new ColN[] { ColN.Turquoise, ColN.Scarlet, ColN.Blue, ColN.Green });
-            AddTube(i++, new ColN[] { ColN.Gray, ColN.Yellow, ColN.Yellow, ColN.Green });
-            AddTube(i++, new ColN[] { ColN.Yellow, ColN.Turquoise, ColN.Brown, ColN.Orange });
-            AddTube(i++, new ColN[] { ColN.Lime, ColN.Red, ColN.Indigo, ColN.Gray });
-            AddTube(i++, new ColN[] { ColN.Green, ColN.Red, ColN.Orange, ColN.Red });
-            AddTube(i++, new ColN[] { ColN.Brown, ColN.Brown, ColN.Scarlet, ColN.Indigo });
-            AddTube(i++, new ColN[] { ColN.Lime, ColN.Gray, ColN.Turquoise, ColN.Purple });
+            //// Dalsi random level kterej zaina s 3 stejnejma barvama nahore (114 states, 50 steps, 1.94sec - s tim checkovanim na zacatku):
+            //// (175 states, 45 steps, 2.62sec - bez tim checkovanim na zacatku):
+            //AddTube(i++, new ColN[] { ColN.Indigo, ColN.Blue, ColN.Turquoise, ColN.Lime });
+            //AddTube(i++, new ColN[] { ColN.Scarlet, ColN.Indigo, ColN.Gray, ColN.Scarlet });
+            //AddTube(i++, new ColN[] { ColN.Purple, ColN.Brown, ColN.Green, ColN.Orange });
+            //AddTube(i++, new ColN[] { ColN.Purple, ColN.Red, ColN.Blue, ColN.Orange });
+            //AddTube(i++, new ColN[] { ColN.Yellow, ColN.Lime, ColN.Blue, ColN.Purple });
+            //AddTube(i++, new ColN[] { ColN.Turquoise, ColN.Scarlet, ColN.Blue, ColN.Green });
+            //AddTube(i++, new ColN[] { ColN.Gray, ColN.Yellow, ColN.Yellow, ColN.Green });
+            //AddTube(i++, new ColN[] { ColN.Yellow, ColN.Turquoise, ColN.Brown, ColN.Orange });
+            //AddTube(i++, new ColN[] { ColN.Lime, ColN.Red, ColN.Indigo, ColN.Gray });
+            //AddTube(i++, new ColN[] { ColN.Green, ColN.Red, ColN.Orange, ColN.Red });
+            //AddTube(i++, new ColN[] { ColN.Brown, ColN.Brown, ColN.Scarlet, ColN.Indigo });
+            //AddTube(i++, new ColN[] { ColN.Lime, ColN.Gray, ColN.Turquoise, ColN.Purple });
 
             ////AddTube(i++, new int[] { 1,1,1 });
             //AddTube(i++, new int[] { 3, 4, 5, 6 });
@@ -367,8 +367,13 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 3, 4, 5, 6 });
             //AddTube(i++, new int[] { 1, 1, 1 });
 
+            AddTube(i++, new LiquidColorName[] { ColN.Pink, ColN.Pink, ColN.Olive, ColN.Gray });
+            AddTube(i++, new LiquidColorName[] { ColN.Gray, ColN.Red, ColN.Pink, ColN.Red });
+            AddTube(i++, new LiquidColorName[] { ColN.Olive, ColN.Red, ColN.Gray, ColN.Olive });
+            AddTube(i++, new LiquidColorName[] { ColN.Pink, ColN.Red, ColN.Gray, ColN.Olive });
 
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName. });
+
+            //AddTube(i++, new LiquidColorName[] { ColN. });
             //AddTube(i++, new LiquidColorName[] { });
 
             // check if puzzle has correct number for each color:
@@ -462,7 +467,7 @@ namespace WaterSortGame.Models
                 appSettings.NumberOfColorsToGenerate = rnd.Next(3, LiquidColor.ColorKeys.Count - 1);
             }
 
-            gameGrid = new LiquidColor[appSettings.NumberOfColorsToGenerate + 2, NumberOfLayers];
+            gameGrid = new LiquidColor[appSettings.NumberOfColorsToGenerate + 2, Layers];
             //Tube.ResetCounter();
             SetFreshGameState();
 
@@ -488,7 +493,7 @@ namespace WaterSortGame.Models
             // add colors randomly to the grid
             for (int x = 0; x < appSettings.NumberOfColorsToGenerate; x++)
             {
-                for (int y = 0; y < NumberOfLayers; y++)
+                for (int y = 0; y < Layers; y++)
                 {
                     //var maxNumber = colorsList.Count > 0 ? colorsList.Count - 1 : 0;
                     //int colorNumber = rnd.Next(0, maxNumber);

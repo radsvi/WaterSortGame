@@ -9,9 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Xml.Linq;
 using WaterSortGame.ViewModels;
+using WaterSortGame.Views.UserControls;
 
 namespace WaterSortGame.Models
 {
@@ -534,7 +536,7 @@ namespace WaterSortGame.Models
 
             return resultNode;
         }
-        private void MakeAMove(ValidMove node)
+        private void MakeAMove(ValidMove move)
         {
             //Debug.WriteLine($"# [{node.Source.X},{node.Source.Y}] => [{node.Target.X},{node.Target.Y}] {{{node.Source.ColorName}}} {{HowMany {node.Source.NumberOfRepeatingLiquids}}}");
             
@@ -544,9 +546,16 @@ namespace WaterSortGame.Models
             //SolvingStepsOLD.Add(upcomingStep);
 
             //previousGameState = node.Data.GameState; // tohle je gamestate kterej uchovavam jen uvnitr autosolvu
-            mainWindowVM.GameState.SetGameState(node.GameState);
-
+            mainWindowVM.GameState.SetGameState(move.GameState);
+            var currentTubeReference = new TubeReference(
+                move.Target.X,
+                move.GameState[move.Target.X, move.Target.Y],
+                move.Target.Y,
+                move.Source.NumberOfRepeatingLiquids
+            );
             mainWindowVM.DrawTubes();
+
+            mainWindowVM.RippleSurfaceAnimation(currentTubeReference);
             mainWindowVM.OnChangingGameState();
         }
         /// <summary>

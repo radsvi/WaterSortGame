@@ -119,7 +119,7 @@
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}">
                     <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.LoadLevel}"/>
                     <Button Content="Save level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.SaveLevel}"/>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding AppSettings.DeveloperOptionsVisible, Converter={StaticResource BoolToVisConverter}}">
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding AppSettings.AdvancedOptionsVisible, Converter={StaticResource BoolToVisConverter}}">
                         <Button Content="Get solution" Command="{Binding AutoSolveCommand}" />
                         <Button Command="{Binding StepThroughCommand}">
                             <StackPanel Orientation="Horizontal">

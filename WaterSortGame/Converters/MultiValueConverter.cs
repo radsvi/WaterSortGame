@@ -35,12 +35,12 @@ namespace WaterSortGame.Converters
             if (values.Length > 0)
             {
                 TubeReference obj = new TubeReference
-                {
-                    TubeControl = (TubeControl)values[0],
-                    ButtonElement = (Button)values[1],
-                    TubeId = ((TubeControl)values[0]).TubeId,
-                    GridElement = (Grid)values[2]
-                };
+                (
+                    (TubeControl)values[0],
+                    (Button)values[1],
+                    ((TubeControl)values[0]).TubeId,
+                    (Grid)values[2]
+                );
 
 
                 return obj;

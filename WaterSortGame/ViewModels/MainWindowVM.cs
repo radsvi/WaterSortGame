@@ -395,7 +395,8 @@ namespace WaterSortGame.ViewModels
             if (successAtLeastOnce > 0)
             {
                 DrawTubes();
-                RippleSurfaceAnimation(currentTubeReference, successAtLeastOnce);
+                currentTubeReference.NumberOfRepeatingLiquids = successAtLeastOnce;
+                RippleSurfaceAnimation(currentTubeReference);
                 OnChangingGameState();
             }
             if (successAtLeastOnce == 0 && AppSettings.UnselectTubeEvenOnIllegalMove == true)
@@ -412,7 +413,7 @@ namespace WaterSortGame.ViewModels
         }
         private void GetTopmostLiquid(TubeReference sourceTube) // selects topmost liquid in a sourceTube
         {
-            for (int i = GameState.NumberOfLayers - 1; i >= 0; i--)
+            for (int i = GameState.Layers - 1; i >= 0; i--)
             {
                 if (GameState[sourceTube.TubeId, i] is not null)
                 {
@@ -429,7 +430,7 @@ namespace WaterSortGame.ViewModels
         private bool AddLiquidToTargetTube(TubeReference currentTubeReference)
         {
             int firstEmptyLayer = -1;
-            for (int y = 0; y < GameState.NumberOfLayers; y++)
+            for (int y = 0; y < GameState.Layers; y++)
             {
                 if (GameState[currentTubeReference.TubeId, y] == null)
                 {
@@ -457,7 +458,7 @@ namespace WaterSortGame.ViewModels
         }
         private void RemoveColorFromSourceTube()
         {
-            for (int y = GameState.NumberOfLayers - 1; y >= 0; y--)
+            for (int y = GameState.Layers - 1; y >= 0; y--)
             {
                 if (GameState[SourceTube.TubeId, y] is not null)
                 {
@@ -498,8 +499,8 @@ namespace WaterSortGame.ViewModels
             //for (int x = 0; x < GameState.NumberOfTubes; x++)
             for (int x = 0; x < GameState.GetLength(0); x++)
             {
-                LiquidColor[] liquidColorsArray = new LiquidColor[GameState.NumberOfLayers];
-                for (int y = 0; y < GameState.NumberOfLayers; y++)
+                LiquidColor[] liquidColorsArray = new LiquidColor[GameState.Layers];
+                for (int y = 0; y < GameState.Layers; y++)
                 {
                     liquidColorsArray[y] = GameState[x, y];
                 }
@@ -598,7 +599,7 @@ namespace WaterSortGame.ViewModels
         }
         private int GetFirstEmptyLayer(TubeReference lastClickedTube)
         {
-            for (int y = 0; y < GameState.NumberOfLayers; y++)
+            for (int y = 0; y < GameState.Layers; y++)
             {
                 if (GameState[lastClickedTube.TubeId, y] is null)
                 {
@@ -607,7 +608,7 @@ namespace WaterSortGame.ViewModels
             }
             throw new Exception("This tube should always have empty space.");
         }
-        private (ImageBrush, Grid) CreateVerticalTubeAnimationBackground(TubeReference currentTubeReference, int numberOfLiquids)
+        private (ImageBrush, Grid) CreateVerticalTubeAnimationBackground(TubeReference currentTubeReference)
         {
             Grid gridElement = new Grid();
 
@@ -648,7 +649,7 @@ namespace WaterSortGame.ViewModels
             tileSizeRectangle.Margin = new Thickness(0, -1, 0, 0);
             tileSizeRectangle.Width = 50;
 
-            tileSizeRectangle.Height = 52 * numberOfLiquids;
+            tileSizeRectangle.Height = 52 * currentTubeReference.NumberOfRepeatingLiquids;
 
             tileSizeRectangle.Fill = brush;
 
@@ -656,23 +657,23 @@ namespace WaterSortGame.ViewModels
 
             return (brush, gridElement);
         }
-        private void RippleSurfaceAnimation(TubeReference currentTubeReference, int numberOfLiquids)
+        internal void RippleSurfaceAnimation(TubeReference currentTubeReference)
         {
             TubeControl tubeControl = ContainerForTubes.Children[currentTubeReference.TubeId] as TubeControl;
 
             // Getting reference to the main grid that contains individual liquids in a tube.
             Grid container = (GetDescendantByTypeAndName(tubeControl, typeof(Grid), "TubeGrid")) as Grid;
 
-            (var brush, var gridElement) = CreateVerticalTubeAnimationBackground(currentTubeReference, numberOfLiquids);
+            (var brush, var gridElement) = CreateVerticalTubeAnimationBackground(currentTubeReference);
             container.Children.Add(gridElement);
 
-            Grid.SetRow(gridElement, 3 - currentTubeReference.TargetEmptyRow);
-            Grid.SetRowSpan(gridElement, numberOfLiquids);
+            Grid.SetRow(gridElement, GameState.Layers - 1 - currentTubeReference.TargetEmptyRow - currentTubeReference.NumberOfRepeatingLiquids + 1);
+            Grid.SetRowSpan(gridElement, currentTubeReference.NumberOfRepeatingLiquids);
 
             //Canvas.SetZIndex(borderElement, 3);
             //Grid.SetZIndex(borderElement, 4);
 
-            StartAnimatingSurface(brush, container, gridElement, numberOfLiquids);
+            StartAnimatingSurface(brush, container, gridElement, currentTubeReference.NumberOfRepeatingLiquids);
         }
         private void StartAnimatingSurface(ImageBrush brush, Grid container, Grid gridElement, int numberOfLiquids)
         {
