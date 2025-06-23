@@ -832,6 +832,14 @@ namespace WaterSortGame.Models
         }
 
         #region Controls
+        private async Task WaitForButtonPress()
+        {
+            while (ResumeRequest is false)
+            {
+                await Task.Delay(100);
+            }
+            ResumeRequest = false;
+        }
         public void CalculateNextStep(LiquidColor[,] gameState)
         {
             //Notification.Show("Game grid locked while automatic solution is engaged",MessageType.Information, 10000);
@@ -844,37 +852,17 @@ namespace WaterSortGame.Models
                 return;
             }
         }
-        private async Task WaitForButtonPress()
-        {
-            while (ResumeRequest is false)
-            {
-                await Task.Delay(100);
-            }
-            ResumeRequest = false;
-        }
-        //public async void StepThroughMethod()
-        //{
-        //    ResumeRequest = false;
-        //    StepThrough = () => ResumeRequest = true;
-        //    for (CurrentSolutionStep = CompleteSolution.Count - 1; CurrentSolutionStep >= 0; CurrentSolutionStep--)
-        //    {
-        //        MakeAMove(CompleteSolution[CurrentSolutionStep]);
-        //        //CompleteSolution.Remove(CompleteSolution[CurrentSolutionStep]);
-        //        await WaitForButtonPress();
-        //    }
-        //}
-        public void StepThroughMethod()
-        {
-            if (CurrentSolutionStep == 0)
-                CurrentSolutionStep = CompleteSolution.Count - 1;
 
-            MakeAMove(CompleteSolution[--CurrentSolutionStep]);
-        }
-        internal void Reset()
+        public async void StepThroughMethod()
         {
-            CompleteSolution?.Clear();
-            CurrentSolutionStep = 0;
-            Iterations = 0;
+            ResumeRequest = false;
+            StepThrough = () => ResumeRequest = true;
+            for (CurrentSolutionStep = CompleteSolution.Count - 1; CurrentSolutionStep >= 0; CurrentSolutionStep--)
+            {
+                MakeAMove(CompleteSolution[CurrentSolutionStep]);
+                //CompleteSolution.Remove(CompleteSolution[CurrentSolutionStep]);
+                await WaitForButtonPress();
+            }
         }
         #endregion
         #region debug
