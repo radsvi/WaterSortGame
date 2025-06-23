@@ -18,7 +18,6 @@ namespace WaterSortGame.Models
         MainWindowVM mainWindowVM;
         AppSettings appSettings;
         Notification notification;
-        AutoSolve autoSolve;
 
         private string readableGameState;
         public string ReadableGameState
@@ -107,7 +106,6 @@ namespace WaterSortGame.Models
             this.mainWindowVM = mainWindowVM;
             appSettings = this.mainWindowVM.AppSettings;
             notification = mainWindowVM.Notification;
-            autoSolve = mainWindowVM.AutoSolve;
 
             //if (Tubes.Count == 0)
             //{
@@ -618,8 +616,8 @@ namespace WaterSortGame.Models
 
             SavedGameStates.Remove(lastGameStatus);
 
-            //autoSolve.CurrentSolutionStep++;
-            mainWindowVM.AutoSolve.CurrentSolutionStep++;
+            if (mainWindowVM.AutoSolve.CompleteSolution.Count > 0)
+                mainWindowVM.AutoSolve.CurrentSolutionStep++;
 
             mainWindowVM.DrawTubes();
         }
