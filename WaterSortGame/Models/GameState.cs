@@ -99,7 +99,6 @@ namespace WaterSortGame.Models
             }
         }
         public LiquidColor[,] LastGameState { get; set; }
-
         public GameState() { }
         public GameState(MainWindowVM mainWindowVM)
         {

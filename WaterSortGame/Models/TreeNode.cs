@@ -11,12 +11,12 @@ namespace WaterSortGame.Models
     internal class TreeNode<T> where T : ValidMove, new() // temporary limitation. change later..
     {
 
-        public T Data { get; private protected set; }
+        public T Data { get; protected set; }
         //public T Data { get; set; }
-        public TreeNode<T>? Parent { get; private protected set; }
-        public TreeNode<T>? FirstChild { get; private protected set; }
-        public TreeNode<T>? NextSibling { get; private protected set; }
-        private protected TreeNode()
+        public TreeNode<T>? Parent { get; protected set; }
+        public TreeNode<T>? FirstChild { get; protected set; }
+        public TreeNode<T>? NextSibling { get; protected set; }
+        protected TreeNode()
         {
             Data = new T();
         }

@@ -23,20 +23,14 @@ namespace WaterSortGame.Models
             ColorName = colorName;
             NumberOfRepeatingLiquids = numberOfRepeatingLiquids;
         }
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int X { get; private set; }
+        public int Y { get; private set; }
         public LiquidColorName? ColorName { get; set; }
         public bool? AllIdenticalLiquids { get; set; } // true if all liquids in one tube are the same color
         public int NumberOfRepeatingLiquids { get; set; } = 1;
     }
     internal class NullPositionPointer : PositionPointer
     {
-        public NullPositionPointer() : base()
-        {
-            X = -1;
-            Y = -1;
-            ColorName = LiquidColorName.Blank;
-            NumberOfRepeatingLiquids = -1;
-        }
+        public NullPositionPointer() : base(LiquidColorName.Blank, -1, -1, -1) {}
     }
 }

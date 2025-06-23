@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+//using System.Text.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Xml.Linq;
@@ -13,11 +14,11 @@ namespace WaterSortGame.Models
 {
     class StoredLevel : ViewModelBase
     {
-        public int NumberOfColors { get; set; }
-        public DateTime Date { get; set; }
-        public string Note { get; set; }
-        public LiquidColor[,] GameGrid { get; set; }
-        public List<Tube> GameGridDisplayList { get; set; }
+        [JsonProperty] public int NumberOfColors { get; private set; }
+        [JsonProperty] public DateTime Date { get; private set; }
+        [JsonProperty] public string Note { get; private set; }
+        [JsonProperty] public LiquidColor[,] GameGrid { get; private set; }
+        public List<Tube> GameGridDisplayList { get; private set; } = new List<Tube>();
         private bool markedForDeletion;
         public bool MarkedForDeletion
         {
@@ -31,18 +32,6 @@ namespace WaterSortGame.Models
                 }
             }
         }
-        public string GetMarkedStatus()
-        {
-            if (markedForDeletion == true)
-            {
-                return "marked";
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         [JsonConstructor]
         public StoredLevel(LiquidColor[,] gameGrid, string noteForSavedLevel)
         {
@@ -70,6 +59,18 @@ namespace WaterSortGame.Models
                     }
                 }
             }
+        }
+        public void GenerateArrayToTubeList()
+        {
+            //List<Tube> list = new List<Tube>();
+            GameGridDisplayList?.Clear();
+            for (int x = 0; x < GameGrid.GetLength(0); x++)
+            {
+                var row = new Tube(GameGrid[x, 0], GameGrid[x, 1], GameGrid[x, 2], GameGrid[x, 3]);
+
+                GameGridDisplayList!.Add(row);
+            }
+            //return list;
         }
         //public StoredLevel(int?[,] gameGridInt, string noteForSavedLevel)
         //{

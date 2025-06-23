@@ -119,6 +119,8 @@ namespace WaterSortGame.ViewModels
 
             FillImportBoxFromClipboard();
 
+            if (LoadLevelList is null)
+                throw new Exception("LoadLevelList is null");
             LoadLevelList?.Clear();
             
             ObservableCollection<StoredLevel>? deserializedList;
@@ -134,8 +136,8 @@ namespace WaterSortGame.ViewModels
             if (deserializedList is null) return;
             foreach (var item in deserializedList)
             {
-                item.GameGridDisplayList = ArrayToTubeList(item.GameGrid);
-                LoadLevelList.Add(item);
+                item.GenerateArrayToTubeList();
+                LoadLevelList!.Add(item);
             }
 
             //OnLoadLevelListChanged?.Invoke(this, EventArgs.Empty);
@@ -245,18 +247,18 @@ namespace WaterSortGame.ViewModels
         //    }
         //    return list;
         //}
-        private List<Tube> ArrayToTubeList(LiquidColor[,] array)
-        {
-            List<Tube> list = new List<Tube>();
+        //private List<Tube> ArrayToTubeList(LiquidColor[,] array)
+        //{
+        //    List<Tube> list = new List<Tube>();
 
-            for (int x = 0; x < array.GetLength(0); x++)
-            {
-                var row = new Tube(array[x, 0], array[x, 1], array[x, 2], array[x, 3]);
+        //    for (int x = 0; x < array.GetLength(0); x++)
+        //    {
+        //        var row = new Tube(array[x, 0], array[x, 1], array[x, 2], array[x, 3]);
 
-                list.Add(row);
-            }
-            return list;
-        }
+        //        list.Add(row);
+        //    }
+        //    return list;
+        //}
         //private LiquidColorNew[] AddTube(int tubeNumber, int[] layers)
         //{
         //    var returnArray = new LiquidColorNew[layers.Length];

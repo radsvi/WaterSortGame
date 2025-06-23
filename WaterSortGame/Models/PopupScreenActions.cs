@@ -16,10 +16,10 @@ namespace WaterSortGame.Models
             OnShowingWindow = onShowingWindow;
             ConfirmationAction = confirmAction;
         }
-        public PopupParams Key { get; set; }
-        public ViewModelBase SelectedViewModel { get; set; }
-        public Action? OnShowingWindow { get; set; }
-        public Action ConfirmationAction { get; set; }
+        public PopupParams Key { get; private set; }
+        public ViewModelBase SelectedViewModel { get; private set; }
+        public Action? OnShowingWindow { get; private set; }
+        public Action ConfirmationAction { get; private set; }
         //private PopupParams key;
         //public PopupParams Key
         //{

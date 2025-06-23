@@ -12,7 +12,7 @@ namespace WaterSortGame.Models
 {
     internal class CollisionDictionary<TKey, TValue> //: IDictionary<TKey, TValue>
     {
-        private Dictionary<TKey, List<TValue>> data = new Dictionary<TKey, List<TValue>>();
+        private Dictionary<TKey, List<TValue>> data = new();
         public bool ContainsKey(TKey key)
         {
             return this.data.ContainsKey(key);

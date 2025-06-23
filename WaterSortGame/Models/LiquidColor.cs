@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,8 +32,8 @@ namespace WaterSortGame.Models
     }
     internal class LiquidColor
     {
-        public LiquidColorName Name { get; set; }
-        public SolidColorBrush Brush { get; set; }
+        [JsonProperty] public LiquidColorName Name { get; private set; }
+        [JsonProperty] public SolidColorBrush Brush { get; private set; }
         //public static List<LiquidColorNew> ColorKeys { get; } = new List<LiquidColorNew>() {
         //    new LiquidColorNew(LiquidColorName.Blank, new SolidColorBrush(Color.FromRgb(0,0,0))),
         //    new LiquidColorNew(LiquidColorName.Blue, new SolidColorBrush(Color.FromRgb(20,93,239))),
@@ -75,7 +76,7 @@ namespace WaterSortGame.Models
         //    }
         //    return result;
         //}
-        private protected LiquidColor() { }
+        private LiquidColor() { } // used for JSON serialization
         public LiquidColor(int colorId)
         {
             var obj = GetColor((LiquidColorName)colorId);
@@ -88,7 +89,7 @@ namespace WaterSortGame.Models
             Name = obj.Name;
             Brush = obj.Brush;
         }
-        private LiquidColor(LiquidColorName name, SolidColorBrush brush)
+        protected LiquidColor(LiquidColorName name, SolidColorBrush brush)
         {
             Name = name;
             Brush = brush;
@@ -101,13 +102,13 @@ namespace WaterSortGame.Models
         {
             //if ((int)name > 11)
             //    return ColorKeys[LiquidColorName.Blue];
-            
+
             //return ColorKeys.Where(key => key.Name == Name).ToList()[0];
             return ColorKeys[name];
         }
         public LiquidColor Clone()
         {
-            return new LiquidColor { Name = this.Name, Brush = Brush.Clone() };
+            return new LiquidColor(this.Name, Brush.Clone());
         }
         //private static bool OperatorOverload(LiquidColorNew first, LiquidColorNew second)
         //{
@@ -152,10 +153,6 @@ namespace WaterSortGame.Models
     }
     internal class NullLiquidColorNew : LiquidColor
     {
-        public NullLiquidColorNew() : base()
-        {
-            Name = LiquidColorName.Blank;
-            Brush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-        }
+        public NullLiquidColorNew() : base(LiquidColorName.Blank, new SolidColorBrush(Color.FromRgb(0, 0, 0))) { }
     }
 }
