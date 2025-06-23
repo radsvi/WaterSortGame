@@ -147,12 +147,12 @@ namespace WaterSortGame.Models
                 }
                 else
                 {
-                    var topPriorityNode = PickNeverincorectMovesFirst(treeNode, hashedSteps);
-                    if (topPriorityNode.GetType() != typeof(NullTreeNode))
-                    {
-                        treeNode = topPriorityNode;
-                        continue; // vygeneroval jsem dalsi stav, takze zbytek preskakuju
-                    }
+                    //var topPriorityNode = PickNeverincorectMovesFirst(treeNode, hashedSteps);
+                    //if (topPriorityNode.GetType() != typeof(NullTreeNode))
+                    //{
+                    //    treeNode = topPriorityNode;
+                    //    continue; // vygeneroval jsem dalsi stav, takze zbytek preskakuju
+                    //}
 
                     (var movableLiquids, var mostFrequentColors) = GetMovableLiquids(treeNode.Data.GameState);
 
@@ -175,6 +175,7 @@ namespace WaterSortGame.Models
                     //            || treeNode.Parent.Parent is not null && treeNode.Parent.Parent.Data.MoveType == MoveType.NeverWrong && treeNode.Parent.Parent.Parent.Data.StepNumber == -1)))
                     if (treeNode.Data.StepNumber == -1) // i.e. first node
                     {
+                        //mostFrequentColors.OrderDesc();
                         validMoves = OrderList(validMoves, mostFrequentColors);
                         //validMoves = validMoves.OrderByDescending(x => x.Priority).ToList();
                     }
@@ -228,6 +229,7 @@ namespace WaterSortGame.Models
         }
         private List<ValidMove> OrderList(List<ValidMove> validMoves, ColorCount mostFrequentColors)
         {
+            //mostFrequentColors.OrderDesc();
             int priorityNum = 100;
             foreach (var color in mostFrequentColors)
             {
@@ -620,7 +622,7 @@ namespace WaterSortGame.Models
                     break;
                 }
             }
-            colorCount.OrderDesc();
+            //colorCount.OrderDesc();
 
             return (pointer, colorCount);
         }
