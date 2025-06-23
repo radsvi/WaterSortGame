@@ -58,7 +58,7 @@ namespace WaterSortGame.ViewModels
         public int LoadLevelScreenHeight
         {
             get { return loadLevelScreenHeight; }
-            set
+            private set
             {
                 if (value != loadLevelScreenHeight)
                 {
@@ -91,7 +91,7 @@ namespace WaterSortGame.ViewModels
         public bool LoadLevelScreenScroll
         {
             get { return loadLevelScreenScroll; }
-            set
+            private set
             {
                 if (value != loadLevelScreenScroll)
                 {

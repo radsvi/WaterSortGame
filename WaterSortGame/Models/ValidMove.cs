@@ -61,12 +61,12 @@ namespace WaterSortGame.Models
         public bool IsTargetSingleColor { get; private set; }
         public LiquidColor Liquid { get; private protected set; }
         public float Priority { get; set; } = 0; // higher weight means better move
-        public LiquidColor[,] GameState { get; set; }
+        public LiquidColor[,] GameState { get; protected set; }
         public int SolutionValue { get; set; }
         public int Hash { get; private set; }
         [Obsolete] public string ReadableHash { get; private set; }
         [Obsolete] public string ReadableGameState { get; private set; }
-        public MoveType MoveType { get; set; } = MoveType.Standard;
+        public MoveType MoveType { get; private set; } = MoveType.Standard;
         //public int MaxSolutionValue { get; set; }
 
         //public static bool operator ==(ValidMove first, ValidMove second)
