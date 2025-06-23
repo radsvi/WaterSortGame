@@ -116,10 +116,11 @@
                     </Grid>
                 </ScrollViewer>
 
-                <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsDeveloper}">
+                <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsBottomLeft}">
                     <Button Content="Load level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.LoadLevel}"/>
                     <Button Content="Save level" Command="{Binding PopupWindow}" CommandParameter="{x:Static models:PopupParams.SaveLevel}"/>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding AppSettings.AdvancedOptionsVisible, Converter={StaticResource BoolToVisConverter}}">
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource NavigationButtonsAdvanced}"
+                                Visibility="{Binding AppSettings.AdvancedOptionsVisible, Converter={StaticResource BoolToVisConverter}}">
                         <Button Content="Get solution" Command="{Binding AutoSolveCommand}" />
                         <Button Command="{Binding StepThroughCommand}">
                             <StackPanel Orientation="Horizontal">
@@ -133,9 +134,9 @@
                     
                 </StackPanel>
                 <StackPanel Grid.Row="2" Style="{StaticResource NavigationButtonsSecondary}">
-                    <Button Command="{Binding StepBackCommand}">
+                    <Button Command="{Binding StepBackCommand}" ToolTip="Returns to previous step">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="« Step back ("/>
+                            <TextBlock Text="« Back ("/>
                             <TextBlock Text="{Binding GameState.SavedGameStates.Count}" d:Text="0"/>
                             <TextBlock Text=")"/>
                         </StackPanel>

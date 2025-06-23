@@ -140,61 +140,14 @@ namespace WaterSortGame.Models
             int i = 0;
             gameGrid = new LiquidColor[20, Layers];
 
-            //AddTube(i++, new int[] { 1, 1, 4, 4 });
-            //AddTube(i++, new int[] { 8, 8, 1, 1 });
-            //AddTube(i++, new int[] { 4, 4, 8, 8 });
-            //AddTube(i++, new int[] { 3, 3, 3 });
-            //AddTube(i++, new int[] { 7, 7, 7 });
-            //AddTube(i++, new int[] { 3 });
-            //AddTube(i++, new int[] { 7 });
-
-            //AddTube(i++, new int[] { 1, 1, 4, 4 });
-            //AddTube(i++, new int[] { 8, 8, 1, 1 });
-            //AddTube(i++, new int[] { 4, 4, 8, 8 });
-            //AddTube(i++, new int[] { 3, 3, 3 });
-            //AddTube(i++, new int[] { 7, 7, 7 });
-            //AddTube(i++, new int[] { 3 });
-            //AddTube(i++, new int[] { 7 });
-
-            //AddTube(i++, new int[] { 1, 1, 1, 2 });
-            //AddTube(i++, new int[] {  });
-            //AddTube(i++, new int[] { 2, 2, 2 });
-            //AddTube(i++, new int[] { 1 });
-            //AddTube(i++, new int[] { 4, 4, 4, 4, });
-
-            //AddTube(i++, new int[] { });
-            //AddTube(i++, new int[] { 1 });
-            //AddTube(i++, new int[] { 1,1,1 });
-            //AddTube(i++, new int[] { 3,3,3,3 });
-            //AddTube(i++, new int[] { 4, 4, 4, 4, });
+            // Almost solved:
+            AddTube(i++, new int[] { });
+            AddTube(i++, new int[] { 1, 1, 1, 3 });
+            AddTube(i++, new int[] { 2, 3, 1 });
+            AddTube(i++, new int[] { 2, 2, 2 });
+            AddTube(i++, new int[] { 3, 3 });
 
 
-            //AddTube(i++, new int[] { 1,2,2,3 });
-            //AddTube(i++, new int[] { 4,3,2,1 });
-            //AddTube(i++, new int[] { 1,3,1,4 });
-            //AddTube(i++, new int[] { 2,3,4,4 });
-            //AddTube(i++, new int[] {  });
-            //AddTube(i++, new int[] {  });
-
-            //AddTube(i++, new int[] { 1, 1, 1, 1 });
-            //AddTube(i++, new int[] { 2, 3, 3, 3 });
-            //AddTube(i++, new int[] { });
-            //AddTube(i++, new int[] { 2, 3 });
-            //AddTube(i++, new int[] { 4,4,4,4 });
-            //AddTube(i++, new int[] { 5,5,});
-            //AddTube(i++, new int[] { 6,6,6,6});
-
-            //AddTube(i++, new int[] { });
-            //AddTube(i++, new int[] { 1, 1, 1, 1 });
-            //AddTube(i++, new int[] { 2, 3, 3 });
-            //AddTube(i++, new int[] { 2, 2, 2 });
-            //AddTube(i++, new int[] { 3, 3 });
-
-            //AddTube(i++, new int[] { 1,2,3,2 });
-            //AddTube(i++, new int[] { 1,1,2,4 });
-            //AddTube(i++, new int[] { 5,2,3,4 });
-            //AddTube(i++, new int[] { 4,1,3,5 });
-            //AddTube(i++, new int[] { 5,3,5,4 });
 
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Yellow, LiquidColorName.Green, LiquidColorName.Purple, LiquidColorName.LightBlue });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.LightBlue });
@@ -224,19 +177,6 @@ namespace WaterSortGame.Models
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.LightBlue, LiquidColorName.LightBlue });
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue });
 
-
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Pink, LiquidColorName.Red, LiquidColorName.Red });
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.LightBlue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Pink });
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Pink, LiquidColorName.Red });
-
-
-
-
-
-
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Gray, LiquidColorName.Red, LiquidColorName.Blue });
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Blue, LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Gray });
-            //AddTube(i++, new LiquidColorName[] { LiquidColorName.Red, LiquidColorName.Blue, LiquidColorName.Gray, LiquidColorName.Red });
 
             //// Nikdy nevyresenej level (stary cislovani):
             //AddTube(i++, new int[] { 9, 2, 4, 1 });
@@ -364,10 +304,10 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 3, 4, 5, 6 });
             //AddTube(i++, new int[] { 1, 1, 1 });
 
-            AddTube(i++, new LiquidColorName[] { ColN.Pink, ColN.Pink, ColN.Olive, ColN.Gray });
-            AddTube(i++, new LiquidColorName[] { ColN.Gray, ColN.Red, ColN.Pink, ColN.Red });
-            AddTube(i++, new LiquidColorName[] { ColN.Olive, ColN.Red, ColN.Gray, ColN.Olive });
-            AddTube(i++, new LiquidColorName[] { ColN.Pink, ColN.Red, ColN.Gray, ColN.Olive });
+            //AddTube(i++, new LiquidColorName[] { ColN.Pink, ColN.Pink, ColN.Olive, ColN.Gray });
+            //AddTube(i++, new LiquidColorName[] { ColN.Gray, ColN.Red, ColN.Pink, ColN.Red });
+            //AddTube(i++, new LiquidColorName[] { ColN.Olive, ColN.Red, ColN.Gray, ColN.Olive });
+            //AddTube(i++, new LiquidColorName[] { ColN.Pink, ColN.Red, ColN.Gray, ColN.Olive });
 
 
             //AddTube(i++, new LiquidColorName[] { ColN. });

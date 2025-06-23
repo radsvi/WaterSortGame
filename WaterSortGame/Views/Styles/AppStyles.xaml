@@ -115,11 +115,25 @@
             </Style>
         </Style.Resources>
     </Style>
-    <Style TargetType="StackPanel" x:Key="NavigationButtonsDeveloper" BasedOn="{StaticResource DefaultStackPanel}">
+    <Style TargetType="StackPanel" x:Key="NavigationButtonsBottomLeft" BasedOn="{StaticResource DefaultStackPanel}">
         <Setter Property="Height" Value="18" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Style.Resources>
             <Style TargetType="Button" BasedOn="{StaticResource DefaultButton}">
+                <Setter Property="Width" Value="80" />
+                <Setter Property="FontSize" Value="10" />
+                <Setter Property="Margin" Value="7,0,0,0" />
+                <Setter Property="VerticalContentAlignment" Value="Top" />
+            </Style>
+        </Style.Resources>
+    </Style>
+    <Style TargetType="StackPanel" x:Key="NavigationButtonsAdvanced" BasedOn="{StaticResource NavigationButtonsBottomLeft}">
+        <Style.Resources>
+            <Style TargetType="Button" BasedOn="{StaticResource DefaultButton}">
+                <Setter Property="BorderBrush" Value="#7db2da" />
+                <!--<Setter Property="BorderThickness" Value="2" />-->
+                <Setter Property="Background" Value="#5fa3d9" />
+
                 <Setter Property="Width" Value="80" />
                 <Setter Property="FontSize" Value="10" />
                 <Setter Property="Margin" Value="7,0,0,0" />

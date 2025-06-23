@@ -634,9 +634,6 @@ namespace WaterSortGame.ViewModels
 
             bmpImg.BeginInit();
             bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallest.png", UriKind.Relative);
-            //bmpImg.UriSource = new Uri("Images\\TubeSurfaceRippleTallNonTransparent.png", UriKind.Relative);
-            //bmpImg.UriSource = new Uri("Images\\JustLine.png", UriKind.Relative);
-            //bmpImg.UriSource = new Uri("Images\\NarrowLine.png", UriKind.Relative);
             bmpImg.EndInit();
 
             brush.ImageSource = bmpImg;
@@ -778,7 +775,7 @@ namespace WaterSortGame.ViewModels
         //    TubeCount = Tubes.Count;
         //}
         public RelayCommand AutoSolveCommand => new RelayCommand(execute => AutoSolve.CalculateNextStep(GameState.gameGrid), canExecute => AutoSolve.CompleteSolution.Count == 0);
-        public RelayCommand StepThroughCommand => new RelayCommand(execute => AutoSolve.StepThrough(), canExecute => AutoSolve.CompleteSolution.Count > 0);
+        public RelayCommand StepThroughCommand => new RelayCommand(execute => AutoSolve.StepThrough(), canExecute => AutoSolve.CompleteSolution.Count > 0 && AutoSolve.CurrentSolutionStep > 0);
         #endregion
     }
 }

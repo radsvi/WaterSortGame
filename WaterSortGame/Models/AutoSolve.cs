@@ -867,7 +867,7 @@ namespace WaterSortGame.Models
         public void StepThroughMethod()
         {
             if (CurrentSolutionStep == 0)
-                CurrentSolutionStep = CompleteSolution.Count - 1;
+                return;
 
             MakeAMove(CompleteSolution[--CurrentSolutionStep]);
         }
