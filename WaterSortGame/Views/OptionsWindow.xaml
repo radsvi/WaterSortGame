@@ -23,7 +23,7 @@
     <Grid Margin="10">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
-                <GroupBox Header="Vials">
+                <GroupBox Header="Flasks">
                     <StackPanel>
                         <DockPanel>
                             <Label Content="Limit extra vial to maximum of"/>
@@ -46,7 +46,7 @@
                         </DockPanel>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Moves">
+                <GroupBox Header="Controls">
                     <DockPanel>
                         <CheckBox IsChecked="{Binding AppSettings.UnselectTubeEvenOnIllegalMove, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Unselect tube even when using illegal move"/>
                     </DockPanel>
@@ -57,7 +57,7 @@
                         <Button Content="Open Help window" Command="{Binding OpenHelpFromOptionsCommand}" Padding="20 1" HorizontalAlignment="Left" Margin="0,10,0,0"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Dev options">
+                <GroupBox Header="Advanced options">
                     <StackPanel>
                         <DockPanel>
                             <CheckBox IsChecked="{Binding AppSettings.AdvancedOptionsVisible, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="Enable Advanced options"/>

@@ -15,11 +15,11 @@ namespace WaterSortGame.ViewModels
 {
     class LoadLevelVM : PopupScreenBase
     {
-        private AppSettings AppSettings;
+        private AppSettings appSettings;
         public LoadLevelVM(object viewModel) : base(viewModel)
         {
             MainWindowVM = (MainWindowVM)viewModel;
-            AppSettings = MainWindowVM.AppSettings;
+            appSettings = MainWindowVM.AppSettings;
             LoadLevelList.CollectionChanged += LoadLevelList_CollectionChanged;
             //MainWindowVM.LoadLevelScreen();
 
@@ -292,7 +292,7 @@ namespace WaterSortGame.ViewModels
         {
             MainWindowVM.WindowService?.CloseWindow(); // close options menu
 
-            ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels);
+            ObservableCollection<StoredLevel> savedLevelList = JsonConvert.DeserializeObject<ObservableCollection<StoredLevel>>(Settings.Default.SavedLevels) ?? [];
 
             //var additionalLevels = new List<StoredLevel>();
             var firstLevel = new int?[,]
