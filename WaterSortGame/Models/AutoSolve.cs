@@ -223,9 +223,15 @@ namespace WaterSortGame.Models
             var duration = DateTime.Now.Subtract(startTime);
             CreateListOfSteps(treeNode!);
             if (CompleteSolution.Count > 0)
+            {
                 notification.Show($"Total states taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}. Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
-            else 
+                Debug_WriteToFileMessage($"Total states taken to generate: {Iterations}. Steps required to solve the puzzle {CompleteSolution.Count}. Duration: {duration.TotalSeconds} seconds");
+            }
+            else
+            {
                 notification.Show($"Total states taken to generate: {Iterations}. Puzzle wasn't solved, something went wrong ({CompleteSolution.Count} steps generated). Duration: {duration.TotalSeconds} seconds", MessageType.Debug, 60000);
+                Debug_WriteToFileMessage($"Total states taken to generate: {Iterations}. Puzzle wasn't solved, something went wrong ({CompleteSolution.Count} steps generated). Duration: {duration.TotalSeconds} seconds");
+            }
         }
         private List<ValidMove> OrderList(List<ValidMove> validMoves, ColorCount mostFrequentColors)
         {
@@ -906,6 +912,12 @@ namespace WaterSortGame.Models
 
             exportString += GameState.GameStateToString(treeNode.Data.GameState, StringFormat.Numbers, true);
             exportString += "{" + note + "}" + "\n";
+            System.IO.File.AppendAllText(exportLogFilename, exportString);
+        }
+        [System.Diagnostics.Conditional("DEBUG")]
+        private void Debug_WriteToFileMessage(string note)
+        {
+            string exportString = DateTime.Now.ToString("[MM/dd/yyyy HH:mm:ss]") + note;
             System.IO.File.AppendAllText(exportLogFilename, exportString);
         }
         #endregion

@@ -193,19 +193,19 @@ namespace WaterSortGame.Models
             //AddTube(i++, new int[] { 8, 12, 6, 12 });
             //AddTube(i++, new int[] { 1, 12, 8, 9 });
 
-            // Ten starej "nikdy" nevyresenej level (vyresenej za 1772 steps to generate, 46 steps to solve, 17.68 sec):
-            AddTube(i++, new int[] { 8, 1, 3, 0 });
-            AddTube(i++, new int[] { 2, 7, 10, 4 });
-            AddTube(i++, new int[] { 8, 10, 10, 11 });
-            AddTube(i++, new int[] { 2, 2, 1, 4 });
-            AddTube(i++, new int[] { 0, 6, 5, 9 });
-            AddTube(i++, new int[] { 2, 3, 6, 3 });
-            AddTube(i++, new int[] { 1, 7, 4, 9 });
-            AddTube(i++, new int[] { 5, 0, 1, 8 });
-            AddTube(i++, new int[] { 10, 9, 6, 5 });
-            AddTube(i++, new int[] { 4, 6, 9, 3 });
-            AddTube(i++, new int[] { 7, 11, 5, 11 });
-            AddTube(i++, new int[] { 0, 11, 7, 8 });
+            //// Ten starej "nikdy" nevyresenej level (vyresenej za 1772 steps to generate, 46 steps to solve, 17.68 sec):
+            //AddTube(i++, new int[] { 8, 1, 3, 0 });
+            //AddTube(i++, new int[] { 2, 7, 10, 4 });
+            //AddTube(i++, new int[] { 8, 10, 10, 11 });
+            //AddTube(i++, new int[] { 2, 2, 1, 4 });
+            //AddTube(i++, new int[] { 0, 6, 5, 9 });
+            //AddTube(i++, new int[] { 2, 3, 6, 3 });
+            //AddTube(i++, new int[] { 1, 7, 4, 9 });
+            //AddTube(i++, new int[] { 5, 0, 1, 8 });
+            //AddTube(i++, new int[] { 10, 9, 6, 5 });
+            //AddTube(i++, new int[] { 4, 6, 9, 3 });
+            //AddTube(i++, new int[] { 7, 11, 5, 11 });
+            //AddTube(i++, new int[] { 0, 11, 7, 8 });
 
             //// Ten starej "nikdy" nevyresenej level (testuju napul vyreseny:
             //AddTube(i++, new LiquidColorName[] { LiquidColorName.Green, LiquidColorName.Indigo, LiquidColorName.Orange, LiquidColorName.Orange });
@@ -310,6 +310,19 @@ namespace WaterSortGame.Models
             //AddTube(i++, new LiquidColorName[] { ColN.Olive, ColN.Red, ColN.Gray, ColN.Olive });
             //AddTube(i++, new LiquidColorName[] { ColN.Pink, ColN.Red, ColN.Gray, ColN.Olive });
 
+            // 2025/07/06 14:15:20 nedarilo se mi vyresit level: (total states 17675, not solved! 171,3 sec)
+            AddTube(i++, new LiquidColorName[] { ColN.Red, ColN.Turquoise, ColN.Gray, ColN.Green });
+            AddTube(i++, new LiquidColorName[] { ColN.Olive, ColN.Indigo, ColN.Orange, ColN.Gray });
+            AddTube(i++, new LiquidColorName[] { ColN.Indigo, ColN.Blue, ColN.Scarlet, ColN.LightGreen });
+            AddTube(i++, new LiquidColorName[] { ColN.Orange, ColN.Yellow, ColN.Lime, ColN.LightGreen });
+            AddTube(i++, new LiquidColorName[] { ColN.Indigo, ColN.Blue, ColN.Yellow, ColN.Orange });
+            AddTube(i++, new LiquidColorName[] { ColN.Lime, ColN.LightGreen, ColN.Yellow, ColN.Olive });
+            AddTube(i++, new LiquidColorName[] { ColN.Olive, ColN.Lime, ColN.Gray, ColN.Red });
+            AddTube(i++, new LiquidColorName[] { ColN.Turquoise, ColN.Blue, ColN.Blue, ColN.Yellow });
+            AddTube(i++, new LiquidColorName[] { ColN.Red, ColN.Turquoise, ColN.Olive, ColN.Indigo });
+            AddTube(i++, new LiquidColorName[] { ColN.Scarlet, ColN.Green, ColN.Scarlet, ColN.Scarlet });
+            AddTube(i++, new LiquidColorName[] { ColN.Green, ColN.Turquoise, ColN.LightGreen, ColN.Lime });
+            AddTube(i++, new LiquidColorName[] { ColN.Gray, ColN.Green, ColN.Orange, ColN.Red });
 
             //AddTube(i++, new LiquidColorName[] { ColN. });
             //AddTube(i++, new LiquidColorName[] { });

@@ -46,7 +46,7 @@ namespace WaterSortGame.Models
         public void Show(string text, int closeDelay = closeDelayDefault) => Show(text, MessageType.Information, closeDelay);
         public void Show(string text, MessageType messageType, int closeDelay = closeDelayDefault)
         {
-            Debug.WriteLine("[Notification: ]" + text);
+            Debug.WriteLine("[Notification:]" + text);
             if (messageType == MessageType.Debug && DisplayDebugMessages is false || messageType == MessageType.Hidden)
             {
                 return;
